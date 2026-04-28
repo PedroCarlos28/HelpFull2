@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelpFull - Comunidade</title>
+    <style>
+        /* =======================================
+           CONFIGURAÇÕES GLOBAIS E FUNDO
+           ======================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            overflow-x: hidden;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* IMAGEM DE FUNDO TRAVADA */
+        .imagem-fundo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -999;
+            pointer-events: none;
+        }
+
+        /* ZOOM RESPONSIVO (APENAS TELAS MAIORES) */
+        @media (min-width: 1440px) {
+            body {
+                zoom: 1.25;
+            }
+        }
+
+        @media (min-width: 1200px) and (max-width: 1439px) {
+            body {
+                zoom: 1.15;
+            }
+        }
+
+        @media (min-width: 1024px) and (max-width: 1199px) {
+            body {
+                zoom: 1.05;
+            }
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .conteudo-site {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 95px 20px 60px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* =======================================
+           NAVBAR ESTÁTICA DO TOPO (Estilo Cápsula)
+           ======================================= */
+        .navbar-topo {
+            display: flex;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: fit-content;
+            z-index: 1000;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 12px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-logo {
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a.ativo {
+            color: #2b7a8c;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        .perfil-capsula {
+            width: 36px;
+            height: 36px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        /* =======================================
+           ÁREA DE INPUT (Criar Postagem)
+           ======================================= */
+        .input-criar-post {
+            background: rgba(240, 240, 240, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50px;
+            padding: 12px 20px 12px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.7), 0 5px 15px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            gap: 15px;
+            width: 100%;
+        }
+
+        .input-criar-post input[type="text"] {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .input-criar-post input::placeholder {
+            color: #555;
+        }
+
+        .acoes-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-emocao {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #a3e68c;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: opacity 0.2s, background-color 0.3s;
+        }
+
+        .btn-emocao:hover {
+            opacity: 0.8;
+        }
+
+        .btn-emocao.ruim {
+            background-color: #e67575;
+        }
+
+        .btn-emocao svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-circular {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: #cfcfcf;
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-circular:hover {
+            background-color: #bcbcbc;
+        }
+
+        .btn-enviar {
+            width: 70px;
+            height: 38px;
+            border-radius: 25px;
+            background-color: #cfcfcf;
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-enviar:hover {
+            background-color: #bcbcbc;
+        }
+
+        .btn-enviar svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* =======================================
+           POSTAGEM CARD
+           ======================================= */
+        .post-card {
+            background: rgba(243, 243, 243, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 35px;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .post-conteudo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .post-cabecalho {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .post-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #2a5a6a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .post-avatar svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .post-autor {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #1a1a1a;
+        }
+
+        .post-texto {
+            font-size: 1.25rem;
+            line-height: 1.4;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 30px;
+        }
+
+        .post-estatisticas {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .estatistica-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #9e9e9e;
+            color: white;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        .estatistica-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .estatistica-emocao.bom {
+            background-color: #a3e68c;
+        }
+
+        .estatistica-emocao.ruim {
+            background-color: #e67575;
+        }
+
+        .post-imagem {
+            width: 250px;
+            height: 200px;
+            background-color: #4b6e7a;
+            border-radius: 25px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* =======================================
+           SEÇÃO BRANCA FINAL (RODAPÉ)
+           ======================================= */
+        .secao-branca {
+            background-color: #ffffff;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            margin-top: auto;
+        }
+
+        .secao-branca-conteudo {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .rodape-simples {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 0 10px;
+        }
+
+        .rodape-simples strong {
+            font-size: 1.2rem;
+            letter-spacing: -1px;
+            font-weight: 900;
+        }
+
+        .contato-info {
+            line-height: 1.6;
+            font-size: 0.85rem;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        /* =======================================
+           RESPONSIVIDADE
+           ======================================= */
+        @media (max-width: 1024px) {
+            .navbar-topo {
+                width: 90%;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .nav-links a {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .navbar-topo {
+                padding: 12px 25px;
+                width: calc(100% - 40px);
+                justify-content: space-between;
+            }
+
+            .conteudo-site {
+                padding-top: 110px;
+                gap: 20px;
+            }
+
+            .input-criar-post {
+                flex-direction: column;
+                border-radius: 25px;
+                padding: 20px;
+                align-items: stretch;
+            }
+
+            .input-criar-post input[type="text"] {
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            .acoes-input {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .post-card {
+                flex-direction: column;
+                padding: 25px;
+                border-radius: 25px;
+                gap: 20px;
+            }
+
+            .post-imagem {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-topo {
+                width: calc(100% - 30px);
+                padding: 12px 20px;
+            }
+
+            .conteudo-site {
+                padding: 100px 15px 40px 15px;
+            }
+
+            .post-imagem {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <img class="imagem-fundo" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
+
+    <div class="conteudo-site">
+
+        <nav class="navbar-topo">
+            <a href="inicio.html" class="nav-logo" style="text-decoration: none; color: inherit;">HELPFULL</a>
+            <ul class="nav-links">
+                <li><a href="Diario.html">Diário</a></li>
+                <li><a href="Comunidade.html" class="ativo">Comunidade</a></li>
+                <li><a href="ChatBOT.html">ChatBOT</a></li>
+                <li><a href="#">Adicionais</a></li>
+            </ul>
+            <div class="perfil-capsula">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+        </nav>
+
+        <!-- Container para criar novo post -->
+        <input type="file" id="upload-foto" accept="image/*" style="display: none;">
+        <div class="input-criar-post">
+            <input type="text" placeholder="O filme ... me fez mt bem!">
+            <div class="acoes-input">
+                <button class="btn-emocao" id="btn-toggle-emocao" onclick="toggleEmocao()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-smile">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                        <line x1="9" x2="9.01" y1="9" y2="9" />
+                        <line x1="15" x2="15.01" y1="9" y2="9" />
+                    </svg>
+                    Bom
+                </button>
+                <button class="btn-circular" onclick="document.getElementById('upload-foto').click()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+                <button class="btn-enviar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-send">
+                        <path d="m22 2-7 20-4-9-9-4Z" />
+                        <path d="M22 2 11 13" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Postagem João -->
+        <article class="post-card">
+            <div class="post-conteudo">
+                <div>
+                    <div class="post-cabecalho">
+                        <div class="post-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <span class="post-autor">João</span>
+                    </div>
+                    <p class="post-texto">O filme ... me fez mt bem!</p>
+                </div>
+                <div class="post-estatisticas">
+                    <div class="estatistica-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-heart">
+                            <path
+                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                        </svg>
+                        12 mil
+                    </div>
+                    <div class="estatistica-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-message-square">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                        3 mil
+                    </div>
+                    <div class="estatistica-badge estatistica-emocao bom">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-smile">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                            <line x1="9" x2="9.01" y1="9" y2="9" />
+                            <line x1="15" x2="15.01" y1="9" y2="9" />
+                        </svg>
+                        Bom
+                    </div>
+                </div>
+            </div>
+            <div class="post-imagem"></div>
+        </article>
+
+        <!-- Postagem Maria -->
+        <article class="post-card">
+            <div class="post-conteudo">
+                <div>
+                    <div class="post-cabecalho">
+                        <div class="post-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <span class="post-autor">Maria</span>
+                    </div>
+                    <p class="post-texto">O filme ... me deixou agoniada!</p>
+                </div>
+                <div class="post-estatisticas">
+                    <div class="estatistica-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-heart">
+                            <path
+                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                        </svg>
+                        3 mil
+                    </div>
+                    <div class="estatistica-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-message-square">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                        1 mil
+                    </div>
+                    <div class="estatistica-badge estatistica-emocao ruim">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-file-warning">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                            <path d="M12 9v4" />
+                            <path d="M12 17h.01" />
+                        </svg>
+                        Ruim
+                    </div>
+                </div>
+            </div>
+            <div class="post-imagem"></div>
+        </article>
+
+    </div>
+
+    <!-- Bottom White Section -->
+    <div class="secao-branca">
+        <div class="secao-branca-conteudo">
+            <footer class="rodape-simples">
+                <strong>HELPFULL</strong>
+                <div class="contato-info">
+                    Entre em contato:<br><br>
+                    Email:<br>
+                    Intagram:<br>
+                    WhatsApp:
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function toggleEmocao() {
+            const btn = document.getElementById('btn-toggle-emocao');
+            const isBom = !btn.classList.contains('ruim');
+
+            if (isBom) {
+                btn.classList.add('ruim');
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-warning"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                    Ruim
+                `;
+            } else {
+                btn.classList.remove('ruim');
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+                    Bom
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>
