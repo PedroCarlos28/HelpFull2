@@ -1505,3 +1505,39 @@ body.acessibilidade-texto-grande .navbar-topo:has(.nav-top-row) .nav-top-row {
     background: rgba(255,255,255,1);
     transform: scale(1.05);
 }
+
+/* ── Otimizações Mobile / Telas Menores ──────── */
+.nav-seta-dropdown {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Oculta botão flutuante de acessibilidade no celular (agora fica dentro do menu) */
+    .btn-acessibilidade {
+        display: none !important;
+    }
+    
+    /* Oculta vídeo pausado com botão de play no celular e usa fundo gradiente limpo */
+    .video-fundo {
+        display: none !important;
+    }
+    body {
+        background: linear-gradient(180deg, #d3ebf1 0%, #edf6f9 40%, #e3f0f5 100%) !important;
+        background-attachment: fixed !important;
+    }
+
+    /* Exibe setinha ao lado de HELPFULL no celular */
+    .nav-seta-dropdown {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        margin-left: 5px;
+        transition: transform 0.25s ease;
+        opacity: 0.75;
+    }
+
+    .nav-logo.aberto .nav-seta-dropdown,
+    .nav-logo-capsula.aberto .nav-seta-dropdown {
+        transform: rotate(180deg);
+    }
+}

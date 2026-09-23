@@ -1,6 +1,5 @@
 <?php
 require_once 'conexao.php';
-session_start();
 
 $usuarioLogado = null;
 if (isset($_SESSION['usuario_id'])) {
@@ -1385,7 +1384,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
     <div class="nav-container-global" id="nav-container-global">
         <nav class="navbar-topo">
-            <a href="inicio.php" class="nav-logo" style="text-decoration: none; color: inherit;">HELPFULL</a>
+            <a href="inicio.php" class="nav-logo" id="navLogoBtn" style="text-decoration: none; color: inherit; display: flex; align-items: center;">HELPFULL <span class="nav-seta-dropdown"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></a>
             <ul class="nav-links">
                 <li><a href="Diario.php">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>
@@ -1399,6 +1398,13 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 <a href="ChatBOT.php">ChatBOT</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php" class="ativo">Perfil</a>
+                <a href="javascript:void(0)" onclick="abrirPainelAcessibilidade(); if(document.getElementById('navDropdownMobile')) document.getElementById('navDropdownMobile').classList.remove('aberto'); if(document.querySelector('.nav-logo')) document.querySelector('.nav-logo').classList.remove('aberto');" style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Configurações
+                </a>
             </div>
             <a href="Perfil.php" class="nav-perfil atual" style="text-decoration: none;">
                 <div class="perfil-capsula" <?= !empty($fotoPerfilDb) ? "style='background-image: url($fotoPerfilDb);'" : '' ?>>
@@ -1901,11 +1907,13 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
                     navDropdown.classList.toggle('aberto');
+                    navLogo.classList.toggle('aberto');
                 }
             });
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.navbar-topo') && !e.target.closest('.nav-dropdown-mobile')) {
                     navDropdown.classList.remove('aberto');
+                    navLogo.classList.remove('aberto');
                 }
             });
         }

@@ -1,6 +1,5 @@
 <?php
 require_once 'conexao.php';
-session_start();
 
 if (isset($_SESSION['usuario_id'])) {
     header("Location: inicio.php");
@@ -421,6 +420,13 @@ if (isset($_SESSION['usuario_id'])) {
         @media (max-height: 600px) {
             body { justify-content: flex-start; padding-top: 100px; }
         }
+
+        @media (max-width: 768px) {
+            .video-fundo, .faixa-inferior { display: none !important; }
+            body {
+                background: linear-gradient(180deg, #d3ebf1 0%, #edf6f9 50%, #d8eef4 100%) !important;
+            }
+        }
     </style>
 </head>
 
@@ -433,10 +439,7 @@ if (isset($_SESSION['usuario_id'])) {
 
     <nav class="navbar-topo">
         <div class="nav-col-esq">
-            <div class="nav-logo" style="display: flex; align-items: center; gap: 8px;">
-                <img src="assets/logoHelpFull.png" alt="HelpFull" style="width: 26px; height: 26px; object-fit: contain;">
-                HELPFULL✦
-            </div>
+            <div class="nav-logo">HELPFULL✦</div>
         </div>
         <div class="titulo-central">
             <span id="mainTitle">Entrar</span>

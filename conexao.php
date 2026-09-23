@@ -1,4 +1,8 @@
 <?php
+// Desativa exibição de notices/warnings na tela (evita textos vazando na interface)
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+@ini_set('display_errors', '0');
+
 // Configurações de ambiente para Vercel / Serverless
 if (getenv('VERCEL') || !empty($_SERVER['VERCEL'])) {
     if (session_status() === PHP_SESSION_NONE) {
