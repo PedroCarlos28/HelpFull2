@@ -43,8 +43,7 @@ try {
     $usuario = $stmt->fetch();
     $novoId = $usuario['id'];
     
-    $_SESSION['usuario_id'] = $novoId;
-    $_SESSION['usuario_nome'] = $nome;
+    salvarSessaoUsuario($novoId, $nome);
 
     echo json_encode(['sucesso' => true, 'mensagem' => 'Cadastro realizado com sucesso!']);
 } catch (PDOException $e) {

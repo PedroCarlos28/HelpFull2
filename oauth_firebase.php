@@ -107,8 +107,7 @@ try {
             $upd->execute(['uid' => $firebaseUid, 'id' => $usuario['id']]);
         } catch (\Exception $ignored) {}
 
-        $_SESSION['usuario_id']   = $usuario['id'];
-        $_SESSION['usuario_nome'] = $usuario['nome'];
+        salvarSessaoUsuario($usuario['id'], $usuario['nome']);
         echo json_encode(['sucesso' => true, 'novo' => false]);
         exit();
     }
@@ -159,8 +158,7 @@ try {
     $novoUsuario = $insert->fetch();
     $novoId = $novoUsuario['id'];
 
-    $_SESSION['usuario_id']   = $novoId;
-    $_SESSION['usuario_nome'] = $nome;
+    salvarSessaoUsuario($novoId, $nome);
 
     echo json_encode(['sucesso' => true, 'novo' => true]);
 } catch (PDOException $e) {
