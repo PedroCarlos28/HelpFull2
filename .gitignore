@@ -1,0 +1,11 @@
+.idea/
+.cursor/
+scratch/
+check_schema.php
+debug_videos.php
+reset_notif.php
+setup_social_v2.php
+config_keys.php
+.env
+*.zip
+*.log
