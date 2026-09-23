@@ -140,7 +140,8 @@ try {
               JOIN usuarios u ON p.usuario_id = u.id 
               LEFT JOIN (SELECT post_id, COUNT(*) as total_curtidas FROM curtidas_comunidade GROUP BY post_id) counts ON counts.post_id = p.id
               LEFT JOIN (SELECT id, post_id FROM curtidas_comunidade WHERE usuario_id = ?) user_liked ON user_liked.post_id = p.id
-              ORDER BY p.criado_em DESC";
+              ORDER BY p.criado_em DESC
+              LIMIT 50";
     $stmtPosts = $pdo->prepare($query);
     $stmtPosts->execute([$current_user_id]);
     $posts = $stmtPosts->fetchAll();
@@ -1791,10 +1792,13 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                     <li><a href="Atividades.php">Adicionais</a></li>
                 </ul>
                 <?php if ($usuarioLogado): ?>
-                    <?php $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; ?>
+                    <?php 
+                        $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; 
+                        $temFotoNav = !empty($fotoPerfilDb) && (strlen($fotoPerfilDb) <= 150000);
+                    ?>
                     <a href="Perfil.php" style="text-decoration: none;">
-                        <div class="perfil-capsula" <?= !empty($fotoPerfilDb) ? "style='background-image: url($fotoPerfilDb);'" : '' ?>>
-                            <?php if (empty($fotoPerfilDb)): ?>
+                        <div class="perfil-capsula" <?= $temFotoNav ? "style='background-image: url($fotoPerfilDb);'" : '' ?>>
+                            <?php if (!$temFotoNav): ?>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -1944,8 +1948,12 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                     <div class="post-card-inner">
                         <div style="flex: 1; display: flex; flex-direction: column;">
                             <div class="post-header">
-                                <div class="post-avatar" <?= !empty($post['autor_foto']) ? "style='background-image: url(" . $post['autor_foto'] . "); background-size: cover; background-position: center;'" : '' ?>>
-                                    <?php if (empty($post['autor_foto'])): ?>
+                                <?php 
+                                    $autorFoto = $post['autor_foto'] ?? '';
+                                    $temFotoAutor = !empty($autorFoto) && (strlen($autorFoto) <= 150000);
+                                ?>
+                                <div class="post-avatar" <?= $temFotoAutor ? "style='background-image: url(" . $autorFoto . "); background-size: cover; background-position: center;'" : '' ?>>
+                                    <?php if (!$temFotoAutor): ?>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                             stroke-width="2">
                                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>

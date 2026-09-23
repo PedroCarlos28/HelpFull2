@@ -3,6 +3,11 @@
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 @ini_set('display_errors', '0');
 
+// Habilita compressão de saída para otimizar payload e evitar limites na Vercel (4.5MB)
+if (!headers_sent() && extension_loaded('zlib') && !ini_get('zlib.output_compression')) {
+    @ini_set('zlib.output_compression', 'On');
+}
+
 // Configurações de ambiente para Vercel / Serverless
 if (getenv('VERCEL') || !empty($_SERVER['VERCEL'])) {
     if (session_status() === PHP_SESSION_NONE) {

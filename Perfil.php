@@ -1885,12 +1885,42 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         document.getElementById('uploadImagemPerfil').addEventListener('change', function (event) {
             if (event.target.files && event.target.files[0]) {
+                const file = event.target.files[0];
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    const stringBase64 = e.target.result; const placeholder = document.getElementById('placeholderFoto'); const icon = document.getElementById('placeholderIcon');
-                    placeholder.style.backgroundImage = `url(${stringBase64})`; placeholder.classList.add('tem-foto'); if (icon) icon.style.display = 'none'; document.getElementById('fotoBase64Input').value = stringBase64;
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        const maxDim = 250;
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > h) {
+                            if (w > maxDim) {
+                                h = Math.round((h * maxDim) / w);
+                                w = maxDim;
+                            }
+                        } else {
+                            if (h > maxDim) {
+                                w = Math.round((w * maxDim) / h);
+                                h = maxDim;
+                            }
+                        }
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const stringBase64 = canvas.toDataURL('image/jpeg', 0.82);
+
+                        const placeholder = document.getElementById('placeholderFoto');
+                        const icon = document.getElementById('placeholderIcon');
+                        placeholder.style.backgroundImage = `url(${stringBase64})`;
+                        placeholder.classList.add('tem-foto');
+                        if (icon) icon.style.display = 'none';
+                        document.getElementById('fotoBase64Input').value = stringBase64;
+                    };
+                    img.src = e.target.result;
                 };
-                reader.readAsDataURL(event.target.files[0]);
+                reader.readAsDataURL(file);
             }
         });
 
