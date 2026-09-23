@@ -23,6 +23,7 @@ if (isset($_SESSION['usuario_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull</title>
+    <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <style>
         /* =======================================
            CONFIGURAÇÕES GLOBAIS
@@ -876,7 +877,10 @@ if (isset($_SESSION['usuario_id'])) {
     <div class="nav-container-global escondida" id="nav-container-global">
         <nav class="navbar-flutuante">
             <!-- Logo SEM a estrela na navbar -->
-            <a href="inicio.php" class="nav-logo-capsula atual" style="text-decoration: none; color: inherit;">HELPFULL</a>
+            <a href="inicio.php" class="nav-logo-capsula atual" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
+                <img src="assets/logoHelpFull.png" alt="HelpFull" style="width: 22px; height: 22px; object-fit: contain;">
+                HELPFULL
+            </a>
             <ul class="links-capsula">
                 <li><a href="Diario.php">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>

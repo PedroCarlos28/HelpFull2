@@ -138,6 +138,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Meu Perfil</title>
+    <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <style>
         * {
             margin: 0;

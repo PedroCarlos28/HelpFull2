@@ -1,14 +1,24 @@
 <?php
-require_once 'conexao.php';
-session_start();
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', '0');
+ob_start();
 
-header('Content-Type: application/json');
+require_once 'conexao.php';
+
+header('Content-Type: application/json; charset=utf-8');
+
+function responderJson($dados) {
+    if (ob_get_length()) {
+        ob_clean();
+    }
+    echo json_encode($dados);
+    exit();
+}
 
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!$input || !isset($input['email']) || !isset($input['senha'])) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Dados inválidos.']);
-    exit();
+    responderJson(['sucesso' => false, 'mensagem' => 'Dados inválidos.']);
 }
 
 $email = trim($input['email']);
@@ -21,11 +31,11 @@ try {
 
     if ($usuario && password_verify($senha, $usuario['senha'])) {
         salvarSessaoUsuario($usuario['id'], $usuario['nome']);
-        echo json_encode(['sucesso' => true]);
+        responderJson(['sucesso' => true]);
     } else {
-        echo json_encode(['sucesso' => false, 'mensagem' => 'Email ou senha incorretos.']);
+        responderJson(['sucesso' => false, 'mensagem' => 'Email ou senha incorretos.']);
     }
 } catch (PDOException $e) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro no servidor: ' . $e->getMessage()]);
+    responderJson(['sucesso' => false, 'mensagem' => 'Erro no servidor: ' . $e->getMessage()]);
 }
 ?>

@@ -62,6 +62,7 @@ $usuarioLogado = $stmt->fetch();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Diário</title>
+    <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <style>
         /* =======================================
            CONFIGURAÇÕES GLOBAIS E FUNDO

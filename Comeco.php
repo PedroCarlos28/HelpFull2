@@ -14,6 +14,7 @@ if (isset($_SESSION['usuario_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Entrar</title>
+    <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -432,7 +433,10 @@ if (isset($_SESSION['usuario_id'])) {
 
     <nav class="navbar-topo">
         <div class="nav-col-esq">
-            <div class="nav-logo">HELPFULL✦</div>
+            <div class="nav-logo" style="display: flex; align-items: center; gap: 8px;">
+                <img src="assets/logoHelpFull.png" alt="HelpFull" style="width: 26px; height: 26px; object-fit: contain;">
+                HELPFULL✦
+            </div>
         </div>
         <div class="titulo-central">
             <span id="mainTitle">Entrar</span>
@@ -585,11 +589,27 @@ if (isset($_SESSION['usuario_id'])) {
                     })
                 });
 
-                const data = await response.json();
-                if (data.sucesso) {
+                const rawText = await response.text();
+                let data = null;
+                try {
+                    data = JSON.parse(rawText);
+                } catch (jsonErr) {
+                    console.error('Resposta bruta recebida:', rawText);
+                    const match = rawText.match(/\{[\s\S]*\}/);
+                    if (match) {
+                        try { data = JSON.parse(match[0]); } catch (e2) {}
+                    }
+                }
+
+                if (data && data.sucesso) {
                     window.location.href = 'inicio.php';
-                } else {
+                } else if (data) {
                     alert('Erro no login: ' + (data.mensagem || 'Tente novamente.'));
+                    if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
+                    if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
+                } else {
+                    const msgLimpa = rawText.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
+                    alert('Erro no servidor: ' + (msgLimpa || 'Resposta inválida do servidor.'));
                     if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
                     if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
                 }

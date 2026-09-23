@@ -1,15 +1,26 @@
 <?php
-require_once 'conexao.php';
-session_start();
+// Silencia notices/warnings para não corromper respostas JSON
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+ini_set('display_errors', '0');
+ob_start();
 
-header('Content-Type: application/json');
+require_once 'conexao.php';
+
+header('Content-Type: application/json; charset=utf-8');
+
+function responderJson($dados) {
+    if (ob_get_length()) {
+        ob_clean();
+    }
+    echo json_encode($dados);
+    exit();
+}
 
 $rawInput = file_get_contents('php://input');
 $input = json_decode($rawInput, true);
 
 if (!$input || empty($input['idToken'])) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Token não fornecido.']);
-    exit();
+    responderJson(['sucesso' => false, 'mensagem' => 'Token não fornecido.']);
 }
 
 $idToken     = trim($input['idToken']);
@@ -62,11 +73,10 @@ if (function_exists('curl_init')) {
     }
 }
 
-// 2. Se a chamada cURL falhar por SSL/rede local do XAMPP, faz fallback para validação do payload JWT
+// 2. Se a chamada cURL falhar por SSL/rede local do XAMPP/Vercel, faz fallback para validação do payload JWT
 if (!$email) {
     $payload = decodeFirebaseJwtPayload($idToken);
     if ($payload && isset($payload['aud']) && $payload['aud'] === 'helpfull-e4aae') {
-        // Verifica se o token não expirou (com margem de tolerância de 5 min)
         if (isset($payload['exp']) && $payload['exp'] > (time() - 300)) {
             $email       = $payload['email'] ?? $clientEmail;
             $nome        = $payload['name'] ?? null;
@@ -82,8 +92,7 @@ if (!$nome) {
 }
 
 if (!$email) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Não foi possível validar o token do Google.']);
-    exit();
+    responderJson(['sucesso' => false, 'mensagem' => 'Não foi possível validar o token do Google.']);
 }
 
 try {
@@ -108,8 +117,7 @@ try {
         } catch (\Exception $ignored) {}
 
         salvarSessaoUsuario($usuario['id'], $usuario['nome']);
-        echo json_encode(['sucesso' => true, 'novo' => false]);
-        exit();
+        responderJson(['sucesso' => true, 'novo' => false]);
     }
 
     // 4. Usuário novo: cria senha aleatória segura para respeitar NOT NULL caso o banco ainda exija
@@ -160,8 +168,8 @@ try {
 
     salvarSessaoUsuario($novoId, $nome);
 
-    echo json_encode(['sucesso' => true, 'novo' => true]);
+    responderJson(['sucesso' => true, 'novo' => true]);
 } catch (PDOException $e) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao salvar no banco: ' . $e->getMessage()]);
+    responderJson(['sucesso' => false, 'mensagem' => 'Erro ao salvar no banco: ' . $e->getMessage()]);
 }
 ?>

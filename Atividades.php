@@ -145,6 +145,7 @@ if (isset($_SESSION['usuario_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Atividades</title>
+    <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <style>
         * {
             margin: 0;
