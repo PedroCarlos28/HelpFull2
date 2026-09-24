@@ -587,12 +587,25 @@ if (isset($_SESSION['usuario_id'])) {
         /* CARDS E SEÇÕES INFERIORES */
         .secao-cartoes {
             display: flex;
+            align-items: stretch;
             gap: 25px;
             margin-bottom: 80px;
         }
 
+        .secao-cartoes a {
+            flex: 1 1 0;
+            display: flex;
+            text-decoration: none;
+            color: inherit;
+        }
+
         .cartao {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 200px;
+            box-sizing: border-box;
             background: rgba(250, 250, 250, 0.85);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
@@ -600,24 +613,26 @@ if (isset($_SESSION['usuario_id'])) {
             border-radius: 25px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.9);
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .cartao:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         }
 
         .cartao h3 {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             margin-bottom: 15px;
             font-weight: 800;
         }
 
         .cartao p {
-            font-size: 0.85rem;
-            line-height: 1.5;
+            font-size: 0.88rem;
+            line-height: 1.55;
             color: #333;
             font-weight: 500;
+            flex: 1;
         }
 
         .bloco-grande-container {
@@ -751,6 +766,15 @@ if (isset($_SESSION['usuario_id'])) {
 
             .secao-cartoes {
                 flex-direction: column;
+                gap: 15px;
+            }
+
+            .secao-cartoes a {
+                width: 100%;
+            }
+
+            .cartao {
+                min-height: auto;
             }
 
             .navbar-flutuante {
@@ -1015,11 +1039,10 @@ if (isset($_SESSION['usuario_id'])) {
                     </div>
                 </a>
 
-                <a href="ChatBOT.php" style="text-decoration: none; color: inherit;">
+                <a href="Comunidade.php" style="text-decoration: none; color: inherit;">
                     <div class="cartao">
-                        <h3>Apoio 24 Horas</h3>
-                        <p>Converse com o Helpy a qualquer momento. Um espaço seguro e sem julgamentos para
-                            desabafar.</p>
+                        <h3>Comunidade</h3>
+                        <p>Compartilhe suas experiências, desabafe e encontre apoio mútuo em um espaço seguro e acolhedor.</p>
                     </div>
                 </a>
 
