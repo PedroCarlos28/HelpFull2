@@ -406,7 +406,8 @@
         aplicarIdioma();
     }
 
-    window.togglePainelAcessibilidade = function () {
+    window.togglePainelAcessibilidade = function (e) {
+        if (e && e.stopPropagation) e.stopPropagation();
         var p = document.getElementById('painelAcessibilidade');
         var b = document.getElementById('btnAcessibilidade');
         if (!p) {
@@ -487,7 +488,7 @@
 
             var pa = document.getElementById('painelAcessibilidade');
             var ba = document.getElementById('btnAcessibilidade');
-            var ml = e.target.closest('[onclick*="togglePainelAcessibilidade"], [onclick*="abrirPainelAcessibilidade"]');
+            var ml = e.target.closest('.btn-abrir-acessibilidade, [onclick*="togglePainelAcessibilidade"], [onclick*="abrirPainelAcessibilidade"]');
             if (pa && pa.classList.contains('aberto')) {
                 if (!pa.contains(e.target) && (!ba || !ba.contains(e.target)) && !ml) {
                     pa.classList.remove('aberto');

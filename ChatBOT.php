@@ -869,9 +869,75 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
+        .btn-fechar-historico-mobile {
+            display: none;
+            background: rgba(0, 0, 0, 0.08);
+            border: none;
+            color: #333;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            line-height: 1;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-fechar-historico-mobile:hover {
+            background: rgba(0, 0, 0, 0.16);
+            color: #000;
+        }
+
+        .overlay-historico-mobile {
+            display: none;
+        }
+
         @media (max-width: 768px) {
+            .conteudo-site {
+                padding: 80px 14px 14px 14px;
+                box-sizing: border-box;
+            }
+
             .btn-toggle-historico-mobile {
-                display: inline-flex;
+                display: flex !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                align-self: center !important;
+                margin: 0 auto 10px auto !important;
+                height: 42px !important;
+                padding: 0 20px !important;
+                font-weight: 800;
+                font-size: 0.9rem;
+                justify-content: center;
+                border-radius: 20px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            }
+
+            .btn-fechar-historico-mobile {
+                display: flex;
+            }
+
+            .overlay-historico-mobile {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.35);
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+                z-index: 2400;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+            }
+
+            .overlay-historico-mobile.ativo {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
             }
 
             .sidebar-historico {
@@ -881,52 +947,79 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             .sidebar-historico.aberto-mobile {
                 display: flex !important;
                 position: fixed;
-                top: 85px;
-                left: 20px;
-                right: 20px;
+                top: 80px;
+                left: 16px;
+                right: 16px;
                 z-index: 2500;
                 width: auto;
-                max-height: 75vh;
-                box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+                max-height: 72vh;
+                padding: 24px 16px;
+                border-radius: 28px;
+                box-shadow: 0 15px 45px rgba(0,0,0,0.25);
             }
 
             .layout-chat-wrapper {
                 flex-direction: column;
                 gap: 10px;
+                width: 100%;
+                margin: 0;
             }
 
             .caixa-chat {
-                border-radius: 25px;
-                height: calc(100vh - 210px);
+                border-radius: 28px;
+                height: calc(100dvh - 175px);
+                min-height: 380px;
+                width: 100%;
+                box-sizing: border-box;
             }
 
             .area-mensagens {
-                padding: 60px 20px 90px 20px;
+                padding: 40px 14px 70px 14px;
+                gap: 12px;
             }
 
             .mensagem {
-                max-width: 90%;
-                font-size: 0.95rem;
-                padding: 15px 20px;
+                max-width: 86%;
+                font-size: 0.9rem;
+                padding: 12px 18px;
+                border-radius: 22px 22px 22px 8px;
+                line-height: 1.45;
+            }
+
+            .msg-usuario {
+                border-radius: 22px 22px 8px 22px;
             }
 
             .area-input-chat {
-                padding: 15px 20px 20px 20px;
+                padding: 10px 12px 12px 12px;
+                gap: 8px;
             }
 
             .input-chat {
-                padding: 14px 20px;
-                font-size: 0.95rem;
+                padding: 10px 16px;
+                font-size: 0.88rem;
+                height: 44px;
+                border-radius: 22px;
+                box-sizing: border-box;
             }
 
             .btn-enviar-chat {
-                width: 50px;
-                height: 50px;
-                border-radius: 20px;
+                width: 44px;
+                height: 44px;
+                border-radius: 16px;
+            }
+
+            .icone-enviar {
+                width: 20px;
+                height: 20px;
+            }
+
+            .blur-topo {
+                height: 45px;
             }
 
             .blur-baixo {
-                height: 80px;
+                height: 60px;
             }
 
             .btn-notificacao-separado { right: 10px; }
@@ -957,13 +1050,6 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 <a href="ChatBOT.php" class="ativo">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
-                <a href="javascript:void(0)" onclick="if(window.togglePainelAcessibilidade){togglePainelAcessibilidade();}if(document.getElementById('navDropdownMobile'))document.getElementById('navDropdownMobile').classList.remove('aberto');if(document.querySelector('.nav-logo'))document.querySelector('.nav-logo').classList.remove('aberto');" style="display: flex; align-items: center; gap: 8px;">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                    Configurações
-                </a>
             </div>
             <?php $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; ?>
             <a href="Perfil.php" style="text-decoration: none; display: flex;">
@@ -1008,6 +1094,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
     </div>
 
     <div class="conteudo-site">
+        <div id="overlayHistoricoMobile" class="overlay-historico-mobile" onclick="toggleHistoricoMobile(false)"></div>
         <button class="btn-toggle-historico-mobile" onclick="toggleHistoricoMobile()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"></path><circle cx="12" cy="12" r="9"></circle></svg>
             Histórico
@@ -1016,13 +1103,16 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             <div class="sidebar-historico">
                 <div class="header-historico">
                     <h3 class="titulo-historico">Histórico</h3>
-                    <button class="btn-novo-chat" onclick="novoChat()" title="Nova Conversa">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button class="btn-novo-chat" onclick="novoChat()" title="Nova Conversa">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="btn-fechar-historico-mobile" onclick="toggleHistoricoMobile(false)" aria-label="Fechar Histórico">×</button>
+                    </div>
                 </div>
 
                 <div class="lista-historico" id="lista-historico-container">
@@ -1077,14 +1167,17 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
     </div>
 
     <script>
-        function toggleHistoricoMobile() {
+        function toggleHistoricoMobile(forcado) {
             const sidebar = document.querySelector('.sidebar-historico');
-            if (sidebar) {
-                sidebar.classList.toggle('aberto-mobile');
-            }
+            const overlay = document.getElementById('overlayHistoricoMobile');
+            if (!sidebar) return;
+            const abrir = typeof forcado === 'boolean' ? forcado : !sidebar.classList.contains('aberto-mobile');
+            sidebar.classList.toggle('aberto-mobile', abrir);
+            if (overlay) overlay.classList.toggle('ativo', abrir);
         }
 
         function novoChat() {
+            if (window.innerWidth <= 768) toggleHistoricoMobile(false);
             const areaMensagens = document.getElementById('area-mensagens');
             areaMensagens.innerHTML = `
                 <div class="mensagem msg-bot">
@@ -1196,6 +1289,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
         }
 
         async function carregarHistorico(dataSessao) {
+            if (window.innerWidth <= 768) toggleHistoricoMobile(false);
             const areaMensagens = document.getElementById('area-mensagens');
             areaMensagens.innerHTML = `
                 <div class="msg-bot-digitando">
@@ -1248,6 +1342,13 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 if (!e.target.closest('.navbar-topo') && !e.target.closest('.nav-dropdown-mobile')) {
                     navDropdown.classList.remove('aberto');
                     navLogo.classList.remove('aberto');
+                }
+                const sidebar = document.querySelector('.sidebar-historico');
+                const btnHist = document.querySelector('.btn-toggle-historico-mobile');
+                if (sidebar && sidebar.classList.contains('aberto-mobile')) {
+                    if (!sidebar.contains(e.target) && (!btnHist || !btnHist.contains(e.target))) {
+                        toggleHistoricoMobile(false);
+                    }
                 }
             });
         }

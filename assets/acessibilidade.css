@@ -859,14 +859,12 @@ body.acessibilidade-contraste .nav-logo-capsula {
 }
 
 .nav-links a.ativo,
-.links-capsula a.ativo,
-.nav-dropdown-mobile a.ativo {
+.links-capsula a.ativo {
     position: relative;
 }
 
 .nav-links a.ativo::after,
-.links-capsula a.ativo::after,
-.nav-dropdown-mobile a.ativo::after {
+.links-capsula a.ativo::after {
     content: "";
     position: absolute;
     left: 50%;
@@ -878,12 +876,32 @@ body.acessibilidade-contraste .nav-logo-capsula {
     transform: translateX(-50%);
 }
 
+.nav-dropdown-mobile a {
+    position: relative;
+    padding-left: 26px !important;
+}
+
+.nav-dropdown-mobile a.ativo {
+    position: relative;
+    color: #2b7a8c !important;
+    background: rgba(43, 122, 140, 0.08) !important;
+}
+
 .nav-dropdown-mobile a.ativo::after {
-    left: 20px;
-    bottom: 6px;
-    width: 4px;
-    height: 22px;
-    transform: none;
+    content: "" !important;
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    bottom: auto !important;
+    width: 4px !important;
+    height: 18px !important;
+    border-radius: 4px !important;
+    background: #2b7a8c !important;
+    transform: translateY(-50%) !important;
+}
+
+body.acessibilidade-escuro .nav-dropdown-mobile a.ativo::after {
+    background: var(--tema-link) !important;
 }
 
 .nav-perfil.atual {

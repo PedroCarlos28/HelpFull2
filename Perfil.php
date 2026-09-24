@@ -1339,6 +1339,38 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 gap: 20px;
             }
 
+            .senha-row {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                width: 100%;
+            }
+
+            .senha-row .conta-input {
+                flex: 1 1 0;
+                min-width: 80px;
+                max-width: none;
+                height: 44px;
+                padding: 0 14px;
+                box-sizing: border-box;
+            }
+
+            .senha-row .btn-editar,
+            .senha-row .btn-sair,
+            .senha-row .btn-salvar,
+            .senha-row .btn-apagar {
+                height: 44px;
+                padding: 0 14px;
+                white-space: nowrap;
+                font-size: 0.85rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 18px;
+                flex-shrink: 0;
+                box-sizing: border-box;
+            }
+
             .grid-duplo {
                 grid-template-columns: 1fr;
                 gap: 16px;
@@ -1484,13 +1516,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php" class="ativo">Perfil</a>
-                <a href="javascript:void(0)" onclick="abrirPainelAcessibilidade(); if(document.getElementById('navDropdownMobile')) document.getElementById('navDropdownMobile').classList.remove('aberto'); if(document.querySelector('.nav-logo')) document.querySelector('.nav-logo').classList.remove('aberto');" style="display: flex; align-items: center; gap: 8px;">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                    Configurações
-                </a>
+                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="event.preventDefault(); event.stopPropagation(); togglePainelAcessibilidade(event); if(document.getElementById('navDropdownMobile')) document.getElementById('navDropdownMobile').classList.remove('aberto'); if(document.querySelector('.nav-logo')) document.querySelector('.nav-logo').classList.remove('aberto');">Configurações</a>
             </div>
             <a href="Perfil.php" class="nav-perfil atual" style="text-decoration: none;">
                 <div class="perfil-capsula" <?= !empty($fotoPerfilDb) ? "style='background-image: url($fotoPerfilDb);'" : '' ?>>
@@ -2011,9 +2037,10 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
     </script>
     <script>
-        function abrirPainelAcessibilidade() {
+        function abrirPainelAcessibilidade(e) {
+            if (e && e.stopPropagation) e.stopPropagation();
             if (window.togglePainelAcessibilidade) {
-                window.togglePainelAcessibilidade();
+                window.togglePainelAcessibilidade(e);
             }
         }
     </script>
