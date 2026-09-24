@@ -1395,6 +1395,7 @@ if (isset($_SESSION['usuario_id'])) {
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php" class="ativo">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
+                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
             <?php if ($usuarioLogado): ?>
                 <?php $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; ?>

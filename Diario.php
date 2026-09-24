@@ -10,7 +10,10 @@ if (!isset($_SESSION['usuario_id'])) {
 // PROCESSAR SALVAMENTO DO DIÁRIO (VIA AJAX)
 // ==========================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'salvar_diario') {
-    header('Content-Type: application/json');
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+    header('Content-Type: application/json; charset=utf-8');
 
     $conteudo = trim($_POST['conteudo'] ?? '');
     $emocao = trim($_POST['emocao'] ?? '');
@@ -786,6 +789,7 @@ $usuarioLogado = $stmt->fetch();
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
+                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
         </nav>
 
@@ -915,22 +919,47 @@ $usuarioLogado = $stmt->fetch();
 
             try {
                 const response = await fetch('Diario.php', { method: 'POST', body: formData });
-                const result = await response.json();
+                const text = await response.text();
+                let result;
+                try {
+                    result = JSON.parse(text);
+                } catch (jsonErr) {
+                    console.error("Resposta não-JSON do servidor:", text);
+                    alert("Erro no formato da resposta ao salvar.");
+                    return;
+                }
 
                 if (result.sucesso) {
                     apagarTudo();
-                    mostrarNotificacaoAtiva(NOTIF_TEMPLATES.diario_salvo);
 
-                    if (result.meta_diario_concluida) {
-                        setTimeout(() => mostrarNotificacaoAtiva(NOTIF_TEMPLATES.meta_diario), 1000);
-                    }
-                    if (result.meta_emocao_concluida) {
-                        setTimeout(() => mostrarNotificacaoAtiva(NOTIF_TEMPLATES.meta_emocao), 2000);
+                    // Dispara a notificação sem deixar quebrar o salvamento caso o toast falhe
+                    try {
+                        if (typeof mostrarNotificacaoAtiva === 'function') {
+                            mostrarNotificacaoAtiva(NOTIF_TEMPLATES.diario_salvo);
+                        } else if (window.mostrarNotificacaoAtiva) {
+                            window.mostrarNotificacaoAtiva(NOTIF_TEMPLATES.diario_salvo);
+                        } else {
+                            alert("Diário salvo com sucesso!");
+                        }
+
+                        if (result.meta_diario_concluida) {
+                            setTimeout(() => {
+                                if (window.mostrarNotificacaoAtiva) mostrarNotificacaoAtiva(NOTIF_TEMPLATES.meta_diario);
+                            }, 1000);
+                        }
+                        if (result.meta_emocao_concluida) {
+                            setTimeout(() => {
+                                if (window.mostrarNotificacaoAtiva) mostrarNotificacaoAtiva(NOTIF_TEMPLATES.meta_emocao);
+                            }, 2000);
+                        }
+                    } catch (notifErr) {
+                        console.warn("Aviso ao exibir notificação:", notifErr);
                     }
                 } else {
-                    alert("Erro ao salvar: " + result.mensagem);
+                    alert("Erro ao salvar: " + (result.mensagem || "Não foi possível salvar o diário."));
                 }
             } catch (error) {
+                console.error("Erro na requisição ao salvar:", error);
                 alert("Erro de conexão ao salvar.");
             } finally {
                 botao.innerHTML = originalText;

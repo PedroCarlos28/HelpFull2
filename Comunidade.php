@@ -1668,6 +1668,27 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             justify-content: space-between;
         }
 
+        .post-midias-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-shrink: 0;
+            padding-left: 25px;
+        }
+
+        .post-midias-container > div {
+            position: relative;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+            border-radius: 12px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .post-midias-container > div:hover {
+            transform: translateY(-6px) scale(1.06);
+            z-index: 25 !important;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+        }
+
         .banner-boas-vindas-comunidade {
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(25px);
@@ -1841,10 +1862,13 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             }
 
             .post-midias-container {
-                margin-top: 0;
-                padding-left: 0;
-                align-self: center;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
                 justify-content: center;
+                margin: 5px 0 10px 0;
+                padding-left: 25px;
+                align-self: center;
             }
 
             .post-botoes-row {
@@ -1912,6 +1936,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
+                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
 
             <div class="nav-publish-row">

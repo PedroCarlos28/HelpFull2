@@ -267,7 +267,8 @@
         var nos = []; var no;
         while ((no = walker.nextNode())) nos.push(no);
         nos.forEach(function (t) {
-            if (!t.nodeValue.trim() || t.parentElement.closest(selConteudo)) return;
+            if (!t || !t.nodeValue || !t.nodeValue.trim()) return;
+            if (!t.parentElement || (t.parentElement.closest && t.parentElement.closest(selConteudo))) return;
             var el = t.parentElement;
             var orig = el.dataset.idiomaOriginal || t.nodeValue.trim();
             el.dataset.idiomaOriginal = orig;
@@ -407,6 +408,7 @@
     }
 
     window.togglePainelAcessibilidade = function (e) {
+        if (e && e.preventDefault) e.preventDefault();
         if (e && e.stopPropagation) e.stopPropagation();
         var p = document.getElementById('painelAcessibilidade');
         var b = document.getElementById('btnAcessibilidade');
@@ -416,11 +418,26 @@
             p = document.getElementById('painelAcessibilidade');
         }
         if (!p) return;
-        var ab = p.classList.toggle('aberto');
+        var ab = !p.classList.contains('aberto');
+        p.classList.toggle('aberto', ab);
         p.setAttribute('data-aberto', ab ? 'true' : 'false');
         if (b) b.setAttribute('aria-expanded', ab ? 'true' : 'false');
     };
     window.abrirPainelAcessibilidade = window.togglePainelAcessibilidade;
+
+    window.abrirPainelAcessibilidadeMobile = function (e) {
+        if (e) {
+            if (e.preventDefault) e.preventDefault();
+            if (e.stopPropagation) e.stopPropagation();
+        }
+        var dropdown = document.getElementById('navDropdownMobile');
+        if (dropdown) dropdown.classList.remove('aberto');
+        var logo = document.querySelector('.nav-logo') || document.querySelector('.nav-logo-capsula');
+        if (logo) logo.classList.remove('aberto');
+        setTimeout(function () {
+            window.togglePainelAcessibilidade(e);
+        }, 30);
+    };
 
     function conectarControlesAcessibilidade() {
         var p = document.getElementById('painelAcessibilidade');
@@ -488,7 +505,7 @@
 
             var pa = document.getElementById('painelAcessibilidade');
             var ba = document.getElementById('btnAcessibilidade');
-            var ml = e.target.closest('.btn-abrir-acessibilidade, [onclick*="togglePainelAcessibilidade"], [onclick*="abrirPainelAcessibilidade"]');
+            var ml = e.target.closest('.btn-abrir-acessibilidade, [onclick*="togglePainelAcessibilidade"], [onclick*="abrirPainelAcessibilidade"], .nav-dropdown-mobile');
             if (pa && pa.classList.contains('aberto')) {
                 if (!pa.contains(e.target) && (!ba || !ba.contains(e.target)) && !ml) {
                     pa.classList.remove('aberto');

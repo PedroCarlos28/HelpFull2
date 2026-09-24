@@ -964,6 +964,7 @@ if (isset($_SESSION['usuario_id'])) {
                 <?php else: ?>
                     <a href="Comeco.php">Entrar</a>
                 <?php endif; ?>
+                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
         </nav>
 

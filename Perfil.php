@@ -628,6 +628,8 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             display: flex;
             flex-direction: column;
             gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .conta-form label {
@@ -646,6 +648,8 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             font-weight: 600;
             color: #333;
             width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
             outline: none;
         }
 
@@ -1334,24 +1338,40 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 padding-top: 145px;
             }
 
+            .card-perfil {
+                padding: 24px 16px;
+                border-radius: 26px;
+                box-sizing: border-box;
+                width: 100%;
+            }
+
             .conta-grid {
                 flex-direction: column-reverse;
                 gap: 20px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .conta-form {
+                width: 100%;
+                box-sizing: border-box;
             }
 
             .senha-row {
                 display: flex;
+                flex-wrap: wrap;
                 gap: 8px;
                 align-items: center;
                 width: 100%;
+                box-sizing: border-box;
             }
 
             .senha-row .conta-input {
-                flex: 1 1 0;
-                min-width: 80px;
-                max-width: none;
+                flex: 1 1 100%;
+                width: 100%;
+                max-width: 100%;
                 height: 44px;
-                padding: 0 14px;
+                padding: 0 16px;
                 box-sizing: border-box;
             }
 
@@ -1359,7 +1379,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             .senha-row .btn-sair,
             .senha-row .btn-salvar,
             .senha-row .btn-apagar {
-                height: 44px;
+                height: 42px;
                 padding: 0 14px;
                 white-space: nowrap;
                 font-size: 0.85rem;
@@ -1367,8 +1387,23 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 align-items: center;
                 justify-content: center;
                 border-radius: 18px;
-                flex-shrink: 0;
+                flex: 1 1 auto;
+                min-width: 0;
                 box-sizing: border-box;
+            }
+
+            .senha-row .btn-salvar,
+            .senha-row .btn-apagar {
+                display: none;
+            }
+
+            body.modo-edicao .senha-row .btn-sair {
+                display: none !important;
+            }
+
+            body.modo-edicao .senha-row .btn-salvar,
+            body.modo-edicao .senha-row .btn-apagar {
+                display: inline-flex !important;
             }
 
             .grid-duplo {
@@ -1516,7 +1551,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php" class="ativo">Perfil</a>
-                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="event.preventDefault(); event.stopPropagation(); togglePainelAcessibilidade(event); if(document.getElementById('navDropdownMobile')) document.getElementById('navDropdownMobile').classList.remove('aberto'); if(document.querySelector('.nav-logo')) document.querySelector('.nav-logo').classList.remove('aberto');">Configurações</a>
+                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
             <a href="Perfil.php" class="nav-perfil atual" style="text-decoration: none;">
                 <div class="perfil-capsula" <?= !empty($fotoPerfilDb) ? "style='background-image: url($fotoPerfilDb);'" : '' ?>>
@@ -1588,7 +1623,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                             onclick="location.href='Sair.php'">Sair da conta</button>
                         <button type="button" class="btn-editar" id="btnEditar"
                             onclick="toggleEdicao(true)">Editar</button>
-                        <button type="submit" class="btn-editar btn-salvar" id="btnSalvar">Salvar</button>
+                        <button type="submit" class="btn-editar btn-salvar" id="btnSalvar" style="display: none;">Salvar</button>
                         <button type="button" class="btn-apagar" id="btnApagar" style="display: none;"
                             onclick="confirmarApagar()">Apagar Conta</button>
                     </div>
@@ -1938,8 +1973,8 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     }
                     toggleEdicao(false);
                 };
-                btnSalvar.style.display = 'inline-block';
-                btnApagar.style.display = 'inline-block';
+                btnSalvar.style.display = 'inline-flex';
+                btnApagar.style.display = 'inline-flex';
                 inputs.forEach(input => {
                     input.removeAttribute('readonly');
                     input.style.background = '#fff';
@@ -1947,7 +1982,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 });
             } else {
                 body.classList.remove('modo-edicao');
-                btnSair.style.display = 'inline-block';
+                btnSair.style.display = 'inline-flex';
                 btnEditar.textContent = 'Editar';
                 btnEditar.style.background = '#bce0e6';
                 btnEditar.style.color = '#444';

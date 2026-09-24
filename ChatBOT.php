@@ -894,26 +894,48 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             display: none;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) and (min-width: 769px) {
+            .sidebar-historico {
+                width: 220px;
+                padding: 30px 14px;
+            }
             .conteudo-site {
-                padding: 80px 14px 14px 14px;
+                padding: 90px 16px 16px 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html, body {
+                height: 100dvh;
+                min-height: 100dvh;
+                overflow: hidden;
+            }
+
+            .conteudo-site {
+                padding: 76px 14px calc(12px + env(safe-area-inset-bottom, 0px)) 14px;
                 box-sizing: border-box;
+                height: 100dvh;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
             }
 
             .btn-toggle-historico-mobile {
-                display: flex !important;
-                width: 100% !important;
-                max-width: 100% !important;
+                display: inline-flex !important;
+                width: auto !important;
+                min-width: 130px !important;
+                max-width: 180px !important;
                 box-sizing: border-box !important;
                 align-self: center !important;
-                margin: 0 auto 10px auto !important;
-                height: 42px !important;
-                padding: 0 20px !important;
+                margin: 0 auto 8px auto !important;
+                height: 38px !important;
+                padding: 0 18px !important;
                 font-weight: 800;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 justify-content: center;
                 border-radius: 20px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+                flex-shrink: 0;
             }
 
             .btn-fechar-historico-mobile {
@@ -960,22 +982,32 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 
             .layout-chat-wrapper {
                 flex-direction: column;
-                gap: 10px;
+                gap: 0;
                 width: 100%;
+                flex: 1;
+                min-height: 0;
                 margin: 0;
             }
 
             .caixa-chat {
-                border-radius: 28px;
-                height: calc(100dvh - 175px);
-                min-height: 380px;
+                border-radius: 26px;
+                flex: 1;
+                min-height: 0;
+                height: auto;
                 width: 100%;
                 box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                position: relative;
             }
 
             .area-mensagens {
-                padding: 40px 14px 70px 14px;
+                flex: 1;
+                min-height: 0;
+                padding: 20px 14px 75px 14px;
                 gap: 12px;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .mensagem {
@@ -991,7 +1023,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             }
 
             .area-input-chat {
-                padding: 10px 12px 12px 12px;
+                padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px)) 12px;
                 gap: 8px;
             }
 
@@ -1015,7 +1047,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             }
 
             .blur-topo {
-                height: 45px;
+                height: 35px;
             }
 
             .blur-baixo {
@@ -1050,6 +1082,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 <a href="ChatBOT.php" class="ativo">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
+                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
             <?php $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; ?>
             <a href="Perfil.php" style="text-decoration: none; display: flex;">
@@ -1142,7 +1175,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 
                 <div class="area-input-chat">
                     <input type="text" class="input-chat" id="inputChat"
-                        placeholder="Digite aqui para conversar com o Helpy..." onkeypress="verificarEnter(event)">
+                        placeholder="Converse com o Helpy..." onkeypress="verificarEnter(event)">
 
                     <button class="btn-enviar-chat" onclick="enviarMensagem()">
                         <svg class="icone-enviar" viewBox="0 0 24 24">
