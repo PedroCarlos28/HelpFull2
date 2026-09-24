@@ -110,19 +110,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_POST['acao']) && $_POST['acao'] === 'deletar_post') {
-        $post_id = $_POST['post_id'];
-        $stmt = $pdo->prepare("DELETE FROM posts_comunidade WHERE id = ? AND usuario_id = ?");
-        $stmt->execute([$post_id, $_SESSION['usuario_id']]);
+        $post_id = $_POST['post_id'] ?? '';
+        if (!empty($post_id)) {
+            try {
+                $stmt = $pdo->prepare("DELETE FROM curtidas_comunidade WHERE post_id = ?");
+                $stmt->execute([$post_id]);
+                $stmt = $pdo->prepare("DELETE FROM reacoes_comunidade WHERE post_id = ?");
+                $stmt->execute([$post_id]);
+                $stmt = $pdo->prepare("DELETE FROM notificacoes_sociais WHERE post_id = ?");
+                $stmt->execute([$post_id]);
+
+                $stmt = $pdo->prepare("DELETE FROM posts_comunidade WHERE id = ? AND usuario_id = ?");
+                $stmt->execute([$post_id, $_SESSION['usuario_id']]);
+            } catch (PDOException $e) {
+            }
+        }
         header("Location: Comunidade.php");
         exit;
     }
 
     if (isset($_POST['acao']) && $_POST['acao'] === 'editar_post') {
-        $post_id = $_POST['post_id'];
+        $post_id = $_POST['post_id'] ?? '';
         $novo_conteudo = trim($_POST['conteudo'] ?? '');
-        if (!empty($novo_conteudo)) {
-            $stmt = $pdo->prepare("UPDATE posts_comunidade SET conteudo_post = ? WHERE id = ? AND usuario_id = ?");
-            $stmt->execute([$novo_conteudo, $post_id, $_SESSION['usuario_id']]);
+        if (!empty($post_id) && !empty($novo_conteudo)) {
+            try {
+                $stmt = $pdo->prepare("UPDATE posts_comunidade SET conteudo_post = ? WHERE id = ? AND usuario_id = ?");
+                $stmt->execute([$novo_conteudo, $post_id, $_SESSION['usuario_id']]);
+            } catch (PDOException $e) {
+            }
         }
         header("Location: Comunidade.php");
         exit;
@@ -1464,20 +1479,19 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
 
         /* Ações do Post */
         .acoes-post-proprio {
-            position: absolute;
-            top: 18px;
-            right: 22px;
+            position: relative;
+            margin-left: auto;
             display: flex;
             align-items: center;
-            z-index: 10;
+            z-index: 20;
         }
 
         .btn-dots {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             cursor: pointer;
             color: #1a1a1a;
-            opacity: 0.6;
+            opacity: 0.75;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1485,37 +1499,37 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             height: 32px;
             border-radius: 50%;
             transition: 0.2s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            flex-shrink: 0;
         }
 
         .btn-dots:hover {
             background: #fff;
             opacity: 1;
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
         .menu-opcoes-post {
-            /* display: none; */
             visibility: hidden;
             opacity: 0;
             position: absolute;
-            top: 40px;
+            top: 38px;
             right: 0;
-            background: rgba(255, 255, 255, 0.6) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px;
             padding: 8px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1) !important;
-            border: 1px solid rgba(255, 255, 255, 0.7) !important;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid rgba(0, 0, 0, 0.08) !important;
             z-index: 30000 !important;
             flex-direction: column;
             align-items: stretch;
             gap: 2px;
-            min-width: 150px;
-            transform: translateY(-10px) scale(0.9);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-width: 140px;
+            transform: translateY(-8px) scale(0.95);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             pointer-events: none;
         }
@@ -2088,6 +2102,40 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                                 </div>
                                 <div class="post-nome"><?= htmlspecialchars($post['autor_nome']) ?></div>
                                 <div class="post-data"><?= $dataCriacao ?></div>
+
+                                <?php if (isset($_SESSION['usuario_id']) && $post['usuario_id'] == $_SESSION['usuario_id']): ?>
+                                    <div class="acoes-post-proprio">
+                                        <button type="button" class="btn-dots" onclick="toggleMenuOpcoes(this)" aria-label="Opções do post">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="1"></circle>
+                                                <circle cx="19" cy="12" r="1"></circle>
+                                                <circle cx="5" cy="12" r="1"></circle>
+                                            </svg>
+                                        </button>
+                                        <div class="menu-opcoes-post">
+                                            <button type="button" class="btn-menu-opcao excluir" onclick="deletarPost('<?= $post['id'] ?>')">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2.5">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path
+                                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                    </path>
+                                                </svg>
+                                                Apagar
+                                            </button>
+                                            <div class="divisor-menu"></div>
+                                            <button type="button" class="btn-menu-opcao"
+                                                onclick="abrirEdicaoPost('<?= $post['id'] ?>', this)">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2.5">
+                                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                                </svg>
+                                                Editar
+                                            </button>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div class="post-texto"><?= htmlspecialchars($post['conteudo_post']) ?></div>
 
@@ -2180,40 +2228,6 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                             </div>
                         <?php endif; ?>
                     </div>
-
-                    <?php if (isset($_SESSION['usuario_id']) && $post['usuario_id'] == $_SESSION['usuario_id']): ?>
-                        <div class="acoes-post-proprio">
-                            <button class="btn-dots" onclick="toggleMenuOpcoes(this)">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="1"></circle>
-                                    <circle cx="19" cy="12" r="1"></circle>
-                                    <circle cx="5" cy="12" r="1"></circle>
-                                </svg>
-                            </button>
-                            <div class="menu-opcoes-post">
-                                <button class="btn-menu-opcao excluir" onclick="deletarPost(<?= $post['id'] ?>)">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2.5">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path
-                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                        </path>
-                                    </svg>
-                                    Apagar
-                                </button>
-                                <div class="divisor-menu"></div>
-                                <button class="btn-menu-opcao"
-                                    onclick="abrirEdicaoPost(<?= $post['id'] ?>, <?= htmlspecialchars(json_encode($post['conteudo_post']), ENT_QUOTES, 'UTF-8') ?>)">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2.5">
-                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                    </svg>
-                                    Editar
-                                </button>
-                            </div>
-                        </div>
-                    <?php endif; ?>
 
                     <?php if (count($reacoes) > 0): ?>
                         <div class="lista-comentarios">
@@ -2729,10 +2743,11 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         if (mainForm) mainForm.addEventListener('submit', handlePostSubmission);
         if (navForm) navForm.addEventListener('submit', handlePostSubmission);
         function deletarPost(id) {
-            console.log('Deletar post chamado para ID:', id);
+            if (!id) return;
             if (confirm("Tem certeza que deseja apagar esta publicação?")) {
                 const form = document.createElement('form');
                 form.method = 'POST';
+                form.action = 'Comunidade.php';
                 form.innerHTML = `
                     <input type="hidden" name="acao" value="deletar_post">
                     <input type="hidden" name="post_id" value="${id}">
@@ -2742,8 +2757,11 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             }
         }
 
-        function abrirEdicaoPost(id, texto) {
-            console.log('Abrir edição para ID:', id);
+        function abrirEdicaoPost(id, btn) {
+            const card = btn ? btn.closest('.post-card') : null;
+            const postTextoEl = card ? card.querySelector('.post-texto') : null;
+            const texto = postTextoEl ? postTextoEl.innerText.trim() : '';
+
             const inputId = document.getElementById('edit-post-id');
             const inputTexto = document.getElementById('edit-post-texto');
             const modal = document.getElementById('modal-edicao');
@@ -2752,39 +2770,27 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 inputId.value = id;
                 inputTexto.value = texto;
                 modal.style.display = 'flex';
+                setTimeout(() => {
+                    inputTexto.focus();
+                }, 50);
             } else {
-                console.error('Elementos do modal não encontrados');
                 alert('Erro ao abrir o editor. Elementos faltando no site.');
             }
         }
 
         function fecharEdicaoPost() {
-            document.getElementById('modal-edicao').style.display = 'none';
+            const modal = document.getElementById('modal-edicao');
+            if (modal) modal.style.display = 'none';
         }
 
         // Handler para o formulário de edição
         const editForm = document.querySelector('#modal-edicao form');
         if (editForm) {
-            editForm.addEventListener('submit', async function (e) {
-                e.preventDefault();
+            editForm.addEventListener('submit', function (e) {
                 const btn = this.querySelector('button[type="submit"]');
-                const originalText = btn.innerText;
-                btn.disabled = true;
-                btn.innerText = "Salvando...";
-
-                const formData = new FormData(this);
-                formData.append('ajax', '1');
-
-                try {
-                    await fetch('Comunidade.php', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    window.location.reload();
-                } catch (error) {
-                    alert("Erro ao editar a publicação.");
-                    btn.disabled = false;
-                    btn.innerText = originalText;
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerText = "Salvando...";
                 }
             });
         }

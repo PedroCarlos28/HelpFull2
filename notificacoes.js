@@ -407,9 +407,13 @@
         aplicarIdioma();
     }
 
+    var _bloqueioFecharPainelAcess = false;
+
     window.togglePainelAcessibilidade = function (e) {
-        if (e && e.preventDefault) e.preventDefault();
-        if (e && e.stopPropagation) e.stopPropagation();
+        if (e) {
+            if (e.preventDefault) e.preventDefault();
+            if (e.stopPropagation) e.stopPropagation();
+        }
         var p = document.getElementById('painelAcessibilidade');
         var b = document.getElementById('btnAcessibilidade');
         if (!p) {
@@ -419,9 +423,19 @@
         }
         if (!p) return;
         var ab = !p.classList.contains('aberto');
-        p.classList.toggle('aberto', ab);
-        p.setAttribute('data-aberto', ab ? 'true' : 'false');
-        if (b) b.setAttribute('aria-expanded', ab ? 'true' : 'false');
+        if (ab) {
+            _bloqueioFecharPainelAcess = true;
+            setTimeout(function () {
+                _bloqueioFecharPainelAcess = false;
+            }, 400);
+            p.classList.add('aberto');
+            p.setAttribute('data-aberto', 'true');
+            if (b) b.setAttribute('aria-expanded', 'true');
+        } else {
+            p.classList.remove('aberto');
+            p.setAttribute('data-aberto', 'false');
+            if (b) b.setAttribute('aria-expanded', 'false');
+        }
     };
     window.abrirPainelAcessibilidade = window.togglePainelAcessibilidade;
 
@@ -434,10 +448,38 @@
         if (dropdown) dropdown.classList.remove('aberto');
         var logo = document.querySelector('.nav-logo') || document.querySelector('.nav-logo-capsula');
         if (logo) logo.classList.remove('aberto');
-        setTimeout(function () {
-            window.togglePainelAcessibilidade(e);
-        }, 30);
+        window.togglePainelAcessibilidade(e);
     };
+
+    function garantirBotaoAcessibilidade() {
+        var b = document.getElementById('btnAcessibilidade');
+        if (!b) {
+            var navContainer = document.querySelector('.nav-container-global');
+            if (navContainer) {
+                var anchor = document.createElement('div');
+                anchor.className = 'acessibilidade-anchor';
+                anchor.innerHTML = `
+                    <button type="button" class="btn-acessibilidade" id="btnAcessibilidade" onclick="togglePainelAcessibilidade(event)" aria-label="Abrir configurações e acessibilidade" aria-expanded="false" title="Configurações">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </button>
+                `;
+                navContainer.appendChild(anchor);
+            }
+        } else {
+            // Se o botão já existe mas usa texto ou ícone de fonte que pode falhar, garante o SVG
+            if (!b.querySelector('svg')) {
+                b.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                `;
+            }
+        }
+    }
 
     function conectarControlesAcessibilidade() {
         var p = document.getElementById('painelAcessibilidade');
@@ -489,6 +531,7 @@
         aplicarAcessibilidade();
         criarPainelAcessibilidade();
         conectarControlesAcessibilidade();
+        garantirBotaoAcessibilidade();
         vincularHoverPerfil();
         carregarNotificacoes();
 
@@ -503,9 +546,11 @@
                 }
             }
 
+            if (_bloqueioFecharPainelAcess) return;
+
             var pa = document.getElementById('painelAcessibilidade');
             var ba = document.getElementById('btnAcessibilidade');
-            var ml = e.target.closest('.btn-abrir-acessibilidade, [onclick*="togglePainelAcessibilidade"], [onclick*="abrirPainelAcessibilidade"], .nav-dropdown-mobile');
+            var ml = e.target.closest('.btn-abrir-acessibilidade, .btn-acessibilidade, [onclick*="togglePainelAcessibilidade"], [onclick*="abrirPainelAcessibilidade"], .nav-dropdown-mobile');
             if (pa && pa.classList.contains('aberto')) {
                 if (!pa.contains(e.target) && (!ba || !ba.contains(e.target)) && !ml) {
                     pa.classList.remove('aberto');
@@ -519,6 +564,7 @@
     if (document.readyState !== 'loading') {
         criarPainelAcessibilidade();
         conectarControlesAcessibilidade();
+        garantirBotaoAcessibilidade();
     }
 
 })();

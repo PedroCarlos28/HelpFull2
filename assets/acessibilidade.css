@@ -88,10 +88,10 @@
 }
 
 #painelAcessibilidade.aberto {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateX(-50%) translateY(0) scale(1) !important;
 }
 
 .acessibilidade-cabecalho {
