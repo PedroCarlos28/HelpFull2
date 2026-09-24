@@ -347,9 +347,12 @@
     function aplicarAcessibilidade() {
         var tg = localStorage.getItem('helpfull_textoGrande') === 'true';
         document.documentElement.classList.toggle('acessibilidade-texto-grande', tg);
+        document.body.classList.toggle('acessibilidade-texto-grande', tg);
         Object.keys(prefAcess).forEach(function (k) {
             var ativo = localStorage.getItem('helpfull_' + k) === 'true';
-            document.body.classList.toggle(prefAcess[k], ativo);
+            var classe = prefAcess[k];
+            document.body.classList.toggle(classe, ativo);
+            document.documentElement.classList.toggle(classe, ativo);
             var el = document.querySelector('[data-acessibilidade="' + k + '"]');
             if (el) { el.classList.toggle('ativo', ativo); el.setAttribute('aria-pressed', ativo ? 'true' : 'false'); }
         });
@@ -357,24 +360,66 @@
 
     function criarPainelAcessibilidade() {
         var p = document.getElementById('painelAcessibilidade');
+        if (!p) {
+            var div = document.createElement('div');
+            div.innerHTML = `
+                <section id="painelAcessibilidade" aria-label="Opções de acessibilidade">
+                    <div class="acessibilidade-cabecalho">
+                        <div>
+                            <h2>Acessibilidade</h2>
+                            <p>Preferências aplicadas em todo o site</p>
+                        </div>
+                        <button type="button" class="acessibilidade-fechar" aria-label="Fechar acessibilidade">×</button>
+                    </div>
+                    <div class="acessibilidade-opcoes">
+                        <div class="acessibilidade-idioma">
+                            <label for="seletorIdioma">Idioma</label>
+                            <select id="seletorIdioma" aria-label="Selecionar idioma">
+                                <option value="pt-BR">Português (Brasil)</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="escuro"><span><strong>Modo noturno</strong><small>Fundo preto e superfícies cinza escuro</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
+                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="contraste"><span><strong>Mais contraste</strong><small>Realça bordas, textos e links</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
+                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="textoGrande"><span><strong>Texto maior</strong><small>Aumenta a leitura sem trocar de página</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
+                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="sublinhar"><span><strong>Sublinhar links</strong><small>Facilita localizar elementos clicáveis</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
+                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="semAnimacao"><span><strong>Reduzir animações</strong><small>Diminui movimentos e transições</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
+                    </div>
+                    <div class="acessibilidade-rodape"><button type="button" class="acessibilidade-resetar">Restaurar padrão</button></div>
+                </section>
+            `.trim();
+            p = div.firstElementChild;
+            document.body.appendChild(p);
+        }
         var b = document.getElementById('btnAcessibilidade');
-        if (!p || !b) return;
-        b.setAttribute('aria-expanded', 'false');
+        if (b) b.setAttribute('aria-expanded', 'false');
         var f = p.querySelector('.acessibilidade-fechar');
         if (f && f.dataset.ligado !== 'true') {
-            f.addEventListener('click', function () { p.classList.remove('aberto'); b.setAttribute('aria-expanded','false'); });
+            f.addEventListener('click', function () {
+                p.classList.remove('aberto');
+                p.setAttribute('data-aberto', 'false');
+                if (b) b.setAttribute('aria-expanded','false');
+            });
             f.dataset.ligado = 'true';
         }
-        aplicarAcessibilidade(); aplicarIdioma();
+        aplicarAcessibilidade();
+        aplicarIdioma();
     }
 
     window.togglePainelAcessibilidade = function () {
         var p = document.getElementById('painelAcessibilidade');
         var b = document.getElementById('btnAcessibilidade');
+        if (!p) {
+            criarPainelAcessibilidade();
+            conectarControlesAcessibilidade();
+            p = document.getElementById('painelAcessibilidade');
+        }
         if (!p) return;
         var ab = p.classList.toggle('aberto');
+        p.setAttribute('data-aberto', ab ? 'true' : 'false');
         if (b) b.setAttribute('aria-expanded', ab ? 'true' : 'false');
     };
+    window.abrirPainelAcessibilidade = window.togglePainelAcessibilidade;
 
     function conectarControlesAcessibilidade() {
         var p = document.getElementById('painelAcessibilidade');
@@ -382,23 +427,39 @@
         p.dataset.controlesConectados = 'true';
         var si = p.querySelector('#seletorIdioma');
         if (si && si.dataset.ligado !== 'true') {
-            si.addEventListener('change', function () { localStorage.setItem('helpfull_idioma', si.value); aplicarIdioma(); });
+            si.value = localStorage.getItem('helpfull_idioma') || 'pt-BR';
+            si.addEventListener('change', function () {
+                localStorage.setItem('helpfull_idioma', si.value);
+                aplicarIdioma();
+            });
             si.dataset.ligado = 'true';
         }
-        p.querySelectorAll('[data-acessibilidade]:not([data-acessibilidade-inline])').forEach(function (el) {
-            el.addEventListener('click', function () {
+        p.querySelectorAll('[data-acessibilidade]').forEach(function (el) {
+            if (el.dataset.ligado === 'true') return;
+            el.dataset.ligado = 'true';
+            el.addEventListener('click', function (e) {
+                e.preventDefault();
                 var k = el.getAttribute('data-acessibilidade');
-                localStorage.setItem('helpfull_' + k, localStorage.getItem('helpfull_' + k) === 'true' ? 'false' : 'true');
+                var ativo = localStorage.getItem('helpfull_' + k) === 'true';
+                localStorage.setItem('helpfull_' + k, (!ativo).toString());
                 aplicarAcessibilidade();
             });
         });
         var re = p.querySelector('.acessibilidade-resetar');
-        if (re) re.addEventListener('click', function () {
-            Object.keys(prefAcess).forEach(function (k) { localStorage.removeItem('helpfull_' + k); });
-            localStorage.setItem('helpfull_idioma', 'pt-BR');
-            aplicarAcessibilidade(); aplicarIdioma();
-        });
-        aplicarAcessibilidade(); aplicarIdioma();
+        if (re && re.dataset.ligado !== 'true') {
+            re.dataset.ligado = 'true';
+            re.addEventListener('click', function (e) {
+                e.preventDefault();
+                Object.keys(prefAcess).forEach(function (k) { localStorage.removeItem('helpfull_' + k); });
+                localStorage.removeItem('helpfull_textoGrande');
+                localStorage.setItem('helpfull_idioma', 'pt-BR');
+                if (si) si.value = 'pt-BR';
+                aplicarAcessibilidade();
+                aplicarIdioma();
+            });
+        }
+        aplicarAcessibilidade();
+        aplicarIdioma();
     }
 
     /* ── Inicialização ────────────────────────────────────── */

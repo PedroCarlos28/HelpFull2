@@ -1341,10 +1341,24 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
             .grid-duplo {
                 grid-template-columns: 1fr;
+                gap: 16px;
             }
 
             .grid-cal-detalhes {
-                flex-direction: column;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 20px !important;
+                width: 100% !important;
+            }
+
+            .grid-cal-detalhes > .card-perfil {
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+
+            .detalhes-scroll {
+                max-height: 320px;
+                padding: 10px 0;
             }
 
             .stats-container {
@@ -1377,49 +1391,64 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             }
 
             .graficos-container {
-                padding: 20px 14px;
-                border-radius: 25px;
+                padding: 16px 12px;
+                border-radius: 24px;
+                box-sizing: border-box;
+                width: 100%;
             }
 
             .graficos-badge {
-                font-size: 1.1rem;
-                padding: 8px 18px;
-                margin-bottom: 15px;
+                font-size: 1rem;
+                padding: 6px 16px;
+                margin-bottom: 12px;
             }
 
             .grafico-card {
-                padding: 16px 12px;
+                padding: 14px 12px;
+                min-height: unset;
                 height: auto;
-                min-height: 230px;
-                border-radius: 20px;
+                border-radius: 18px;
+                box-sizing: border-box;
+                width: 100%;
+            }
+
+            .grafico-titulo {
+                font-size: 1rem;
             }
 
             .grafico-wrapper {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 gap: 6px;
-                padding-bottom: 6px;
+                height: 110px;
+                margin-top: 10px;
+                padding-bottom: 2px;
             }
 
             .grafico-y-axis {
-                min-width: 16px;
-                font-size: 0.68rem;
-                padding-bottom: 20px;
+                min-width: 14px;
+                font-size: 0.65rem;
+                height: 90px;
+                padding-bottom: 16px;
+                justify-content: space-between;
             }
 
             .grafico-barras {
-                min-width: 285px;
+                min-width: 260px;
                 gap: 2px;
+                height: 100%;
             }
 
             .barra {
-                max-width: 18px;
-                margin-bottom: 8px;
+                max-width: 14px;
+                margin-bottom: 4px;
+                border-radius: 4px;
             }
 
             .barra-label {
                 font-size: 0.58rem;
                 font-weight: 800;
+                line-height: 1;
             }
 
             .rodape-simples {
@@ -1483,41 +1512,16 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         </nav>
 
         <div class="acessibilidade-anchor">
-        <button type="button" class="btn-acessibilidade" id="btnAcessibilidade" onclick="abrirPainelAcessibilidade()" aria-label="Abrir opções de acessibilidade" aria-expanded="false">
-            <span class="material-symbols-rounded" aria-hidden="true">settings</span>
-        </button>
+            <button type="button" class="btn-acessibilidade" id="btnAcessibilidade" onclick="togglePainelAcessibilidade()" aria-label="Abrir opções de acessibilidade" aria-expanded="false">
+                <span class="material-symbols-rounded" aria-hidden="true">settings</span>
+            </button>
 
-        <button class="btn-notificacao-separado" id="btnNotificacaoDetached" onclick="togglePainelNotificacoes()">
-            <svg viewBox="0 0 24 24">
-                <path
-                    d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
-            </svg>
-        </button>
-
-        <section id="painelAcessibilidade" aria-label="Opções de acessibilidade">
-            <div class="acessibilidade-cabecalho">
-                <div>
-                    <h2>Acessibilidade</h2>
-                    <p>Preferências aplicadas em todo o site</p>
-                </div>
-                <button type="button" class="acessibilidade-fechar" aria-label="Fechar acessibilidade" onclick="abrirPainelAcessibilidade()">×</button>
-            </div>
-            <div class="acessibilidade-opcoes">
-                <div class="acessibilidade-idioma">
-                    <label for="seletorIdioma">Idioma</label>
-                    <select id="seletorIdioma" aria-label="Selecionar idioma">
-                        <option value="pt-BR">Português (Brasil)</option>
-                        <option value="en">English</option>
-                    </select>
-                </div>
-                <button type="button" class="acessibilidade-opcao" data-acessibilidade="escuro" data-acessibilidade-inline="true" onclick="alternarAcessibilidade('escuro', this)" aria-pressed="false"><span><strong>Modo noturno</strong><small>Fundo preto e superfícies cinza escuro</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                <button type="button" class="acessibilidade-opcao" data-acessibilidade="contraste" data-acessibilidade-inline="true" onclick="alternarAcessibilidade('contraste', this)" aria-pressed="false"><span><strong>Mais contraste</strong><small>Realça bordas, textos e links</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                <button type="button" class="acessibilidade-opcao" data-acessibilidade="textoGrande" data-acessibilidade-inline="true" onclick="alternarAcessibilidade('textoGrande', this)" aria-pressed="false"><span><strong>Texto maior</strong><small>Aumenta a leitura sem trocar de página</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                <button type="button" class="acessibilidade-opcao" data-acessibilidade="sublinhar" data-acessibilidade-inline="true" onclick="alternarAcessibilidade('sublinhar', this)" aria-pressed="false"><span><strong>Sublinhar links</strong><small>Facilita localizar elementos clicáveis</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                <button type="button" class="acessibilidade-opcao" data-acessibilidade="semAnimacao" data-acessibilidade-inline="true" onclick="alternarAcessibilidade('semAnimacao', this)" aria-pressed="false"><span><strong>Reduzir animações</strong><small>Diminui movimentos e transições</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-            </div>
-            <div class="acessibilidade-rodape"><button type="button" class="acessibilidade-resetar">Restaurar padrão</button></div>
-        </section>
+            <button class="btn-notificacao-separado" id="btnNotificacaoDetached" onclick="togglePainelNotificacoes()">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+                </svg>
+            </button>
         </div>
 
         <div class="painel-notificacoes" id="painelNotificacoes">
@@ -2007,48 +2011,11 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
     </script>
     <script>
-        function posicionarPainelAcessibilidade() {
-            var painel = document.getElementById('painelAcessibilidade');
-            if (!painel) return;
-            painel.style.removeProperty('left');
-            painel.style.removeProperty('right');
-            painel.style.removeProperty('top');
-            painel.style.marginLeft = '0px';
-            var limite = painel.getBoundingClientRect();
-            var ajuste = 0;
-            if (limite.right > window.innerWidth - 12) ajuste = window.innerWidth - 12 - limite.right;
-            if (limite.left + ajuste < 12) ajuste = 12 - limite.left;
-            painel.style.marginLeft = ajuste + 'px';
-        }
-
         function abrirPainelAcessibilidade() {
-            var painel = document.getElementById('painelAcessibilidade');
-            var botao = document.getElementById('btnAcessibilidade');
-            if (!painel) return;
-
-            var abrir = !painel.classList.contains('aberto');
-            painel.classList.toggle('aberto', abrir);
-            painel.setAttribute('data-aberto', abrir ? 'true' : 'false');
-            if (botao) botao.setAttribute('aria-expanded', abrir ? 'true' : 'false');
-            if (abrir) {
-                posicionarPainelAcessibilidade();
-                window.requestAnimationFrame(posicionarPainelAcessibilidade);
+            if (window.togglePainelAcessibilidade) {
+                window.togglePainelAcessibilidade();
             }
         }
-
-        function alternarAcessibilidade(chave, controle) {
-            var classe = 'acessibilidade-' + (chave === 'textoGrande' ? 'texto-grande' : chave === 'semAnimacao' ? 'sem-animacao' : chave);
-            var ativo = !document.body.classList.contains(classe);
-            document.body.classList.toggle(classe, ativo);
-            localStorage.setItem('helpfull_' + chave, ativo ? 'true' : 'false');
-            controle.classList.toggle('ativo', ativo);
-            controle.setAttribute('aria-pressed', ativo ? 'true' : 'false');
-        }
-
-        window.addEventListener('resize', function () {
-            var painel = document.getElementById('painelAcessibilidade');
-            if (painel && painel.getAttribute('data-aberto') === 'true') posicionarPainelAcessibilidade();
-        });
     </script>
     <script src="notificacoes.js?v=20260916-v2"></script>
 </body>

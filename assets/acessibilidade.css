@@ -1,25 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0');
 
 #painelAcessibilidade {
-    position: absolute;
-    top: 66px;
-    left: 50%;
-    right: auto;
-    width: min(340px, calc(100vw - 32px));
+    position: fixed !important;
+    top: 75px !important;
+    left: 50% !important;
+    right: auto !important;
+    width: min(340px, calc(100vw - 32px)) !important;
     padding: 22px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.85);
     border-radius: 28px;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.96);
     color: #1a1a1a;
     font-family: 'Montserrat', sans-serif;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(43, 122, 140, 0.1);
     backdrop-filter: blur(35px);
     -webkit-backdrop-filter: blur(35px);
-    z-index: 3500;
+    z-index: 99999 !important;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transform: translateX(-50%) translateY(-12px) scale(0.94);
+    transform: translateX(-50%) translateY(-14px) scale(0.92);
     transform-origin: top center;
     transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease;
 }
@@ -938,31 +938,9 @@ body.acessibilidade-contraste .nav-dropdown-mobile a.ativo::after {
     box-shadow: none !important;
 }
 
-body.acessibilidade-escuro .nav-logo-capsula.atual,
-body.acessibilidade-contraste .nav-logo-capsula.atual {
-    position: relative;
-}
-
-.nav-logo-capsula.atual {
-    position: relative;
-}
-
-.nav-logo-capsula.atual::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: -9px;
-    width: 24px;
-    height: 3px;
-    border-radius: 3px;
-    background: #2b7a8c;
-    transform: translateX(-50%);
-}
-
 body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .nav-links a.ativo::after,
 body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .links-capsula a.ativo::after,
-body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .nav-dropdown-mobile a.ativo::after,
-body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .nav-logo-capsula.atual::after {
+body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .nav-dropdown-mobile a.ativo::after {
     box-shadow: 0 0 6px rgba(43, 122, 140, 0.7),
         0 0 12px rgba(43, 122, 140, 0.3);
 }
@@ -981,23 +959,6 @@ body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .nav-perfil.atua
 body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .nav-logo,
 body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .nav-logo-capsula {
     text-shadow: none !important;
-}
-
-body.acessibilidade-escuro .nav-logo-capsula.atual::after,
-body.acessibilidade-contraste .nav-logo-capsula.atual::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: -9px;
-    width: 24px;
-    height: 3px;
-    border-radius: 3px;
-    background: var(--tema-link);
-    transform: translateX(-50%);
-}
-
-body.acessibilidade-escuro .nav-logo-capsula.atual::after {
-    box-shadow: 0 0 7px rgba(130, 211, 223, 0.75);
 }
 
 body.acessibilidade-escuro .nav-logo,
@@ -1583,13 +1544,12 @@ body.acessibilidade-texto-grande .navbar-topo:has(.nav-top-row) .nav-top-row {
         overflow: visible !important;
     }
 
-    /* Container flutuante do início sempre visível no celular */
-    .nav-container-global,
+    /* No início, respeita a classe escondida no mobile igual ao PC */
     .nav-container-global.escondida {
-        transform: translateX(-50%) translateY(0) !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
+        transform: translateX(-50%) translateY(-100px) !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
     }
 
     .nav-logo,

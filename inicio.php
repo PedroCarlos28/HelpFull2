@@ -922,7 +922,7 @@ if (isset($_SESSION['usuario_id'])) {
     <div class="nav-container-global escondida" id="nav-container-global">
         <nav class="navbar-flutuante">
             <!-- Logo SEM a estrela na navbar -->
-            <a href="inicio.php" class="nav-logo-capsula atual" style="text-decoration: none; color: inherit; display: flex; align-items: center;">HELPFULL <span class="nav-seta-dropdown"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></a>
+            <a href="inicio.php" class="nav-logo-capsula" style="text-decoration: none; color: inherit; display: flex; align-items: center;">HELPFULL <span class="nav-seta-dropdown"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></a>
             <ul class="links-capsula">
                 <li><a href="Diario.php">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>
@@ -1106,10 +1106,6 @@ if (isset($_SESSION['usuario_id'])) {
         const menuEstatico = document.getElementById('menu');
 
         function atualizarNavbarScroll() {
-            if (window.innerWidth <= 768) {
-                navbar.classList.remove('escondida');
-                return;
-            }
             if (menuEstatico) {
                 const posicao = menuEstatico.getBoundingClientRect().top;
                 if (posicao < 0) {

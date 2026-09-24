@@ -1043,15 +1043,17 @@ if (isset($_SESSION['usuario_id'])) {
 
         .busca-row {
             display: flex;
-            background: rgba(255,255,255,0.55);
+            background: rgba(255,255,255,0.65);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255,255,255,0.75);
+            border: 1px solid rgba(255,255,255,0.85);
             border-radius: 50px;
-            padding: 6px;
+            padding: 5px 6px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-            gap: 8px;
+            gap: 6px;
             align-items: center;
+            box-sizing: border-box;
+            width: 100%;
             transition: box-shadow 0.3s;
         }
 
@@ -1061,22 +1063,24 @@ if (isset($_SESSION['usuario_id'])) {
         }
 
         .busca-icone {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            margin-left: 8px;
+            margin-left: 6px;
             color: #888;
         }
 
         .busca-input {
-            flex: 1;
+            flex: 1 1 0;
+            min-width: 0;
+            width: 100%;
             border: none;
             background: transparent;
             font-family: inherit;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 600;
             color: #333;
             outline: none;
@@ -1086,9 +1090,10 @@ if (isset($_SESSION['usuario_id'])) {
         .busca-input::placeholder { color: #aaa; }
 
         .busca-btn {
-            height: 40px;
-            padding: 0 22px;
-            border-radius: 40px;
+            flex-shrink: 0;
+            height: 38px;
+            padding: 0 18px;
+            border-radius: 38px;
             border: none;
             background: #2b7a8c;
             color: #fff;
@@ -1096,6 +1101,9 @@ if (isset($_SESSION['usuario_id'])) {
             font-size: 0.88rem;
             cursor: pointer;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.25s;
             box-shadow: 0 4px 12px rgba(43,122,140,0.25);
         }
