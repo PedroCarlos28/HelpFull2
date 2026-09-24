@@ -912,7 +912,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             }
 
             .conteudo-site {
-                padding: 76px 14px calc(12px + env(safe-area-inset-bottom, 0px)) 14px;
+                padding: 88px 14px calc(12px + env(safe-area-inset-bottom, 0px)) 14px;
                 box-sizing: border-box;
                 height: 100dvh;
                 min-height: 0;

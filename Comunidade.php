@@ -1822,6 +1822,10 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 width: 100%;
             }
 
+            .caixa-agrupadora::before {
+                border-radius: 25px;
+            }
+
             .card-postagem {
                 border-radius: 22px;
                 padding: 15px;
@@ -2388,20 +2392,9 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             }
         }
 
-        let debounceTimer;
-        document.getElementById('input-busca-api')?.addEventListener('input', function () {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                if (this.value.trim().length > 2) {
-                    buscarNaAPI();
-                }
-            }, 600);
-        });
-
         document.getElementById('input-busca-api')?.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                clearTimeout(debounceTimer);
                 buscarNaAPI();
             }
         });
