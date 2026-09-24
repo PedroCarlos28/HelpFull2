@@ -1239,8 +1239,9 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             navLogo.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
-                    navDropdown.classList.toggle('aberto');
-                    navLogo.classList.toggle('aberto');
+                    e.stopPropagation();
+                    const aberto = navDropdown.classList.toggle('aberto');
+                    navLogo.classList.toggle('aberto', aberto);
                 }
             });
             document.addEventListener('click', function(e) {

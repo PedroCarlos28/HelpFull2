@@ -6,23 +6,22 @@
     left: 50%;
     right: auto;
     width: min(340px, calc(100vw - 32px));
-    padding: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.55);
-    border-radius: 22px;
-    background: rgba(235, 235, 235, 0.94);
+    padding: 22px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.95);
     color: #1a1a1a;
     font-family: 'Montserrat', sans-serif;
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    z-index: 2200;
-    display: none;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 2px 10px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(35px);
+    -webkit-backdrop-filter: blur(35px);
+    z-index: 3500;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transform: translateX(-50%) translateY(-8px) scale(0.96);
+    transform: translateX(-50%) translateY(-12px) scale(0.94);
     transform-origin: top center;
-    transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+    transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease;
 }
 
 .acessibilidade-anchor {
@@ -89,7 +88,6 @@
 }
 
 #painelAcessibilidade.aberto {
-    display: block;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -117,12 +115,25 @@
 }
 
 .acessibilidade-fechar {
-    border: 0;
-    background: transparent;
-    color: inherit;
-    font-size: 1.35rem;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    color: #444;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.25rem;
     line-height: 1;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s, color 0.2s;
+}
+
+.acessibilidade-fechar:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #1a1a1a;
+    transform: scale(1.08);
 }
 
 .acessibilidade-opcoes {
@@ -133,9 +144,10 @@
 .acessibilidade-idioma {
     display: grid;
     gap: 6px;
-    padding: 9px 11px;
-    border-radius: 13px;
-    background: rgba(255, 255, 255, 0.68);
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .acessibilidade-idioma label {
@@ -162,17 +174,18 @@
     justify-content: space-between;
     gap: 12px;
     min-height: 44px;
-    padding: 9px 11px;
-    border-radius: 13px;
-    background: rgba(255, 255, 255, 0.68);
-    color: inherit;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.03);
+    color: #1a1a1a;
     font: inherit;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.78rem;
     font-weight: 600;
     text-align: left;
     cursor: pointer;
-    border: 1px solid transparent;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 }
 
 .acessibilidade-opcao > span:first-child {
@@ -198,10 +211,14 @@
     line-height: 1.25;
 }
 
-.acessibilidade-opcao:hover,
+.acessibilidade-opcao:hover {
+    border-color: rgba(43, 122, 140, 0.3);
+    background: rgba(43, 122, 140, 0.05);
+}
+
 .acessibilidade-opcao.ativo {
     border-color: #2b7a8c;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(43, 122, 140, 0.08);
 }
 
 .acessibilidade-status {
@@ -210,7 +227,7 @@
     flex: 0 0 auto;
     position: relative;
     border-radius: 20px;
-    background: #a7a7a7;
+    background: #dcdcdc;
     transition: background 0.2s ease;
 }
 
@@ -223,6 +240,7 @@
     height: 14px;
     border-radius: 50%;
     background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     transition: transform 0.2s ease;
 }
 
@@ -237,19 +255,27 @@
 .acessibilidade-rodape {
     display: flex;
     justify-content: flex-end;
-    margin-top: 12px;
+    margin-top: 14px;
 }
 
 .acessibilidade-resetar {
-    padding: 7px 11px;
-    border: 1px solid currentColor;
-    border-radius: 10px;
-    background: transparent;
-    color: inherit;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(43, 122, 140, 0.1);
+    color: #2b7a8c;
     font: inherit;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.acessibilidade-resetar:hover {
+    background: #2b7a8c;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(43, 122, 140, 0.2);
 }
 
 /* Os temas usam camadas de superficie e nao aplicam filtros sobre midias. */
@@ -1547,5 +1573,45 @@ body.acessibilidade-texto-grande .navbar-topo:has(.nav-top-row) .nav-top-row {
     .nav-logo.aberto .nav-seta-dropdown,
     .nav-logo-capsula.aberto .nav-seta-dropdown {
         transform: rotate(180deg);
+    }
+
+    /* Garante que navbars não cortem o dropdown móvel */
+    .navbar-topo,
+    .navbar-topo.scrolled,
+    .navbar-flutuante,
+    .nav-container-global {
+        overflow: visible !important;
+    }
+
+    /* Container flutuante do início sempre visível no celular */
+    .nav-container-global,
+    .nav-container-global.escondida {
+        transform: translateX(-50%) translateY(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    .nav-logo,
+    .nav-logo-capsula {
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: transparent !important;
+        touch-action: manipulation !important;
+    }
+
+    /* Dropdown mobile fosco com alta opacidade e visual refinado */
+    .nav-dropdown-mobile {
+        background: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(30px) !important;
+        -webkit-backdrop-filter: blur(30px) !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 16px 45px rgba(0, 0, 0, 0.18) !important;
+        z-index: 3200 !important;
+    }
+
+    body.acessibilidade-escuro .nav-dropdown-mobile {
+        background: rgba(24, 24, 27, 0.98) !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6) !important;
     }
 }

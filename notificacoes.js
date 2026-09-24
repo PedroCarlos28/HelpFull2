@@ -417,10 +417,22 @@
         document.addEventListener('click', function (e) {
             var painel = getPainel();
             var btn    = getBtnSino();
-            if (!painel || !painel.classList.contains('aberto')) return;
-            if (!painel.contains(e.target) && (!btn || !btn.contains(e.target))) {
-                painel.classList.remove('aberto');
-                _hoverTimer = setTimeout(esconderBtnSino, 1500);
+            if (painel && painel.classList.contains('aberto')) {
+                if (!painel.contains(e.target) && (!btn || !btn.contains(e.target))) {
+                    painel.classList.remove('aberto');
+                    _hoverTimer = setTimeout(esconderBtnSino, 1500);
+                }
+            }
+
+            var pa = document.getElementById('painelAcessibilidade');
+            var ba = document.getElementById('btnAcessibilidade');
+            var ml = e.target.closest('[onclick*="togglePainelAcessibilidade"], [onclick*="abrirPainelAcessibilidade"]');
+            if (pa && pa.classList.contains('aberto')) {
+                if (!pa.contains(e.target) && (!ba || !ba.contains(e.target)) && !ml) {
+                    pa.classList.remove('aberto');
+                    pa.setAttribute('data-aberto', 'false');
+                    if (ba) ba.setAttribute('aria-expanded', 'false');
+                }
             }
         });
     });

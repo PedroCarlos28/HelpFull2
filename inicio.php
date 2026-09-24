@@ -759,6 +759,7 @@ if (isset($_SESSION['usuario_id'])) {
                 justify-content: space-between;
                 padding: 10px 25px;
                 gap: 15px;
+                overflow: visible !important;
             }
 
             .links-capsula {
@@ -1081,14 +1082,24 @@ if (isset($_SESSION['usuario_id'])) {
         const navbar = document.getElementById('nav-container-global');
         const menuEstatico = document.getElementById('menu');
 
-        window.addEventListener('scroll', () => {
-            const posicao = menuEstatico.getBoundingClientRect().top;
-            if (posicao < 0) {
+        function atualizarNavbarScroll() {
+            if (window.innerWidth <= 768) {
                 navbar.classList.remove('escondida');
-            } else {
-                navbar.classList.add('escondida');
+                return;
             }
-        });
+            if (menuEstatico) {
+                const posicao = menuEstatico.getBoundingClientRect().top;
+                if (posicao < 0) {
+                    navbar.classList.remove('escondida');
+                } else {
+                    navbar.classList.add('escondida');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', atualizarNavbarScroll);
+        window.addEventListener('resize', atualizarNavbarScroll);
+        atualizarNavbarScroll();
 
         // === MOBILE DROPDOWN TOGGLE ===
         const navLogo = document.querySelector('.nav-logo-capsula');
@@ -1097,8 +1108,9 @@ if (isset($_SESSION['usuario_id'])) {
             navLogo.addEventListener('click', function (e) {
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
-                    navDropdown.classList.toggle('aberto');
-                    navLogo.classList.toggle('aberto');
+                    e.stopPropagation();
+                    const aberto = navDropdown.classList.toggle('aberto');
+                    navLogo.classList.toggle('aberto', aberto);
                 }
             });
             document.addEventListener('click', function (e) {

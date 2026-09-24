@@ -149,6 +149,19 @@ try {
     $posts = [];
 }
 
+$usuarioNovoSemPosts = false;
+if (!empty($usuarioLogado['id'])) {
+    try {
+        $stmtCheckPosts = $pdo->prepare("SELECT COUNT(*) FROM posts_comunidade WHERE usuario_id = ?");
+        $stmtCheckPosts->execute([$usuarioLogado['id']]);
+        $usuarioNovoSemPosts = ((int)$stmtCheckPosts->fetchColumn() === 0);
+    } catch (PDOException $e) {
+        $usuarioNovoSemPosts = false;
+    }
+} else {
+    $usuarioNovoSemPosts = true;
+}
+
 $coresTags = [
     'Pode dar gatilho' => 'alerta',
     'Me deixou ansioso' => 'alerta',
@@ -244,7 +257,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             border: 1px solid rgba(255, 255, 255, 0.5);
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             gap: 0;
-            overflow: hidden;
+            overflow: visible;
             position: relative;
         }
 
@@ -1655,13 +1668,88 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             justify-content: space-between;
         }
 
-        .post-midias-container {
+        .banner-boas-vindas-comunidade {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(43, 122, 140, 0.28);
+            border-radius: 22px;
+            padding: 16px 20px;
+            margin: 15px 0 10px 0;
             display: flex;
-            gap: 6px;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 30px rgba(43, 122, 140, 0.08);
+            position: relative;
+            animation: fadeInDropdown 0.35s ease;
+        }
+
+        .bv-comunidade-icone {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: rgba(43, 122, 140, 0.12);
+            color: #2b7a8c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
-            align-items: flex-start;
-            padding-left: 10px;
-            margin-top: 35px;
+        }
+
+        .bv-comunidade-info {
+            flex: 1;
+        }
+
+        .bv-comunidade-info h4 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #2b7a8c;
+            margin-bottom: 3px;
+        }
+
+        .bv-comunidade-info p {
+            font-size: 0.82rem;
+            line-height: 1.45;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .btn-fechar-bv {
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            margin-left: auto;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .btn-fechar-bv:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #1a1a1a;
+            transform: scale(1.08);
+        }
+
+        body.acessibilidade-escuro .banner-boas-vindas-comunidade {
+            background: rgba(24, 24, 27, 0.9);
+            border-color: rgba(43, 122, 140, 0.4);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        body.acessibilidade-escuro .bv-comunidade-info p {
+            color: #d4d4d8;
+        }
+
+        body.acessibilidade-escuro .btn-fechar-bv {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
 
         @media (max-width: 768px) {
@@ -1937,6 +2025,21 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                         style="display: none; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div>
                 </form>
             </div>
+
+            <?php if ($usuarioNovoSemPosts): ?>
+                <div class="banner-boas-vindas-comunidade" id="bannerBoasVindasComunidade">
+                    <div class="bv-comunidade-icone">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="bv-comunidade-info">
+                        <h4>Bem-vindo(a) à Comunidade! ✦</h4>
+                        <p>Este é o seu espaço seguro para compartilhar como você está se sentindo, desabafar e acolher os outros. Você pode criar sua primeira publicação no campo acima ou reagir às postagens com empatia!</p>
+                    </div>
+                    <button type="button" class="btn-fechar-bv" onclick="document.getElementById('bannerBoasVindasComunidade').style.display='none';" aria-label="Fechar dica">×</button>
+                </div>
+            <?php endif; ?>
 
             <?php foreach ($posts as $post):
                 $dataCriacao = date('d/m/Y', strtotime($post['criado_em']));
@@ -2557,8 +2660,9 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             navLogoCom.addEventListener('click', function (e) {
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
-                    navDropdownCom.classList.toggle('aberto');
-                    navLogoCom.classList.toggle('aberto');
+                    e.stopPropagation();
+                    const aberto = navDropdownCom.classList.toggle('aberto');
+                    navLogoCom.classList.toggle('aberto', aberto);
                 }
             });
             document.addEventListener('click', function (e) {

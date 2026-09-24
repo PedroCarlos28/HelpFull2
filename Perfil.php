@@ -1326,16 +1326,17 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 width: calc(100% - 40px);
                 margin: 0 auto;
                 justify-content: space-between;
+                overflow: visible !important;
             }
             .nav-logo { cursor: pointer; }
 
             .conteudo-site {
-                padding-top: 110px;
+                padding-top: 145px;
             }
 
             .conta-grid {
                 flex-direction: column-reverse;
-                gap: 25px;
+                gap: 20px;
             }
 
             .grid-duplo {
@@ -1369,10 +1370,62 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             }
 
             .conta-imagem-placeholder {
-                width: 150px;
-                height: 150px;
-                min-width: 150px;
-                margin: 0 auto;
+                width: 140px;
+                height: 140px;
+                min-width: 140px;
+                margin: 5px auto 10px auto;
+            }
+
+            .graficos-container {
+                padding: 20px 14px;
+                border-radius: 25px;
+            }
+
+            .graficos-badge {
+                font-size: 1.1rem;
+                padding: 8px 18px;
+                margin-bottom: 15px;
+            }
+
+            .grafico-card {
+                padding: 16px 12px;
+                height: auto;
+                min-height: 230px;
+                border-radius: 20px;
+            }
+
+            .grafico-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 6px;
+                padding-bottom: 6px;
+            }
+
+            .grafico-y-axis {
+                min-width: 16px;
+                font-size: 0.68rem;
+                padding-bottom: 20px;
+            }
+
+            .grafico-barras {
+                min-width: 285px;
+                gap: 2px;
+            }
+
+            .barra {
+                max-width: 18px;
+                margin-bottom: 8px;
+            }
+
+            .barra-label {
+                font-size: 0.58rem;
+                font-weight: 800;
+            }
+
+            .rodape-simples {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
             }
 
             .btn-notificacao-separado { right: 10px; }
@@ -1447,7 +1500,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     <h2>Acessibilidade</h2>
                     <p>Preferências aplicadas em todo o site</p>
                 </div>
-                <button type="button" class="acessibilidade-fechar" aria-label="Fechar acessibilidade" onclick="var painel = document.getElementById('painelAcessibilidade'); painel.setAttribute('data-aberto', 'false'); painel.classList.remove('aberto'); painel.style.display = 'none'; painel.style.opacity = '0'; painel.style.visibility = 'hidden'; painel.style.pointerEvents = 'none'; document.getElementById('btnAcessibilidade').setAttribute('aria-expanded', 'false');">×</button>
+                <button type="button" class="acessibilidade-fechar" aria-label="Fechar acessibilidade" onclick="abrirPainelAcessibilidade()">×</button>
             </div>
             <div class="acessibilidade-opcoes">
                 <div class="acessibilidade-idioma">
@@ -1940,8 +1993,9 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             navLogo.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
-                    navDropdown.classList.toggle('aberto');
-                    navLogo.classList.toggle('aberto');
+                    e.stopPropagation();
+                    const aberto = navDropdown.classList.toggle('aberto');
+                    navLogo.classList.toggle('aberto', aberto);
                 }
             });
             document.addEventListener('click', function(e) {
@@ -1970,25 +2024,15 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         function abrirPainelAcessibilidade() {
             var painel = document.getElementById('painelAcessibilidade');
             var botao = document.getElementById('btnAcessibilidade');
-            if (!painel || !botao) return;
+            if (!painel) return;
 
-            var abrir = painel.getAttribute('data-aberto') !== 'true';
-            painel.setAttribute('data-aberto', abrir ? 'true' : 'false');
+            var abrir = !painel.classList.contains('aberto');
             painel.classList.toggle('aberto', abrir);
-            painel.style.display = abrir ? 'block' : 'none';
-            painel.style.opacity = abrir ? '0' : '0';
-            painel.style.visibility = abrir ? 'visible' : 'hidden';
-            painel.style.pointerEvents = abrir ? 'auto' : 'none';
-            botao.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+            painel.setAttribute('data-aberto', abrir ? 'true' : 'false');
+            if (botao) botao.setAttribute('aria-expanded', abrir ? 'true' : 'false');
             if (abrir) {
-                painel.style.transform = 'translateX(-50%) translateY(-14px) scale(0.9)';
                 posicionarPainelAcessibilidade();
-                window.requestAnimationFrame(function () {
-                    painel.style.opacity = '1';
-                    painel.style.transform = 'translateX(-50%) translateY(0) scale(1)';
-                    posicionarPainelAcessibilidade();
-                    window.requestAnimationFrame(posicionarPainelAcessibilidade);
-                });
+                window.requestAnimationFrame(posicionarPainelAcessibilidade);
             }
         }
 
