@@ -1377,14 +1377,14 @@ if (isset($_SESSION['usuario_id'])) {
             <ul class="nav-links">
                 <li><a href="Diario.php">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>
-                <li><a href="ChatBOT.php">ChatBOT</a></li>
+                <li><a href="ChatBOT.php">Helpy</a></li>
                 <li><a href="Atividades.php" class="ativo">Adicionais</a></li>
             </ul>
             <div class="nav-dropdown-mobile" id="navDropdownMobile">
                 <a href="inicio.php">Início</a>
                 <a href="Diario.php">Diário</a>
                 <a href="Comunidade.php">Comunidade</a>
-                <a href="ChatBOT.php">ChatBOT</a>
+                <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php" class="ativo">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
                 <a href="javascript:void(0)" onclick="if(window.togglePainelAcessibilidade){togglePainelAcessibilidade();}if(document.getElementById('navDropdownMobile'))document.getElementById('navDropdownMobile').classList.remove('aberto');if(document.querySelector('.nav-logo'))document.querySelector('.nav-logo').classList.remove('aberto');" style="display: flex; align-items: center; gap: 8px;">

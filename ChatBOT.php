@@ -28,7 +28,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HelpFull - ChatBOT</title>
+    <title>HelpFull - Helpy</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <style>
         /* =======================================
@@ -947,14 +947,14 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             <ul class="nav-links">
                 <li><a href="Diario.php">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>
-                <li><a href="ChatBOT.php" class="ativo">ChatBOT</a></li>
+                <li><a href="ChatBOT.php" class="ativo">Helpy</a></li>
                 <li><a href="Atividades.php">Adicionais</a></li>
             </ul>
             <div class="nav-dropdown-mobile" id="navDropdownMobile">
                 <a href="inicio.php">Início</a>
                 <a href="Diario.php">Diário</a>
                 <a href="Comunidade.php">Comunidade</a>
-                <a href="ChatBOT.php" class="ativo">ChatBOT</a>
+                <a href="ChatBOT.php" class="ativo">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
                 <a href="javascript:void(0)" onclick="if(window.togglePainelAcessibilidade){togglePainelAcessibilidade();}if(document.getElementById('navDropdownMobile'))document.getElementById('navDropdownMobile').classList.remove('aberto');if(document.querySelector('.nav-logo'))document.querySelector('.nav-logo').classList.remove('aberto');" style="display: flex; align-items: center; gap: 8px;">
@@ -1045,14 +1045,14 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 <div class="blur-baixo"></div>
                 <div class="area-mensagens" id="area-mensagens">
                     <div class="mensagem msg-bot">
-                        Olá, <?= htmlspecialchars($usuarioLogado['nome']) ?>! Aqui é o seu assistente HelpFull. Como
+                        Olá, <?= htmlspecialchars($usuarioLogado['nome']) ?>! Aqui é o seu assistente Helpy. Como
                         posso te apoiar hoje?
                     </div>
                 </div>
 
                 <div class="area-input-chat">
                     <input type="text" class="input-chat" id="inputChat"
-                        placeholder="Digite aqui para conversar com o ChatBOT..." onkeypress="verificarEnter(event)">
+                        placeholder="Digite aqui para conversar com o Helpy..." onkeypress="verificarEnter(event)">
 
                     <button class="btn-enviar-chat" onclick="enviarMensagem()">
                         <svg class="icone-enviar" viewBox="0 0 24 24">
@@ -1088,7 +1088,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             const areaMensagens = document.getElementById('area-mensagens');
             areaMensagens.innerHTML = `
                 <div class="mensagem msg-bot">
-                    Olá, <?= htmlspecialchars($usuarioLogado['nome']) ?>! Aqui é o seu assistente HelpFull. Como posso te apoiar hoje?
+                    Olá, <?= htmlspecialchars($usuarioLogado['nome']) ?>! Aqui é o seu assistente Helpy. Como posso te apoiar hoje?
                 </div>
             `;
         }
@@ -1166,7 +1166,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                     // Verifica se bateu a meta
                     if (data.meta_concluida) {
                         mostrarNotificacaoAtiva({
-                            mensagem: "Meta concluída! Você desabafou um pouco com o ChatBOT hoje. 💬",
+                            mensagem: "Meta concluída! Você desabafou um pouco com o Helpy hoje. 💬",
                             intensidade: "baixa",
                             link: "Perfil.php",
                             textoBotao: "Ver Perfil"

@@ -213,7 +213,7 @@
             sublinhar:['Sublinhar links','Facilita localizar elementos clicáveis'],
             semAnimacao:['Reduzir animações','Diminui movimentos e transições'],
             restaurar:'Restaurar padrão',
-            nav:{'Diario.php':'Diário','Comunidade.php':'Comunidade','ChatBOT.php':'ChatBOT','Atividades.php':'Atividades','Perfil.php':'Perfil','inicio.php':'Início'}
+            nav:{'Diario.php':'Diário','Comunidade.php':'Comunidade','ChatBOT.php':'Helpy','Atividades.php':'Atividades','Perfil.php':'Perfil','inicio.php':'Início'}
         },
         en: {
             idioma:'Language', acessibilidade:'Accessibility',
@@ -225,7 +225,7 @@
             sublinhar:['Underline links','Makes clickable elements easier to find'],
             semAnimacao:['Reduce motion','Reduces movement and transitions'],
             restaurar:'Restore defaults',
-            nav:{'Diario.php':'Journal','Comunidade.php':'Community','ChatBOT.php':'ChatBOT','Atividades.php':'Activities','Perfil.php':'Profile','inicio.php':'Home'}
+            nav:{'Diario.php':'Journal','Comunidade.php':'Community','ChatBOT.php':'Helpy','Atividades.php':'Activities','Perfil.php':'Profile','inicio.php':'Home'}
         }
     };
 
@@ -236,7 +236,7 @@
             'Diários':'Diários','Emoções do Mês':'Emoções do Mês','Sobre essa aba:':'Sobre essa aba:','Textos':'Textos','Videos':'Videos',
             'A Técnica 4-7-8 para Alívio Imediato':'A Técnica 4-7-8 para Alívio Imediato','O poder das pausas e da autocompaixão':'O poder das pausas e da autocompaixão',
             'Práticas de Respiração e Foco':'Práticas de Respiração e Foco','Entendendo a Mente':'Entendendo a Mente',
-            'Histórico':'Histórico','Nova Conversa':'Nova Conversa','Digite aqui para conversar com o ChatBOT...':'Digite aqui para conversar com o ChatBOT...',
+            'Histórico':'Histórico','Nova Conversa':'Nova Conversa','Digite aqui para conversar com o Helpy...':'Digite aqui para conversar com o Helpy...',
             'Atribua uma emoção ao seu diario:':'Atribua uma emoção ao seu diario:','Irritado':'Irritado','Ansioso':'Ansioso','Feliz':'Feliz','Calmo':'Calmo','Triste':'Triste','Amoroso':'Amoroso',
             'Apagar tudo':'Apagar tudo','Salvar':'Salvar','Editar':'Editar','Sair da conta':'Sair da conta','Apagar Conta':'Apagar Conta',
             'Notificações':'Notificações','Limpar':'Limpar','Nenhuma notificação nova.':'Nenhuma notificação nova.','Bom':'Bom','Ruim':'Ruim','Reagir':'Reagir',
@@ -244,13 +244,13 @@
         },
         en: {
             'Início':'Home','Diário':'Journal','Comunidade':'Community','Atividades':'Activities','Adicionais':'Activities','Perfil':'Profile',
-            'Diário Pessoal':'Personal journal','Apoio 24 Horas':'24-hour support','Apoio emocional na palma da sua mão.':'Emotional support in the palm of your hand.','Conversar com o ChatBOT →':'Talk to the ChatBOT →',
+            'Diário Pessoal':'Personal journal','Apoio 24 Horas':'24-hour support','Apoio emocional na palma da sua mão.':'Emotional support in the palm of your hand.','Conversar com o Helpy →':'Talk to Helpy →',
             'Alerta':'Alert','Segurança':'Safety','Processamento':'Processing','Pode dar gatilho':'May be triggering','Me deixou ansioso':'Made me anxious','Achei pesado':'I found it heavy','Cura a alma':'Healing','É leve':'It is light','Me trouxe paz':'Brought me peace','Relaxante':'Relaxing','Me fez refletir':'Made me reflect','História profunda':'Deep story','Me emocionou':'Moved me','Me deixou pensativo':'Made me thoughtful','Apagar':'Delete',
             'Sua Conta:':'Your Account:','Metas':'Goals','Calendário':'Calendar','Detalhes do dia':'Day details','Gráficos':'Charts',
             'Diários':'Journals','Emoções do Mês':'Monthly emotions','Sobre essa aba:':'About this section:','Textos':'Texts','Videos':'Videos',
             'A Técnica 4-7-8 para Alívio Imediato':'The 4-7-8 technique for immediate relief','O poder das pausas e da autocompaixão':'The power of pauses and self-compassion',
             'Práticas de Respiração e Foco':'Breathing and focus practices','Entendendo a Mente':'Understanding the mind',
-            'Histórico':'History','Nova Conversa':'New conversation','Digite aqui para conversar com o ChatBOT...':'Type here to chat with the ChatBOT...',
+            'Histórico':'History','Nova Conversa':'New conversation','Digite aqui para conversar com o Helpy...':'Type here to chat with Helpy...',
             'Atribua uma emoção ao seu diario:':'Choose an emotion for your journal:','Irritado':'Irritated','Ansioso':'Anxious','Feliz':'Happy','Calmo':'Calm','Triste':'Sad','Amoroso':'Loving',
             'Apagar tudo':'Clear all','Salvar':'Save','Editar':'Edit','Sair da conta':'Log out','Apagar Conta':'Delete account',
             'Notificações':'Notifications','Limpar':'Clear','Nenhuma notificação nova.':'No new notifications.','Bom':'Good','Ruim':'Bad','Reagir':'React',
@@ -284,7 +284,7 @@
             '.texto-extra-scrolled':'We all have difficult days, and you do not have to go through them alone. Explore a space focused on your well-being, track your mood, record your journey and discover tools designed to bring more clarity and calm to your daily life.',
             '.bloco-grande p':'We all have difficult days, and you do not have to go through them alone. Explore a space focused on your well-being, track your mood and discover tools designed to bring more clarity and calm to your daily life.',
             '.secao-cartoes .cartao:nth-child(1) p':'Record your thoughts every day. Writing can ease the mind and help you better understand your emotions.',
-            '.secao-cartoes .cartao:nth-child(2) p':'Talk to our ChatBot whenever you need. A safe, judgment-free space to share what you are feeling.',
+            '.secao-cartoes .cartao:nth-child(2) p':'Talk to Helpy whenever you need. A safe, judgment-free space to share what you are feeling.',
             '.secao-cartoes .cartao:nth-child(3) p':'Access breathing and relaxation exercises to reduce stress and improve your focus throughout the day.',
             '.texto-intro-diario':'Writing in a journal can help you better understand your thoughts and feelings. Take a few minutes to write about your day, focusing on what went well, what challenged you and how you felt. You can also select the emotions that best describe your mood today.',
             '.card-sobre p':'Here you will find materials to support your self-awareness journey. Explore short articles, relaxation techniques and selected reflections to bring more clarity, calm and lightness to your day.',
@@ -296,7 +296,7 @@
             '.texto-extra-scrolled':'Todos temos dias difíceis, e você não precisa passar por eles sozinho. Explore um ambiente focado no seu bem-estar, acompanhe seu humor, registre sua jornada e descubra ferramentas desenhadas para trazer mais clareza e tranquilidade para o seu dia a dia.',
             '.bloco-grande p':'Todos temos dias difíceis, e você não precisa passar por eles sozinho. Explore um ambiente focado no seu bem-estar, acompanhe seu humor e descubra ferramentas desenhadas para trazer mais clareza e tranquilidade para o seu dia a dia.',
             '.secao-cartoes .cartao:nth-child(1) p':'Registre seus pensamentos diariamente. Escrever alivia a mente e ajuda a entender melhor suas emoções.',
-            '.secao-cartoes .cartao:nth-child(2) p':'Converse com nosso ChatBot a qualquer momento. Um espaço seguro e sem julgamentos para desabafar.',
+            '.secao-cartoes .cartao:nth-child(2) p':'Converse com o Helpy a qualquer momento. Um espaço seguro e sem julgamentos para desabafar.',
             '.secao-cartoes .cartao:nth-child(3) p':'Acesse exercícios de respiração e relaxamento para reduzir o estresse e melhorar seu foco no dia a dia.',
             '.texto-intro-diario':'Escrever um diário pode ajudar você a entender melhor seus pensamentos e sentimentos. Reserve alguns minutos para escrever sobre o seu dia, concentrando-se no que correu bem, no que o desafiou e como você se sentiu. Você também pode selecionar as emoções que melhor descrevem seu humor hoje.',
             '.card-sobre p':'Aqui reunimos materiais para apoiar sua jornada de autoconhecimento. Explore artigos rápidos, técnicas de relaxamento e reflexões selecionadas para ajudar a trazer mais clareza, calma e leveza ao seu dia a dia.',

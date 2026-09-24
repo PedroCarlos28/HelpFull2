@@ -758,7 +758,7 @@ $usuarioLogado = $stmt->fetch();
             <ul class="nav-links">
                 <li><a href="Diario.php" class="ativo">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>
-                <li><a href="ChatBOT.php">ChatBOT</a></li>
+                <li><a href="ChatBOT.php">Helpy</a></li>
                 <li><a href="Atividades.php">Adicionais</a></li>
             </ul>
             <?php $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; ?>
@@ -783,7 +783,7 @@ $usuarioLogado = $stmt->fetch();
                 <a href="inicio.php">Início</a>
                 <a href="Diario.php" class="ativo">Diário</a>
                 <a href="Comunidade.php">Comunidade</a>
-                <a href="ChatBOT.php">ChatBOT</a>
+                <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
                 <a href="javascript:void(0)" onclick="if(window.togglePainelAcessibilidade){togglePainelAcessibilidade();}if(document.getElementById('navDropdownMobile'))document.getElementById('navDropdownMobile').classList.remove('aberto');if(document.querySelector('.nav-logo'))document.querySelector('.nav-logo').classList.remove('aberto');" style="display: flex; align-items: center; gap: 8px;">

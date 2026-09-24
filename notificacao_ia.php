@@ -216,7 +216,7 @@ try {
             // Mensagem de fallback — funciona sem API
             $acoes = [
                 3 => ['msg' => 'Percebemos que você teve alguns dias difíceis. Que tal experimentar uma atividade de relaxamento?', 'link' => 'Atividades.php', 'btn' => 'Ver atividades'],
-                4 => ['msg' => 'Você registrou várias emoções pesadas. Uma conversa pode ajudar — o ChatBOT está aqui por você.', 'link' => 'ChatBOT.php', 'btn' => 'Conversar'],
+                4 => ['msg' => 'Você registrou várias emoções pesadas. Uma conversa pode ajudar — o Helpy está aqui por você.', 'link' => 'ChatBOT.php', 'btn' => 'Conversar'],
                 5 => ['msg' => 'Temos acompanhado sua semana. Considere falar com um profissional de saúde mental. Você merece apoio.', 'link' => 'ChatBOT.php', 'btn' => 'Buscar apoio'],
             ];
             $nivel = $contagemRuim >= 5 ? 5 : ($contagemRuim >= 4 ? 4 : 3);

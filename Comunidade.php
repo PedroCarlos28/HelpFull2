@@ -1788,7 +1788,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 <ul class="nav-links">
                     <li><a href="Diario.php">Diário</a></li>
                     <li><a href="Comunidade.php" class="ativo">Comunidade</a></li>
-                    <li><a href="ChatBOT.php">ChatBOT</a></li>
+                    <li><a href="ChatBOT.php">Helpy</a></li>
                     <li><a href="Atividades.php">Adicionais</a></li>
                 </ul>
                 <?php if ($usuarioLogado): ?>
@@ -1821,7 +1821,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 <a href="inicio.php">Início</a>
                 <a href="Diario.php">Diário</a>
                 <a href="Comunidade.php" class="ativo">Comunidade</a>
-                <a href="ChatBOT.php">ChatBOT</a>
+                <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
                 <a href="javascript:void(0)" onclick="if(window.togglePainelAcessibilidade){togglePainelAcessibilidade();}if(document.getElementById('navDropdownMobile'))document.getElementById('navDropdownMobile').classList.remove('aberto');if(document.querySelector('.nav-logo'))document.querySelector('.nav-logo').classList.remove('aberto');" style="display: flex; align-items: center; gap: 8px;">

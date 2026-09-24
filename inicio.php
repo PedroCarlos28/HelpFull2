@@ -880,7 +880,7 @@ if (isset($_SESSION['usuario_id'])) {
             <ul class="links-capsula">
                 <li><a href="Diario.php">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>
-                <li><a href="ChatBOT.php">ChatBOT</a></li>
+                <li><a href="ChatBOT.php">Helpy</a></li>
                 <li><a href="Atividades.php">Atividades</a></li>
             </ul>
             <?php if ($usuarioLogado): ?>
@@ -911,7 +911,7 @@ if (isset($_SESSION['usuario_id'])) {
                 <a href="inicio.php" class="ativo">Início</a>
                 <a href="Diario.php">Diário</a>
                 <a href="Comunidade.php">Comunidade</a>
-                <a href="ChatBOT.php">ChatBOT</a>
+                <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <?php if ($usuarioLogado): ?>
                     <a href="Perfil.php">Perfil</a>
@@ -975,7 +975,7 @@ if (isset($_SESSION['usuario_id'])) {
             <div class="menu-estatitco" id="menu">
                 <a href="Diario.php">Diário</a>
                 <a href="Comunidade.php">Comunidade</a>
-                <a href="ChatBOT.php">ChatBOT</a>
+                <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Atividades</a>
                 <?php if ($usuarioLogado): ?>
                     <a href="Perfil.php">Perfil</a>
@@ -996,7 +996,7 @@ if (isset($_SESSION['usuario_id'])) {
                 <a href="ChatBOT.php" style="text-decoration: none; color: inherit;">
                     <div class="cartao">
                         <h3>Apoio 24 Horas</h3>
-                        <p>Converse com nosso ChatBot a qualquer momento. Um espaço seguro e sem julgamentos para
+                        <p>Converse com o Helpy a qualquer momento. Um espaço seguro e sem julgamentos para
                             desabafar.</p>
                     </div>
                 </a>
@@ -1027,11 +1027,11 @@ if (isset($_SESSION['usuario_id'])) {
         <div class="secao-branca-conteudo">
             <div class="texto-extra-container">
                 <p class="texto-extra-scrolled">
-                    Precisa conversar agora? Nosso ChatBot foi treinado para te ouvir com empatia e total privacidade,
+                    Precisa conversar agora? O Helpy foi treinado para te ouvir com empatia e total privacidade,
                     sem nenhum julgamento. Um espaço seguro para desabafar, organizar as ideias ou simplesmente
                     encontrar conforto a qualquer hora do dia.
                 </p>
-                <a href="ChatBOT.php" class="link-extra">Conversar com o ChatBOT →</a>
+                <a href="ChatBOT.php" class="link-extra">Conversar com o Helpy →</a>
             </div>
             <footer class="rodape-simples">
                 <strong>HELPFULL</strong>

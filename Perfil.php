@@ -1388,14 +1388,14 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             <ul class="nav-links">
                 <li><a href="Diario.php">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>
-                <li><a href="ChatBOT.php">ChatBOT</a></li>
+                <li><a href="ChatBOT.php">Helpy</a></li>
                 <li><a href="Atividades.php">Adicionais</a></li>
             </ul>
             <div class="nav-dropdown-mobile" id="navDropdownMobile">
                 <a href="inicio.php">Início</a>
                 <a href="Diario.php">Diário</a>
                 <a href="Comunidade.php">Comunidade</a>
-                <a href="ChatBOT.php">ChatBOT</a>
+                <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php" class="ativo">Perfil</a>
                 <a href="javascript:void(0)" onclick="abrirPainelAcessibilidade(); if(document.getElementById('navDropdownMobile')) document.getElementById('navDropdownMobile').classList.remove('aberto'); if(document.querySelector('.nav-logo')) document.querySelector('.nav-logo').classList.remove('aberto');" style="display: flex; align-items: center; gap: 8px;">
@@ -1550,7 +1550,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 <div class="stat-valor"><?= $totalEmocoes ?></div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">Total de conversas<br>no ChatBOT</div>
+                <div class="stat-label">Total de conversas<br>com o Helpy</div>
                 <div class="stat-valor"><?= $totalChats ?></div>
             </div>
             <div class="stat-item">
@@ -1575,7 +1575,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 <div class="meta-checkbox"><svg class="check-icon" viewBox="0 0 24 24">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg></div>
-                <div class="meta-texto">Dar um 'oi' para o ChatBOT e desabafar por 2 minutinhos.</div>
+                <div class="meta-texto">Dar um 'oi' para o Helpy e desabafar por 2 minutinhos.</div>
             </div>
             <div class="meta-item <?= $emocaoHoje ? 'concluida' : '' ?>">
                 <div class="meta-checkbox"><svg class="check-icon" viewBox="0 0 24 24">
