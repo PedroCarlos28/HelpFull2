@@ -1353,6 +1353,10 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 padding: 15px 5px;
             }
 
+            .stats-container .stat-item:last-child {
+                grid-column: span 2;
+            }
+
             .stat-item {
                 border-right: none;
                 background: rgba(0, 0, 0, 0.04);

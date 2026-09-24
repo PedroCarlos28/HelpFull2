@@ -59,8 +59,8 @@ if (isset($_SESSION['usuario_id'])) {
         /* FUNDO */
         .video-fundo {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 50%;
+            left: 50%;
             min-width: 100%;
             min-height: 100%;
             width: auto;
@@ -69,8 +69,18 @@ if (isset($_SESSION['usuario_id'])) {
             z-index: 0;
             pointer-events: none;
             transform: translate(-50%, -50%);
-            left: 50%;
-            top: 50%;
+        }
+
+        .imagem-fundo-mobile {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
         }
 
         /* CONTAINER Principal */
@@ -709,8 +719,18 @@ if (isset($_SESSION['usuario_id'])) {
 
         /* MOBILE */
         @media (max-width: 768px) {
+            .video-fundo {
+                display: none !important;
+            }
+
+            .imagem-fundo-mobile {
+                display: block !important;
+            }
+
             .nav-container-global {
                 width: 100%;
+                padding: 0 15px;
+                box-sizing: border-box;
             }
 
             .caixa-vidro {
@@ -868,9 +888,10 @@ if (isset($_SESSION['usuario_id'])) {
 
 <body>
 
-    <video class="video-fundo" autoplay loop muted playsinline>
+    <video class="video-fundo" autoplay loop muted playsinline poster="assets/HELPFULL.png">
         <source src="assets/HelpFullVideoFundo.mp4" type="video/mp4">
     </video>
+    <img class="imagem-fundo-mobile" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
 
     <!-- Navbar Premium -->
     <div class="nav-container-global escondida" id="nav-container-global">

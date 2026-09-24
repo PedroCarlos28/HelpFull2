@@ -421,10 +421,47 @@ if (isset($_SESSION['usuario_id'])) {
             body { justify-content: flex-start; padding-top: 100px; }
         }
 
+        .imagem-fundo-mobile {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
         @media (max-width: 768px) {
             .video-fundo, .faixa-inferior { display: none !important; }
-            body {
-                background: linear-gradient(180deg, #d3ebf1 0%, #edf6f9 50%, #d8eef4 100%) !important;
+            .imagem-fundo-mobile { display: block !important; }
+        }
+
+        @media (max-width: 480px) {
+            .caixa-acesso {
+                width: 94%;
+                margin-top: 75px;
+                margin-bottom: 20px;
+            }
+            .form-view {
+                padding: 25px 18px;
+            }
+            .footer-botoes {
+                gap: 10px;
+            }
+            .footer-botoes-direita {
+                gap: 8px;
+            }
+            .footer-botoes-direita .btn-form {
+                min-width: 95px;
+                padding: 0 14px;
+                font-size: 0.88rem;
+                height: 48px;
+            }
+            .btn-google-circle {
+                width: 48px;
+                height: 48px;
             }
         }
     </style>
@@ -432,9 +469,10 @@ if (isset($_SESSION['usuario_id'])) {
 
 <body>
 
-    <video class="video-fundo" autoplay loop muted playsinline>
+    <video class="video-fundo" autoplay loop muted playsinline poster="assets/HELPFULL.png">
         <source src="assets/HelpFullVideoFundo.mp4" type="video/mp4">
     </video>
+    <img class="imagem-fundo-mobile" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
     <div class="faixa-inferior"></div>
 
     <nav class="navbar-topo">

@@ -1517,13 +1517,21 @@ body.acessibilidade-texto-grande .navbar-topo:has(.nav-top-row) .nav-top-row {
         display: none !important;
     }
     
-    /* Oculta vídeo pausado com botão de play no celular e usa fundo gradiente limpo */
+    /* Oculta vídeo pausado com botão de play no celular e exibe a imagem de fundo estática */
     .video-fundo {
         display: none !important;
     }
-    body {
-        background: linear-gradient(180deg, #d3ebf1 0%, #edf6f9 40%, #e3f0f5 100%) !important;
-        background-attachment: fixed !important;
+    .imagem-fundo,
+    .imagem-fundo-mobile {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
     }
 
     /* Exibe setinha ao lado de HELPFULL no celular */
