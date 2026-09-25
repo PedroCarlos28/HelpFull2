@@ -293,14 +293,9 @@ body.acessibilidade-escuro {
     color-scheme: dark;
 }
 
-body.acessibilidade-escuro .navbar-topo,
-body.acessibilidade-escuro .navbar-flutuante,
-body.acessibilidade-escuro .painel-notificacoes,
-body.acessibilidade-escuro .toast-notificacao,
-body.acessibilidade-escuro #painelAcessibilidade,
 body.acessibilidade-escuro .card-perfil,
 body.acessibilidade-escuro .card,
-body.acessibilidade-escuro [class*="card-"]:not(.card-sobre):not(.card-artigo):not(.video-card):not(.video-busca-card):not(.card-postagem),
+body.acessibilidade-escuro [class*="card-"]:not(.card-sobre):not(.card-artigo):not(.video-card):not(.video-busca-card):not(.card-postagem):not(.grafico-card),
 body.acessibilidade-escuro .caixa-conteudo,
 body.acessibilidade-escuro .secao-conteudo,
 body.acessibilidade-escuro .bloco-conteudo,
@@ -361,18 +356,79 @@ body.acessibilidade-contraste .acessibilidade-idioma select {
     border-color: var(--tema-borda) !important;
 }
 
-body.acessibilidade-escuro .navbar-topo {
-    background: var(--tema-superficie) !important;
-    border-color: var(--tema-borda) !important;
-    box-shadow: none !important;
+/* =========================================================
+   ELEMENTOS TRANSLÚCIDOS / VIDRO DESFOCADO (DARK GLASSMORPHISM)
+   Onde no tema claro era transparente com blur, no tema escuro
+   mantém o mesmo efeito translúcido desfocado, porém escurecido.
+   ========================================================= */
+body.acessibilidade-escuro .navbar-topo,
+body.acessibilidade-escuro .navbar-flutuante {
+    background: rgba(22, 28, 33, 0.62) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.acessibilidade-escuro .btn-acessibilidade,
+body.acessibilidade-escuro .btn-notificacao-separado {
+    background: rgba(22, 28, 33, 0.62) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: var(--tema-texto) !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.acessibilidade-escuro .btn-acessibilidade:hover,
+body.acessibilidade-escuro .btn-notificacao-separado:hover {
+    background: rgba(30, 38, 45, 0.75) !important;
+}
+
+body.acessibilidade-escuro .painel-notificacoes {
+    background: rgba(22, 28, 33, 0.80) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.acessibilidade-escuro #painelAcessibilidade {
+    background: rgba(22, 28, 33, 0.85) !important;
+    backdrop-filter: blur(35px) !important;
+    -webkit-backdrop-filter: blur(35px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45) !important;
+}
+
+body.acessibilidade-escuro .toast-notificacao {
+    background: rgba(22, 28, 33, 0.80) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.acessibilidade-escuro .caixa-vidro {
+    background: rgba(22, 28, 33, 0.68) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+body.acessibilidade-escuro .grafico-card {
+    background: rgba(22, 28, 33, 0.65) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
 }
 
 body.acessibilidade-escuro .textarea-container {
-    background: rgba(18, 22, 26, 0.92) !important;
+    background: rgba(16, 20, 24, 0.78) !important;
     backdrop-filter: blur(18px) !important;
     -webkit-backdrop-filter: blur(18px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.07) !important;
-    box-shadow: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25) !important;
 }
 
 body.acessibilidade-escuro .textarea-diario {
@@ -1105,12 +1161,6 @@ body.acessibilidade-escuro .acessibilidade-opcao small {
     color: var(--tema-texto-suave) !important;
 }
 
-body.acessibilidade-escuro .btn-acessibilidade,
-body.acessibilidade-escuro .btn-notificacao-separado {
-    background: var(--tema-superficie-elevada) !important;
-    color: var(--tema-texto) !important;
-    border-color: var(--tema-borda) !important;
-}
 
 body.acessibilidade-escuro .btn-notificacao-separado svg {
     fill: var(--tema-texto) !important;
@@ -1146,11 +1196,11 @@ body.acessibilidade-escuro .cabecalho-imagem {
 }
 
 body.acessibilidade-escuro .card-sobre {
-    background: rgba(25, 30, 34, 0.95) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: none !important;
+    background: rgba(22, 28, 33, 0.65) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
     filter: none !important;
 }
 
@@ -1167,9 +1217,11 @@ body.acessibilidade-escuro .secao-video-header {
 }
 
 body.acessibilidade-escuro .tabs-capsula {
-    background: rgba(24, 32, 37, 0.85) !important;
-    border: 1px solid var(--tema-borda) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+    background: rgba(22, 28, 33, 0.62) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
 body.acessibilidade-escuro .tab-slider {
@@ -1557,9 +1609,7 @@ body.acessibilidade-sem-animacao *::after {
     transition-duration: 0.01ms !important;
 }
 
-body.acessibilidade-escuro .navbar-topo,
 body.acessibilidade-contraste .navbar-topo {
-    border: 0 !important;
     box-shadow: none !important;
 }
 
@@ -1595,12 +1645,12 @@ body.acessibilidade-contraste .rodape-simples {
     }
 }
 
-/* Ajustes para .caixa-agrupadora (Comunidade e Diario) */
+/* Ajustes para .caixa-agrupadora (Comunidade e Diario) - Dark Glassmorphism */
 body.acessibilidade-escuro .caixa-agrupadora {
-    background: rgba(25, 30, 34, 0.94) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    background: rgba(22, 28, 33, 0.62) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25) !important;
 }
 
@@ -1623,11 +1673,15 @@ body.acessibilidade-escuro .post-card {
 }
 
 body.acessibilidade-escuro .modal-edicao-content,
+body.acessibilidade-escuro .modal-excluir-content,
+body.acessibilidade-escuro .modal-foto-content,
 body.acessibilidade-escuro #modal-content {
-    background: var(--tema-superficie) !important;
+    background: rgba(22, 28, 33, 0.85) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
     color: var(--tema-texto) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.45) !important;
 }
 
 body.acessibilidade-escuro .nav-input-container {
