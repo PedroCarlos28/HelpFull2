@@ -452,6 +452,9 @@
     };
 
     function garantirBotaoAcessibilidade() {
+        // Botão de configurações só aparece na página de Perfil
+        if (!window.location.pathname.toLowerCase().includes('perfil.php')) return;
+
         var b = document.getElementById('btnAcessibilidade');
         if (!b) {
             var navContainer = document.querySelector('.nav-container-global');
