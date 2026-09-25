@@ -368,8 +368,10 @@ body.acessibilidade-escuro .navbar-topo {
 }
 
 body.acessibilidade-escuro .textarea-container {
-    background: var(--tema-superficie) !important;
-    border: 1px solid var(--tema-borda) !important;
+    background: rgba(18, 22, 26, 0.92) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
     box-shadow: none !important;
 }
 
@@ -894,8 +896,6 @@ body.acessibilidade-contraste .nav-dropdown-mobile a {
 body.acessibilidade-escuro .nav-logo,
 body.acessibilidade-escuro .nav-logo-capsula {
     color: var(--tema-link) !important;
-    text-shadow: 0 0 5px rgba(130, 211, 223, 0.72),
-        0 0 14px rgba(130, 211, 223, 0.38) !important;
 }
 
 body.acessibilidade-contraste .nav-logo,
@@ -1026,11 +1026,20 @@ body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .nav-logo-capsul
     text-shadow: none !important;
 }
 
-body.acessibilidade-escuro .nav-logo,
-body.acessibilidade-escuro .nav-logo-capsula,
+/* Contraste: sem brilho no logo */
 body.acessibilidade-contraste .nav-logo,
 body.acessibilidade-contraste .nav-logo-capsula {
     text-shadow: none !important;
+}
+
+/* Modo escuro: logo HELPFULL com brilho neon */
+body.acessibilidade-escuro .nav-logo,
+body.acessibilidade-escuro .nav-logo-capsula {
+    color: var(--tema-link) !important;
+    text-shadow:
+        0 0 6px rgba(126, 207, 219, 0.9),
+        0 0 16px rgba(126, 207, 219, 0.5),
+        0 0 32px rgba(126, 207, 219, 0.25) !important;
 }
 
 body.acessibilidade-escuro .logo-gigante,
@@ -1124,13 +1133,17 @@ body.acessibilidade-escuro .video-fundo {
     opacity: 0.55 !important;
 }
 
-/* Atividades - Cabeçalho, Sobre e Artigos */
+/* Atividades - Cabeçalho (sem imagem, fundo sólido para texto legível) */
 body.acessibilidade-escuro .cabecalho-imagem {
-    background-size: cover !important;
-    background-position: center !important;
+    background-image: none !important;
+    background-color: var(--tema-superficie) !important;
     border: 1px solid rgba(255, 255, 255, 0.07) !important;
     box-shadow: none !important;
-    filter: brightness(0.42) saturate(0.85) !important;
+    filter: none !important;
+}
+
+body.acessibilidade-escuro .cabecalho-imagem * {
+    color: var(--tema-texto) !important;
 }
 
 body.acessibilidade-escuro .card-sobre {
