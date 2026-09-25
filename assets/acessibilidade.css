@@ -1137,7 +1137,7 @@ body.acessibilidade-escuro .video-fundo {
 body.acessibilidade-escuro .cabecalho-imagem {
     background-image:
         linear-gradient(rgba(15, 19, 23, 0.62), rgba(15, 19, 23, 0.62)),
-        url('assets/HELPFULL.png') !important;
+        url('HELPFULL.png') !important;
     background-size: cover !important;
     background-position: center !important;
     border: 1px solid rgba(255, 255, 255, 0.07) !important;
