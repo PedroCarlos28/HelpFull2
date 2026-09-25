@@ -1133,13 +1133,16 @@ body.acessibilidade-escuro .video-fundo {
     opacity: 0.55 !important;
 }
 
-/* Atividades - Cabeçalho: imagem de fundo com overlay escuro, card-sobre sólido */
+/* Atividades - Cabe\u00e7alho: overlay escuro sobre imagem, filhos n\u00e3o s\u00e3o afetados */
 body.acessibilidade-escuro .cabecalho-imagem {
+    background-image:
+        linear-gradient(rgba(15, 19, 23, 0.62), rgba(15, 19, 23, 0.62)),
+        url('assets/HELPFULL.png') !important;
     background-size: cover !important;
     background-position: center !important;
     border: 1px solid rgba(255, 255, 255, 0.07) !important;
     box-shadow: none !important;
-    filter: brightness(0.5) !important;
+    filter: none !important;
 }
 
 body.acessibilidade-escuro .card-sobre {
@@ -1148,7 +1151,7 @@ body.acessibilidade-escuro .card-sobre {
     -webkit-backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: none !important;
-    filter: brightness(2) !important;
+    filter: none !important;
 }
 
 body.acessibilidade-escuro .card-sobre * {
