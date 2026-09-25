@@ -1529,7 +1529,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             .toast-notificacao { width: 92%; max-width: 380px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v6">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v8">
 </head>
 
 <body>
@@ -2088,6 +2088,6 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             }
         }
     </script>
-    <script src="notificacoes.js?v=20260924-v6" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v6';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
 </body>
 </html>

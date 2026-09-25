@@ -1904,7 +1904,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             .post-texto { font-size: 1.05rem; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v6">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v8">
 </head>
 
 <body>
@@ -2829,7 +2829,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             }
         });
     </script>
-    <script src="notificacoes.js?v=20260924-v6" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v6';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
 </body>
 
 </html>

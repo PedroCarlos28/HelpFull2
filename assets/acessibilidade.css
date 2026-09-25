@@ -299,10 +299,8 @@ body.acessibilidade-escuro .painel-notificacoes,
 body.acessibilidade-escuro .toast-notificacao,
 body.acessibilidade-escuro #painelAcessibilidade,
 body.acessibilidade-escuro .card-perfil,
-body.acessibilidade-escuro .card-sobre,
-body.acessibilidade-escuro .caixa-agrupadora,
 body.acessibilidade-escuro .card,
-body.acessibilidade-escuro [class*="card-"],
+body.acessibilidade-escuro [class*="card-"]:not(.card-sobre):not(.card-artigo):not(.video-card):not(.video-busca-card):not(.card-postagem),
 body.acessibilidade-escuro .caixa-conteudo,
 body.acessibilidade-escuro .secao-conteudo,
 body.acessibilidade-escuro .bloco-conteudo,
@@ -314,7 +312,7 @@ body.acessibilidade-escuro .rodape {
     background: var(--tema-superficie) !important;
     color: var(--tema-texto) !important;
     border-color: var(--tema-borda) !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
 }
 
 body.acessibilidade-escuro .card-perfil :where(h1, h2, h3, h4, h5, h6, p, label, strong, small, li, dt, dd, td, th, div, span),
@@ -1025,7 +1023,7 @@ body.acessibilidade-escuro .conta-input {
     border-color: var(--tema-borda) !important;
 }
 
-body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ),
+body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ):not(.btn-fechar-painel):not(.btn-fechar-bv):not(.attachment-remove),
 body.acessibilidade-escuro .item-notificacao,
 body.acessibilidade-escuro .lista-notificacoes,
 body.acessibilidade-escuro .btn-limpar-pill,
@@ -1067,18 +1065,31 @@ body.acessibilidade-escuro .post-imagem img {
 
 body.acessibilidade-escuro .imagem-fundo,
 body.acessibilidade-escuro .video-fundo {
-    filter: brightness(0.58) !important;
+    filter: brightness(0.45) contrast(1.05) !important;
+    opacity: 0.55 !important;
 }
 
-/* Atividades - Cabeçalho e Tabs */
+/* Atividades - Cabeçalho, Sobre e Artigos */
 body.acessibilidade-escuro .cabecalho-imagem {
-    background-color: #161d22 !important;
-    background-image: linear-gradient(135deg, rgba(20, 26, 31, 0.92), rgba(27, 36, 42, 0.95)), url('HELPFULL.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
+    background-color: #1a2227 !important;
+    background-image: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.acessibilidade-escuro .card-sobre {
+    background: rgba(255, 255, 255, 0.04) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45) !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .card-artigo,
+body.acessibilidade-escuro .secao-video-header {
+    background: #1e262a !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18) !important;
 }
 
 body.acessibilidade-escuro .tabs-capsula {
@@ -1198,8 +1209,14 @@ body.acessibilidade-escuro .modal-artigo-content {
 
 /* Perfil - Stats, Metas e Calendário */
 body.acessibilidade-escuro .stat-item {
-    background: var(--tema-superficie-elevada) !important;
-    border: 1px solid var(--tema-borda) !important;
+    background: transparent !important;
+    border: none !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .stat-item:last-child {
+    border-right: none !important;
 }
 
 body.acessibilidade-escuro .stat-label {
@@ -1211,8 +1228,14 @@ body.acessibilidade-escuro .stat-valor {
 }
 
 body.acessibilidade-escuro .meta-item {
-    background: var(--tema-superficie-elevada) !important;
-    border: 1px solid var(--tema-borda) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .meta-checkbox {
+    background: #2a3338 !important;
+    border: 2px solid #55656d !important;
 }
 
 body.acessibilidade-escuro .meta-texto {
@@ -1220,8 +1243,8 @@ body.acessibilidade-escuro .meta-texto {
 }
 
 body.acessibilidade-escuro .meta-item.concluida .meta-checkbox {
-    background: var(--tema-link) !important;
-    border-color: var(--tema-link) !important;
+    background: #2b7a8c !important;
+    border-color: #2b7a8c !important;
 }
 
 body.acessibilidade-escuro .cal-dia {
@@ -1499,23 +1522,91 @@ body.acessibilidade-contraste .rodape-simples {
 }
 
 /* Ajustes especificos da Comunidade */
-body.acessibilidade-escuro .caixa-agrupadora::before,
-body.acessibilidade-escuro .card-postagem,
-body.acessibilidade-escuro .post-card,
+body.acessibilidade-escuro .caixa-agrupadora {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .caixa-agrupadora::before {
+    background: rgba(32, 39, 43, 0.75) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.07) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+body.acessibilidade-escuro .card-postagem {
+    background: var(--tema-superficie) !important;
+    color: var(--tema-texto) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .post-card {
+    background: var(--tema-superficie-elevada) !important;
+    color: var(--tema-texto) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow: none !important;
+}
+
 body.acessibilidade-escuro .modal-edicao-content,
 body.acessibilidade-escuro #modal-content {
     background: var(--tema-superficie) !important;
     color: var(--tema-texto) !important;
-    border-color: var(--tema-borda) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
 }
 
-body.acessibilidade-escuro .nav-input-container,
+body.acessibilidade-escuro .nav-input-container {
+    background: rgba(24, 32, 37, 0.85) !important;
+    border-color: rgba(67, 81, 88, 0.6) !important;
+}
+
 body.acessibilidade-escuro .input-texto-post,
 body.acessibilidade-escuro .nav-input-texto {
-    background: var(--tema-campo) !important;
+    background: transparent !important;
     color: var(--tema-texto) !important;
     border-color: var(--tema-borda) !important;
+}
+
+/* Ícones circulares de avatar — não recebem background de tema */
+body.acessibilidade-escuro .post-avatar {
+    background: #2b7a8c !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .bv-comunidade-icone {
+    background: rgba(43, 122, 140, 0.2) !important;
+    color: #82d3df !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .perfil-capsula {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .sininho-notificacao {
+    background: #2b7a8c !important;
+    border-color: rgba(32, 39, 43, 0.9) !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .btn-fechar-bv {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: var(--tema-texto) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .attachment-remove {
+    background: #c0392b !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 body.acessibilidade-escuro .input-texto-post::placeholder,
@@ -1574,7 +1665,6 @@ body.acessibilidade-escuro .pill-cinza.curtido {
 body.acessibilidade-escuro .btn-salvar,
 body.acessibilidade-escuro .btn-editar,
 body.acessibilidade-escuro .btn-trocar-foto,
-body.acessibilidade-escuro .btn-novo-chat,
 body.acessibilidade-escuro .btn-enviar-chat,
 body.acessibilidade-escuro .btn-iniciar,
 body.acessibilidade-escuro .modal-edicao-content button[type="submit"],
@@ -1586,10 +1676,24 @@ body.acessibilidade-escuro .btn-filtro.active {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
 }
 
+/* Helpy Sidebar New Chat Icon Button (Clean & transparent without colored box) */
+body.acessibilidade-escuro .btn-novo-chat {
+    background: transparent !important;
+    border: none !important;
+    color: var(--tema-texto) !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+body.acessibilidade-escuro .btn-novo-chat:hover {
+    background: transparent !important;
+    color: var(--tema-link) !important;
+    transform: scale(1.1) !important;
+}
+
 body.acessibilidade-escuro .btn-salvar:hover,
 body.acessibilidade-escuro .btn-editar:hover,
 body.acessibilidade-escuro .btn-trocar-foto:hover,
-body.acessibilidade-escuro .btn-novo-chat:hover,
 body.acessibilidade-escuro .btn-enviar-chat:hover,
 body.acessibilidade-escuro .btn-iniciar:hover,
 body.acessibilidade-escuro .modal-edicao-content button[type="submit"]:hover,
@@ -1686,9 +1790,9 @@ body.acessibilidade-escuro .tag-reacao-btn.process-item:hover {
 body.acessibilidade-escuro .menu-opcoes-post,
 body.acessibilidade-escuro .reacoes-expandidas::before,
 body.acessibilidade-escuro .itens-reacao {
-    background: rgba(32, 39, 43, 0.98) !important;
+    background: rgba(32, 39, 43, 0.96) !important;
     border-color: var(--tema-borda) !important;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
 body.acessibilidade-escuro .btn-menu-opcao:hover,
