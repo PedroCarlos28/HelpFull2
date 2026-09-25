@@ -232,6 +232,17 @@ if (isset($_SESSION['usuario_id'])) {
             width: 26px;
             background: #2b7a8c;
             border-radius: 999px;
+            box-shadow: 0 0 8px rgba(43, 122, 140, 0.8), 0 0 16px rgba(43, 122, 140, 0.45);
+            animation: brilhoDot 2.4s ease-in-out infinite;
+        }
+
+        @keyframes brilhoDot {
+            0%, 100% {
+                box-shadow: 0 0 6px rgba(43, 122, 140, 0.75), 0 0 14px rgba(43, 122, 140, 0.35);
+            }
+            50% {
+                box-shadow: 0 0 11px rgba(43, 122, 140, 0.95), 0 0 22px rgba(43, 122, 140, 0.55);
+            }
         }
 
         .texto-intro {
@@ -248,13 +259,38 @@ if (isset($_SESSION['usuario_id'])) {
             overflow: hidden;
             flex-shrink: 0;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            background: #fff;
+            background: #eef6f8;
+            position: relative;
         }
 
-        .quadrado-grafico img {
+        .quadrado-grafico::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(43, 122, 140, 0.14) 0%, rgba(0, 180, 216, 0.05) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .quadrado-grafico .carrossel-img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1.08);
+            transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .quadrado-grafico .carrossel-img.ativo {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
         }
 
         /* MENU ESTÁTICO */
@@ -999,7 +1035,18 @@ if (isset($_SESSION['usuario_id'])) {
             background: rgba(255, 255, 255, 0.6) !important;
         }
         body.acessibilidade-escuro .carrossel-dot.ativo {
-            background: #5eb5c9 !important;
+            background: var(--tema-link, #7ecfdb) !important;
+            box-shadow: 0 0 8px rgba(126, 207, 219, 0.8), 0 0 16px rgba(126, 207, 219, 0.45) !important;
+            animation: brilhoDotEscuro 2.4s ease-in-out infinite !important;
+        }
+
+        @keyframes brilhoDotEscuro {
+            0%, 100% {
+                box-shadow: 0 0 6px rgba(126, 207, 219, 0.75), 0 0 14px rgba(126, 207, 219, 0.35);
+            }
+            50% {
+                box-shadow: 0 0 11px rgba(126, 207, 219, 0.95), 0 0 22px rgba(126, 207, 219, 0.55);
+            }
         }
 
         body.acessibilidade-contraste .carrossel-slide .slide-titulo,
@@ -1236,8 +1283,17 @@ if (isset($_SESSION['usuario_id'])) {
                 </div>
             </div>
 
-            <div class="quadrado-grafico">
-                <img src="assets/HELPFULL.png" alt="Imagem HelpFull">
+            <div class="quadrado-grafico" id="carrosselImagens">
+                <img src="assets/slides/slide_0.jpg" class="carrossel-img ativo" data-index="0" alt="Cada pequeno passo conta">
+                <img src="assets/slides/slide_1.jpg" class="carrossel-img" data-index="1" alt="Você não está sozinho nessa">
+                <img src="assets/slides/slide_2.jpg" class="carrossel-img" data-index="2" alt="Bem-estar é um hábito">
+                <img src="assets/slides/slide_3.jpg" class="carrossel-img" data-index="3" alt="Sua mente merece atenção todos os dias">
+                <img src="assets/slides/slide_4.jpg" class="carrossel-img" data-index="4" alt="Um espaço só seu para respirar">
+                <img src="assets/slides/slide_5.jpg" class="carrossel-img" data-index="5" alt="Pequenos hábitos grandes transformações">
+                <img src="assets/slides/slide_6.jpg" class="carrossel-img" data-index="6" alt="Cuidar de você também é produtivo">
+                <img src="assets/slides/slide_7.jpg" class="carrossel-img" data-index="7" alt="Sua jornada emocional começa com um gesto simples">
+                <img src="assets/slides/slide_8.jpg" class="carrossel-img" data-index="8" alt="Entenda o que você sente no seu próprio ritmo">
+                <img src="assets/slides/slide_9.jpg" class="carrossel-img" data-index="9" alt="Porque toda emoção merece ser ouvida">
             </div>
         </div>
     </div>
@@ -1370,6 +1426,7 @@ if (isset($_SESSION['usuario_id'])) {
         (function () {
             const cardHero = document.getElementById('heroCarrosselCard');
             const slides = document.querySelectorAll('.carrossel-slide');
+            const imagens = document.querySelectorAll('.carrossel-img');
             const dotsContainer = document.getElementById('carrosselDots');
             const dots = document.querySelectorAll('.carrossel-dot');
 
@@ -1400,11 +1457,13 @@ if (isset($_SESSION['usuario_id'])) {
                 if (novoIndex === slideAtual && manual) return;
 
                 slides[slideAtual].classList.remove('ativo');
+                if (imagens[slideAtual]) imagens[slideAtual].classList.remove('ativo');
                 if (dots[slideAtual]) dots[slideAtual].classList.remove('ativo');
 
                 slideAtual = novoIndex;
 
                 slides[slideAtual].classList.add('ativo');
+                if (imagens[slideAtual]) imagens[slideAtual].classList.add('ativo');
                 if (dots[slideAtual]) dots[slideAtual].classList.add('ativo');
 
                 // Revela as bolinhas para indicar que o texto trocou e há mais opções

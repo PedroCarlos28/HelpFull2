@@ -775,7 +775,33 @@ body.acessibilidade-escuro .carrossel-dot:hover {
 }
 
 body.acessibilidade-escuro .carrossel-dot.ativo {
-    background: #5eb5c9 !important;
+    background: var(--tema-link, #7ecfdb) !important;
+    box-shadow: 0 0 8px rgba(126, 207, 219, 0.8), 0 0 16px rgba(126, 207, 219, 0.45) !important;
+    animation: brilhoDotEscuro 2.4s ease-in-out infinite !important;
+}
+
+body:not(.acessibilidade-escuro):not(.acessibilidade-contraste) .carrossel-dot.ativo {
+    background: #2b7a8c !important;
+    box-shadow: 0 0 8px rgba(43, 122, 140, 0.8), 0 0 16px rgba(43, 122, 140, 0.45) !important;
+    animation: brilhoDot 2.4s ease-in-out infinite !important;
+}
+
+@keyframes brilhoDot {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(43, 122, 140, 0.75), 0 0 14px rgba(43, 122, 140, 0.35);
+    }
+    50% {
+        box-shadow: 0 0 11px rgba(43, 122, 140, 0.95), 0 0 22px rgba(43, 122, 140, 0.55);
+    }
+}
+
+@keyframes brilhoDotEscuro {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(126, 207, 219, 0.75), 0 0 14px rgba(126, 207, 219, 0.35);
+    }
+    50% {
+        box-shadow: 0 0 11px rgba(126, 207, 219, 0.95), 0 0 22px rgba(126, 207, 219, 0.55);
+    }
 }
 
 body.acessibilidade-escuro .cartao p {
@@ -1241,7 +1267,8 @@ body.acessibilidade-escuro .logo-gigante,
 body.acessibilidade-escuro .menu-estatitco a,
 body.acessibilidade-escuro .cartao h3,
 body.acessibilidade-escuro .bloco-grande h2,
-body.acessibilidade-escuro .link-extra {
+body.acessibilidade-escuro .link-extra,
+body.acessibilidade-escuro .link-card-video {
     color: var(--tema-link) !important;
 }
 
@@ -1253,7 +1280,8 @@ body.acessibilidade-contraste .logo-gigante,
 body.acessibilidade-contraste .menu-estatitco a,
 body.acessibilidade-contraste .cartao h3,
 body.acessibilidade-contraste .bloco-grande h2,
-body.acessibilidade-contraste .link-extra {
+body.acessibilidade-contraste .link-extra,
+body.acessibilidade-contraste .link-card-video {
     color: var(--tema-link) !important;
 }
 

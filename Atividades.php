@@ -829,6 +829,59 @@ if (isset($_SESSION['usuario_id'])) {
             fill: #1a1a1a;
         }
 
+        /* LINK PARA O VÍDEO RELACIONADO (ESTILO HERO INÍCIO) */
+        .link-card-video {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            font-weight: 800;
+            font-size: 1.05rem;
+            text-decoration: none;
+            color: #2b7a8c;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .link-card-video:hover {
+            color: #1e5966;
+            transform: translateX(4px);
+        }
+
+        .link-card-video .seta {
+            display: inline-block;
+            transition: transform 0.25s ease;
+        }
+
+        .link-card-video:hover .seta {
+            transform: translateX(4px);
+        }
+
+        /* ANIMAÇÃO DE DESTAQUE NO VÍDEO DESTINO */
+        @keyframes destaqueVideoPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(43, 122, 140, 0.85);
+            }
+            35% {
+                transform: scale(1.045);
+                box-shadow: 0 0 0 16px rgba(43, 122, 140, 0.4), 0 12px 35px rgba(43, 122, 140, 0.5);
+            }
+            70% {
+                transform: scale(1.02);
+                box-shadow: 0 0 0 8px rgba(43, 122, 140, 0.25), 0 8px 25px rgba(43, 122, 140, 0.35);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(43, 122, 140, 0);
+            }
+        }
+
+        .video-card.video-card-destaque {
+            animation: destaqueVideoPulse 1.8s cubic-bezier(0.25, 1, 0.5, 1) 2 !important;
+            z-index: 10;
+        }
+
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -1513,6 +1566,9 @@ if (isset($_SESSION['usuario_id'])) {
                     ciclo quatro vezes. Essa prática simples ajuda a desacelerar os batimentos cardíacos e traz a mente
                     de volta para o momento presente, sendo excelente para praticar em momentos de tensão ou antes de
                     dormir.</p>
+                <a href="javascript:void(0)" onclick="irParaVideo('video-fmBRuuQ0Gs8')" class="link-card-video">
+                    Praticar respiração guiada com o vídeo <span class="seta">→</span>
+                </a>
             </div>
             <div class="card-artigo">
                 <h3>O poder das pausas e da autocompaixão</h3>
@@ -1521,6 +1577,30 @@ if (isset($_SESSION['usuario_id'])) {
                     um amigo em dificuldade. Se o dia foi pesado, não se culpe por não ter tido o rendimento que
                     gostaria. Reconheça seu esforço, permita-se pausar e lembre-se de que o cuidado com a mente envolve,
                     acima de tudo, aceitar nossos momentos de descanso. Um dia difícil não define sua jornada.</p>
+                <a href="javascript:void(0)" onclick="irParaVideo('video-LsgpZ6IbGx0')" class="link-card-video">
+                    Assistir vídeo de pausa e presença mental <span class="seta">→</span>
+                </a>
+            </div>
+            <div class="card-artigo">
+                <h3>Como o estresse atua no corpo (e como desativá-lo)</h3>
+                <p>Quando nos sentimos sob pressão ou ameaçados, nosso cérebro aciona o modo de "luta ou fuga", liberando hormônios como cortisol e adrenalina. Isso acelera os batimentos, tensiona os músculos e bloqueia a capacidade de pensar com clareza. Para enviar ao cérebro o sinal de que o perigo já passou, pequenas práticas corporais são poderosas: relaxar os ombros, soltar o maxilar e realizar exalações longas e audíveis. Ao acalmar o corpo físico primeiro, a mente gradualmente compreende que está segura, permitindo que a racionalidade e a serenidade voltem a liderar.</p>
+                <a href="javascript:void(0)" onclick="irParaVideo('video-xI_oUWoofJ0')" class="link-card-video">
+                    Assistir ao vídeo sobre estresse e mente <span class="seta">→</span>
+                </a>
+            </div>
+            <div class="card-artigo">
+                <h3>Quebrando o ciclo do excesso de pensamentos</h3>
+                <p>Ficar repassando a mesma preocupação mentalmente dá a falsa impressão de estarmos resolvendo um problema, mas na verdade apenas desgasta nossa energia emocional. Quando você perceber que está preso num turbilhão de pensamentos, use a regra da ancoragem: nomeie mentalmente três coisas que você consegue ver ao seu redor, dois sons que consegue ouvir e uma textura que consegue tocar com as mãos. Trazer a atenção de volta para os sentidos físicos interrompe o piloto automático da mente e impede que medos futuros sequestrem a sua paz no presente.</p>
+                <a href="javascript:void(0)" onclick="irParaVideo('video--4igBhtIlhk')" class="link-card-video">
+                    Assistir ao vídeo sobre excesso de pensamentos <span class="seta">→</span>
+                </a>
+            </div>
+            <div class="card-artigo">
+                <h3>Acolhendo o que você sente sem julgamentos</h3>
+                <p>Sentir tristeza, cansaço, medo ou irritação não significa que você esteja falhando. As emoções são mensagens biológicas que pedem atenção, e tentar suprimi-las à força costuma apenas torná-las mais intensas. Quando uma sensação incômoda surgir, experimente dar um nome a ela sem se criticar: "estou sentindo frustração agora". Observe essa sensação no corpo como quem assiste a uma onda no oceano — ela cresce, atinge seu pico e, se você não lutar contra ela, naturalmente se dissipa. Aprender a conviver com o desconforto é um dos passos mais libertadores da saúde emocional.</p>
+                <a href="javascript:void(0)" onclick="irParaVideo('video-ySLhZfsagDA')" class="link-card-video">
+                    Assistir ao vídeo sobre emoções e bem-estar <span class="seta">→</span>
+                </a>
             </div>
         </div>
 
@@ -1565,39 +1645,53 @@ if (isset($_SESSION['usuario_id'])) {
                         pensamentos.</p>
                 </div>
                 <div class="video-grid">
-                    <div class="video-card"
+                    <div class="video-card" id="video-aNXKjGFUlMs"
                         style="background-image: url('https://img.youtube.com/vi/aNXKjGFUlMs/maxresdefault.jpg');"
                         onclick="openVideo('aNXKjGFUlMs')">
                         <div class="play-btn"><svg viewBox="0 0 24 24" width="24" height="24">
                                 <path d="M8 5v14l11-7z" />
                             </svg></div>
                     </div>
-                    <div class="video-card"
-                        style="background-image: url('https://img.youtube.com/vi/inpok4MKVLM/maxresdefault.jpg');"
-                        onclick="openVideo('inpok4MKVLM')">
+                    <div class="video-card" id="video-fmBRuuQ0Gs8"
+                        style="background-image: url('https://img.youtube.com/vi/fmBRuuQ0Gs8/maxresdefault.jpg');"
+                        onclick="openVideo('fmBRuuQ0Gs8')">
                         <div class="play-btn"><svg viewBox="0 0 24 24" width="24" height="24">
                                 <path d="M8 5v14l11-7z" />
                             </svg></div>
                     </div>
                 </div>
             </div>
-            <div class="secao-video">
+            <div class="secao-video" id="secao-mente">
                 <div class="secao-video-header">
                     <h3>Entendendo a Mente</h3>
                     <p>Vídeos educativos sobre como nossa mente processa emoções e a importância do descanso mental.
                         Perfeito para entender melhor seus próprios sentimentos de forma leve e didática.</p>
                 </div>
                 <div class="video-grid">
-                    <div class="video-card"
-                        style="background-image: url('https://img.youtube.com/vi/v-t1Z5-oPtU/maxresdefault.jpg');"
-                        onclick="openVideo('v-t1Z5-oPtU')">
+                    <div class="video-card" id="video-xI_oUWoofJ0"
+                        style="background-image: url('https://img.youtube.com/vi/xI_oUWoofJ0/maxresdefault.jpg');"
+                        onclick="openVideo('xI_oUWoofJ0')">
                         <div class="play-btn"><svg viewBox="0 0 24 24" width="24" height="24">
                                 <path d="M8 5v14l11-7z" />
                             </svg></div>
                     </div>
-                    <div class="video-card"
-                        style="background-image: url('https://img.youtube.com/vi/15GaKTP0gFE/maxresdefault.jpg');"
-                        onclick="openVideo('15GaKTP0gFE')">
+                    <div class="video-card" id="video-LsgpZ6IbGx0"
+                        style="background-image: url('https://img.youtube.com/vi/LsgpZ6IbGx0/maxresdefault.jpg');"
+                        onclick="openVideo('LsgpZ6IbGx0')">
+                        <div class="play-btn"><svg viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M8 5v14l11-7z" />
+                            </svg></div>
+                    </div>
+                    <div class="video-card" id="video--4igBhtIlhk"
+                        style="background-image: url('https://img.youtube.com/vi/-4igBhtIlhk/maxresdefault.jpg');"
+                        onclick="openVideo('-4igBhtIlhk')">
+                        <div class="play-btn"><svg viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M8 5v14l11-7z" />
+                            </svg></div>
+                    </div>
+                    <div class="video-card" id="video-ySLhZfsagDA"
+                        style="background-image: url('https://img.youtube.com/vi/ySLhZfsagDA/maxresdefault.jpg');"
+                        onclick="openVideo('ySLhZfsagDA')">
                         <div class="play-btn"><svg viewBox="0 0 24 24" width="24" height="24">
                                 <path d="M8 5v14l11-7z" />
                             </svg></div>
@@ -1680,10 +1774,35 @@ if (isset($_SESSION['usuario_id'])) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('ativo'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('ativo'));
             document.querySelectorAll('.sobre-content').forEach(content => content.classList.remove('ativo'));
-            btnClicado.classList.add('ativo');
+            if (!btnClicado) {
+                btnClicado = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+            }
+            if (btnClicado) btnClicado.classList.add('ativo');
             reposicionarSlider(tabId);
-            document.getElementById('tab-' + tabId).classList.add('ativo');
-            document.getElementById('sobre-' + tabId).classList.add('ativo');
+            const tabContent = document.getElementById('tab-' + tabId);
+            if (tabContent) tabContent.classList.add('ativo');
+            const sobreContent = document.getElementById('sobre-' + tabId);
+            if (sobreContent) sobreContent.classList.add('ativo');
+        }
+
+        function irParaVideo(targetId) {
+            const btnVideos = document.querySelector('.tab-btn[data-tab="videos"]');
+            showTab('videos', btnVideos);
+
+            setTimeout(() => {
+                const elemento = document.getElementById(targetId);
+                if (elemento) {
+                    elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    elemento.classList.remove('video-card-destaque');
+                    void elemento.offsetWidth;
+                    elemento.classList.add('video-card-destaque');
+
+                    setTimeout(() => {
+                        elemento.classList.remove('video-card-destaque');
+                    }, 3600);
+                }
+            }, 120);
         }
 
         window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { reposicionarSlider('textos'); }, 50); });
