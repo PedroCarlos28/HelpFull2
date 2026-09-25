@@ -1374,7 +1374,7 @@ if (isset($_SESSION['usuario_id'])) {
             .video-busca-grid { grid-template-columns: 1fr; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v18">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v19">
 </head>
 
 <body>

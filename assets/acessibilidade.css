@@ -1732,12 +1732,25 @@ body.acessibilidade-escuro .nav-input-texto {
     border-color: var(--tema-borda) !important;
 }
 
-/* Ícones circulares de avatar — não recebem background de tema */
+/* Avatares dos usuários: preserva fotos de perfil e não sobrescreve background-image */
 body.acessibilidade-escuro .post-avatar {
-    background: #2b7a8c !important;
     color: #fff !important;
     border: none !important;
     box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .post-avatar:not([style*="background-image"]):not([style*="url"]) {
+    background-color: #2b7a8c !important;
+}
+
+body.acessibilidade-escuro .post-avatar[style*="background-image"],
+body.acessibilidade-escuro .post-avatar[style*="url"],
+body.acessibilidade-escuro .perfil-capsula[style*="background-image"],
+body.acessibilidade-escuro .perfil-capsula[style*="url"] {
+    background-color: transparent !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
 }
 
 body.acessibilidade-escuro .bv-comunidade-icone {
