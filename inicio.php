@@ -131,6 +131,109 @@ if (isset($_SESSION['usuario_id'])) {
             padding-bottom: 80px;
         }
 
+        /* CARROSSEL HERO */
+        .carrossel-intro-container {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 180px;
+            position: relative;
+            user-select: none;
+        }
+
+        .carrossel-slides {
+            position: relative;
+            width: 100%;
+            min-height: 125px;
+            display: flex;
+            align-items: center;
+        }
+
+        .carrossel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px) scale(0.99);
+            transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s ease;
+            pointer-events: none;
+        }
+
+        .carrossel-slide.ativo {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .carrossel-slide .slide-titulo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+            display: block;
+            line-height: 1.35;
+        }
+
+        .carrossel-slide .slide-desc {
+            font-size: 1.05rem;
+            line-height: 1.55;
+            font-weight: 500;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .carrossel-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 14px;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .caixa-vidro:hover .carrossel-dots,
+        .carrossel-dots.mostrar-temporario {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .carrossel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(26, 26, 26, 0.22);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+            transition: width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, transform 0.25s ease;
+        }
+
+        .carrossel-dot:hover {
+            background: rgba(26, 26, 26, 0.55);
+            transform: scale(1.25);
+        }
+
+        .carrossel-dot.ativo {
+            width: 26px;
+            background: #2b7a8c;
+            border-radius: 999px;
+        }
+
         .texto-intro {
             flex: 1;
             font-size: 1.15rem;
@@ -754,6 +857,28 @@ if (isset($_SESSION['usuario_id'])) {
                 padding: 30px;
             }
 
+            .carrossel-intro-container {
+                text-align: center;
+                align-items: center;
+                min-height: auto;
+                width: 100%;
+            }
+
+            .carrossel-slides {
+                min-height: 155px;
+            }
+
+            .carrossel-slide {
+                text-align: center;
+                align-items: center;
+            }
+
+            .carrossel-dots {
+                justify-content: center;
+                margin-top: 12px;
+                margin-bottom: 22px;
+            }
+
             .quadrado-grafico {
                 width: 100%;
                 height: 180px;
@@ -845,6 +970,48 @@ if (isset($_SESSION['usuario_id'])) {
             .texto-intro {
                 font-size: 1rem;
             }
+
+            .carrossel-slides {
+                min-height: 175px;
+            }
+
+            .carrossel-slide .slide-titulo {
+                font-size: 1.12rem;
+            }
+
+            .carrossel-slide .slide-desc {
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+        }
+
+        /* === TEMA ESCURO E CONTRASTE (ACESSIBILIDADE) PARA O CARROSSEL === */
+        body.acessibilidade-escuro .carrossel-slide .slide-titulo {
+            color: #ffffff !important;
+        }
+        body.acessibilidade-escuro .carrossel-slide .slide-desc {
+            color: #d1d5db !important;
+        }
+        body.acessibilidade-escuro .carrossel-dot {
+            background: rgba(255, 255, 255, 0.3) !important;
+        }
+        body.acessibilidade-escuro .carrossel-dot:hover {
+            background: rgba(255, 255, 255, 0.6) !important;
+        }
+        body.acessibilidade-escuro .carrossel-dot.ativo {
+            background: #5eb5c9 !important;
+        }
+
+        body.acessibilidade-contraste .carrossel-slide .slide-titulo,
+        body.acessibilidade-contraste .carrossel-slide .slide-desc {
+            color: var(--tema-texto, #000) !important;
+        }
+        body.acessibilidade-contraste .carrossel-dot {
+            background: transparent !important;
+            border: 1.5px solid var(--tema-texto, #000) !important;
+        }
+        body.acessibilidade-contraste .carrossel-dot.ativo {
+            background: var(--tema-texto, #000) !important;
         }
 
         /* === MOBILE DROPDOWN MENU === */
@@ -999,11 +1166,76 @@ if (isset($_SESSION['usuario_id'])) {
         <h1 class="logo-gigante">HELPFULL✦</h1>
 
         <!-- Hero Content -->
-        <div class="caixa-vidro">
-            <p class="texto-intro">
-                O bem-estar impulsiona a motivação e os relacionamentos,
-                enquanto dificuldades emocionais prejudicam o humor e a tomada de decisões.
-            </p>
+        <div class="caixa-vidro" id="heroCarrosselCard">
+            <div class="carrossel-intro-container" id="carrosselContainer">
+                <div class="carrossel-slides" id="carrosselSlides">
+                    <!-- Slide 1 -->
+                    <div class="carrossel-slide ativo" data-index="0">
+                        <strong class="slide-titulo">Cada pequeno passo conta.</strong>
+                        <p class="slide-desc">Sua jornada de autocuidado começa aqui. Acompanhe seu humor, registre seus pensamentos e descubra ferramentas para dias mais leves.</p>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="carrossel-slide" data-index="1">
+                        <strong class="slide-titulo">Você não está sozinho nessa.</strong>
+                        <p class="slide-desc">Um espaço pensado pra te ouvir, te ajudar a organizar as emoções e caminhar rumo ao seu melhor bem-estar.</p>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="carrossel-slide" data-index="2">
+                        <strong class="slide-titulo">Bem-estar é um hábito, não um destino.</strong>
+                        <p class="slide-desc">Construa, dia após dia, uma rotina mais consciente com apoio emocional sempre à mão.</p>
+                    </div>
+                    <!-- Slide 4 -->
+                    <div class="carrossel-slide" data-index="3">
+                        <strong class="slide-titulo">Sua mente merece atenção todos os dias.</strong>
+                        <p class="slide-desc">Entenda seus padrões emocionais, celebre suas conquistas e encontre apoio nos momentos mais difíceis.</p>
+                    </div>
+                    <!-- Slide 5 -->
+                    <div class="carrossel-slide" data-index="4">
+                        <strong class="slide-titulo">Um espaço só seu, para respirar e recomeçar.</strong>
+                        <p class="slide-desc">Aqui você encontra ferramentas simples para cuidar da sua saúde emocional, no seu tempo e do seu jeito.</p>
+                    </div>
+                    <!-- Slide 6 -->
+                    <div class="carrossel-slide" data-index="5">
+                        <strong class="slide-titulo">Pequenos hábitos, grandes transformações.</strong>
+                        <p class="slide-desc">Registre, reflita e evolua. O HelpFull te acompanha em cada etapa da sua jornada emocional.</p>
+                    </div>
+                    <!-- Slide 7 -->
+                    <div class="carrossel-slide" data-index="6">
+                        <strong class="slide-titulo">Cuidar de você também é produtivo.</strong>
+                        <p class="slide-desc">Organize seus pensamentos, entenda suas emoções e construa mais equilíbrio no seu dia a dia.</p>
+                    </div>
+                    <!-- Slide 8 -->
+                    <div class="carrossel-slide" data-index="7">
+                        <strong class="slide-titulo">Sua jornada emocional começa com um gesto simples.</strong>
+                        <p class="slide-desc">Escrever, compartilhar e se cuidar. Tudo em um só lugar, feito para o seu bem-estar.</p>
+                    </div>
+                    <!-- Slide 9 -->
+                    <div class="carrossel-slide" data-index="8">
+                        <strong class="slide-titulo">Entenda o que você sente, no seu próprio ritmo.</strong>
+                        <p class="slide-desc">Ferramentas pensadas para te ajudar a lidar com as emoções do dia a dia, com leveza e acolhimento.</p>
+                    </div>
+                    <!-- Slide 10 -->
+                    <div class="carrossel-slide" data-index="9">
+                        <strong class="slide-titulo">Porque toda emoção merece ser ouvida.</strong>
+                        <p class="slide-desc">Um ambiente seguro para desabafar, refletir e crescer emocionalmente, sempre que você precisar.</p>
+                    </div>
+                </div>
+
+                <!-- Indicadores (bolinhas) -->
+                <div class="carrossel-dots" id="carrosselDots" aria-label="Navegação dos textos em destaque">
+                    <button type="button" class="carrossel-dot ativo" data-slide="0" aria-label="Texto 1"></button>
+                    <button type="button" class="carrossel-dot" data-slide="1" aria-label="Texto 2"></button>
+                    <button type="button" class="carrossel-dot" data-slide="2" aria-label="Texto 3"></button>
+                    <button type="button" class="carrossel-dot" data-slide="3" aria-label="Texto 4"></button>
+                    <button type="button" class="carrossel-dot" data-slide="4" aria-label="Texto 5"></button>
+                    <button type="button" class="carrossel-dot" data-slide="5" aria-label="Texto 6"></button>
+                    <button type="button" class="carrossel-dot" data-slide="6" aria-label="Texto 7"></button>
+                    <button type="button" class="carrossel-dot" data-slide="7" aria-label="Texto 8"></button>
+                    <button type="button" class="carrossel-dot" data-slide="8" aria-label="Texto 9"></button>
+                    <button type="button" class="carrossel-dot" data-slide="9" aria-label="Texto 10"></button>
+                </div>
+            </div>
+
             <div class="quadrado-grafico">
                 <img src="assets/HELPFULL.png" alt="Imagem HelpFull">
             </div>
@@ -1133,6 +1365,138 @@ if (isset($_SESSION['usuario_id'])) {
                 }
             });
         }
+
+        // === CARROSSEL DE TEXTOS EM DESTAQUE ===
+        (function () {
+            const cardHero = document.getElementById('heroCarrosselCard');
+            const slides = document.querySelectorAll('.carrossel-slide');
+            const dotsContainer = document.getElementById('carrosselDots');
+            const dots = document.querySelectorAll('.carrossel-dot');
+
+            if (!cardHero || !slides.length) return;
+
+            let slideAtual = 0;
+            const totalSlides = slides.length;
+            let timerCarrossel = null;
+            let timeoutDots = null;
+            let cooldownScroll = false;
+
+            function exibirDotsTemporariamente() {
+                if (!dotsContainer) return;
+                dotsContainer.classList.add('mostrar-temporario');
+                if (timeoutDots) clearTimeout(timeoutDots);
+                timeoutDots = setTimeout(function () {
+                    dotsContainer.classList.remove('mostrar-temporario');
+                }, 4000);
+            }
+
+            function irParaSlide(novoIndex, manual) {
+                if (novoIndex < 0) {
+                    novoIndex = totalSlides - 1;
+                } else if (novoIndex >= totalSlides) {
+                    novoIndex = 0;
+                }
+
+                if (novoIndex === slideAtual && manual) return;
+
+                slides[slideAtual].classList.remove('ativo');
+                if (dots[slideAtual]) dots[slideAtual].classList.remove('ativo');
+
+                slideAtual = novoIndex;
+
+                slides[slideAtual].classList.add('ativo');
+                if (dots[slideAtual]) dots[slideAtual].classList.add('ativo');
+
+                // Revela as bolinhas para indicar que o texto trocou e há mais opções
+                exibirDotsTemporariamente();
+
+                // Reinicia a contagem de 1 minuto a partir do momento da troca
+                reiniciarTimer();
+            }
+
+            function proximoSlide() {
+                irParaSlide(slideAtual + 1);
+            }
+
+            function slideAnterior() {
+                irParaSlide(slideAtual - 1);
+            }
+
+            function reiniciarTimer() {
+                if (timerCarrossel) clearInterval(timerCarrossel);
+                timerCarrossel = setInterval(proximoSlide, 60000); // 1 em 1 minuto (60.000 ms)
+            }
+
+            // Inicia o cronômetro automático de 1 minuto
+            reiniciarTimer();
+
+            // Clique nas bolinhas indicadoras
+            dots.forEach(function (dot, index) {
+                dot.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    irParaSlide(index, true);
+                });
+            });
+
+            // Scroll do mouse (Roda / Wheel) sobre o card
+            cardHero.addEventListener('wheel', function (e) {
+                // Ignora micro-movimentos acidentais
+                if (Math.abs(e.deltaY) < 12 && Math.abs(e.deltaX) < 12) return;
+
+                e.preventDefault();
+                if (cooldownScroll) return;
+                cooldownScroll = true;
+                setTimeout(function () {
+                    cooldownScroll = false;
+                }, 380);
+
+                if (e.deltaY > 0 || e.deltaX > 0) {
+                    proximoSlide();
+                } else {
+                    slideAnterior();
+                }
+            }, { passive: false });
+
+            // Gestos de Touch no Celular (Swipe)
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchEndX = 0;
+            let touchEndY = 0;
+            let isTouchTracking = false;
+
+            cardHero.addEventListener('touchstart', function (e) {
+                if (e.touches && e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    touchEndX = touchStartX;
+                    touchEndY = touchStartY;
+                    isTouchTracking = true;
+                    exibirDotsTemporariamente();
+                }
+            }, { passive: true });
+
+            cardHero.addEventListener('touchmove', function (e) {
+                if (!isTouchTracking || !e.touches || e.touches.length !== 1) return;
+                touchEndX = e.touches[0].clientX;
+                touchEndY = e.touches[0].clientY;
+            }, { passive: true });
+
+            cardHero.addEventListener('touchend', function () {
+                if (!isTouchTracking) return;
+                isTouchTracking = false;
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
+
+                // Se o deslize horizontal foi de ao menos 30px e maior que o vertical
+                if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
+                    if (diffX < 0) {
+                        proximoSlide(); // Arrastou para a esquerda -> próximo
+                    } else {
+                        slideAnterior(); // Arrastou para a direita -> anterior
+                    }
+                }
+            }, { passive: true });
+        })();
     </script>
     <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
 

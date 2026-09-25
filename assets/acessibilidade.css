@@ -749,6 +749,7 @@ body.acessibilidade-escuro .rodape-simples {
 
 body.acessibilidade-escuro .logo-gigante,
 body.acessibilidade-escuro .texto-intro,
+body.acessibilidade-escuro .carrossel-slide .slide-titulo,
 body.acessibilidade-escuro .menu-estatitco a,
 body.acessibilidade-escuro .cartao h3,
 body.acessibilidade-escuro .bloco-grande h2,
@@ -759,6 +760,22 @@ body.acessibilidade-escuro .rodape-simples,
 body.acessibilidade-escuro .rodape-simples strong,
 body.acessibilidade-escuro .contato-info {
     color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .carrossel-slide .slide-desc {
+    color: var(--tema-texto-suave) !important;
+}
+
+body.acessibilidade-escuro .carrossel-dot {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+body.acessibilidade-escuro .carrossel-dot:hover {
+    background: rgba(255, 255, 255, 0.6) !important;
+}
+
+body.acessibilidade-escuro .carrossel-dot.ativo {
+    background: #5eb5c9 !important;
 }
 
 body.acessibilidade-escuro .cartao p {
@@ -1000,6 +1017,8 @@ body.acessibilidade-contraste .grafico-card {
 
 body.acessibilidade-contraste .logo-gigante,
 body.acessibilidade-contraste .texto-intro,
+body.acessibilidade-contraste .carrossel-slide .slide-titulo,
+body.acessibilidade-contraste .carrossel-slide .slide-desc,
 body.acessibilidade-contraste .menu-estatitco a,
 body.acessibilidade-contraste .cartao h3,
 body.acessibilidade-contraste .cartao p,
@@ -1010,6 +1029,15 @@ body.acessibilidade-contraste .link-extra,
 body.acessibilidade-contraste .rodape-simples,
 body.acessibilidade-contraste .contato-info {
     color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-contraste .carrossel-dot {
+    background: transparent !important;
+    border: 1.5px solid var(--tema-texto) !important;
+}
+
+body.acessibilidade-contraste .carrossel-dot.ativo {
+    background: var(--tema-texto) !important;
 }
 
 body.acessibilidade-contraste .rodape-simples {

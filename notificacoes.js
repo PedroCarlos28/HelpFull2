@@ -441,6 +441,46 @@
         'Cuidar de você nunca foi tão simples.': 'Taking care of yourself has never been easier.',
         'O bem-estar impulsiona a motivação e os relacionamentos, enquanto dificuldades emocionais prejudicam o humor e a tomada de decisões.':
             'Well-being boosts motivation and relationships, while emotional struggles harm mood and decision-making.',
+        '"Cada pequeno passo conta."': '"Every small step counts."',
+        'Cada pequeno passo conta.': 'Every small step counts.',
+        'Sua jornada de autocuidado começa aqui. Acompanhe seu humor, registre seus pensamentos e descubra ferramentas para dias mais leves.':
+            'Your self-care journey begins here. Track your mood, record your thoughts, and discover tools for lighter days.',
+        '"Você não está sozinho nessa."': '"You are not alone in this."',
+        'Você não está sozinho nessa.': 'You are not alone in this.',
+        'Um espaço pensado pra te ouvir, te ajudar a organizar as emoções e caminhar rumo ao seu melhor bem-estar.':
+            'A space designed to listen, help you organize your emotions, and guide you toward your best well-being.',
+        '"Bem-estar é um hábito, não um destino."': '"Well-being is a habit, not a destination."',
+        'Bem-estar é um hábito, não um destino.': 'Well-being is a habit, not a destination.',
+        'Construa, dia após dia, uma rotina mais consciente com apoio emocional sempre à mão.':
+            'Build, day by day, a more mindful routine with emotional support always within reach.',
+        '"Sua mente merece atenção todos os dias."': '"Your mind deserves attention every day."',
+        'Sua mente merece atenção todos os dias.': 'Your mind deserves attention every day.',
+        'Entenda seus padrões emocionais, celebre suas conquistas e encontre apoio nos momentos mais difíceis.':
+            'Understand your emotional patterns, celebrate your wins, and find support in the most difficult moments.',
+        '"Um espaço só seu, para respirar e recomeçar."': '"A space of your own, to breathe and restart."',
+        'Um espaço só seu, para respirar e recomeçar.': 'A space of your own, to breathe and restart.',
+        'Aqui você encontra ferramentas simples para cuidar da sua saúde emocional, no seu tempo e do seu jeito.':
+            'Here you will find simple tools to care for your emotional health, in your time and your way.',
+        '"Pequenos hábitos, grandes transformações."': '"Small habits, big transformations."',
+        'Pequenos hábitos, grandes transformações.': 'Small habits, big transformations.',
+        'Registre, reflita e evolua. O HelpFull te acompanha em cada etapa da sua jornada emocional.':
+            'Record, reflect, and evolve. HelpFull accompanies you at every stage of your emotional journey.',
+        '"Cuidar de você também é produtivo."': '"Taking care of yourself is also productive."',
+        'Cuidar de você também é produtivo.': 'Taking care of yourself is also productive.',
+        'Organize seus pensamentos, entenda suas emoções e construa mais equilíbrio no seu dia a dia.':
+            'Organize your thoughts, understand your emotions, and build more balance in your daily life.',
+        '"Sua jornada emocional começa com um gesto simples."': '"Your emotional journey begins with a simple gesture."',
+        'Sua jornada emocional começa com um gesto simples.': 'Your emotional journey begins with a simple gesture.',
+        'Escrever, compartilhar e se cuidar. Tudo em um só lugar, feito para o seu bem-estar.':
+            'Write, share, and take care of yourself. All in one place, made for your well-being.',
+        '"Entenda o que você sente, no seu próprio ritmo."': '"Understand what you feel, at your own pace."',
+        'Entenda o que você sente, no seu próprio ritmo.': 'Understand what you feel, at your own pace.',
+        'Ferramentas pensadas para te ajudar a lidar com as emoções do dia a dia, com leveza e acolhimento.':
+            'Tools designed to help you deal with everyday emotions, with lightness and warmth.',
+        '"Porque toda emoção merece ser ouvida."': '"Because every emotion deserves to be heard."',
+        'Porque toda emoção merece ser ouvida.': 'Because every emotion deserves to be heard.',
+        'Um ambiente seguro para desabafar, refletir e crescer emocionalmente, sempre que você precisar.':
+            'A safe environment to vent, reflect, and grow emotionally, whenever you need it.',
         'Todos temos dias difíceis, e você não precisa passar por eles sozinho. Explore um ambiente focado no seu bem-estar, acompanhe seu humor, registre sua jornada e descubra ferramentas desenhadas para trazer mais clareza e tranquilidade para o seu dia a dia.':
             'We all have difficult days, and you don\'t have to go through them alone. Explore an environment focused on your well-being, track your mood, record your journey, and discover tools designed to bring more clarity and calm to your routine.',
         'Registre seus pensamentos diariamente. Escrever alivia a mente e ajuda a entender melhor suas emoções.': 'Record your thoughts daily. Writing clears the mind and helps you better understand your emotions.',
