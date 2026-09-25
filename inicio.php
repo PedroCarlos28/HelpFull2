@@ -908,7 +908,7 @@ if (isset($_SESSION['usuario_id'])) {
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v5">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v6">
 </head>
 
 <body>
@@ -1134,7 +1134,7 @@ if (isset($_SESSION['usuario_id'])) {
             });
         }
     </script>
-    <script src="notificacoes.js?v=20260924-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260924-v6" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v6';document.body.appendChild(s);}"></script>
 
 </body>
 

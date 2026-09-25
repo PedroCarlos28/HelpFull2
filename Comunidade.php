@@ -1904,7 +1904,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             .post-texto { font-size: 1.05rem; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v5">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v6">
 </head>
 
 <body>
@@ -2199,8 +2199,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                                     onclick="curtirPost(this, '<?php echo $post['id']; ?>')">
                                     ♡ <?php echo $post['total_curtidas'] ?? 0; ?>
                                 </button>
-                                <button class="pill-cinza" onclick="toggleMenu('menuReacoes_<?= $post['id'] ?>')">💬
-                                    Reagir</button>
+                                <button class="pill-cinza" onclick="toggleMenu('menuReacoes_<?= $post['id'] ?>')">💬 Reagir</button>
                                 <?php if ($post['tag_impacto'] === 'Ruim'): ?>
                                     <div class="pill-avaliacao ruim">Ruim</div>
                                 <?php else: ?>
@@ -2830,7 +2829,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             }
         });
     </script>
-    <script src="notificacoes.js?v=20260924-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260924-v6" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v6';document.body.appendChild(s);}"></script>
 </body>
 
 </html>

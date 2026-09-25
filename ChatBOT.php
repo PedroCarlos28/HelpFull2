@@ -57,7 +57,8 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             font-size: 1rem;
         }
 
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -797,14 +798,18 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             -webkit-backdrop-filter: blur(25px);
             border-radius: 25px;
             padding: 15px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             flex-direction: column;
             gap: 5px;
             z-index: 2100;
             animation: fadeInDropdown 0.3s ease;
         }
-        .nav-dropdown-mobile.aberto { display: flex; }
+
+        .nav-dropdown-mobile.aberto {
+            display: flex;
+        }
+
         .nav-dropdown-mobile a {
             text-decoration: none;
             color: #1a1a1a;
@@ -814,27 +819,61 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             border-radius: 15px;
             transition: background 0.2s;
         }
-        .nav-dropdown-mobile a:hover { background: rgba(0,0,0,0.05); }
-        .nav-dropdown-mobile a.ativo { color: #2b7a8c; background: rgba(43,122,140,0.08); }
+
+        .nav-dropdown-mobile a:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-dropdown-mobile a.ativo {
+            color: #2b7a8c;
+            background: rgba(43, 122, 140, 0.08);
+        }
+
         @keyframes fadeInDropdown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         @media (min-width: 769px) {
-            .nav-dropdown-mobile { display: none !important; }
+            .nav-dropdown-mobile {
+                display: none !important;
+            }
         }
+
         @media (max-width: 768px) {
-            .nav-container-global { width: 100%; }
-            .nav-links { display: none; }
+            .nav-container-global {
+                width: 100%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
             .navbar-topo {
                 padding: 12px 25px;
                 width: calc(100% - 40px);
                 margin: 0 auto;
                 justify-content: space-between;
             }
-            .nav-logo { cursor: pointer; }
-            .conteudo-site { padding-top: 85px; }
-            .sidebar-historico { display: none; }
+
+            .nav-logo {
+                cursor: pointer;
+            }
+
+            .conteudo-site {
+                padding-top: 85px;
+            }
+
+            .sidebar-historico {
+                display: none;
+            }
         }
 
         @keyframes fadeIn {
@@ -866,7 +905,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             gap: 8px;
             margin-bottom: 10px;
             align-self: flex-start;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .btn-fechar-historico-mobile {
@@ -899,13 +938,16 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 width: 220px;
                 padding: 30px 14px;
             }
+
             .conteudo-site {
                 padding: 90px 16px 16px 16px;
             }
         }
 
         @media (max-width: 768px) {
-            html, body {
+
+            html,
+            body {
                 height: 100dvh;
                 min-height: 100dvh;
                 overflow: hidden;
@@ -934,7 +976,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 font-size: 0.85rem;
                 justify-content: center;
                 border-radius: 20px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
                 flex-shrink: 0;
             }
 
@@ -977,7 +1019,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 max-height: 72vh;
                 padding: 24px 16px;
                 border-radius: 28px;
-                box-shadow: 0 15px 45px rgba(0,0,0,0.25);
+                box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
             }
 
             .layout-chat-wrapper {
@@ -1054,12 +1096,23 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 height: 60px;
             }
 
-            .btn-notificacao-separado { right: 10px; }
-            .painel-notificacoes { right: 10px; width: calc(100vw - 40px); max-width: 320px; }
-            .toast-notificacao { width: 92%; max-width: 380px; }
+            .btn-notificacao-separado {
+                right: 10px;
+            }
+
+            .painel-notificacoes {
+                right: 10px;
+                width: calc(100vw - 40px);
+                max-width: 320px;
+            }
+
+            .toast-notificacao {
+                width: 92%;
+                max-width: 380px;
+            }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v5">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v6">
 </head>
 
 <body>
@@ -1068,7 +1121,11 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 
     <div class="nav-container-global">
         <nav class="navbar-topo">
-            <a href="inicio.php" class="nav-logo" style="display: flex; align-items: center;">HELPFULL <span class="nav-seta-dropdown"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></a>
+            <a href="inicio.php" class="nav-logo" style="display: flex; align-items: center;">HELPFULL <span
+                    class="nav-seta-dropdown"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg></span></a>
             <ul class="nav-links">
                 <li><a href="Diario.php">Diário</a></li>
                 <li><a href="Comunidade.php">Comunidade</a></li>
@@ -1082,7 +1139,8 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 <a href="ChatBOT.php" class="ativo">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
-                <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
+                <a href="javascript:void(0)" class="btn-abrir-acessibilidade"
+                    onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
             <?php $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; ?>
             <a href="Perfil.php" style="text-decoration: none; display: flex;">
@@ -1129,7 +1187,11 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
     <div class="conteudo-site">
         <div id="overlayHistoricoMobile" class="overlay-historico-mobile" onclick="toggleHistoricoMobile(false)"></div>
         <button class="btn-toggle-historico-mobile" onclick="toggleHistoricoMobile()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"></path><circle cx="12" cy="12" r="9"></circle></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 8v4l3 3"></path>
+                <circle cx="12" cy="12" r="9"></circle>
+            </svg>
             Histórico
         </button>
         <div class="layout-chat-wrapper">
@@ -1138,13 +1200,15 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                     <h3 class="titulo-historico">Histórico</h3>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <button class="btn-novo-chat" onclick="novoChat()" title="Nova Conversa">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
                         </button>
-                        <button type="button" class="btn-fechar-historico-mobile" onclick="toggleHistoricoMobile(false)" aria-label="Fechar Histórico">×</button>
+                        <button type="button" class="btn-fechar-historico-mobile" onclick="toggleHistoricoMobile(false)"
+                            aria-label="Fechar Histórico">×</button>
                     </div>
                 </div>
 
@@ -1174,8 +1238,8 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 </div>
 
                 <div class="area-input-chat">
-                    <input type="text" class="input-chat" id="inputChat"
-                        placeholder="Converse com o Helpy..." onkeypress="verificarEnter(event)">
+                    <input type="text" class="input-chat" id="inputChat" placeholder="Converse com o Helpy..."
+                        onkeypress="verificarEnter(event)">
 
                     <button class="btn-enviar-chat" onclick="enviarMensagem()">
                         <svg class="icone-enviar" viewBox="0 0 24 24">
@@ -1363,7 +1427,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
         const navLogo = document.querySelector('.nav-logo');
         const navDropdown = document.getElementById('navDropdownMobile');
         if (navLogo && navDropdown) {
-            navLogo.addEventListener('click', function(e) {
+            navLogo.addEventListener('click', function (e) {
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1371,7 +1435,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                     navLogo.classList.toggle('aberto', aberto);
                 }
             });
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 if (!e.target.closest('.navbar-topo') && !e.target.closest('.nav-dropdown-mobile')) {
                     navDropdown.classList.remove('aberto');
                     navLogo.classList.remove('aberto');
@@ -1388,7 +1452,8 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 
 
     </script>
-    <script src="notificacoes.js?v=20260924-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260924-v6"
+        onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v6';document.body.appendChild(s);}"></script>
 </body>
 
 </html>

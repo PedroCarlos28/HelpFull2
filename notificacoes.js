@@ -388,6 +388,11 @@
         'Mais curtidos': 'Most liked',
         'Reações': 'Reactions',
         'Reagir': 'React',
+        '💬 Reagir': '💬 React',
+        '💬  Reagir': '💬 React',
+        'Alerta': 'Alert',
+        'Segurança': 'Comfort',
+        'Processamento': 'Reflection',
         'Pode dar gatilho': 'May be triggering',
         'Me deixou ansioso': 'Made me anxious',
         'Achei pesado': 'I found it heavy',
@@ -403,6 +408,22 @@
         'Ruim': 'Bad',
         'Nenhum comentário ainda.': 'No comments yet.',
         'Seja o primeiro a comentar!': 'Be the first to comment!',
+        'Bem-vindo(a) à Comunidade! ✦': 'Welcome to the Community! ✦',
+        'Este é o seu espaço seguro para compartilhar como você está se sentindo, desabafar e acolher os outros. Você pode criar sua primeira publicação no campo acima ou reagir às postagens com empatia!':
+            'This is your safe space to share how you are feeling, vent, and support others. You can create your first post in the field above or react to posts with empathy!',
+        'Apagar': 'Delete',
+        'Editar': 'Edit',
+        'Editar Publicação': 'Edit Post',
+        'Salvar Alterações': 'Save Changes',
+        'Cancelar': 'Cancel',
+        'Mídias e Atividades': 'Media & Activities',
+        'O que você consumiu?': 'What did you consume?',
+        'Escreva aqui o nome...': 'Type the name here...',
+        'Buscar': 'Search',
+        'Tudo': 'All',
+        'Filmes/Séries': 'Movies/Series',
+        'Livros': 'Books',
+        'Pesquisa aqui...': 'Search here...',
 
         // ChatBOT (Helpy)
         'Histórico': 'History',
@@ -433,7 +454,7 @@
         dicionarioENLower[k.toLowerCase()] = dicionarioEN[k];
     });
 
-    var selConteudo = '.post-texto,.post-nome,.post-data,.comentario-nome,.tag-solida,.post-avatar,.post-midias-container,.attachment-name';
+    var selConteudo = '.post-texto,.post-nome,.post-data,.comentario-nome,.post-avatar,.post-midias-container,.attachment-name';
 
     function traduzirPagina() {
         var idioma = localStorage.getItem('helpfull_idioma') || 'pt-BR';
@@ -468,6 +489,8 @@
                     no.nodeValue = no._textoOriginal.replace(originalTrimmed, dicionarioENLower[originalTrimmed.toLowerCase()]);
                 } else if (dicionarioENLower[norm.toLowerCase()]) {
                     no.nodeValue = dicionarioENLower[norm.toLowerCase()];
+                } else if (originalTrimmed.indexOf('Reagir') !== -1) {
+                    no.nodeValue = no._textoOriginal.replace('Reagir', 'React');
                 }
             }
         }

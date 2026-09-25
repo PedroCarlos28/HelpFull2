@@ -748,7 +748,7 @@ $usuarioLogado = $stmt->fetch();
             .btn-emocao { flex: 1 1 calc(50% - 10px); min-width: auto; font-size: 0.85rem; padding: 10px 5px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v5">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v6">
 </head>
 
 <body>
@@ -987,7 +987,7 @@ $usuarioLogado = $stmt->fetch();
             });
         }
     </script>
-    <script src="notificacoes.js?v=20260924-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260924-v6" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v6';document.body.appendChild(s);}"></script>
 </body>
 
 </html>

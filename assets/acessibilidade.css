@@ -1025,7 +1025,7 @@ body.acessibilidade-escuro .conta-input {
     border-color: var(--tema-borda) !important;
 }
 
-body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn),
+body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ),
 body.acessibilidade-escuro .item-notificacao,
 body.acessibilidade-escuro .lista-notificacoes,
 body.acessibilidade-escuro .btn-limpar-pill,
@@ -1543,14 +1543,144 @@ body.acessibilidade-escuro .notif-content p {
 body.acessibilidade-escuro .btn-acao-circ,
 body.acessibilidade-escuro .nav-btn-circ,
 body.acessibilidade-escuro .nav-btn-send,
-body.acessibilidade-escuro .pill-cinza,
 body.acessibilidade-escuro .btn-dots,
 body.acessibilidade-escuro .btn-menu-opcao,
-body.acessibilidade-escuro .btn-filtro,
+body.acessibilidade-escuro .btn-filtro:not(.active),
 body.acessibilidade-escuro .attachment-pill {
     background: var(--tema-superficie-elevada) !important;
     color: var(--tema-texto) !important;
     border-color: var(--tema-borda) !important;
+}
+
+/* Post Actions (Like & React pills) */
+body.acessibilidade-escuro .pill-cinza:not(.curtido) {
+    background: #242c30 !important;
+    color: #cbd6db !important;
+    border: 1px solid #36444b !important;
+}
+
+body.acessibilidade-escuro .pill-cinza:not(.curtido):hover {
+    background: #2f3a40 !important;
+    color: #ffffff !important;
+}
+
+body.acessibilidade-escuro .pill-cinza.curtido {
+    background: #7a1921 !important;
+    color: #ffffff !important;
+    border: 1px solid #a3222d !important;
+}
+
+/* Primary teal buttons across all pages, darkened */
+body.acessibilidade-escuro .btn-salvar,
+body.acessibilidade-escuro .btn-editar,
+body.acessibilidade-escuro .btn-trocar-foto,
+body.acessibilidade-escuro .btn-novo-chat,
+body.acessibilidade-escuro .btn-enviar-chat,
+body.acessibilidade-escuro .btn-iniciar,
+body.acessibilidade-escuro .modal-edicao-content button[type="submit"],
+body.acessibilidade-escuro #modal-header-container button[onclick*="buscarNaAPI"],
+body.acessibilidade-escuro .btn-filtro.active {
+    background: #1c525f !important;
+    color: #ffffff !important;
+    border: 1px solid #276d7d !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.acessibilidade-escuro .btn-salvar:hover,
+body.acessibilidade-escuro .btn-editar:hover,
+body.acessibilidade-escuro .btn-trocar-foto:hover,
+body.acessibilidade-escuro .btn-novo-chat:hover,
+body.acessibilidade-escuro .btn-enviar-chat:hover,
+body.acessibilidade-escuro .btn-iniciar:hover,
+body.acessibilidade-escuro .modal-edicao-content button[type="submit"]:hover,
+body.acessibilidade-escuro #modal-header-container button[onclick*="buscarNaAPI"]:hover {
+    background: #246575 !important;
+}
+
+/* Impact pills (Bom / Ruim) with rich darkened tones */
+body.acessibilidade-escuro .nav-pill-bom:not(.ruim),
+body.acessibilidade-escuro .pill-toggle-bom:not(.ruim),
+body.acessibilidade-escuro .pill-avaliacao.bom {
+    background: #18381c !important;
+    color: #7de888 !important;
+    border: 1px solid #295e30 !important;
+}
+
+body.acessibilidade-escuro .nav-pill-bom.ruim,
+body.acessibilidade-escuro .pill-toggle-bom.ruim,
+body.acessibilidade-escuro .pill-avaliacao.ruim {
+    background: #42181d !important;
+    color: #ff8c94 !important;
+    border: 1px solid #6b2830 !important;
+}
+
+/* Reaction popup header pills (.pill-titulo) */
+body.acessibilidade-escuro .pill-titulo.alerta {
+    background: #521e24 !important;
+    color: #ffc4ca !important;
+    border: 1px solid #782e36 !important;
+}
+
+body.acessibilidade-escuro .pill-titulo.seguranca {
+    background: #143818 !important;
+    color: #bbf0c2 !important;
+    border: 1px solid #225c28 !important;
+}
+
+body.acessibilidade-escuro .pill-titulo.process {
+    background: #172f4d !important;
+    color: #bcd9ff !important;
+    border: 1px solid #234875 !important;
+}
+
+/* Reaction badges displayed on posts (.tag-solida) */
+body.acessibilidade-escuro .tag-solida.alerta {
+    background: #42181d !important;
+    color: #ffb8c0 !important;
+    border: 1px solid #66262e !important;
+}
+
+body.acessibilidade-escuro .tag-solida.seguranca {
+    background: #123016 !important;
+    color: #b0f0b8 !important;
+    border: 1px solid #1e5225 !important;
+}
+
+body.acessibilidade-escuro .tag-solida.process {
+    background: #142842 !important;
+    color: #b3d6ff !important;
+    border: 1px solid #1f3e66 !important;
+}
+
+/* Reaction buttons inside reaction popup (.tag-reacao-btn) */
+body.acessibilidade-escuro .tag-reacao-btn.alerta-item {
+    background: #331316 !important;
+    color: #ffb5bd !important;
+    border: 1px solid #4d1c21 !important;
+}
+
+body.acessibilidade-escuro .tag-reacao-btn.alerta-item:hover {
+    background: #471b20 !important;
+}
+
+body.acessibilidade-escuro .tag-reacao-btn.seguranca-item {
+    background: #0d2411 !important;
+    color: #a6f0ad !important;
+    border: 1px solid #163d1c !important;
+}
+
+body.acessibilidade-escuro .tag-reacao-btn.seguranca-item:hover {
+    background: #143818 !important;
+}
+
+body.acessibilidade-escuro .tag-reacao-btn.process-item {
+    background: #0e1c2c !important;
+    color: #a6cdff !important;
+    border: 1px solid #172d47 !important;
+}
+
+body.acessibilidade-escuro .tag-reacao-btn.process-item:hover {
+    background: #162c47 !important;
 }
 
 body.acessibilidade-escuro .menu-opcoes-post,
@@ -1564,63 +1694,6 @@ body.acessibilidade-escuro .itens-reacao {
 body.acessibilidade-escuro .btn-menu-opcao:hover,
 body.acessibilidade-escuro .btn-filtro:hover:not(.active) {
     background: #405158 !important;
-}
-
-body.acessibilidade-escuro .btn-filtro.active {
-    background: #2b7a8c !important;
-    color: #ffffff !important;
-    border-color: #58b5c5 !important;
-}
-
-body.acessibilidade-escuro .tag-reacao-btn.alerta-item {
-    background: #6f3f45 !important;
-    color: #ffe5e7 !important;
-}
-
-body.acessibilidade-escuro .tag-reacao-btn.seguranca-item {
-    background: #3f7041 !important;
-    color: #e1ffe1 !important;
-}
-
-body.acessibilidade-escuro .tag-reacao-btn.process-item {
-    background: #3d5f88 !important;
-    color: #e1efff !important;
-}
-
-body.acessibilidade-escuro .nav-pill-bom,
-body.acessibilidade-escuro .pill-toggle-bom {
-    background: #3f7041 !important;
-    color: #e1ffe1 !important;
-}
-
-body.acessibilidade-escuro .nav-pill-bom.ruim,
-body.acessibilidade-escuro .pill-toggle-bom.ruim {
-    background: #6f3f45 !important;
-    color: #ffe5e7 !important;
-}
-
-body.acessibilidade-escuro .pill-avaliacao.bom {
-    background: #315a37 !important;
-    color: #d9ffd9 !important;
-    border-color: #5d9c62 !important;
-}
-
-body.acessibilidade-escuro .pill-avaliacao.ruim {
-    background: #63363b !important;
-    color: #ffdfe2 !important;
-    border-color: #a45d64 !important;
-}
-
-body.acessibilidade-escuro .tag-solida.alerta {
-    background: #8d4f56 !important;
-}
-
-body.acessibilidade-escuro .tag-solida.seguranca {
-    background: #4e8a50 !important;
-}
-
-body.acessibilidade-escuro .tag-solida.process {
-    background: #4d76a8 !important;
 }
 
 body.acessibilidade-escuro .item-resultado {
