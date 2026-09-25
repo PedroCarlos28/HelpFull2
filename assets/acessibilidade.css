@@ -1133,32 +1133,34 @@ body.acessibilidade-escuro .video-fundo {
     opacity: 0.55 !important;
 }
 
-/* Atividades - Cabeçalho (sem imagem, fundo sólido para texto legível) */
+/* Atividades - Cabeçalho: imagem de fundo com overlay escuro, card-sobre sólido */
 body.acessibilidade-escuro .cabecalho-imagem {
-    background-image: none !important;
-    background-color: var(--tema-superficie) !important;
+    background-size: cover !important;
+    background-position: center !important;
     border: 1px solid rgba(255, 255, 255, 0.07) !important;
     box-shadow: none !important;
-    filter: none !important;
-}
-
-body.acessibilidade-escuro .cabecalho-imagem * {
-    color: var(--tema-texto) !important;
+    filter: brightness(0.5) !important;
 }
 
 body.acessibilidade-escuro .card-sobre {
-    background: rgba(255, 255, 255, 0.04) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
+    background: rgba(25, 30, 34, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     box-shadow: none !important;
+    filter: brightness(2) !important;
+}
+
+body.acessibilidade-escuro .card-sobre * {
+    color: var(--tema-texto) !important;
+    filter: none !important;
 }
 
 body.acessibilidade-escuro .card-artigo,
 body.acessibilidade-escuro .secao-video-header {
-    background: #1e262a !important;
+    background: var(--tema-superficie) !important;
     border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18) !important;
+    box-shadow: none !important;
 }
 
 body.acessibilidade-escuro .tabs-capsula {
@@ -1598,10 +1600,10 @@ body.acessibilidade-escuro .caixa-agrupadora {
 }
 
 body.acessibilidade-escuro .caixa-agrupadora::before {
-    background: rgba(30, 36, 40, 0.6) !important;
+    background: rgba(25, 30, 34, 0.93) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
     box-shadow: none !important;
 }
 
