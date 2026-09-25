@@ -1059,7 +1059,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             .toast-notificacao { width: 92%; max-width: 380px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260916-v3">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260924-v5">
 </head>
 
 <body>
@@ -1388,7 +1388,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 
 
     </script>
-    <script src="notificacoes.js?v=20260924-v4" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v4';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260924-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v5';document.body.appendChild(s);}"></script>
 </body>
 
 </html>

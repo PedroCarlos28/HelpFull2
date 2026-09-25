@@ -229,89 +229,307 @@
         }
     };
 
-    var textosPag = {
-        'pt-BR': {
-            'Início':'Início','Diário':'Diário','Comunidade':'Comunidade','Atividades':'Atividades','Adicionais':'Adicionais','Perfil':'Perfil',
-            'Sua Conta:':'Sua Conta:','Metas':'Metas','Calendário':'Calendário','Detalhes do dia':'Detalhes do dia','Gráficos':'Gráficos',
-            'Diários':'Diários','Emoções do Mês':'Emoções do Mês','Sobre essa aba:':'Sobre essa aba:','Textos':'Textos','Videos':'Videos',
-            'A Técnica 4-7-8 para Alívio Imediato':'A Técnica 4-7-8 para Alívio Imediato','O poder das pausas e da autocompaixão':'O poder das pausas e da autocompaixão',
-            'Práticas de Respiração e Foco':'Práticas de Respiração e Foco','Entendendo a Mente':'Entendendo a Mente',
-            'Histórico':'Histórico','Nova Conversa':'Nova Conversa','Digite aqui para conversar com o Helpy...':'Digite aqui para conversar com o Helpy...',
-            'Atribua uma emoção ao seu diario:':'Atribua uma emoção ao seu diario:','Irritado':'Irritado','Ansioso':'Ansioso','Feliz':'Feliz','Calmo':'Calmo','Triste':'Triste','Amoroso':'Amoroso',
-            'Apagar tudo':'Apagar tudo','Salvar':'Salvar','Editar':'Editar','Sair da conta':'Sair da conta','Apagar Conta':'Apagar Conta',
-            'Notificações':'Notificações','Limpar':'Limpar','Nenhuma notificação nova.':'Nenhuma notificação nova.','Bom':'Bom','Ruim':'Ruim','Reagir':'Reagir',
-            'Entre em contato:':'Entre em contato:','Email:':'Email:','Intagram:':'Intagram:','WhatsApp:':'WhatsApp:','Comente sua experiência aqui...':'Comente sua experiência aqui...'
-        },
-        en: {
-            'Início':'Home','Diário':'Journal','Comunidade':'Community','Atividades':'Activities','Adicionais':'Activities','Perfil':'Profile',
-            'Diário Pessoal':'Personal journal','Apoio 24 Horas':'24-hour support','Apoio emocional na palma da sua mão.':'Emotional support in the palm of your hand.','Conversar com o Helpy →':'Talk to Helpy →',
-            'Alerta':'Alert','Segurança':'Safety','Processamento':'Processing','Pode dar gatilho':'May be triggering','Me deixou ansioso':'Made me anxious','Achei pesado':'I found it heavy','Cura a alma':'Healing','É leve':'It is light','Me trouxe paz':'Brought me peace','Relaxante':'Relaxing','Me fez refletir':'Made me reflect','História profunda':'Deep story','Me emocionou':'Moved me','Me deixou pensativo':'Made me thoughtful','Apagar':'Delete',
-            'Sua Conta:':'Your Account:','Metas':'Goals','Calendário':'Calendar','Detalhes do dia':'Day details','Gráficos':'Charts',
-            'Diários':'Journals','Emoções do Mês':'Monthly emotions','Sobre essa aba:':'About this section:','Textos':'Texts','Videos':'Videos',
-            'A Técnica 4-7-8 para Alívio Imediato':'The 4-7-8 technique for immediate relief','O poder das pausas e da autocompaixão':'The power of pauses and self-compassion',
-            'Práticas de Respiração e Foco':'Breathing and focus practices','Entendendo a Mente':'Understanding the mind',
-            'Histórico':'History','Nova Conversa':'New conversation','Digite aqui para conversar com o Helpy...':'Type here to chat with Helpy...',
-            'Atribua uma emoção ao seu diario:':'Choose an emotion for your journal:','Irritado':'Irritated','Ansioso':'Anxious','Feliz':'Happy','Calmo':'Calm','Triste':'Sad','Amoroso':'Loving',
-            'Apagar tudo':'Clear all','Salvar':'Save','Editar':'Edit','Sair da conta':'Log out','Apagar Conta':'Delete account',
-            'Notificações':'Notifications','Limpar':'Clear','Nenhuma notificação nova.':'No new notifications.','Bom':'Good','Ruim':'Bad','Reagir':'React',
-            'Entre em contato:':'Contact us:','Email:':'Email:','Intagram:':'Instagram:','WhatsApp:':'WhatsApp:','Comente sua experiência aqui...':'Share your experience here...'
-        }
+    var dicionarioEN = {
+        // Navegação e cabeçalho
+        'Início': 'Home',
+        'Diário': 'Journal',
+        'Comunidade': 'Community',
+        'Helpy': 'Helpy',
+        'Atividades': 'Activities',
+        'Adicionais': 'Activities',
+        'Perfil': 'Profile',
+        'Configurações': 'Settings',
+        'Entrar': 'Sign in',
+        'Sair': 'Log out',
+        'Sair da conta': 'Log out',
+        'Notificações': 'Notifications',
+        'Limpar': 'Clear',
+        'Nenhuma notificação nova.': 'No new notifications.',
+        'Ver Perfil': 'View Profile',
+
+        // Acessibilidade e Preferências
+        'Idioma': 'Language',
+        'Acessibilidade': 'Accessibility',
+        'Preferências aplicadas em todo o site': 'Preferences applied across the site',
+        'Fechar acessibilidade': 'Close accessibility',
+        'Modo noturno': 'Dark mode',
+        'Fundo preto e superfícies cinza escuro': 'Dark background and deep gray surfaces',
+        'Mais contraste': 'High contrast',
+        'Realça bordas, textos e links': 'Highlights borders, text and links',
+        'Texto maior': 'Larger text',
+        'Aumenta a leitura sem trocar de página': 'Enhances readability without changing pages',
+        'Sublinhar links': 'Underline links',
+        'Facilita localizar elementos clicáveis': 'Makes clickable elements easier to locate',
+        'Reduzir animações': 'Reduce motion',
+        'Diminui movimentos e transições': 'Reduces movement and transitions',
+        'Restaurar padrão': 'Restore defaults',
+
+        // Atividades - Geral e Abas
+        'Textos': 'Texts',
+        'Videos': 'Videos',
+        'Vídeos': 'Videos',
+        'Sobre essa aba:': 'About this section:',
+        'Aqui reunimos materiais para apoiar sua jornada de autoconhecimento. Explore artigos rápidos, técnicas de relaxamento e reflexões selecionadas para ajudar a trazer mais clareza, calma e leveza ao seu dia a dia.':
+            'Here we have gathered materials to support your journey of self-discovery. Explore quick articles, relaxation techniques, and selected reflections to bring more clarity, calm, and lightness to your daily life.',
+        'Aqui reunimos conteúdos visuais para apoiar sua jornada de bem-estar. Assista a vídeos curtos com técnicas de respiração, exercícios de foco e reflexões guiadas para ajudar a acalmar a mente e trazer mais leveza ao seu dia.':
+            'Here we gather visual content to support your wellness journey. Watch short videos with breathing techniques, focus exercises, and guided reflections to help calm your mind and bring more ease to your day.',
+        '🔍 Pesquisar conteúdos': '🔍 Search content',
+        '🔍 PESQUISAR CONTEÚDOS': '🔍 SEARCH CONTENT',
+        'Pesquisar conteúdos': 'Search content',
+        'Ex: ansiedade, meditação, autocuidado...': 'Ex: anxiety, meditation, self-care...',
+        'Buscar': 'Search',
+        'Buscando artigos...': 'Searching articles...',
+        'Textos separados por nós': 'Curated texts',
+        'A Técnica 4-7-8 para Alívio Imediato': 'The 4-7-8 Technique for Immediate Relief',
+        'Quando a mente acelera, sua respiração é sua maior aliada. A técnica 4-7-8 atua como um calmante natural para o sistema nervoso. Funciona assim: inspire silenciosamente pelo nariz contando até 4; prenda a respiração contando até 7; e expire completamente pela boca contando até 8. Repita esse ciclo quatro vezes. Essa prática simples ajuda a desacelerar os batimentos cardíacos e traz a mente de volta para o momento presente, sendo excelente para praticar em momentos de tensão ou antes de dormir.':
+            'When your mind races, your breath is your greatest ally. The 4-7-8 technique acts as a natural calmative for your nervous system. It works like this: inhale quietly through your nose for a count of 4; hold your breath for a count of 7; and exhale completely through your mouth for a count of 8. Repeat this cycle four times. This simple practice helps slow your heart rate and brings you back to the present moment, making it great during stressful times or before sleeping.',
+        'O poder das pausas e da autocompaixão': 'The Power of Pauses and Self-Compassion',
+        'É muito comum nos cobrarmos excessivamente quando as coisas não saem como o planejado. A autocompaixão não é ter pena de si mesmo, mas sim se tratar com a mesma gentileza que você trataria um amigo em dificuldade. Se o dia foi pesado, não se culpe por não ter tido o rendimento que gostaria. Reconheça seu esforço, permita-se pausar e lembre-se de que o cuidado com a mente envolve, acima de tudo, aceitar nossos momentos de descanso. Um dia difícil não define sua jornada.':
+            'It is very common to be overly demanding of ourselves when things do not go as planned. Self-compassion is not feeling sorry for yourself, but rather treating yourself with the same kindness you would offer a struggling friend. If the day was heavy, do not blame yourself for not being as productive as you wanted. Acknowledge your effort, allow yourself to pause, and remember that caring for your mind involves accepting moments of rest. One hard day does not define your journey.',
+        '🎬 Pesquisar vídeos e práticas': '🎬 Search videos and practices',
+        '🎬 PESQUISAR VÍDEOS E PRÁTICAS': '🎬 SEARCH VIDEOS AND PRACTICES',
+        'Pesquisar vídeos e práticas': 'Search videos and practices',
+        'Ex: meditação guiada, técnicas de ansiedade...': 'Ex: guided meditation, anxiety techniques...',
+        'Buscando vídeos...': 'Searching videos...',
+        'Vídeos separados por nós': 'Curated videos',
+        'Práticas de Respiração e Foco': 'Breathing and Focus Practices',
+        'Técnicas de respiração guiada para reduzir a ansiedade e ancorar no momento presente. Práticas curtas focadas apenas no controle do ar e relaxamento mental, ideais para acalmar os pensamentos.':
+            'Guided breathing techniques to reduce anxiety and anchor yourself in the present moment. Short practices focused on airflow control and mental relaxation, ideal for calming your mind.',
+        'Entendendo a Mente': 'Understanding the Mind',
+        'Vídeos educativos sobre como nossa mente processa emoções e a importância do descanso mental. Perfeito para entender melhor seus próprios sentimentos de forma leve e didática.':
+            'Educational videos on how our mind processes emotions and the importance of mental rest. Perfect for understanding your feelings in an engaging, easy-to-follow way.',
+        'Ler artigo completo': 'Read full article',
+        'Fechar artigo': 'Close article',
+        'Nenhum artigo encontrado.': 'No articles found.',
+        'Nenhum vídeo encontrado.': 'No videos found.',
+        'Artigo Completo': 'Full Article',
+        'Fonte original': 'Original source',
+
+        // Perfil
+        'Sua Conta:': 'Your Account:',
+        'Nome:': 'Name:',
+        'Email:': 'Email:',
+        'Senha:': 'Password:',
+        'Editar': 'Edit',
+        'Salvar': 'Save',
+        'Salvar alterações': 'Save changes',
+        'Cancelar': 'Cancel',
+        'Apagar Conta': 'Delete Account',
+        'Total de diários registrados': 'Total journals registered',
+        'Total de diários': 'Total journals',
+        'registrados': 'registered',
+        'Total de emoções registradas': 'Total emotions logged',
+        'Total de emoções': 'Total emotions',
+        'registradas': 'logged',
+        'Total de conversas com o Helpy': 'Total chats with Helpy',
+        'Total de conversas': 'Total chats',
+        'com o Helpy': 'with Helpy',
+        'Total de posts na comunidade': 'Total posts in community',
+        'Total de posts na': 'Total posts in',
+        'comunidade': 'community',
+        'Total de curtidas recebidas': 'Total likes received',
+        'Total de curtidas': 'Total likes',
+        'recebidas': 'received',
+        'Metas': 'Goals',
+        'Anotar uma pequena vitória de hoje no Diário (por menor que seja).': 'Write down a small victory from today in your Journal (no matter how small).',
+        "Dar um 'oi' para o Helpy e desabafar por 2 minutinhos.": 'Say hello to Helpy and vent for 2 minutes.',
+        'Registrar a emoção que estou sentindo agora no meu Diário.': 'Log the emotion you are feeling right now in your Journal.',
+        'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Adicionais': 'Take 1 minute to watch a breathing video in the Activities tab.',
+        'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Atividades': 'Take 1 minute to watch a breathing video in the Activities tab.',
+        'Calendário': 'Calendar',
+        'Detalhes do dia': 'Day details',
+        'Gráficos': 'Charts',
+        'Diários': 'Journals',
+        'Emoções do Mês': 'Monthly Emotions',
+        'Mês': 'Month',
+        'Ano': 'Year',
+        'Nenhum registro encontrado para este mês.': 'No records found for this month.',
+        'Selecione um dia para ver os diários.': 'Select a day to view entries.',
+        'Nenhum diário registrado neste dia.': 'No journal entries on this day.',
+
+        // Diário
+        'Como você está se sentindo hoje?': 'How are you feeling today?',
+        'Atribua uma emoção ao seu diario:': 'Assign an emotion to your journal:',
+        'Atribua uma emoção ao seu diário:': 'Assign an emotion to your journal:',
+        'Irritado': 'Irritated',
+        'Ansioso': 'Anxious',
+        'Feliz': 'Happy',
+        'Calmo': 'Calm',
+        'Triste': 'Sad',
+        'Amoroso': 'Loving',
+        'Título do seu dia...': 'Title of your day...',
+        'Escreva sobre seus pensamentos, sentimentos ou acontecimentos...': 'Write about your thoughts, feelings, or events...',
+        'Apagar tudo': 'Clear all',
+        'Salvar no diário': 'Save to journal',
+        'Registros anteriores': 'Previous entries',
+        'Filtrar por emoção:': 'Filter by emotion:',
+        'Todas as emoções': 'All emotions',
+        'Nenhum diário registrado ainda.': 'No journal entries recorded yet.',
+        'Escrever em um diário pode ajudar você a entender melhor seus pensamentos e sentimentos.': 'Writing in a journal can help you better understand your thoughts and feelings.',
+        'Reserve alguns minutos para escrever sobre o seu dia, concentrando-se no que correu bem, no que o desafiou e como você se sentiu. Você também pode selecionar as emoções que melhor descrevem seu humor hoje.':
+            'Take a few minutes to write about your day, focusing on what went well, what challenged you, and how you felt. You can also select the emotions that best describe your mood today.',
+
+        // Comunidade
+        'Comunidade HelpFull': 'HelpFull Community',
+        'Compartilhe suas experiências, desabafe e encontre apoio mútuo em um espaço seguro e acolhedor.': 'Share your experiences, vent, and find mutual support in a safe and welcoming space.',
+        'Criar publicação': 'Create post',
+        'O que você gostaria de compartilhar ou desabafar?': 'What would you like to share or vent about?',
+        'Publicar': 'Post',
+        'Comentários': 'Comments',
+        'Comentar': 'Comment',
+        'Comente sua experiência aqui...': 'Share your experience here...',
+        'Curtir': 'Like',
+        'Curtidas': 'Likes',
+        'Apoiar': 'Support',
+        'Apoios': 'Supports',
+        'Denunciar': 'Report',
+        'Denunciar publicação': 'Report post',
+        'Mais recentes': 'Most recent',
+        'Mais curtidos': 'Most liked',
+        'Reações': 'Reactions',
+        'Reagir': 'React',
+        'Pode dar gatilho': 'May be triggering',
+        'Me deixou ansioso': 'Made me anxious',
+        'Achei pesado': 'I found it heavy',
+        'Cura a alma': 'Healing',
+        'É leve': 'It is light',
+        'Me trouxe paz': 'Brought me peace',
+        'Relaxante': 'Relaxing',
+        'Me fez refletir': 'Made me reflect',
+        'História profunda': 'Deep story',
+        'Me emocionou': 'Moved me',
+        'Me deixou pensativo': 'Made me thoughtful',
+        'Bom': 'Good',
+        'Ruim': 'Bad',
+        'Nenhum comentário ainda.': 'No comments yet.',
+        'Seja o primeiro a comentar!': 'Be the first to comment!',
+
+        // ChatBOT (Helpy)
+        'Histórico': 'History',
+        'Nova Conversa': 'New Conversation',
+        'Digite aqui para conversar com o Helpy...': 'Type here to talk to Helpy...',
+        'Conversar com o Helpy →': 'Talk to Helpy →',
+        'O Helpy está digitando...': 'Helpy is typing...',
+        'Limpar histórico': 'Clear history',
+
+        // Início
+        'Cuidar de você nunca foi tão simples.': 'Taking care of yourself has never been easier.',
+        'O bem-estar impulsiona a motivação e os relacionamentos, enquanto dificuldades emocionais prejudicam o humor e a tomada de decisões.':
+            'Well-being boosts motivation and relationships, while emotional struggles harm mood and decision-making.',
+        'Todos temos dias difíceis, e você não precisa passar por eles sozinho. Explore um ambiente focado no seu bem-estar, acompanhe seu humor, registre sua jornada e descubra ferramentas desenhadas para trazer mais clareza e tranquilidade para o seu dia a dia.':
+            'We all have difficult days, and you don\'t have to go through them alone. Explore an environment focused on your well-being, track your mood, record your journey, and discover tools designed to bring more clarity and calm to your routine.',
+        'Registre seus pensamentos diariamente. Escrever alivia a mente e ajuda a entender melhor suas emoções.': 'Record your thoughts daily. Writing clears the mind and helps you better understand your emotions.',
+        'Acesse exercícios de respiração e relaxamento para reduzir o estresse e melhorar seu foco no dia a dia.': 'Access breathing and relaxation exercises to reduce stress and improve your focus daily.',
+        'Diário Pessoal': 'Personal Journal',
+        'Apoio 24 Horas': '24/7 Support',
+        'Apoio emocional na palma da sua mão.': 'Emotional support in the palm of your hand.',
+        'Entre em contato:': 'Get in touch:',
+        'Intagram:': 'Instagram:',
+        'WhatsApp:': 'WhatsApp:'
     };
+
+    var dicionarioENLower = {};
+    Object.keys(dicionarioEN).forEach(function (k) {
+        dicionarioENLower[k.toLowerCase()] = dicionarioEN[k];
+    });
 
     var selConteudo = '.post-texto,.post-nome,.post-data,.comentario-nome,.tag-solida,.post-avatar,.post-midias-container,.attachment-name';
 
     function traduzirPagina() {
         var idioma = localStorage.getItem('helpfull_idioma') || 'pt-BR';
-        var mapa   = textosPag[idioma] || textosPag['pt-BR'];
         var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-        var nos = []; var no;
-        while ((no = walker.nextNode())) nos.push(no);
-        nos.forEach(function (t) {
-            if (!t || !t.nodeValue || !t.nodeValue.trim()) return;
-            if (!t.parentElement || (t.parentElement.closest && t.parentElement.closest(selConteudo))) return;
-            var el = t.parentElement;
-            var orig = el.dataset.idiomaOriginal || t.nodeValue.trim();
-            el.dataset.idiomaOriginal = orig;
-            if (mapa[orig]) t.nodeValue = t.nodeValue.replace(orig, mapa[orig]);
-        });
+        var no;
+        while ((no = walker.nextNode())) {
+            if (!no || !no.nodeValue) continue;
+            var raw = no.nodeValue;
+            var trimmed = raw.trim();
+            if (!trimmed) continue;
+            if (!no.parentElement) continue;
+            var tag = no.parentElement.tagName.toLowerCase();
+            if (tag === 'script' || tag === 'style' || tag === 'code' || tag === 'pre') continue;
+            if (no.parentElement.closest && no.parentElement.closest(selConteudo)) continue;
+
+            if (no._textoOriginal === undefined) {
+                no._textoOriginal = raw;
+            }
+
+            if (idioma === 'pt-BR') {
+                if (no.nodeValue !== no._textoOriginal) {
+                    no.nodeValue = no._textoOriginal;
+                }
+            } else if (idioma === 'en') {
+                var originalTrimmed = no._textoOriginal.trim();
+                var norm = originalTrimmed.replace(/\s+/g, ' ');
+                if (dicionarioEN[originalTrimmed]) {
+                    no.nodeValue = no._textoOriginal.replace(originalTrimmed, dicionarioEN[originalTrimmed]);
+                } else if (dicionarioEN[norm]) {
+                    no.nodeValue = dicionarioEN[norm];
+                } else if (dicionarioENLower[originalTrimmed.toLowerCase()]) {
+                    no.nodeValue = no._textoOriginal.replace(originalTrimmed, dicionarioENLower[originalTrimmed.toLowerCase()]);
+                } else if (dicionarioENLower[norm.toLowerCase()]) {
+                    no.nodeValue = dicionarioENLower[norm.toLowerCase()];
+                }
+            }
+        }
+
+        // Placeholders
         document.querySelectorAll('[placeholder]').forEach(function (el) {
-            if (el.closest(selConteudo)) return;
-            var orig = el.dataset.idiomaPlaceholder || el.getAttribute('placeholder');
-            el.dataset.idiomaPlaceholder = orig;
-            if (mapa[orig]) el.setAttribute('placeholder', mapa[orig]);
+            if (el.closest && el.closest(selConteudo)) return;
+            if (el._origPlaceholder === undefined) {
+                el._origPlaceholder = el.getAttribute('placeholder') || '';
+            }
+            if (idioma === 'pt-BR') {
+                el.setAttribute('placeholder', el._origPlaceholder);
+            } else if (idioma === 'en') {
+                var pTrim = el._origPlaceholder.trim();
+                if (dicionarioEN[pTrim]) {
+                    el.setAttribute('placeholder', dicionarioEN[pTrim]);
+                } else if (dicionarioENLower[pTrim.toLowerCase()]) {
+                    el.setAttribute('placeholder', dicionarioENLower[pTrim.toLowerCase()]);
+                }
+            }
         });
-        var longos = idioma === 'en' ? {
-            '.texto-intro':'Well-being supports motivation and relationships, while emotional difficulties can affect mood and decision-making.',
-            '.texto-extra-scrolled':'We all have difficult days, and you do not have to go through them alone. Explore a space focused on your well-being, track your mood, record your journey and discover tools designed to bring more clarity and calm to your daily life.',
-            '.bloco-grande p':'We all have difficult days, and you do not have to go through them alone. Explore a space focused on your well-being, track your mood and discover tools designed to bring more clarity and calm to your daily life.',
-            '.secao-cartoes a:nth-child(1) p, .secao-cartoes .cartao:nth-child(1) p':'Record your thoughts every day. Writing can ease the mind and help you better understand your emotions.',
-            '.secao-cartoes a:nth-child(2) p, .secao-cartoes .cartao:nth-child(2) p':'Share experiences and feelings in a safe space. Find mutual support and welcoming without judgment.',
-            '.secao-cartoes a:nth-child(3) p, .secao-cartoes .cartao:nth-child(3) p':'Access breathing and relaxation exercises to reduce stress and improve your focus throughout the day.',
-            '.texto-intro-diario':'Writing in a journal can help you better understand your thoughts and feelings. Take a few minutes to write about your day, focusing on what went well, what challenged you and how you felt. You can also select the emotions that best describe your mood today.',
-            '.card-sobre p':'Here you will find materials to support your self-awareness journey. Explore short articles, relaxation techniques and selected reflections to bring more clarity, calm and lightness to your day.',
-            '.card-artigo:nth-of-type(1) p':'When your mind speeds up, your breathing is your greatest ally. The 4-7-8 technique acts as a natural calming method for the nervous system and helps you return to the present moment.',
-            '.card-artigo:nth-of-type(2) p':'It is common to be overly demanding of ourselves when things do not go as planned. Self-compassion means treating yourself with the same kindness you would offer a friend in difficulty.',
-            '.secao-video-header p':'Short videos with breathing techniques, focus exercises and guided reflections to help calm the mind and bring more lightness to your day.'
-        } : {
-            '.texto-intro':'O bem-estar impulsiona a motivação e os relacionamentos, enquanto dificuldades emocionais prejudicam o humor e a tomada de decisões.',
-            '.texto-extra-scrolled':'Todos temos dias difíceis, e você não precisa passar por eles sozinho. Explore um ambiente focado no seu bem-estar, acompanhe seu humor, registre sua jornada e descubra ferramentas desenhadas para trazer mais clareza e tranquilidade para o seu dia a dia.',
-            '.bloco-grande p':'Todos temos dias difíceis, e você não precisa passar por eles sozinho. Explore um ambiente focado no seu bem-estar, acompanhe seu humor e descubra ferramentas desenhadas para trazer mais clareza e tranquilidade para o seu dia a dia.',
-            '.secao-cartoes a:nth-child(1) p, .secao-cartoes .cartao:nth-child(1) p':'Registre seus pensamentos diariamente. Escrever alivia a mente e ajuda a entender melhor suas emoções.',
-            '.secao-cartoes a:nth-child(2) p, .secao-cartoes .cartao:nth-child(2) p':'Compartilhe suas experiências, desabafe e encontre apoio mútuo em um espaço seguro e acolhedor.',
-            '.secao-cartoes a:nth-child(3) p, .secao-cartoes .cartao:nth-child(3) p':'Acesse exercícios de respiração e relaxamento para reduzir o estresse e melhorar seu foco no dia a dia.',
-            '.texto-intro-diario':'Escrever um diário pode ajudar você a entender melhor seus pensamentos e sentimentos. Reserve alguns minutos para escrever sobre o seu dia, concentrando-se no que correu bem, no que o desafiou e como você se sentiu. Você também pode selecionar as emoções que melhor descrevem seu humor hoje.',
-            '.card-sobre p':'Aqui reunimos materiais para apoiar sua jornada de autoconhecimento. Explore artigos rápidos, técnicas de relaxamento e reflexões selecionadas para ajudar a trazer mais clareza, calma e leveza ao seu dia a dia.',
-            '.card-artigo:nth-of-type(1) p':'Quando a mente acelera, sua respiração é sua maior aliada. A técnica 4-7-8 atua como um calmante natural para o sistema nervoso e ajuda a trazer a mente de volta para o momento presente.',
-            '.card-artigo:nth-of-type(2) p':'É muito comum nos cobrarmos excessivamente quando as coisas não saem como o planejado. A autocompaixão é tratar a si mesmo com a mesma gentileza que você ofereceria a um amigo em dificuldade.',
-            '.secao-video-header p':'Aqui reunimos conteúdos visuais para apoiar sua jornada de bem-estar. Assista a vídeos curtos com técnicas de respiração, exercícios de foco e reflexões guiadas para ajudar a acalmar a mente e trazer mais leveza ao seu dia.'
-        };
-        Object.keys(longos).forEach(function (sel) {
-            document.querySelectorAll(sel).forEach(function (el) {
-                if (el.closest(selConteudo)) return;
-                if (!el.dataset.idiomaOriginal) el.dataset.idiomaOriginal = el.textContent.trim();
-                el.textContent = idioma === 'pt-BR' ? el.dataset.idiomaOriginal : longos[sel];
-            });
+
+        // Botões submit/button
+        document.querySelectorAll('input[type="submit"], input[type="button"]').forEach(function (el) {
+            if (el._origVal === undefined) {
+                el._origVal = el.value || '';
+            }
+            if (idioma === 'pt-BR') {
+                el.value = el._origVal;
+            } else if (idioma === 'en') {
+                var vTrim = el._origVal.trim();
+                if (dicionarioEN[vTrim]) {
+                    el.value = dicionarioEN[vTrim];
+                } else if (dicionarioENLower[vTrim.toLowerCase()]) {
+                    el.value = dicionarioENLower[vTrim.toLowerCase()];
+                }
+            }
         });
+    }
+
+    window.traduzirPagina = traduzirPagina;
+
+    var _observerTraducao = null;
+    function iniciarObservadorTraducao() {
+        if (_observerTraducao || typeof MutationObserver === 'undefined') return;
+        var timeoutId = null;
+        _observerTraducao = new MutationObserver(function (mutations) {
+            var temNovosNodes = false;
+            for (var i = 0; i < mutations.length; i++) {
+                if (mutations[i].addedNodes && mutations[i].addedNodes.length > 0) {
+                    temNovosNodes = true;
+                    break;
+                }
+            }
+            if (temNovosNodes) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(function () {
+                    traduzirPagina();
+                }, 100);
+            }
+        });
+        _observerTraducao.observe(document.body, { childList: true, subtree: true });
     }
 
     function aplicarIdioma() {
@@ -343,6 +561,7 @@
             if (t.nav[url]) a.textContent = t.nav[url];
         });
         traduzirPagina();
+        iniciarObservadorTraducao();
     }
 
     function aplicarAcessibilidade() {
