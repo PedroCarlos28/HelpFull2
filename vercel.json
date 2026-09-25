@@ -11,6 +11,14 @@
       "dest": "/assets/$1"
     },
     {
+      "src": "/notificacoes\\.js",
+      "dest": "/notificacoes.js"
+    },
+    {
+      "src": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot|json))",
+      "dest": "/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/index.php"
     }

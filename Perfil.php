@@ -2075,13 +2075,19 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
     </script>
     <script>
+        function togglePainelAcessibilidade(e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            if (window.togglePainelAcessibilidade && window.togglePainelAcessibilidade !== togglePainelAcessibilidade) {
+                window.togglePainelAcessibilidade(e);
+            }
+        }
         function abrirPainelAcessibilidade(e) {
             if (e && e.stopPropagation) e.stopPropagation();
-            if (window.togglePainelAcessibilidade) {
+            if (window.togglePainelAcessibilidade && window.togglePainelAcessibilidade !== togglePainelAcessibilidade) {
                 window.togglePainelAcessibilidade(e);
             }
         }
     </script>
-    <script src="notificacoes.js?v=20260916-v2"></script>
+    <script src="notificacoes.js?v=20260924-v4" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v4';document.body.appendChild(s);}"></script>
 </body>
 </html>
