@@ -410,10 +410,59 @@ body.acessibilidade-escuro .toast-notificacao {
 }
 
 body.acessibilidade-escuro .caixa-vidro {
-    background: rgba(22, 28, 33, 0.68) !important;
+    background: rgba(22, 28, 33, 0.62) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .cartao {
+    background: rgba(22, 28, 33, 0.65) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
     border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25) !important;
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .cartao:hover {
+    background: rgba(30, 38, 45, 0.75) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.acessibilidade-escuro .bloco-grande {
+    background: rgba(22, 28, 33, 0.62) !important;
+    backdrop-filter: blur(35px) !important;
+    -webkit-backdrop-filter: blur(35px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25) !important;
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .quadrado-grafico {
+    background: rgba(16, 20, 24, 0.70) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.acessibilidade-escuro .nav-dropdown-mobile {
+    background: rgba(22, 28, 33, 0.85) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.acessibilidade-escuro .nav-dropdown-mobile a {
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .nav-dropdown-mobile a:hover,
+body.acessibilidade-escuro .nav-dropdown-mobile a.ativo {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--tema-link) !important;
 }
 
 body.acessibilidade-escuro .grafico-card {
@@ -421,6 +470,7 @@ body.acessibilidade-escuro .grafico-card {
     backdrop-filter: blur(15px) !important;
     -webkit-backdrop-filter: blur(15px) !important;
     border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    color: var(--tema-texto) !important;
 }
 
 body.acessibilidade-escuro .textarea-container {
@@ -460,16 +510,6 @@ body.acessibilidade-escuro .btn-enviar-chat svg {
     color: var(--tema-texto) !important;
     fill: currentColor !important;
     stroke: currentColor !important;
-}
-
-body.acessibilidade-escuro .caixa-vidro,
-body.acessibilidade-escuro .cartao,
-body.acessibilidade-escuro .bloco-grande,
-body.acessibilidade-escuro .quadrado-grafico {
-    background: var(--tema-superficie) !important;
-    color: var(--tema-texto) !important;
-    border-color: var(--tema-borda) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28) !important;
 }
 
 body.acessibilidade-escuro .btn-emocao.emocao-irritado {
@@ -622,11 +662,6 @@ body.acessibilidade-escuro .graficos-container {
 }
 
 body.acessibilidade-escuro .graficos-badge,
-body.acessibilidade-escuro .grafico-card {
-    background: var(--tema-superficie) !important;
-    color: var(--tema-texto) !important;
-    border-color: var(--tema-borda) !important;
-}
 
 body.acessibilidade-escuro .faixa-meio-branca,
 body.acessibilidade-escuro .secao-branca,
@@ -1178,6 +1213,7 @@ body.acessibilidade-escuro .post-imagem img {
 }
 
 body.acessibilidade-escuro .imagem-fundo,
+body.acessibilidade-escuro .imagem-fundo-mobile,
 body.acessibilidade-escuro .video-fundo {
     filter: brightness(0.45) contrast(1.05) !important;
     opacity: 0.55 !important;
