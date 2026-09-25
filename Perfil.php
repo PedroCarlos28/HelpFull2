@@ -124,6 +124,119 @@ try {
 } catch (PDOException $e) {
 }
 
+// Estatísticas diárias adicionais para metas
+$diariosHojeCount = isset($diariosPorData[$hoje]) ? count($diariosPorData[$hoje]) : 0;
+$multiplosDiariosHoje = ($diariosHojeCount >= 2);
+
+$postouHoje = false;
+try {
+    $stmtPostHoje = $pdo->prepare("SELECT COUNT(*) FROM posts_comunidade WHERE usuario_id = ? AND TO_CHAR(criado_em, 'YYYY-MM-DD') = ?");
+    $stmtPostHoje->execute([$id, $hoje]);
+    $postouHoje = ($stmtPostHoje->fetchColumn() > 0);
+} catch (Exception $e) {}
+
+$reagiuHoje = false;
+try {
+    $stmtReacaoHoje = $pdo->prepare("SELECT COUNT(*) FROM reacoes_comunidade WHERE usuario_id = ?");
+    $stmtReacaoHoje->execute([$id]);
+    $reagiuHoje = ($stmtReacaoHoje->fetchColumn() > 0);
+} catch (Exception $e) {}
+
+// Banco de Metas (App & Autocuidado / Bem-estar)
+$poolMetas = [
+    'diario_vitoria' => [
+        'id' => 'diario_vitoria',
+        'texto' => 'Anotar uma pequena vitória de hoje no Diário (por menor que seja).',
+        'auto' => $diarioHoje
+    ],
+    'helpy_conversa' => [
+        'id' => 'helpy_conversa',
+        'texto' => "Dar um 'oi' para o Helpy e desabafar por 2 minutinhos.",
+        'auto' => $usouChatHoje
+    ],
+    'diario_emocao' => [
+        'id' => 'diario_emocao',
+        'texto' => 'Registrar a emoção que estou sentindo agora no meu Diário.',
+        'auto' => $emocaoHoje
+    ],
+    'video_respiracao' => [
+        'id' => 'video_respiracao',
+        'texto' => 'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Adicionais.',
+        'auto' => $assistiuVideoHoje
+    ],
+    'comunidade_post' => [
+        'id' => 'comunidade_post',
+        'texto' => 'Compartilhar uma mensagem positiva ou pensamento na Comunidade.',
+        'auto' => $postouHoje
+    ],
+    'comunidade_apoio' => [
+        'id' => 'comunidade_apoio',
+        'texto' => 'Deixar uma reação ou palavra de apoio para alguém na Comunidade.',
+        'auto' => $reagiuHoje
+    ],
+    'diario_gratidao' => [
+        'id' => 'diario_gratidao',
+        'texto' => 'Escrever no Diário pelo menos 1 motivo de gratidão pelo dia de hoje.',
+        'auto' => $diarioHoje
+    ],
+    'autocuidado_agua' => [
+        'id' => 'autocuidado_agua',
+        'texto' => 'Beber um bom copo de água e fazer 3 respirações lentas e profundas.',
+        'auto' => false
+    ],
+    'autocuidado_pausa' => [
+        'id' => 'autocuidado_pausa',
+        'texto' => 'Fazer uma pausa de 5 minutos longe de telas para descansar a mente.',
+        'auto' => false
+    ],
+    'autocuidado_alongamento' => [
+        'id' => 'autocuidado_alongamento',
+        'texto' => 'Alongar o pescoço e os ombros para aliviar a tensão do corpo.',
+        'auto' => false
+    ],
+    'helpy_dica' => [
+        'id' => 'helpy_dica',
+        'texto' => 'Pedir ao Helpy uma sugestão de reflexão ou conselho para o dia.',
+        'auto' => $usouChatHoje
+    ],
+    'diario_duplo' => [
+        'id' => 'diario_duplo',
+        'texto' => 'Registrar mais de um momento do seu dia no Diário para reflexão.',
+        'auto' => $multiplosDiariosHoje
+    ],
+    'musica_relax' => [
+        'id' => 'musica_relax',
+        'texto' => 'Ouvir uma música relaxante ou som suave na aba Adicionais.',
+        'auto' => false
+    ],
+    'autocuidado_gentileza' => [
+        'id' => 'autocuidado_gentileza',
+        'texto' => 'Praticar a gentileza consigo mesmo(a) e reconhecer um ponto positivo seu.',
+        'auto' => false
+    ],
+    'espaco_zen' => [
+        'id' => 'espaco_zen',
+        'texto' => 'Organizar um cantinho do seu espaço ao redor para clarear os pensamentos.',
+        'auto' => false
+    ],
+    'artigo_leitura' => [
+        'id' => 'artigo_leitura',
+        'texto' => 'Ler um artigo ou curiosidade de bem-estar na aba Adicionais.',
+        'auto' => false
+    ],
+];
+
+// Sorteio determinístico diário de 4 metas aleatórias (muda automaticamente a cada novo dia)
+$chavesMetas = array_keys($poolMetas);
+usort($chavesMetas, function($a, $b) use ($hoje, $id) {
+    return strcmp(md5($hoje . '_' . $id . '_' . $a), md5($hoje . '_' . $id . '_' . $b));
+});
+$chavesSorteadas = array_slice($chavesMetas, 0, 4);
+$metasDoDia = [];
+foreach ($chavesSorteadas as $chave) {
+    $metasDoDia[] = $poolMetas[$chave];
+}
+
 $jsonDiariosData = json_encode($diariosPorData);
 $jsonGraficoAno = json_encode($diariosPorAnoMes);
 $maxEmocao = max(1, max($emocoesGlobaisLista));
@@ -770,6 +883,13 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             align-items: center;
             gap: 15px;
             margin-bottom: 18px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.15s ease, opacity 0.2s ease;
+        }
+
+        .meta-item:hover {
+            transform: translateX(3px);
         }
 
         .meta-item:last-child {
@@ -786,6 +906,11 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .meta-item:hover .meta-checkbox {
+            border-color: #2b7a8c;
         }
 
         .check-icon {
@@ -807,6 +932,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             font-weight: 800;
             color: #444;
             font-size: 0.95rem;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
         }
 
         .meta-item.concluida .meta-texto {
@@ -1529,7 +1655,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             .toast-notificacao { width: 92%; max-width: 380px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v20">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v21">
 </head>
 
 <body>
@@ -1690,30 +1816,19 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         <div class="card-perfil">
             <h2 class="titulo-secao">Metas</h2>
-            <div class="meta-item <?= $diarioHoje ? 'concluida' : '' ?>">
-                <div class="meta-checkbox"><svg class="check-icon" viewBox="0 0 24 24">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg></div>
-                <div class="meta-texto">Anotar uma pequena vitória de hoje no Diário (por menor que seja).</div>
-            </div>
-            <div class="meta-item <?= $usouChatHoje ? 'concluida' : '' ?>">
-                <div class="meta-checkbox"><svg class="check-icon" viewBox="0 0 24 24">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg></div>
-                <div class="meta-texto">Dar um 'oi' para o Helpy e desabafar por 2 minutinhos.</div>
-            </div>
-            <div class="meta-item <?= $emocaoHoje ? 'concluida' : '' ?>">
-                <div class="meta-checkbox"><svg class="check-icon" viewBox="0 0 24 24">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg></div>
-                <div class="meta-texto">Registrar a emoção que estou sentindo agora no meu Diário.</div>
-            </div>
-            <div class="meta-item <?= $assistiuVideoHoje ? 'concluida' : '' ?>">
-                <div class="meta-checkbox"><svg class="check-icon" viewBox="0 0 24 24">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg></div>
-                <div class="meta-texto">Tirar 1 minutinho para assistir a um vídeo de respiração na aba Adicionais</div>
-            </div>
+            <?php foreach ($metasDoDia as $meta): ?>
+                <div class="meta-item <?= $meta['auto'] ? 'concluida' : '' ?>"
+                     data-id="<?= htmlspecialchars($meta['id']) ?>"
+                     data-auto="<?= $meta['auto'] ? '1' : '0' ?>"
+                     onclick="toggleMeta(this)">
+                    <div class="meta-checkbox">
+                        <svg class="check-icon" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="meta-texto"><?= htmlspecialchars($meta['texto']) ?></div>
+                </div>
+            <?php endforeach; ?>
         </div>
 
         <div class="grid-cal-detalhes">
@@ -2049,8 +2164,58 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             }
         });
 
+        // === METAS DIÁRIAS (SORTEIO E PERSISTÊNCIA) ===
+        const CHAVE_METAS_STORAGE = 'helpfull_metas_<?= $hoje ?>_<?= $id ?>';
+
+        function carregarMetasStorage() {
+            try {
+                // Remove histórico de metas de datas anteriores para manter limpo
+                Object.keys(localStorage).forEach(k => {
+                    if (k.startsWith('helpfull_metas_') && !k.startsWith('helpfull_metas_<?= $hoje ?>')) {
+                        localStorage.removeItem(k);
+                    }
+                });
+
+                const estadoSalvo = JSON.parse(localStorage.getItem(CHAVE_METAS_STORAGE) || '{}');
+                document.querySelectorAll('.meta-item').forEach(item => {
+                    const metaId = item.getAttribute('data-id');
+                    const autoConcluida = item.getAttribute('data-auto') === '1';
+
+                    if (estadoSalvo.hasOwnProperty(metaId)) {
+                        if (estadoSalvo[metaId]) {
+                            item.classList.add('concluida');
+                        } else {
+                            item.classList.remove('concluida');
+                        }
+                    } else if (autoConcluida) {
+                        item.classList.add('concluida');
+                    }
+                });
+            } catch (e) {
+                console.error('Erro ao ler metas:', e);
+            }
+        }
+
+        function salvarMetasStorage() {
+            try {
+                const estado = {};
+                document.querySelectorAll('.meta-item').forEach(item => {
+                    const metaId = item.getAttribute('data-id');
+                    estado[metaId] = item.classList.contains('concluida');
+                });
+                localStorage.setItem(CHAVE_METAS_STORAGE, JSON.stringify(estado));
+            } catch (e) {
+                console.error('Erro ao salvar metas:', e);
+            }
+        }
+
+        function toggleMeta(el) {
+            el.classList.toggle('concluida');
+            salvarMetasStorage();
+        }
+
         window.onload = () => {
-            desenharCalendario(); renderGraficoDiarios();
+            desenharCalendario(); renderGraficoDiarios(); carregarMetasStorage();
             if (detalhesDoBanco[hojeString]) abrirDetalhes(hojeString); else document.getElementById('painelDetalhes').innerHTML = '<div style="text-align: center; color: #888; margin-top: 20px;">Nenhum registro para hoje. Que tal escrever algo?</div>';
         };
 

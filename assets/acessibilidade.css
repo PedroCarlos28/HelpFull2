@@ -1481,8 +1481,19 @@ body.acessibilidade-escuro .meta-texto {
 }
 
 body.acessibilidade-escuro .meta-item.concluida .meta-checkbox {
-    background: #2b7a8c !important;
-    border-color: #2b7a8c !important;
+    background: #232d32 !important;
+    border-color: #66cc33 !important;
+}
+
+body.acessibilidade-escuro .meta-item.concluida .check-icon {
+    display: block !important;
+    stroke: #66cc33 !important;
+}
+
+body.acessibilidade-escuro .meta-item.concluida .meta-texto {
+    color: #92a4ad !important;
+    text-decoration: line-through !important;
+    text-decoration-thickness: 2px !important;
 }
 
 body.acessibilidade-escuro .cal-dia {
