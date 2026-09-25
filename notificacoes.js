@@ -366,6 +366,10 @@
         'Todas as emoções': 'All emotions',
         'Nenhum diário registrado ainda.': 'No journal entries recorded yet.',
         'Escrever em um diário pode ajudar você a entender melhor seus pensamentos e sentimentos.': 'Writing in a journal can help you better understand your thoughts and feelings.',
+        'Escrever um diário pode ajudar você a entender melhor seus pensamentos e sentimentos. Reserve alguns minutos para escrever sobre o seu dia, concentrando-se no que correu bem, no que o desafiou e como você se sentiu ao longo do dia. Você também pode selecionar as emoções que melhor descrevem seu humor hoje.':
+            'Writing in a journal can help you better understand your thoughts and feelings. Take a few minutes to write about your day, focusing on what went well, what challenged you, and how you felt throughout the day. You can also select the emotions that best describe your mood today.',
+        'Reserve alguns minutos para escrever sobre o seu dia, concentrando-se no que correu bem, no que o desafiou e como você se sentiu ao longo do dia. Você também pode selecionar as emoções que melhor descrevem seu humor hoje.':
+            'Take a few minutes to write about your day, focusing on what went well, what challenged you, and how you felt throughout the day. You can also select the emotions that best describe your mood today.',
         'Reserve alguns minutos para escrever sobre o seu dia, concentrando-se no que correu bem, no que o desafiou e como você se sentiu. Você também pode selecionar as emoções que melhor descrevem seu humor hoje.':
             'Take a few minutes to write about your day, focusing on what went well, what challenged you, and how you felt. You can also select the emotions that best describe your mood today.',
 

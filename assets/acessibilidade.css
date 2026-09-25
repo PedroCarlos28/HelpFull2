@@ -1595,19 +1595,17 @@ body.acessibilidade-contraste .rodape-simples {
     }
 }
 
-/* Ajustes especificos da Comunidade */
+/* Ajustes para .caixa-agrupadora (Comunidade e Diario) */
 body.acessibilidade-escuro .caixa-agrupadora {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-body.acessibilidade-escuro .caixa-agrupadora::before {
-    background: rgba(25, 30, 34, 0.93) !important;
+    background: rgba(25, 30, 34, 0.94) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
     border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    box-shadow: none !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.acessibilidade-escuro .caixa-agrupadora::before {
+    display: none !important;
 }
 
 body.acessibilidade-escuro .card-postagem {
