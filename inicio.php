@@ -908,7 +908,7 @@ if (isset($_SESSION['usuario_id'])) {
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v19">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v20">
 </head>
 
 <body>

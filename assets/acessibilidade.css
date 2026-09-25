@@ -399,6 +399,82 @@ body.acessibilidade-escuro #painelAcessibilidade {
     -webkit-backdrop-filter: blur(35px) !important;
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45) !important;
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro #painelAcessibilidade :where(h1, h2, h3, h4, h5, h6, p, label, strong, span, div) {
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-cabecalho h2 {
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-cabecalho p {
+    color: var(--tema-texto-suave) !important;
+    opacity: 0.85 !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-fechar {
+    background: rgba(255, 255, 255, 0.10) !important;
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-fechar:hover {
+    background: rgba(255, 255, 255, 0.22) !important;
+    color: #ffffff !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-idioma {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-idioma label {
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-opcao {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-opcao:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(126, 207, 219, 0.4) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-opcao.ativo {
+    border-color: var(--tema-link) !important;
+    background: rgba(126, 207, 219, 0.12) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-opcao strong {
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-opcao small {
+    color: var(--tema-texto-suave) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-status {
+    background: #364248 !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-opcao.ativo .acessibilidade-status {
+    background: var(--tema-link) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-resetar {
+    background: rgba(126, 207, 219, 0.12) !important;
+    color: var(--tema-link) !important;
+    border: 1px solid rgba(126, 207, 219, 0.25) !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-resetar:hover {
+    background: var(--tema-link) !important;
+    color: #12161a !important;
 }
 
 body.acessibilidade-escuro .toast-notificacao {
@@ -1465,7 +1541,8 @@ body.acessibilidade-contraste .rodape {
 
 body.acessibilidade-contraste .card-perfil :where(h1, h2, h3, h4, h5, h6, p, label, strong, small, li, dt, dd, td, th, div, span),
 body.acessibilidade-contraste [class*="card-"] :where(h1, h2, h3, h4, h5, h6, p, label, strong, small, li, dt, dd, td, th, div, span),
-body.acessibilidade-contraste .caixa-agrupadora :where(h1, h2, h3, h4, h5, h6, p, label, strong, small, li, dt, dd, td, th, div, span) {
+body.acessibilidade-contraste .caixa-agrupadora :where(h1, h2, h3, h4, h5, h6, p, label, strong, small, li, dt, dd, td, th, div, span),
+body.acessibilidade-contraste #painelAcessibilidade :where(h1, h2, h3, h4, h5, h6, p, label, strong, small, li, dt, dd, td, th, div, span) {
     color: var(--tema-texto) !important;
 }
 
