@@ -432,6 +432,9 @@
         'Bem-vindo(a) à Comunidade! ✦': 'Welcome to the Community! ✦',
         'Este é o seu espaço seguro para compartilhar como você está se sentindo, desabafar e acolher os outros. Você pode criar sua primeira publicação no campo acima ou reagir às postagens com empatia!':
             'This is your safe space to share how you are feeling, vent, and support others. You can create your first post in the field above or react to posts with empathy!',
+        'Bem-vindo(a) ao seu Diário! ✦': 'Welcome to your Journal! ✦',
+        'Escrever um diário ajuda a entender melhor seus pensamentos e sentimentos. Reserve alguns minutos para expressar como foi o seu dia e selecione as emoções que melhor descrevem seu humor!':
+            'Writing in a journal helps you better understand your thoughts and feelings. Take a few minutes to express how your day was and select the emotions that best describe your mood!',
         'Apagar': 'Delete',
         'Editar': 'Edit',
         'Editar Publicação': 'Edit Post',
