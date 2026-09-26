@@ -1316,6 +1316,99 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             color: #333;
         }
 
+        /* Card e Botão de Relatório em PDF */
+        .relatorio-acao-container {
+            margin-top: 30px;
+            background: rgba(234, 234, 234, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 24px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .relatorio-card-info {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex: 1;
+        }
+
+        .relatorio-icone-circ {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #2b7a8c 0%, #1e5a67 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.25);
+        }
+
+        .relatorio-textos {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .relatorio-card-titulo {
+            font-size: 1.12rem;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .relatorio-card-subtitulo {
+            font-size: 0.86rem;
+            color: #555;
+            line-height: 1.45;
+            font-weight: 500;
+        }
+
+        .btn-gerar-relatorio {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #2b7a8c 0%, #1a5b6a 100%);
+            color: #ffffff !important;
+            font-weight: 800;
+            font-size: 0.95rem;
+            padding: 14px 26px;
+            border-radius: 30px;
+            text-decoration: none;
+            white-space: nowrap;
+            box-shadow: 0 6px 20px rgba(43, 122, 140, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+        }
+
+        .btn-gerar-relatorio:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(43, 122, 140, 0.5);
+            filter: brightness(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .relatorio-acao-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+                gap: 16px;
+            }
+
+            .btn-gerar-relatorio {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         .overlay-editar {
             position: fixed;
             inset: 0;
@@ -1909,6 +2002,36 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- ÁREA DO RELATÓRIO EM PDF -->
+            <div class="relatorio-acao-container">
+                <div class="relatorio-card-info">
+                    <div class="relatorio-icone-circ">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="relatorio-textos">
+                        <h4 class="relatorio-card-titulo">Relatório Completo de Uso e Bem-Estar</h4>
+                        <p class="relatorio-card-subtitulo">
+                            Gere um documento em PDF com suas reações emocionais, gráficos do mês, publicações da comunidade e conteúdos assistidos.
+                            <strong>100% confidencial: nenhum texto escrito do seu diário é exposto.</strong>
+                        </p>
+                    </div>
+                </div>
+                <a href="relatorio_pdf.php" target="_blank" class="btn-gerar-relatorio" id="btnGerarRelatorioPdf">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    <span>Criar Relatório em PDF</span>
+                </a>
             </div>
         </div>
     </div>

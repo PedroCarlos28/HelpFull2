@@ -2570,6 +2570,20 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             const query = document.getElementById('input-busca-api').value.trim();
             if (!query) return;
 
+            // Registra a pesquisa no histórico para o relatório
+            try {
+                let catNome = tipoBuscaAtual === 'book' ? 'Livros' : (tipoBuscaAtual === 'video' ? 'Filmes e Séries' : 'Mídias Gerais');
+                const fdLog = new FormData();
+                fdLog.append('tipo', 'pesquisa_comunidade');
+                fdLog.append('termo_ou_titulo', query);
+                fdLog.append('categoria', catNome);
+                fetch('salvar_atividade_log.php', { method: 'POST', body: fdLog }).catch(() => {});
+
+                const historicoLocal = JSON.parse(localStorage.getItem('helpfull_pesquisas_comunidade') || '[]');
+                historicoLocal.unshift({ termo: query, categoria: catNome, data: new Date().toISOString() });
+                localStorage.setItem('helpfull_pesquisas_comunidade', JSON.stringify(historicoLocal.slice(0, 40)));
+            } catch (e) {}
+
             const container = document.getElementById('resultados-api');
             container.style.display = 'grid';
             container.innerHTML = '<div class="loader-container"><div class="loader"></div></div>';

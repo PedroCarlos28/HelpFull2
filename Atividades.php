@@ -1867,6 +1867,28 @@ if (isset($_SESSION['usuario_id'])) {
                     .catch(error => console.error("Erro ao marcar vídeo:", error));
             }
             marcarVideoVisto(videoId);
+
+            // Registra o vídeo assistido para o relatório de atividades
+            try {
+                const titulosPlataforma = {
+                    'aNXKjGFUlMs': 'Exercício de Respiração Rápida e Foco',
+                    'fmBRuuQ0Gs8': 'Técnica de Respiração 4-7-8 Guiada',
+                    'xI_oUWoofJ0': 'Como o estresse atua no corpo (e como desativá-lo)',
+                    'LsgpZ6IbGx0': 'O poder das pausas e da autocompaixão',
+                    '-4igBhtIlhk': 'Quebrando o ciclo do excesso de pensamentos',
+                    'ySLhZfsagDA': 'Acolhendo o que você sente sem julgamentos'
+                };
+                const tituloV = titulosPlataforma[videoId] || ('Vídeo: ' + videoId);
+                const fdLog = new FormData();
+                fdLog.append('tipo', 'video_assistido');
+                fdLog.append('termo_ou_titulo', tituloV);
+                fdLog.append('categoria', titulosPlataforma[videoId] ? 'Plataforma HelpFull' : (plataforma === 'dailymotion' ? 'Dailymotion' : 'YouTube'));
+                fetch('salvar_atividade_log.php', { method: 'POST', body: fdLog }).catch(() => {});
+
+                const historicoLocal = JSON.parse(localStorage.getItem('helpfull_videos_assistidos_lista') || '[]');
+                historicoLocal.unshift({ id: videoId, titulo: tituloV, plataforma: plataforma, data: new Date().toISOString() });
+                localStorage.setItem('helpfull_videos_assistidos_lista', JSON.stringify(historicoLocal.slice(0, 40)));
+            } catch (e) {}
         }
 
         function closeModal(event) {
@@ -1900,6 +1922,19 @@ if (isset($_SESSION['usuario_id'])) {
         async function buscarTextos() {
             const query = document.getElementById('busca-texto-input').value.trim();
             if (!query) return;
+
+            // Registra a pesquisa de textos para o relatório
+            try {
+                const fdLog = new FormData();
+                fdLog.append('tipo', 'pesquisa_texto');
+                fdLog.append('termo_ou_titulo', query);
+                fdLog.append('categoria', 'Artigos de Bem-Estar');
+                fetch('salvar_atividade_log.php', { method: 'POST', body: fdLog }).catch(() => {});
+
+                const historicoLocal = JSON.parse(localStorage.getItem('helpfull_pesquisas_textos') || '[]');
+                historicoLocal.unshift({ termo: query, categoria: 'Artigos', data: new Date().toISOString() });
+                localStorage.setItem('helpfull_pesquisas_textos', JSON.stringify(historicoLocal.slice(0, 40)));
+            } catch (e) {}
 
             const loader = document.getElementById('busca-texto-loader');
             const container = document.getElementById('busca-texto-resultados');
@@ -2067,6 +2102,19 @@ if (isset($_SESSION['usuario_id'])) {
         async function buscarVideos() {
             const query = document.getElementById('busca-video-input').value.trim();
             if (!query) return;
+
+            // Registra a pesquisa de vídeos para o relatório
+            try {
+                const fdLog = new FormData();
+                fdLog.append('tipo', 'pesquisa_video');
+                fdLog.append('termo_ou_titulo', query);
+                fdLog.append('categoria', 'Vídeos e Práticas');
+                fetch('salvar_atividade_log.php', { method: 'POST', body: fdLog }).catch(() => {});
+
+                const historicoLocal = JSON.parse(localStorage.getItem('helpfull_pesquisas_videos') || '[]');
+                historicoLocal.unshift({ termo: query, categoria: 'Vídeos', data: new Date().toISOString() });
+                localStorage.setItem('helpfull_pesquisas_videos', JSON.stringify(historicoLocal.slice(0, 40)));
+            } catch (e) {}
 
             const loader = document.getElementById('busca-video-loader');
             const container = document.getElementById('busca-video-resultados');
