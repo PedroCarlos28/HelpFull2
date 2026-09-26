@@ -1404,7 +1404,7 @@ body.acessibilidade-escuro .conta-input {
     border-color: var(--tema-borda) !important;
 }
 
-body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ):not(.btn-fechar-painel):not(.btn-fechar-bv):not(.attachment-remove),
+body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ):not(.btn-fechar-painel):not(.btn-fechar-bv):not(.attachment-remove):not(.busca-btn):not(.btn-buscar-api),
 body.acessibilidade-escuro .item-notificacao,
 body.acessibilidade-escuro .lista-notificacoes,
 body.acessibilidade-escuro .btn-limpar-pill,
@@ -1414,7 +1414,7 @@ body.acessibilidade-escuro .toast-btn {
     border-color: var(--tema-borda) !important;
 }
 
-body.acessibilidade-escuro button:hover:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot),
+body.acessibilidade-escuro button:hover:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.busca-btn):not(.btn-buscar-api),
 body.acessibilidade-escuro .acessibilidade-opcao:hover,
 body.acessibilidade-escuro .acessibilidade-opcao.ativo {
     background: #34434a !important;
@@ -1541,6 +1541,7 @@ body.acessibilidade-escuro .busca-icone {
     color: var(--tema-link) !important;
 }
 
+body.acessibilidade-escuro button.busca-btn,
 body.acessibilidade-escuro .busca-btn {
     background: #2b7a8c !important;
     color: #ffffff !important;
@@ -1548,8 +1549,12 @@ body.acessibilidade-escuro .busca-btn {
     box-shadow: 0 4px 12px rgba(43, 122, 140, 0.4) !important;
 }
 
+body.acessibilidade-escuro button.busca-btn:hover,
 body.acessibilidade-escuro .busca-btn:hover {
-    background: #3696ac !important;
+    background: #236878 !important;
+    color: #ffffff !important;
+    transform: scale(1.04) !important;
+    box-shadow: 0 6px 16px rgba(43, 122, 140, 0.5) !important;
 }
 
 /* Atividades - Resultados e Divisores */

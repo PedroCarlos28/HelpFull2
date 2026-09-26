@@ -1185,6 +1185,16 @@ if (isset($_SESSION['usuario_id'])) {
             transform: scale(1.04);
         }
 
+        body.acessibilidade-escuro .busca-btn {
+            background: #2b7a8c !important;
+            color: #ffffff !important;
+        }
+
+        body.acessibilidade-escuro .busca-btn:hover {
+            background: #236878 !important;
+            color: #ffffff !important;
+        }
+
         .busca-resultados {
             display: none;
             flex-direction: column;
