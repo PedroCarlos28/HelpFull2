@@ -42,24 +42,18 @@ if (isset($_SESSION['usuario_id'])) {
             top: 0;
             left: 0;
             width: 100%;
-            height: 70vh;
+            height: 100vh;
             z-index: 0;
             pointer-events: none;
             display: block;
-            filter: blur(32px);
-            -webkit-filter: blur(32px);
-            transform: scale(1.08);
+            filter: blur(16px);
+            -webkit-filter: blur(16px);
+            transform: scale(1.04);
             transform-origin: center center;
         }
 
         .faixa-inferior {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 30vh;
-            background: #f0f0f0;
-            z-index: 0;
+            display: none !important;
         }
 
         /* === NAVBAR PADRÃO === */
@@ -893,7 +887,7 @@ if (isset($_SESSION['usuario_id'])) {
 
         window.mostrarInstrucoesFirebase = mostrarInstrucoesFirebase;
     </script>
-    <script src="assets/fundo-animado.js?v=20260925-v1"></script>
+    <script src="assets/fundo-animado.js?v=20260925-v2"></script>
 </body>
 
 </html>
