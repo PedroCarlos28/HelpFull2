@@ -2043,7 +2043,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             .post-texto { font-size: 1.05rem; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v20">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v1">
 </head>
 
 <body>

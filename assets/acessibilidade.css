@@ -3475,5 +3475,630 @@ body.pagina-perfil .painel-notificacoes.aberto {
     }
 }
 
+/* =============================================================
+   ALTO CONTRASTE (MAIS CONTRASTE) NOS NOVOS PAINÉIS E COMPONENTES
+   Garante máxima nitidez, bordas sólidas brancas/amarelas, 
+   superfícies pretas e leitura desobstruída em qualquer tela.
+   Utiliza especificidade reforçada para prevalecer sobre qualquer
+   regra de modo escuro ou tema legado.
+   ============================================================= */
+
+/* Overlays / Cenários de fundo */
+html body.acessibilidade-contraste #painelAcessibilidadeOverlay,
+html body.acessibilidade-contraste .modal-onboarding-overlay,
+html body.acessibilidade-contraste .painel-acessibilidade-overlay,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessibilidadeOverlay,
+html body.acessibilidade-contraste.acessibilidade-escuro .modal-onboarding-overlay,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-acessibilidade-overlay {
+    background: rgba(0, 0, 0, 0.88) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* 1. Modal de Configurações (#painelAcessibilidade) e Onboarding (#modal-onboarding) */
+html body.acessibilidade-contraste #painelAcessibilidade,
+html body.acessibilidade-contraste .onboarding-card,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessibilidade,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-card {
+    background: #000000 !important;
+    border: 2.5px solid #ffffff !important;
+    box-shadow: 0 0 0 2px #000000, 0 15px 50px rgba(0, 0, 0, 0.95) !important;
+    color: #ffffff !important;
+}
+
+html body.acessibilidade-contraste .onboarding-cabecalho h2,
+html body.acessibilidade-contraste .acessibilidade-cabecalho h2,
+html body.acessibilidade-contraste #painelAcessTitulo,
+html body.acessibilidade-contraste #onboarding-titulo,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessTitulo,
+html body.acessibilidade-contraste.acessibilidade-escuro #onboarding-titulo {
+    color: #ffffff !important;
+    font-weight: 900 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-cabecalho p,
+html body.acessibilidade-contraste .acessibilidade-cabecalho p,
+html body.acessibilidade-contraste #painelAcessSubtitulo,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessSubtitulo {
+    color: #f0f0f0 !important;
+    opacity: 1 !important;
+    font-weight: 600 !important;
+}
+
+/* Badge de cabeçalho */
+html body.acessibilidade-contraste .onboarding-badge,
+html body.acessibilidade-contraste #painelAcessBadge,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-badge,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessBadge {
+    background: #000000 !important;
+    border: 2px solid #ffe66d !important;
+    color: #ffe66d !important;
+    font-weight: 800 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-badge svg,
+html body.acessibilidade-contraste #painelAcessBadge svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-badge svg,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessBadge svg {
+    color: #ffe66d !important;
+    stroke: #ffe66d !important;
+}
+
+/* Botão Fechar (x) */
+html body.acessibilidade-contraste .acessibilidade-fechar,
+html body.acessibilidade-contraste #painelAcessibilidade .acessibilidade-fechar,
+html body.acessibilidade-contraste.acessibilidade-escuro .acessibilidade-fechar,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessibilidade .acessibilidade-fechar {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+}
+
+html body.acessibilidade-contraste .acessibilidade-fechar:hover,
+html body.acessibilidade-contraste #painelAcessibilidade .acessibilidade-fechar:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .acessibilidade-fechar:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessibilidade .acessibilidade-fechar:hover {
+    background: #ffe66d !important;
+    border-color: #ffe66d !important;
+    color: #000000 !important;
+}
+
+/* Seletor de Idioma */
+html body.acessibilidade-contraste .acessibilidade-idioma,
+html body.acessibilidade-contraste #painelAcessibilidade .acessibilidade-idioma,
+html body.acessibilidade-contraste.acessibilidade-escuro .acessibilidade-idioma,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelAcessibilidade .acessibilidade-idioma {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+}
+
+html body.acessibilidade-contraste .acessibilidade-idioma label,
+html body.acessibilidade-contraste #rotuloIdiomaPainel,
+html body.acessibilidade-contraste.acessibilidade-escuro #rotuloIdiomaPainel {
+    color: #ffe66d !important;
+    font-weight: 800 !important;
+}
+
+html body.acessibilidade-contraste .acessibilidade-idioma label svg,
+html body.acessibilidade-contraste #rotuloIdiomaPainel svg,
+html body.acessibilidade-contraste.acessibilidade-escuro #rotuloIdiomaPainel svg {
+    color: #ffe66d !important;
+    stroke: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .acessibilidade-idioma select,
+html body.acessibilidade-contraste #seletorIdioma,
+html body.acessibilidade-contraste.acessibilidade-escuro #seletorIdioma {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+/* Títulos de Seção */
+html body.acessibilidade-contraste .onboarding-secao-titulo,
+html body.acessibilidade-contraste #secaoTemaTitulo,
+html body.acessibilidade-contraste #secaoAcessTitulo,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-secao-titulo,
+html body.acessibilidade-contraste.acessibilidade-escuro #secaoTemaTitulo,
+html body.acessibilidade-contraste.acessibilidade-escuro #secaoAcessTitulo {
+    color: #ffe66d !important;
+    font-weight: 900 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-secao-titulo svg,
+html body.acessibilidade-contraste #secaoTemaTitulo svg,
+html body.acessibilidade-contraste #secaoAcessTitulo svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-secao-titulo svg,
+html body.acessibilidade-contraste.acessibilidade-escuro #secaoTemaTitulo svg,
+html body.acessibilidade-contraste.acessibilidade-escuro #secaoAcessTitulo svg {
+    color: #ffe66d !important;
+    stroke: #ffe66d !important;
+}
+
+/* Botões de Seleção de Tema (Inativos) */
+html body.acessibilidade-contraste .onboarding-tema-btn,
+html body.acessibilidade-contraste .painel-tema-btn,
+html body.acessibilidade-contraste .onboarding-tema-btn:not(.ativo),
+html body.acessibilidade-contraste .painel-tema-btn:not(.ativo),
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn:not(.ativo),
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn:not(.ativo) {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+html body.acessibilidade-contraste .onboarding-tema-btn *,
+html body.acessibilidade-contraste .painel-tema-btn *,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn *,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn * {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+html body.acessibilidade-contraste .onboarding-tema-btn:hover,
+html body.acessibilidade-contraste .painel-tema-btn:hover,
+html body.acessibilidade-contraste .onboarding-tema-btn:not(.ativo):hover,
+html body.acessibilidade-contraste .painel-tema-btn:not(.ativo):hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn:not(.ativo):hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn:not(.ativo):hover {
+    background: #1a1a1a !important;
+    border-color: #ffe66d !important;
+    color: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-tema-btn:hover *,
+html body.acessibilidade-contraste .painel-tema-btn:hover *,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn:hover *,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn:hover * {
+    color: #ffe66d !important;
+    stroke: #ffe66d !important;
+}
+
+/* Botões de Seleção de Tema (Ativos) */
+html body.acessibilidade-contraste .onboarding-tema-btn.ativo,
+html body.acessibilidade-contraste .painel-tema-btn.ativo,
+html body.acessibilidade-contraste button.painel-tema-btn.ativo,
+html body.acessibilidade-contraste button.onboarding-tema-btn.ativo,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn.ativo,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn.ativo,
+html body.acessibilidade-contraste.acessibilidade-escuro button.painel-tema-btn.ativo,
+html body.acessibilidade-contraste.acessibilidade-escuro button.onboarding-tema-btn.ativo {
+    background: #ffe66d !important;
+    border: 2.5px solid #ffe66d !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+    box-shadow: 0 0 14px rgba(255, 230, 109, 0.45) !important;
+}
+
+html body.acessibilidade-contraste .onboarding-tema-btn.ativo *,
+html body.acessibilidade-contraste .painel-tema-btn.ativo *,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn.ativo *,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn.ativo * {
+    color: #000000 !important;
+    stroke: #000000 !important;
+    font-weight: 900 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-tema-btn.ativo:hover,
+html body.acessibilidade-contraste .painel-tema-btn.ativo:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-tema-btn.ativo:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-tema-btn.ativo:hover {
+    background: #fff099 !important;
+    border-color: #ffffff !important;
+}
+
+/* Linhas de Opções de Acessibilidade (Inativas) */
+html body.acessibilidade-contraste .onboarding-opt-row,
+html body.acessibilidade-contraste .painel-opt-row,
+html body.acessibilidade-contraste .onboarding-opt-row:not(.ativo),
+html body.acessibilidade-contraste .painel-opt-row:not(.ativo),
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row:not(.ativo),
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row:not(.ativo) {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+html body.acessibilidade-contraste .onboarding-opt-row:hover,
+html body.acessibilidade-contraste .painel-opt-row:hover,
+html body.acessibilidade-contraste .onboarding-opt-row:not(.ativo):hover,
+html body.acessibilidade-contraste .painel-opt-row:not(.ativo):hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row:not(.ativo):hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row:not(.ativo):hover {
+    border-color: #ffe66d !important;
+    background: #111111 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-opt-nome,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-nome {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-opt-icone svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-icone svg {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* Linhas de Opções de Acessibilidade (Ativas) */
+html body.acessibilidade-contraste .onboarding-opt-row.ativo,
+html body.acessibilidade-contraste .painel-opt-row.ativo,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row.ativo,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row.ativo {
+    background: #111111 !important;
+    border: 2px solid #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-opt-row.ativo .onboarding-opt-nome,
+html body.acessibilidade-contraste .painel-opt-row.ativo .onboarding-opt-nome,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row.ativo .onboarding-opt-nome,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row.ativo .onboarding-opt-nome {
+    color: #ffe66d !important;
+    font-weight: 800 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-opt-row.ativo .onboarding-opt-icone svg,
+html body.acessibilidade-contraste .painel-opt-row.ativo .onboarding-opt-icone svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row.ativo .onboarding-opt-icone svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row.ativo .onboarding-opt-icone svg {
+    color: #ffe66d !important;
+    stroke: #ffe66d !important;
+}
+
+/* Switches de ativação */
+html body.acessibilidade-contraste .onboarding-switch,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-switch {
+    background: #222222 !important;
+    border: 2px solid #ffffff !important;
+}
+
+html body.acessibilidade-contraste .onboarding-switch::after,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-switch::after {
+    background: #ffffff !important;
+}
+
+html body.acessibilidade-contraste .onboarding-opt-row.ativo .onboarding-switch,
+html body.acessibilidade-contraste .painel-opt-row.ativo .onboarding-switch,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row.ativo .onboarding-switch,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row.ativo .onboarding-switch {
+    background: #ffe66d !important;
+    border-color: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-opt-row.ativo .onboarding-switch::after,
+html body.acessibilidade-contraste .painel-opt-row.ativo .onboarding-switch::after,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-opt-row.ativo .onboarding-switch::after,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-opt-row.ativo .onboarding-switch::after {
+    background: #000000 !important;
+}
+
+/* Card de Preview Explicativo */
+html body.acessibilidade-contraste .onboarding-preview-card,
+html body.acessibilidade-contraste #painelPreviewCard,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-card,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewCard {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+html body.acessibilidade-contraste .onboarding-preview-tag,
+html body.acessibilidade-contraste #painelPreviewTag,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-tag,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewTag {
+    background: #ffe66d !important;
+    border: 2px solid #ffe66d !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-preview-icone-badge,
+html body.acessibilidade-contraste #painelPreviewIcone,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-icone-badge,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewIcone {
+    background: #000000 !important;
+    border: 2px solid #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-preview-icone-badge svg,
+html body.acessibilidade-contraste #painelPreviewIcone svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-icone-badge svg,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewIcone svg {
+    stroke: #ffe66d !important;
+    color: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-preview-titulo,
+html body.acessibilidade-contraste #painelPreviewTitulo,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-titulo,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewTitulo {
+    color: #ffe66d !important;
+    font-weight: 900 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-preview-desc,
+html body.acessibilidade-contraste #painelPreviewDesc,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-desc,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewDesc {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    font-weight: 600 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-preview-dica,
+html body.acessibilidade-contraste #painelPreviewDica,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-dica,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewDica {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+html body.acessibilidade-contraste .onboarding-preview-dica svg,
+html body.acessibilidade-contraste #painelPreviewDica svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-dica svg,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewDica svg {
+    stroke: #ffe66d !important;
+    color: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-preview-dica span,
+html body.acessibilidade-contraste #painelPreviewDica span,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-preview-dica span,
+html body.acessibilidade-contraste.acessibilidade-escuro #painelPreviewDica span {
+    color: #ffffff !important;
+}
+
+/* Tutorial / Dica em Onboarding */
+html body.acessibilidade-contraste .onboarding-dica-painel,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-dica-painel {
+    background: #000000 !important;
+    border: 2px solid #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-dica-icone svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-dica-icone svg {
+    stroke: #ffe66d !important;
+    color: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-dica-corpo strong,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-dica-corpo strong {
+    color: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .onboarding-dica-corpo p,
+html body.acessibilidade-contraste .onboarding-dica-corpo b,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-dica-corpo p,
+html body.acessibilidade-contraste.acessibilidade-escuro .onboarding-dica-corpo b {
+    color: #ffffff !important;
+}
+
+/* Rodapé dos painéis */
+html body.acessibilidade-contraste .acessibilidade-rodape,
+html body.acessibilidade-contraste.acessibilidade-escuro .acessibilidade-rodape {
+    border-top: 2px solid #ffffff !important;
+}
+
+html body.acessibilidade-contraste .acessibilidade-resetar,
+html body.acessibilidade-contraste.acessibilidade-escuro .acessibilidade-resetar {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+}
+
+html body.acessibilidade-contraste .acessibilidade-resetar:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .acessibilidade-resetar:hover {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+html body.acessibilidade-contraste .btn-painel-fechar,
+html body.acessibilidade-contraste button.btn-painel-fechar,
+html body.acessibilidade-contraste .btn-onboarding-concluir,
+html body.acessibilidade-contraste button.btn-onboarding-concluir,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-painel-fechar,
+html body.acessibilidade-contraste.acessibilidade-escuro button.btn-painel-fechar,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-onboarding-concluir,
+html body.acessibilidade-contraste.acessibilidade-escuro button.btn-onboarding-concluir {
+    background: #ffe66d !important;
+    color: #000000 !important;
+    border: 2px solid #ffe66d !important;
+    font-weight: 900 !important;
+    box-shadow: 0 4px 14px rgba(255, 230, 109, 0.45) !important;
+}
+
+html body.acessibilidade-contraste .btn-painel-fechar *,
+html body.acessibilidade-contraste .btn-onboarding-concluir *,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-painel-fechar *,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-onboarding-concluir * {
+    color: #000000 !important;
+    stroke: #000000 !important;
+}
+
+html body.acessibilidade-contraste .btn-painel-fechar:hover,
+html body.acessibilidade-contraste button.btn-painel-fechar:hover,
+html body.acessibilidade-contraste .btn-onboarding-concluir:hover,
+html body.acessibilidade-contraste button.btn-onboarding-concluir:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-painel-fechar:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro button.btn-painel-fechar:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-onboarding-concluir:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro button.btn-onboarding-concluir:hover {
+    background: #fff099 !important;
+    border-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* 2. Bloco e Painel de Notificações */
+html body.acessibilidade-contraste .card-notificacoes-bloco,
+html body.acessibilidade-contraste #cardNotificacoesPerfil,
+html body.acessibilidade-contraste .painel-notificacoes,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco,
+html body.acessibilidade-contraste.acessibilidade-escuro #cardNotificacoesPerfil,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-notificacoes {
+    background: #000000 !important;
+    border: 2.5px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+html body.acessibilidade-contraste .notificacoes-bloco-titulo h2,
+html body.acessibilidade-contraste #tituloNotificacoesPerfil,
+html body.acessibilidade-contraste .painel-notificacoes h3,
+html body.acessibilidade-contraste.acessibilidade-escuro .notificacoes-bloco-titulo h2,
+html body.acessibilidade-contraste.acessibilidade-escuro #tituloNotificacoesPerfil,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-notificacoes h3 {
+    color: #ffe66d !important;
+    font-weight: 900 !important;
+}
+
+html body.acessibilidade-contraste .notificacoes-icone-tag svg,
+html body.acessibilidade-contraste .painel-notificacoes-header svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .notificacoes-icone-tag svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-notificacoes-header svg {
+    color: #ffe66d !important;
+    stroke: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .btn-limpar-pill,
+html body.acessibilidade-contraste .card-notificacoes-bloco .btn-limpar-pill,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-limpar-pill,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .btn-limpar-pill {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+}
+
+html body.acessibilidade-contraste .btn-limpar-pill:hover,
+html body.acessibilidade-contraste .card-notificacoes-bloco .btn-limpar-pill:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-limpar-pill:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .btn-limpar-pill:hover {
+    background: #ff5555 !important;
+    border-color: #ff5555 !important;
+    color: #ffffff !important;
+}
+
+html body.acessibilidade-contraste .nenhuma-notif-texto,
+html body.acessibilidade-contraste #cardNotificacoesPerfil .nenhuma-notif-texto,
+html body.acessibilidade-contraste .painel-notificacoes .nenhuma-notif-texto,
+html body.acessibilidade-contraste.acessibilidade-escuro .nenhuma-notif-texto,
+html body.acessibilidade-contraste.acessibilidade-escuro #cardNotificacoesPerfil .nenhuma-notif-texto,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-notificacoes .nenhuma-notif-texto {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    font-weight: 700 !important;
+}
+
+html body.acessibilidade-contraste .item-notificacao,
+html body.acessibilidade-contraste .card-notificacoes-bloco .item-notificacao,
+html body.acessibilidade-contraste #cardNotificacoesPerfil .item-notificacao,
+html body.acessibilidade-contraste .painel-notificacoes .item-notificacao,
+html body.acessibilidade-contraste.acessibilidade-escuro .item-notificacao,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .item-notificacao,
+html body.acessibilidade-contraste.acessibilidade-escuro #cardNotificacoesPerfil .item-notificacao,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-notificacoes .item-notificacao {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+html body.acessibilidade-contraste .item-notificacao:hover,
+html body.acessibilidade-contraste .card-notificacoes-bloco .item-notificacao:hover,
+html body.acessibilidade-contraste #cardNotificacoesPerfil .item-notificacao:hover,
+html body.acessibilidade-contraste .painel-notificacoes .item-notificacao:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .item-notificacao:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .item-notificacao:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro #cardNotificacoesPerfil .item-notificacao:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-notificacoes .item-notificacao:hover {
+    border-color: #ffe66d !important;
+    background: #111111 !important;
+}
+
+html body.acessibilidade-contraste .item-notificacao strong,
+html body.acessibilidade-contraste .card-notificacoes-bloco .notif-content strong,
+html body.acessibilidade-contraste .painel-notificacoes .notif-content strong,
+html body.acessibilidade-contraste.acessibilidade-escuro .item-notificacao strong,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .notif-content strong,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-notificacoes .notif-content strong {
+    color: #ffe66d !important;
+    font-weight: 800 !important;
+}
+
+html body.acessibilidade-contraste .item-notificacao p,
+html body.acessibilidade-contraste .card-notificacoes-bloco .notif-content p,
+html body.acessibilidade-contraste .painel-notificacoes .notif-content p,
+html body.acessibilidade-contraste.acessibilidade-escuro .item-notificacao p,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .notif-content p,
+html body.acessibilidade-contraste.acessibilidade-escuro .painel-notificacoes .notif-content p {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+html body.acessibilidade-contraste .item-notificacao .barra-intensidade,
+html body.acessibilidade-contraste .card-notificacoes-bloco .item-notificacao .barra-intensidade,
+html body.acessibilidade-contraste.acessibilidade-escuro .item-notificacao .barra-intensidade,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .item-notificacao .barra-intensidade {
+    background: #ffe66d !important;
+}
+
+html body.acessibilidade-contraste .notif-link-btn,
+html body.acessibilidade-contraste .card-notificacoes-bloco .notif-link-btn,
+html body.acessibilidade-contraste.acessibilidade-escuro .notif-link-btn,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .notif-link-btn {
+    background: #ffe66d !important;
+    border: 2px solid #ffe66d !important;
+    color: #000000 !important;
+    font-weight: 900 !important;
+}
+
+html body.acessibilidade-contraste .notif-link-btn:hover,
+html body.acessibilidade-contraste .card-notificacoes-bloco .notif-link-btn:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .notif-link-btn:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .card-notificacoes-bloco .notif-link-btn:hover {
+    background: #fff099 !important;
+    border-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* 3. Botão Flutuante de Configurações */
+html body.acessibilidade-contraste .btn-acessibilidade,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-acessibilidade {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+html body.acessibilidade-contraste .btn-acessibilidade svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-acessibilidade svg {
+    stroke: #ffffff !important;
+    color: #ffffff !important;
+}
+
+html body.acessibilidade-contraste .btn-acessibilidade:hover,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-acessibilidade:hover {
+    border-color: #ffe66d !important;
+    background: #1a1a1a !important;
+}
+
+html body.acessibilidade-contraste .btn-acessibilidade:hover svg,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-acessibilidade:hover svg {
+    stroke: #ffe66d !important;
+    color: #ffe66d !important;
+}
+
 
 

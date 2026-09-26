@@ -1123,7 +1123,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v21">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v1">
 </head>
 
 <body>

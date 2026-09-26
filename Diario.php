@@ -850,7 +850,7 @@ if (!empty($usuarioLogado['id'])) {
             .btn-emocao { flex: 1 1 calc(50% - 10px); min-width: auto; font-size: 0.85rem; padding: 10px 5px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v20">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v1">
 </head>
 
 <body>

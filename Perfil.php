@@ -1675,7 +1675,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             .toast-notificacao { width: 92%; max-width: 380px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v21">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v1">
 </head>
 
 <body class="pagina-perfil">
