@@ -490,12 +490,12 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
         }
 
         .sidebar-historico {
-            background: rgba(235, 235, 235, 0.85);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border-radius: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 2px 5px rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.7);
             width: 250px;
             padding: 40px 20px;
             display: flex;
@@ -562,31 +562,31 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
         }
 
         .btn-historico {
-            background: #e2e2e2;
-            border: none;
+            background: rgba(255, 255, 255, 0.60);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.75);
             border-radius: 25px;
             padding: 12px 25px;
             font-size: 0.95rem;
             font-weight: 700;
-            color: #333;
+            color: #2c3e50;
             cursor: pointer;
             transition: all 0.2s ease;
             width: 85%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .btn-historico:hover {
-            background: #d0d0d0;
+            background: rgba(255, 255, 255, 0.95);
             transform: scale(1.03);
         }
 
         /* JANELA DO CHAT */
         .caixa-chat {
-            background: rgba(235, 235, 235, 0.85);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: #ebebeb;
             border-radius: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 2px 5px rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
             flex: 1;
@@ -665,16 +665,19 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 
         .msg-usuario {
             align-self: flex-end;
-            background-color: #badbeb;
-            color: #1a1a1a;
+            background: linear-gradient(135deg, #184e5d 0%, #206275 100%);
+            color: #ffffff;
             border-radius: 35px 35px 10px 35px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 15px rgba(24, 78, 93, 0.25);
         }
 
         .msg-bot {
             align-self: flex-start;
-            background-color: #d1d1d1;
+            background-color: #ffffff;
             color: #1a1a1a;
             border-radius: 35px 35px 35px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
         }
 
         .msg-bot-digitando {
@@ -745,11 +748,11 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             flex: 1;
             padding: 20px 30px;
             border-radius: 35px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.50);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.06);
             font-size: 1.15rem;
             outline: none;
             color: #1a1a1a;
@@ -1120,7 +1123,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v20">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v21">
 </head>
 
 <body>

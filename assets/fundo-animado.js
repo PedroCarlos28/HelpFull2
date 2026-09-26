@@ -9,6 +9,9 @@
  * - Interatividade:
  *     * Rastro e brilho do mouse ATIVOS APENAS nas duas telas principais (inicio.php e Comeco.php).
  *     * Nas outras telas e blocos de gráficos/atividades: SEM rastro e SEM brilho do mouse (apenas fluxo orgânico calmo).
+ * - Acessibilidade:
+ *     * Ao ativar o modo "Reduzir animações" (body.acessibilidade-sem-animacao), a animação do fundo para completamente
+ *       e as ondas permanecem estáticas e elegantes, sem nenhum movimento.
  */
 (function () {
     'use strict';
@@ -44,6 +47,16 @@
         let mouseSpeed = 0;
         let mouseMoved = false;
 
+        let animFrameId = null;
+        let startTime = performance.now();
+
+        function checarReducaoAnimacao() {
+            return document.body.classList.contains('acessibilidade-sem-animacao') ||
+                   (document.documentElement && document.documentElement.classList.contains('acessibilidade-sem-animacao')) ||
+                   (window.localStorage && window.localStorage.getItem('helpfull_semAnimacao') === 'true') ||
+                   (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+        }
+
         function redimensionar() {
             if (isBlock && canvas.parentElement) {
                 const rect = canvas.parentElement.getBoundingClientRect();
@@ -56,6 +69,10 @@
             canvas.width = Math.floor(width * dpr);
             canvas.height = Math.floor(height * dpr);
             ctx.scale(dpr, dpr);
+
+            if (checarReducaoAnimacao()) {
+                desenharQuadro(1200);
+            }
         }
 
         window.addEventListener('resize', redimensionar, { passive: true });
@@ -68,12 +85,14 @@
         // Eventos de movimento (apenas se hasMouse = true)
         if (hasMouse) {
             window.addEventListener('mousemove', function (e) {
+                if (checarReducaoAnimacao()) return;
                 mouseX = e.clientX;
                 mouseY = e.clientY;
                 mouseMoved = true;
             }, { passive: true });
 
             window.addEventListener('touchmove', function (e) {
+                if (checarReducaoAnimacao()) return;
                 if (e.touches && e.touches.length > 0) {
                     mouseX = e.touches[0].clientX;
                     mouseY = e.touches[0].clientY;
@@ -155,12 +174,10 @@
             }
         ];
 
-        let startTime = performance.now();
+        function desenharQuadro(time) {
+            const isReduced = checarReducaoAnimacao();
 
-        function animar(timestamp) {
-            const time = timestamp - startTime;
-
-            if (hasMouse) {
+            if (hasMouse && !isReduced) {
                 const moveDelta = Math.hypot(mouseX - prevX, mouseY - prevY);
                 mouseSpeed += (moveDelta - mouseSpeed) * 0.1;
                 prevX = mouseX;
@@ -228,7 +245,7 @@
                     const h2 = Math.cos(x * ribbon.freq * 1.6 - waveTime * 0.8) * (ribbon.amp * 0.38);
 
                     let mouseDistort = 0;
-                    if (hasMouse) {
+                    if (hasMouse && !isReduced) {
                         const dx = x - currentMouseX;
                         const distToMouseX = Math.abs(dx);
                         if (distToMouseX < 380) {
@@ -249,8 +266,8 @@
                 ctx.restore();
             });
 
-            // 3. Brilho azul do mouse (APENAS se hasMouse = true)
-            if (hasMouse) {
+            // 3. Brilho azul do mouse (APENAS se hasMouse = true e NÃO estiver em modo sem animação)
+            if (hasMouse && !isReduced) {
                 ctx.save();
 
                 const speedBoost = Math.min(mouseSpeed * 0.006, 0.22);
@@ -296,11 +313,58 @@
 
                 ctx.restore();
             }
-
-            requestAnimationFrame(animar);
         }
 
-        requestAnimationFrame(animar);
+        function animar(timestamp) {
+            if (checarReducaoAnimacao()) {
+                // Modo menos animações: renderiza uma única vez a onda estática e para
+                desenharQuadro(1200);
+                animFrameId = null;
+                return;
+            }
+
+            const time = timestamp - startTime;
+            desenharQuadro(time);
+            animFrameId = requestAnimationFrame(animar);
+        }
+
+        function verificarModoAnimacao() {
+            if (checarReducaoAnimacao()) {
+                if (animFrameId) {
+                    cancelAnimationFrame(animFrameId);
+                    animFrameId = null;
+                }
+                desenharQuadro(1200); // Fica estático na posição da onda
+            } else {
+                if (!animFrameId) {
+                    startTime = performance.now() - 1200;
+                    animFrameId = requestAnimationFrame(animar);
+                }
+            }
+        }
+
+        // Observa alterações no body e html (ex: ao ativar ou desativar o switch de menos animações)
+        if (window.MutationObserver) {
+            const observer = new MutationObserver(verificarModoAnimacao);
+            observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+            if (document.documentElement) {
+                observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+            }
+        }
+        window.addEventListener('storage', function (e) {
+            if (!e || e.key === 'helpfull_semAnimacao' || e.key === null) {
+                verificarModoAnimacao();
+            }
+        });
+        window.addEventListener('helpfull-acessibilidade-mudou', verificarModoAnimacao);
+        if (window.matchMedia) {
+            const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (mq.addEventListener) {
+                mq.addEventListener('change', verificarModoAnimacao);
+            }
+        }
+
+        verificarModoAnimacao();
     }
 
     function initFundoAnimado() {
@@ -308,7 +372,6 @@
         if (canvs.length > 0) {
             canvs.forEach(initFundoAnimadoInstancia);
         } else {
-            // Cria elemento padrão full-screen se nenhum existir
             let canvas = document.getElementById('fundoAnimadoCanvas');
             if (!canvas) {
                 canvas = document.createElement('canvas');

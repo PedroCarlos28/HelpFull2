@@ -300,8 +300,6 @@ body.acessibilidade-escuro .caixa-conteudo,
 body.acessibilidade-escuro .secao-conteudo,
 body.acessibilidade-escuro .bloco-conteudo,
 body.acessibilidade-escuro .area-conteudo,
-body.acessibilidade-escuro .sidebar-historico,
-body.acessibilidade-escuro .caixa-chat,
 body.acessibilidade-escuro footer,
 body.acessibilidade-escuro .rodape {
     background: var(--tema-superficie) !important;
@@ -333,16 +331,9 @@ body.acessibilidade-escuro .toast-conteudo p {
     color: var(--tema-texto) !important;
 }
 
-body.acessibilidade-escuro .btn-historico,
 body.acessibilidade-escuro .msg-bot,
-body.acessibilidade-escuro .msg-usuario,
 body.acessibilidade-escuro .msg-bot-digitando {
     background: var(--tema-superficie-elevada) !important;
-}
-
-body.acessibilidade-escuro .input-chat {
-    background: var(--tema-campo) !important;
-    border-color: var(--tema-borda) !important;
 }
 
 body.acessibilidade-escuro .acessibilidade-idioma {
@@ -361,6 +352,91 @@ body.acessibilidade-contraste .acessibilidade-idioma select {
    Onde no tema claro era transparente com blur, no tema escuro
    mantém o mesmo efeito translúcido desfocado, porém escurecido.
    ========================================================= */
+
+/* CHATBOT VIDRO FOSCO (SIDEBAR, INPUT E BALÕES) */
+body.acessibilidade-escuro .sidebar-historico {
+    background: rgba(18, 26, 33, 0.60) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* CHATBOT: JANELA DA CONVERSA NORMAL (SEM VIDRO FOSCO) */
+body.acessibilidade-escuro .caixa-chat {
+    background: var(--tema-superficie) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--tema-borda) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.acessibilidade-escuro .btn-historico {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    color: #e6edf3 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.acessibilidade-escuro .btn-historico:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+    border-color: rgba(255, 255, 255, 0.20) !important;
+    transform: scale(1.03);
+}
+
+body.acessibilidade-escuro .input-chat {
+    background: rgba(20, 32, 42, 0.55) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.acessibilidade-escuro .input-chat::placeholder {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+body.acessibilidade-escuro .btn-enviar-chat {
+    background: rgba(30, 112, 160, 0.75) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+    color: #ffffff !important;
+}
+
+body.acessibilidade-escuro .btn-enviar-chat svg {
+    stroke: #ffffff !important;
+    fill: none !important;
+}
+
+/* Balão da mensagem do usuário: azul tipo o do tema claro, só que escuro */
+body.acessibilidade-escuro .msg-usuario {
+    background: linear-gradient(135deg, #174b5a 0%, #1e5c6e 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 4px 18px rgba(10, 35, 45, 0.45) !important;
+}
+
+body.acessibilidade-escuro .msg-bot {
+    background: rgba(30, 42, 52, 0.70) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    color: #e6edf3 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.acessibilidade-escuro .msg-bot-digitando {
+    background: rgba(30, 42, 52, 0.70) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
 body.acessibilidade-escuro .navbar-topo,
 body.acessibilidade-escuro .navbar-flutuante {
     background: rgba(22, 28, 33, 0.62) !important;
