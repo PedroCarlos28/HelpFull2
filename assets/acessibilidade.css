@@ -1,29 +1,89 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0');
 
+#painelAcessibilidadeOverlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(8, 14, 18, 0.68) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    z-index: 99998 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.28s ease, visibility 0.28s ease !important;
+}
+
+#painelAcessibilidadeOverlay.aberto {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 #painelAcessibilidade {
     position: fixed !important;
-    top: 75px !important;
+    top: 50% !important;
     left: 50% !important;
     right: auto !important;
-    width: min(340px, calc(100vw - 32px)) !important;
-    max-height: calc(100vh - 95px) !important;
+    bottom: auto !important;
+    width: min(840px, calc(100vw - 32px)) !important;
+    max-height: 92vh !important;
     overflow-y: auto !important;
-    padding: 22px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.85);
-    border-radius: 28px;
-    background: rgba(255, 255, 255, 0.96);
-    color: #1a1a1a;
-    font-family: 'Montserrat', sans-serif;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(43, 122, 140, 0.1);
-    backdrop-filter: blur(35px);
-    -webkit-backdrop-filter: blur(35px);
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    padding: 20px 24px 16px 24px !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    border-radius: 32px !important;
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    font-family: 'Montserrat', sans-serif !important;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.38) !important;
+    backdrop-filter: blur(35px) !important;
+    -webkit-backdrop-filter: blur(35px) !important;
     z-index: 99999 !important;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateX(-50%) translateY(-14px) scale(0.92);
-    transform-origin: top center;
-    transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translate(-50%, -50%) scale(0.95) !important;
+    transform-origin: center center !important;
+    transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    box-sizing: border-box !important;
+}
+
+#painelAcessibilidade::-webkit-scrollbar {
+    display: none !important;
+}
+
+#painelAcessibilidade .onboarding-col-opcoes {
+    gap: 10px !important;
+}
+
+#painelAcessibilidade .onboarding-tema-pills {
+    gap: 6px !important;
+}
+
+#painelAcessibilidade .onboarding-tema-btn {
+    padding: 8px 4px !important;
+    border-radius: 14px !important;
+}
+
+#painelAcessibilidade .onboarding-opt-row {
+    padding: 7px 12px !important;
+    border-radius: 13px !important;
+}
+
+#painelAcessibilidade .onboarding-preview-card {
+    padding: 16px 18px !important;
+    border-radius: 20px !important;
+    gap: 12px !important;
+}
+
+#painelAcessibilidade .acessibilidade-rodape {
+    margin-top: 2px !important;
+    padding-top: 8px !important;
 }
 
 .acessibilidade-anchor {
@@ -93,7 +153,7 @@
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
-    transform: translateX(-50%) translateY(0) scale(1) !important;
+    transform: translate(-50%, -50%) scale(1) !important;
 }
 
 .acessibilidade-cabecalho {
@@ -101,19 +161,22 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 14px;
+    margin-bottom: 2px;
 }
 
 .acessibilidade-cabecalho h2 {
-    margin: 0;
-    font-size: 1.05rem;
+    margin: 4px 0 2px 0;
+    font-size: 1.45rem;
     font-weight: 900;
+    color: #1f2937;
+    letter-spacing: -0.4px;
 }
 
 .acessibilidade-cabecalho p {
-    margin: 4px 0 0;
-    font-size: 0.72rem;
-    opacity: 0.68;
+    margin: 0;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #64748b;
 }
 
 .acessibilidade-fechar {
@@ -256,18 +319,22 @@
 
 .acessibilidade-rodape {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 14px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 6px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .acessibilidade-resetar {
-    padding: 8px 16px;
+    padding: 9px 18px;
     border: none;
     border-radius: 20px;
     background: rgba(43, 122, 140, 0.1);
     color: #2b7a8c;
     font: inherit;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 800;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -278,6 +345,26 @@
     color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(43, 122, 140, 0.2);
+}
+
+.btn-painel-fechar {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #2b7a8c, #236878);
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(43, 122, 140, 0.35);
+    transition: all 0.2s ease;
+}
+
+.btn-painel-fechar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(43, 122, 140, 0.45);
+    filter: brightness(1.08);
 }
 
 /* Os temas usam camadas de superficie e nao aplicam filtros sobre midias. */
@@ -472,44 +559,46 @@ body.acessibilidade-escuro .painel-notificacoes {
 }
 
 body.acessibilidade-escuro #painelAcessibilidade {
-    background: rgba(22, 28, 33, 0.85) !important;
+    background: rgba(20, 26, 31, 0.96) !important;
     backdrop-filter: blur(35px) !important;
     -webkit-backdrop-filter: blur(35px) !important;
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45) !important;
-    color: var(--tema-texto) !important;
-}
-
-body.acessibilidade-escuro #painelAcessibilidade :where(h1, h2, h3, h4, h5, h6, p, label, strong, span, div) {
-    color: var(--tema-texto) !important;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.75) !important;
+    color: #f1f5f9 !important;
 }
 
 body.acessibilidade-escuro .acessibilidade-cabecalho h2 {
-    color: var(--tema-texto) !important;
+    color: #ffffff !important;
 }
 
 body.acessibilidade-escuro .acessibilidade-cabecalho p {
-    color: var(--tema-texto-suave) !important;
-    opacity: 0.85 !important;
+    color: #94a3b8 !important;
+    opacity: 1 !important;
 }
 
 body.acessibilidade-escuro .acessibilidade-fechar {
-    background: rgba(255, 255, 255, 0.10) !important;
-    color: var(--tema-texto) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
 }
 
 body.acessibilidade-escuro .acessibilidade-fechar:hover {
-    background: rgba(255, 255, 255, 0.22) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
     color: #ffffff !important;
 }
 
 body.acessibilidade-escuro .acessibilidade-idioma {
-    background: rgba(255, 255, 255, 0.05) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 body.acessibilidade-escuro .acessibilidade-idioma label {
-    color: var(--tema-texto) !important;
+    color: #e2e8f0 !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-idioma select {
+    background: #182329 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 body.acessibilidade-escuro .acessibilidade-opcao {
@@ -544,6 +633,10 @@ body.acessibilidade-escuro .acessibilidade-opcao.ativo .acessibilidade-status {
     background: var(--tema-link) !important;
 }
 
+body.acessibilidade-escuro .acessibilidade-rodape {
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 body.acessibilidade-escuro .acessibilidade-resetar {
     background: rgba(126, 207, 219, 0.12) !important;
     color: var(--tema-link) !important;
@@ -552,7 +645,7 @@ body.acessibilidade-escuro .acessibilidade-resetar {
 
 body.acessibilidade-escuro .acessibilidade-resetar:hover {
     background: var(--tema-link) !important;
-    color: #12161a !important;
+    color: #12181b !important;
 }
 
 body.acessibilidade-escuro .toast-notificacao {
@@ -1923,10 +2016,13 @@ body.acessibilidade-contraste .rodape-simples {
     }
 
     #painelAcessibilidade {
-        top: 66px;
-        left: 50%;
-        right: auto;
-        width: min(340px, calc(100vw - 32px));
+        top: 50% !important;
+        left: 50% !important;
+        right: auto !important;
+        width: calc(100vw - 24px) !important;
+        padding: 20px 16px 18px 16px !important;
+        border-radius: 28px !important;
+        max-height: 92vh !important;
     }
 }
 
@@ -2594,20 +2690,25 @@ body.acessibilidade-escuro [vw] [vw-access-button] {
 .onboarding-card {
     width: 100%;
     max-width: 860px;
-    max-height: 92vh;
+    max-height: 90vh;
     overflow-y: auto;
     background: #ffffff;
     border-radius: 36px;
-    padding: 36px 36px 28px 36px;
+    padding: 24px 28px 20px 28px;
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.85);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
     position: relative;
     box-sizing: border-box;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     animation: onboardingFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.onboarding-card::-webkit-scrollbar {
+    display: none;
 }
 
 @keyframes onboardingFadeIn {
@@ -2638,7 +2739,7 @@ body.acessibilidade-escuro [vw] [vw-access-button] {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .onboarding-cabecalho h2 {
@@ -2894,30 +2995,30 @@ body.acessibilidade-escuro [vw] [vw-access-button] {
 .onboarding-dica-painel {
     display: flex;
     align-items: flex-start;
-    gap: 14px;
+    gap: 10px;
     background: rgba(43, 122, 140, 0.08);
     border: 1.5px dashed rgba(43, 122, 140, 0.35);
-    padding: 14px 18px;
-    border-radius: 20px;
+    padding: 10px 14px;
+    border-radius: 16px;
     box-sizing: border-box;
 }
 
 .onboarding-dica-icone {
-    font-size: 1.45rem;
+    font-size: 1.3rem;
     line-height: 1;
 }
 
 .onboarding-dica-corpo strong {
     display: block;
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     font-weight: 800;
     color: #1f2937;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .onboarding-dica-corpo p {
-    font-size: 0.82rem;
-    line-height: 1.45;
+    font-size: 0.8rem;
+    line-height: 1.4;
     color: #475569;
     font-weight: 600;
     margin: 0;
@@ -2925,13 +3026,13 @@ body.acessibilidade-escuro [vw] [vw-access-button] {
 
 .btn-onboarding-concluir {
     width: 100%;
-    padding: 14px 24px;
-    border-radius: 30px;
+    padding: 11px 20px;
+    border-radius: 24px;
     border: none;
     background: linear-gradient(135deg, #2b7a8c, #236878);
     color: #ffffff;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 0.95rem;
     cursor: pointer;
     box-shadow: 0 8px 24px rgba(43, 122, 140, 0.35);
     transition: all 0.25s ease;
@@ -2951,8 +3052,9 @@ body.acessibilidade-escuro [vw] [vw-access-button] {
     transform: scale(0.98);
 }
 
-/* Modo Escuro do Onboarding */
-body.acessibilidade-escuro .onboarding-card {
+/* Modo Escuro do Onboarding e Painel de Configurações */
+body.acessibilidade-escuro .onboarding-card,
+body.acessibilidade-escuro #painelAcessibilidade {
     background: rgba(20, 26, 31, 0.96) !important;
     border-color: rgba(255, 255, 255, 0.14) !important;
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.75) !important;
@@ -2960,6 +3062,7 @@ body.acessibilidade-escuro .onboarding-card {
 }
 
 body.acessibilidade-escuro .onboarding-cabecalho h2,
+body.acessibilidade-escuro .acessibilidade-cabecalho h2,
 body.acessibilidade-escuro .onboarding-preview-titulo,
 body.acessibilidade-escuro .onboarding-opt-nome,
 body.acessibilidade-escuro .onboarding-dica-corpo strong {
@@ -2967,9 +3070,20 @@ body.acessibilidade-escuro .onboarding-dica-corpo strong {
 }
 
 body.acessibilidade-escuro .onboarding-cabecalho p,
+body.acessibilidade-escuro .acessibilidade-cabecalho p,
 body.acessibilidade-escuro .onboarding-preview-desc,
 body.acessibilidade-escuro .onboarding-dica-corpo p {
     color: #94a3b8 !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-fechar {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #e2e8f0 !important;
+}
+
+body.acessibilidade-escuro .acessibilidade-fechar:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+    color: #ffffff !important;
 }
 
 body.acessibilidade-escuro .onboarding-tema-btn,

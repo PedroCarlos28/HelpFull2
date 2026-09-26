@@ -350,11 +350,59 @@
         'Total de curtidas': 'Total likes',
         'recebidas': 'received',
         'Metas': 'Goals',
-        'Anotar uma pequena vitória de hoje no Diário (por menor que seja).': 'Write down a small victory from today in your Journal (no matter how small).',
+        'Anotar uma pequena vitória de hoje no Diário (por menor que seja).': 'Write down a small victory today in your Journal (no matter how small).',
+        'Anotar uma pequena vitória de hoje no Diário (por menor que seja)': 'Write down a small victory today in your Journal (no matter how small)',
         "Dar um 'oi' para o Helpy e desabafar por 2 minutinhos.": 'Say hello to Helpy and vent for 2 minutes.',
+        "Dar um 'oi' para o Helpy e desabafar por 2 minutinhos": 'Say hello to Helpy and vent for 2 minutes',
         'Registrar a emoção que estou sentindo agora no meu Diário.': 'Log the emotion you are feeling right now in your Journal.',
-        'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Adicionais': 'Take 1 minute to watch a breathing video in the Activities tab.',
-        'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Atividades': 'Take 1 minute to watch a breathing video in the Activities tab.',
+        'Registrar a emoção que estou sentindo agora no meu Diário': 'Log the emotion you are feeling right now in your Journal',
+        'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Adicionais.': 'Take 1 minute to watch a breathing video in the Extras tab.',
+        'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Adicionais': 'Take 1 minute to watch a breathing video in the Extras tab',
+        'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Atividades.': 'Take 1 minute to watch a breathing video in the Activities tab.',
+        'Tirar 1 minutinho para assistir a um vídeo de respiração na aba Atividades': 'Take 1 minute to watch a breathing video in the Activities tab',
+        'Compartilhar uma mensagem positiva ou pensamento na Comunidade.': 'Share a positive message or thought in the Community.',
+        'Compartilhar uma mensagem positiva ou pensamento na Comunidade': 'Share a positive message or thought in the Community',
+        'Deixar uma reação ou palavra de apoio para alguém na Comunidade.': 'Leave a reaction or supportive word for someone in the Community.',
+        'Deixar uma reação ou palavra de apoio para alguém na Comunidade': 'Leave a reaction or supportive word for someone in the Community',
+        'Escrever no Diário pelo menos 1 motivo de gratidão pelo dia de hoje.': 'Write in your Journal at least 1 reason for gratitude today.',
+        'Escrever no Diário pelo menos 1 motivo de gratidão pelo dia de hoje': 'Write in your Journal at least 1 reason for gratitude today',
+        'Beber um bom copo de água e fazer 3 respirações lentas e profundas.': 'Drink a good glass of water and take 3 slow, deep breaths.',
+        'Beber um bom copo de água e fazer 3 respirações lentas e profundas': 'Drink a good glass of water and take 3 slow, deep breaths',
+        'Fazer uma pausa de 5 minutos longe de telas para descansar a mente.': 'Take a 5-minute break away from screens to rest your mind.',
+        'Fazer uma pausa de 5 minutos longe de telas para descansar a mente': 'Take a 5-minute break away from screens to rest your mind',
+        'Alongar o pescoço e os ombros para aliviar a tensão do corpo.': 'Stretch your neck and shoulders to relieve body tension.',
+        'Alongar o pescoço e os ombros para aliviar a tensão do corpo': 'Stretch your neck and shoulders to relieve body tension',
+        'Pedir ao Helpy uma sugestão de reflexão ou conselho para o dia.': 'Ask Helpy for a reflection prompt or advice for the day.',
+        'Pedir ao Helpy uma sugestão de reflexão ou conselho para o dia': 'Ask Helpy for a reflection prompt or advice for the day',
+        'Registrar mais de um momento do seu dia no Diário para reflexão.': 'Record more than one moment of your day in your Journal for reflection.',
+        'Registrar mais de um momento do seu dia no Diário para reflexão': 'Record more than one moment of your day in your Journal for reflection',
+        'Ouvir uma música relaxante ou som suave na aba Adicionais.': 'Listen to relaxing music or soothing sounds in the Extras tab.',
+        'Ouvir uma música relaxante ou som suave na aba Adicionais': 'Listen to relaxing music or soothing sounds in the Extras tab',
+        'Praticar a gentileza consigo mesmo(a) e reconhecer um ponto positivo seu.': 'Practice self-kindness and recognize something positive about yourself.',
+        'Praticar a gentileza consigo mesmo(a) e reconhecer um ponto positivo seu': 'Practice self-kindness and recognize something positive about yourself',
+        'Organizar um cantinho do seu espaço ao redor para clarear os pensamentos.': 'Tidy up a corner of your space to clear your thoughts.',
+        'Organizar um cantinho do seu espaço ao redor para clarear os pensamentos': 'Tidy up a corner of your space to clear your thoughts',
+        'Ler um artigo ou curiosidade de bem-estar na aba Adicionais.': 'Read an article or wellness tip in the Extras tab.',
+        'Ler um artigo ou curiosidade de bem-estar na aba Adicionais': 'Read an article or wellness tip in the Extras tab',
+        'Janeiro': 'January', 'Fevereiro': 'February', 'Março': 'March', 'Abril': 'April',
+        'Maio': 'May', 'Junho': 'June', 'Julho': 'July', 'Agosto': 'August',
+        'Setembro': 'September', 'Outubro': 'October', 'Novembro': 'November', 'Dezembro': 'December',
+        'Jan': 'Jan', 'Fev': 'Feb', 'Mar': 'Mar', 'Abr': 'Apr', 'Mai': 'May', 'Jun': 'Jun',
+        'Jul': 'Jul', 'Ago': 'Aug', 'Set': 'Sep', 'Out': 'Oct', 'Nov': 'Nov', 'Dez': 'Dec',
+        'Dom': 'Sun', 'Seg': 'Mon', 'Ter': 'Tue', 'Qua': 'Wed', 'Qui': 'Thu', 'Sex': 'Fri', 'Sáb': 'Sat',
+        'Configurações & Acessibilidade': 'Settings & Accessibility',
+        'Personalize sua experiência no HelpFull a qualquer momento.': 'Customize your HelpFull experience at any time.',
+        'Aparência e Modo Noturno': 'Appearance & Dark Mode',
+        'Acessibilidade e Leitura': 'Accessibility & Reading',
+        'Do Dispositivo': 'From Device',
+        'Concluir': 'Done',
+        'Tudo pronto! Entrar no site': 'All set! Enter site',
+        'Personalize tudo agora': 'Customize everything now',
+        'Mais Contraste': 'High Contrast',
+        'Texto Maior': 'Larger Text',
+        'Sublinhar Links': 'Underline Links',
+        'Reduzir Animações': 'Reduce Motion',
+        'Tradutor de Libras (Gov.br)': 'Libras Translator (Gov.br)',
         'Calendário': 'Calendar',
         'Detalhes do dia': 'Day details',
         'Gráficos': 'Charts',
@@ -637,28 +685,88 @@
         document.documentElement.lang = idioma;
         var sel = document.getElementById('seletorIdioma');
         if (sel) sel.value = idioma;
-        var cab = document.querySelector('.acessibilidade-cabecalho h2');
-        var des = document.querySelector('.acessibilidade-cabecalho p');
-        var fec = document.querySelector('.acessibilidade-fechar');
-        var rot = document.querySelector('.acessibilidade-idioma label');
+
+        var badge = document.getElementById('painelAcessBadge');
+        var tit = document.getElementById('painelAcessTitulo');
+        var sub = document.getElementById('painelAcessSubtitulo');
+        var secTema = document.getElementById('secaoTemaTitulo');
+        var secAcess = document.getElementById('secaoAcessTitulo');
+        var rotIdioma = document.getElementById('rotuloIdiomaPainel');
+        var btnConcluir = document.querySelector('.btn-painel-fechar');
         var res = document.querySelector('.acessibilidade-resetar');
-        if (cab) cab.textContent = t.acessibilidade;
-        if (des) des.textContent = t.preferencias;
-        if (fec) fec.setAttribute('aria-label', t.fechar);
-        if (rot) rot.textContent = t.idioma;
-        if (res) res.textContent = t.restaurar;
-        Object.keys(prefAcess).concat(['autoTema']).forEach(function (k) {
-            var el = document.querySelector('[data-acessibilidade="' + k + '"]');
-            if (!el || !t[k]) return;
-            var ti = el.querySelector('strong');
-            var di = el.querySelector('small');
-            if (ti) ti.textContent = t[k][0];
-            if (di) di.textContent = t[k][1];
-        });
+        var fec = document.querySelector('.acessibilidade-fechar');
+
+        if (idioma === 'en') {
+            if (badge) badge.textContent = '⚙️ Preferences';
+            if (tit) tit.textContent = 'Settings & Accessibility';
+            if (sub) sub.textContent = 'Customize your HelpFull experience at any time.';
+            if (secTema) secTema.textContent = '🎨 Appearance & Dark Mode';
+            if (secAcess) secAcess.textContent = '⚙️ Accessibility & Reading';
+            if (rotIdioma) rotIdioma.textContent = '🌐 Language';
+            if (btnConcluir) btnConcluir.textContent = 'Done';
+            if (res) res.textContent = 'Restore defaults';
+            if (fec) fec.setAttribute('aria-label', 'Close settings');
+            document.querySelectorAll('.painel-tema-btn').forEach(function (btn) {
+                var tm = btn.getAttribute('data-tema');
+                var span = btn.querySelector('.tema-nome');
+                if (span) {
+                    if (tm === 'claro') span.textContent = 'Light';
+                    else if (tm === 'escuro') span.textContent = 'Dark';
+                    else if (tm === 'sistema') span.textContent = 'From Device';
+                }
+            });
+            document.querySelectorAll('.painel-opt-row').forEach(function (row) {
+                var k = row.getAttribute('data-acess-key');
+                var span = row.querySelector('.onboarding-opt-nome');
+                if (span) {
+                    if (k === 'contraste') span.textContent = 'High Contrast';
+                    else if (k === 'textoGrande') span.textContent = 'Larger Text';
+                    else if (k === 'sublinhar') span.textContent = 'Underline Links';
+                    else if (k === 'semAnimacao') span.textContent = 'Reduce Motion';
+                    else if (k === 'libras') span.textContent = 'Libras Translator (Gov.br)';
+                }
+            });
+        } else {
+            if (badge) badge.textContent = '⚙️ Preferências';
+            if (tit) tit.textContent = 'Configurações & Acessibilidade';
+            if (sub) sub.textContent = 'Personalize sua experiência no HelpFull a qualquer momento.';
+            if (secTema) secTema.textContent = '🎨 Aparência e Modo Noturno';
+            if (secAcess) secAcess.textContent = '⚙️ Acessibilidade e Leitura';
+            if (rotIdioma) rotIdioma.textContent = '🌐 Idioma / Language';
+            if (btnConcluir) btnConcluir.textContent = 'Concluir';
+            if (res) res.textContent = 'Restaurar padrão';
+            if (fec) fec.setAttribute('aria-label', 'Fechar configurações');
+            document.querySelectorAll('.painel-tema-btn').forEach(function (btn) {
+                var tm = btn.getAttribute('data-tema');
+                var span = btn.querySelector('.tema-nome');
+                if (span) {
+                    if (tm === 'claro') span.textContent = 'Claro';
+                    else if (tm === 'escuro') span.textContent = 'Escuro';
+                    else if (tm === 'sistema') span.textContent = 'Do Dispositivo';
+                }
+            });
+            document.querySelectorAll('.painel-opt-row').forEach(function (row) {
+                var k = row.getAttribute('data-acess-key');
+                var span = row.querySelector('.onboarding-opt-nome');
+                if (span) {
+                    if (k === 'contraste') span.textContent = 'Mais Contraste';
+                    else if (k === 'textoGrande') span.textContent = 'Texto Maior';
+                    else if (k === 'sublinhar') span.textContent = 'Sublinhar Links';
+                    else if (k === 'semAnimacao') span.textContent = 'Reduzir Animações';
+                    else if (k === 'libras') span.textContent = 'Tradutor de Libras (Gov.br)';
+                }
+            });
+        }
+
         document.querySelectorAll('.nav-links a,.links-capsula a,.nav-dropdown-mobile a').forEach(function (a) {
             var url = (a.getAttribute('href') || '').split('?')[0].split('#')[0];
             if (t.nav[url]) a.textContent = t.nav[url];
         });
+
+        if (typeof atualizarPreviewPainel === 'function') {
+            atualizarPreviewPainel('padrao');
+        }
+
         traduzirPagina();
         iniciarObservadorTraducao();
     }
@@ -772,6 +880,7 @@
 
         var lb = localStorage.getItem('helpfull_libras') === 'true';
         gerenciarVLibras(lb);
+        sincronizarEstadoVisualPainel();
     }
 
     if (window.matchMedia) {
@@ -790,55 +899,338 @@
         } catch (e) {}
     }
 
+    var explicativosPainel = {
+        'pt-BR': {
+            'padrao': {
+                icone: '✨',
+                tag: 'CONFIGURAÇÕES',
+                titulo: 'Configurações Rápidas',
+                desc: 'Passe o mouse ou toque sobre qualquer opção ao lado para conferir sua finalidade e visualizar o efeito em tempo real.',
+                dica: '💡 As alterações são salvas automaticamente em seu perfil e navegador.'
+            },
+            'idioma': {
+                icone: '🌐',
+                tag: 'LINGUAGEM',
+                titulo: 'Idioma da Plataforma',
+                desc: 'Alterne todo o conteúdo, menus e metas diárias entre Português e Inglês com tradução instantânea.',
+                dica: '💡 A tradução é aplicada imediatamente em todas as páginas.'
+            },
+            'tema-claro': {
+                icone: '☀️',
+                tag: 'TEMA VISUAL',
+                titulo: 'Modo Claro',
+                desc: 'Aparência tradicional e luminosa com tons suaves de azul e branco, ideal para ambientes claros e leitura diurna.',
+                dica: '💡 Proporciona visual limpo, refrescante e acolhedor.'
+            },
+            'tema-escuro': {
+                icone: '🌙',
+                tag: 'TEMA VISUAL',
+                titulo: 'Modo Noturno',
+                desc: 'Substitui fundos claros por superfícies escuras relaxantes, diminuindo o cansaço dos olhos à noite e economizando bateria.',
+                dica: '💡 Recomendado para ambientes com pouca luz e relaxamento visual.'
+            },
+            'tema-auto': {
+                icone: '💻',
+                tag: 'APARÊNCIA INTELIGENTE',
+                titulo: 'Seguir o Dispositivo',
+                desc: 'Acompanha automaticamente as configurações do seu celular ou PC: claro de dia e escuro quando o sistema ativar o modo noturno.',
+                dica: '💡 O HelpFull sincroniza sozinho sem você precisar trocar manualmente!'
+            },
+            'contraste': {
+                icone: '👁️',
+                tag: 'ACESSIBILIDADE VISUAL',
+                titulo: 'Mais Contraste',
+                desc: 'Realça nitidamente as bordas, cartões e tipografia do site, eliminando tons apagados e facilitando a leitura.',
+                dica: '💡 Excelente sob claridade intensa ou para quem tem baixa visão.'
+            },
+            'textoGrande': {
+                icone: '🔍',
+                tag: 'LEGIBILIDADE',
+                titulo: 'Texto Maior',
+                desc: 'Aumenta as letras de títulos, relatos, artigos e botões em toda a plataforma sem deformar o layout.',
+                dica: '💡 Melhora a experiência de leitura sem precisar aproximar a tela.'
+            },
+            'sublinhar': {
+                icone: '🔗',
+                tag: 'NAVEGAÇÃO',
+                titulo: 'Sublinhar Links',
+                desc: 'Destaca de forma inequívoca todos os links, botões e elementos clicáveis com uma linha inferior.',
+                dica: '💡 Facilita identificar rapidamente onde é possível clicar.'
+            },
+            'semAnimacao': {
+                icone: '⚡',
+                tag: 'CONFORTO E FOCO',
+                titulo: 'Reduzir Animações',
+                desc: 'Diminui movimentos e efeitos de transição, resultando em uma navegação mais direta, estática e suave.',
+                dica: '💡 Recomendado para evitar tonturas visuais ou acelerar aparelhos mais lentos.'
+            },
+            'libras': {
+                icone: '🤟',
+                tag: 'INCLUSÃO OFICIAL',
+                titulo: 'Tradutor de Libras (Gov.br)',
+                desc: 'Integra o avatar 3D do VLibras do Governo Federal para tradução simultânea de textos para a Língua Brasileira de Sinais.',
+                dica: '💡 O avatar fica disponível no canto da tela para traduzir o que você selecionar.'
+            }
+        },
+        'en': {
+            'padrao': {
+                icone: '✨',
+                tag: 'SETTINGS',
+                titulo: 'Quick Settings',
+                desc: 'Hover or tap on any option on the left to see what it does and test the effect in real time.',
+                dica: '💡 Changes are automatically saved to your profile and browser.'
+            },
+            'idioma': {
+                icone: '🌐',
+                tag: 'LANGUAGE',
+                titulo: 'Platform Language',
+                desc: 'Switch interface, menus, and daily goals between Portuguese and English with instant translation.',
+                dica: '💡 Changes are applied immediately across all sections.'
+            },
+            'tema-claro': {
+                icone: '☀️',
+                tag: 'THEME',
+                titulo: 'Light Mode',
+                desc: 'Bright and traditional look with soothing blue and white tones, ideal for daytime and bright rooms.',
+                dica: '💡 Clean, refreshing and friendly visual feel.'
+            },
+            'tema-escuro': {
+                icone: '🌙',
+                tag: 'THEME',
+                titulo: 'Dark Mode',
+                desc: 'Replaces bright backgrounds with relaxing dark surfaces to ease eye strain and save battery life.',
+                dica: '💡 Great for nighttime and low-light relaxation.'
+            },
+            'tema-auto': {
+                icone: '💻',
+                tag: 'SMART THEME',
+                titulo: 'Match Device',
+                desc: 'Automatically synchronizes with your device theme: light by day, dark when your system enables dark mode.',
+                dica: '💡 HelpFull stays in sync without manual changes!'
+            },
+            'contraste': {
+                icone: '👁️',
+                tag: 'VISUAL ACCESSIBILITY',
+                titulo: 'High Contrast',
+                desc: 'Sharpens card borders, buttons and text for maximal visibility and clarity.',
+                dica: '💡 Helpful in bright sunlight or for low-vision readers.'
+            },
+            'textoGrande': {
+                icone: '🔍',
+                tag: 'READABILITY',
+                titulo: 'Larger Text',
+                desc: 'Increases text size throughout titles, articles and buttons without breaking layouts.',
+                dica: '💡 Easier reading without zooming your screen.'
+            },
+            'sublinhar': {
+                icone: '🔗',
+                tag: 'NAVIGATION',
+                titulo: 'Underline Links',
+                desc: 'Highlights clickable links and buttons with clear underline indicators.',
+                dica: '💡 Makes interactive targets unmistakable.'
+            },
+            'semAnimacao': {
+                icone: '⚡',
+                tag: 'COMFORT & FOCUS',
+                titulo: 'Reduce Motion',
+                desc: 'Minimizes motion and transitions for a straightforward, quiet experience.',
+                dica: '💡 Prevents visual fatigue and speeds up low-end devices.'
+            },
+            'libras': {
+                icone: '🤟',
+                tag: 'ACCESSIBILITY',
+                titulo: 'Libras Translator (Gov.br)',
+                desc: 'Integrates the Brazilian Government VLibras 3D avatar for text-to-sign-language translation.',
+                dica: '💡 The avatar rests on screen to translate any selected text.'
+            }
+        }
+    };
+
+    function atualizarPreviewPainel(chave) {
+        var idioma = localStorage.getItem('helpfull_idioma') === 'en' ? 'en' : 'pt-BR';
+        var mapa = explicativosPainel[idioma] || explicativosPainel['pt-BR'];
+        var item = mapa[chave] || mapa['padrao'];
+        var tag = document.getElementById('painelPreviewTag');
+        var icone = document.getElementById('painelPreviewIcone');
+        var titulo = document.getElementById('painelPreviewTitulo');
+        var desc = document.getElementById('painelPreviewDesc');
+        var dica = document.getElementById('painelPreviewDica');
+        if (!tag || !icone || !titulo || !desc || !dica) return;
+
+        tag.textContent = item.tag;
+        icone.textContent = item.icone;
+        titulo.textContent = item.titulo;
+        desc.textContent = item.desc;
+        dica.textContent = item.dica;
+    }
+
+    function sincronizarEstadoVisualPainel() {
+        var p = document.getElementById('painelAcessibilidade');
+        if (!p) return;
+        var modo = localStorage.getItem('helpfull_tema_modo') || (localStorage.getItem('helpfull_escuro') === 'true' ? 'escuro' : 'claro');
+        p.querySelectorAll('.painel-tema-btn').forEach(function (btn) {
+            var tema = btn.getAttribute('data-tema');
+            btn.classList.toggle('ativo', tema === modo);
+        });
+        p.querySelectorAll('.painel-opt-row').forEach(function (row) {
+            var key = row.getAttribute('data-acess-key');
+            var ativo = localStorage.getItem('helpfull_' + key) === 'true';
+            row.classList.toggle('ativo', ativo);
+        });
+        var si = p.querySelector('#seletorIdioma');
+        if (si) {
+            si.value = localStorage.getItem('helpfull_idioma') || 'pt-BR';
+        }
+    }
+
     function criarPainelAcessibilidade() {
+        var overlay = document.getElementById('painelAcessibilidadeOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'painelAcessibilidadeOverlay';
+            overlay.className = 'painel-acessibilidade-overlay';
+            overlay.setAttribute('role', 'presentation');
+            document.body.appendChild(overlay);
+        }
+
         var p = document.getElementById('painelAcessibilidade');
         if (!p) {
             var div = document.createElement('div');
             div.innerHTML = `
-                <section id="painelAcessibilidade" aria-label="Opções de acessibilidade">
+                <section id="painelAcessibilidade" aria-label="Configurações e Acessibilidade" role="dialog" aria-modal="true">
                     <div class="acessibilidade-cabecalho">
                         <div>
-                            <h2>Acessibilidade</h2>
-                            <p>Preferências aplicadas em todo o site</p>
+                            <div class="onboarding-badge" id="painelAcessBadge">⚙️ Preferências</div>
+                            <h2 id="painelAcessTitulo">Configurações & Acessibilidade</h2>
+                            <p id="painelAcessSubtitulo">Personalize sua experiência no HelpFull a qualquer momento.</p>
                         </div>
-                        <button type="button" class="acessibilidade-fechar" aria-label="Fechar acessibilidade">×</button>
+                        <button type="button" class="acessibilidade-fechar" aria-label="Fechar configurações">×</button>
                     </div>
-                    <div class="acessibilidade-opcoes">
-                        <div class="acessibilidade-idioma">
-                            <label for="seletorIdioma">Idioma</label>
-                            <select id="seletorIdioma" aria-label="Selecionar idioma">
-                                <option value="pt-BR">Português (Brasil)</option>
-                                <option value="en">English</option>
-                            </select>
+
+                    <div class="onboarding-grid">
+                        <!-- Coluna Esquerda: Controles -->
+                        <div class="onboarding-col-opcoes">
+                            <div class="acessibilidade-idioma">
+                                <label for="seletorIdioma" id="rotuloIdiomaPainel">🌐 Idioma / Language</label>
+                                <select id="seletorIdioma" aria-label="Selecionar idioma" data-preview-key="idioma">
+                                    <option value="pt-BR">Português (Brasil)</option>
+                                    <option value="en">English (US)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <div class="onboarding-secao-titulo" id="secaoTemaTitulo">🎨 Aparência e Modo Noturno</div>
+                                <div class="onboarding-tema-pills">
+                                    <button type="button" class="onboarding-tema-btn painel-tema-btn" data-tema="claro" data-preview-key="tema-claro">
+                                        <span class="tema-icone">☀️</span>
+                                        <span class="tema-nome">Claro</span>
+                                    </button>
+                                    <button type="button" class="onboarding-tema-btn painel-tema-btn" data-tema="escuro" data-preview-key="tema-escuro">
+                                        <span class="tema-icone">🌙</span>
+                                        <span class="tema-nome">Escuro</span>
+                                    </button>
+                                    <button type="button" class="onboarding-tema-btn painel-tema-btn" data-tema="sistema" data-preview-key="tema-auto">
+                                        <span class="tema-icone">💻</span>
+                                        <span class="tema-nome">Do Dispositivo</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="onboarding-secao-titulo" id="secaoAcessTitulo">⚙️ Acessibilidade e Leitura</div>
+                                <div class="onboarding-lista-opcoes">
+                                    <div class="onboarding-opt-row painel-opt-row" data-acess-key="contraste" data-preview-key="contraste">
+                                        <div class="onboarding-opt-info">
+                                            <span class="onboarding-opt-icone">👁️</span>
+                                            <span class="onboarding-opt-nome">Mais Contraste</span>
+                                        </div>
+                                        <div class="onboarding-switch" aria-hidden="true"></div>
+                                    </div>
+
+                                    <div class="onboarding-opt-row painel-opt-row" data-acess-key="textoGrande" data-preview-key="textoGrande">
+                                        <div class="onboarding-opt-info">
+                                            <span class="onboarding-opt-icone">🔍</span>
+                                            <span class="onboarding-opt-nome">Texto Maior</span>
+                                        </div>
+                                        <div class="onboarding-switch" aria-hidden="true"></div>
+                                    </div>
+
+                                    <div class="onboarding-opt-row painel-opt-row" data-acess-key="sublinhar" data-preview-key="sublinhar">
+                                        <div class="onboarding-opt-info">
+                                            <span class="onboarding-opt-icone">🔗</span>
+                                            <span class="onboarding-opt-nome">Sublinhar Links</span>
+                                        </div>
+                                        <div class="onboarding-switch" aria-hidden="true"></div>
+                                    </div>
+
+                                    <div class="onboarding-opt-row painel-opt-row" data-acess-key="semAnimacao" data-preview-key="semAnimacao">
+                                        <div class="onboarding-opt-info">
+                                            <span class="onboarding-opt-icone">⚡</span>
+                                            <span class="onboarding-opt-nome">Reduzir Animações</span>
+                                        </div>
+                                        <div class="onboarding-switch" aria-hidden="true"></div>
+                                    </div>
+
+                                    <div class="onboarding-opt-row painel-opt-row" data-acess-key="libras" data-preview-key="libras">
+                                        <div class="onboarding-opt-info">
+                                            <span class="onboarding-opt-icone">🤟</span>
+                                            <span class="onboarding-opt-nome">Tradutor de Libras (Gov.br)</span>
+                                        </div>
+                                        <div class="onboarding-switch" aria-hidden="true"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="escuro"><span><strong>Modo noturno</strong><small>Fundo preto e superfícies cinza escuro</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="autoTema"><span><strong>Seguir dispositivo</strong><small>Sincroniza com o tema do seu aparelho</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="contraste"><span><strong>Mais contraste</strong><small>Realça bordas, textos e links</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="textoGrande"><span><strong>Texto maior</strong><small>Aumenta a leitura sem trocar de página</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="sublinhar"><span><strong>Sublinhar links</strong><small>Facilita localizar elementos clicáveis</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="semAnimacao"><span><strong>Reduzir animações</strong><small>Diminui movimentos e transições</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
-                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="libras"><span><strong>Tradutor de Libras (Gov.br)</strong><small>Ativa o avatar VLibras do Governo Federal</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
+
+                        <!-- Coluna Direita: Preview Explicativo Dinâmico -->
+                        <div class="onboarding-col-preview">
+                            <div class="onboarding-preview-card" id="painelPreviewCard">
+                                <div class="onboarding-preview-topo">
+                                    <span class="onboarding-preview-tag" id="painelPreviewTag">CONFIGURAÇÕES</span>
+                                    <div class="onboarding-preview-icone-badge" id="painelPreviewIcone">✨</div>
+                                    <h3 class="onboarding-preview-titulo" id="painelPreviewTitulo">Configurações Rápidas</h3>
+                                    <p class="onboarding-preview-desc" id="painelPreviewDesc">Passe o mouse ou toque sobre qualquer opção ao lado para conferir sua finalidade e visualizar o efeito em tempo real.</p>
+                                </div>
+                                <div class="onboarding-preview-dica" id="painelPreviewDica">
+                                    💡 As alterações são salvas automaticamente em seu perfil e navegador.
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="acessibilidade-rodape"><button type="button" class="acessibilidade-resetar">Restaurar padrão</button></div>
+
+                    <!-- Rodapé do painel sem tutorial -->
+                    <div class="acessibilidade-rodape">
+                        <button type="button" class="acessibilidade-resetar">Restaurar padrão</button>
+                        <button type="button" class="btn-painel-fechar">Concluir</button>
+                    </div>
                 </section>
             `.trim();
             p = div.firstElementChild;
             document.body.appendChild(p);
         }
+
         var b = document.getElementById('btnAcessibilidade');
         if (b) b.setAttribute('aria-expanded', 'false');
-        var f = p.querySelector('.acessibilidade-fechar');
-        if (f && f.dataset.ligado !== 'true') {
-            f.addEventListener('click', function () {
-                p.classList.remove('aberto');
-                p.setAttribute('data-aberto', 'false');
-                if (b) b.setAttribute('aria-expanded','false');
-            });
-            f.dataset.ligado = 'true';
-        }
+
+        conectarControlesAcessibilidade();
         aplicarAcessibilidade();
         aplicarIdioma();
+        sincronizarEstadoVisualPainel();
     }
+
+    window.fecharPainelAcessibilidade = function () {
+        var p = document.getElementById('painelAcessibilidade');
+        var overlay = document.getElementById('painelAcessibilidadeOverlay');
+        var b = document.getElementById('btnAcessibilidade');
+        if (p) {
+            p.classList.remove('aberto');
+            p.setAttribute('data-aberto', 'false');
+        }
+        if (overlay) {
+            overlay.classList.remove('aberto');
+        }
+        if (b) b.setAttribute('aria-expanded', 'false');
+    };
 
     var _bloqueioFecharPainelAcess = false;
     var _ultimoToggleTempo = 0;
@@ -855,11 +1247,12 @@
         _ultimoToggleTempo = agora;
 
         var p = document.getElementById('painelAcessibilidade');
+        var overlay = document.getElementById('painelAcessibilidadeOverlay');
         var b = document.getElementById('btnAcessibilidade');
         if (!p) {
             criarPainelAcessibilidade();
-            conectarControlesAcessibilidade();
             p = document.getElementById('painelAcessibilidade');
+            overlay = document.getElementById('painelAcessibilidadeOverlay');
         }
         if (!p) return;
         var ab = !p.classList.contains('aberto');
@@ -867,14 +1260,15 @@
             _bloqueioFecharPainelAcess = true;
             setTimeout(function () {
                 _bloqueioFecharPainelAcess = false;
-            }, 400);
+            }, 350);
             p.classList.add('aberto');
             p.setAttribute('data-aberto', 'true');
+            if (overlay) overlay.classList.add('aberto');
             if (b) b.setAttribute('aria-expanded', 'true');
+            sincronizarEstadoVisualPainel();
+            atualizarPreviewPainel('padrao');
         } else {
-            p.classList.remove('aberto');
-            p.setAttribute('data-aberto', 'false');
-            if (b) b.setAttribute('aria-expanded', 'false');
+            window.fecharPainelAcessibilidade();
         }
     };
     window.abrirPainelAcessibilidade = window.togglePainelAcessibilidade;
@@ -912,12 +1306,11 @@
                 navContainer.appendChild(anchor);
             }
         } else {
-            // Se o botão já existe mas usa texto ou ícone de fonte que pode falhar, garante o SVG
             if (!b.querySelector('svg')) {
                 b.innerHTML = `
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                     </svg>
                 `;
             }
@@ -926,26 +1319,84 @@
 
     function conectarControlesAcessibilidade() {
         var p = document.getElementById('painelAcessibilidade');
+        var overlay = document.getElementById('painelAcessibilidadeOverlay');
         if (!p || p.dataset.controlesConectados === 'true') return;
         p.dataset.controlesConectados = 'true';
+
+        if (overlay && overlay.dataset.ligado !== 'true') {
+            overlay.addEventListener('click', function () {
+                window.fecharPainelAcessibilidade();
+            });
+            overlay.dataset.ligado = 'true';
+        }
+
         var si = p.querySelector('#seletorIdioma');
         if (si && si.dataset.ligado !== 'true') {
             si.value = localStorage.getItem('helpfull_idioma') || 'pt-BR';
             si.addEventListener('change', function () {
                 localStorage.setItem('helpfull_idioma', si.value);
                 aplicarIdioma();
+                atualizarPreviewPainel('idioma');
             });
             si.dataset.ligado = 'true';
         }
-        p.querySelectorAll('[data-acessibilidade]').forEach(function (el) {
-            if (el.dataset.ligado === 'true') return;
-            el.dataset.ligado = 'true';
-            el.addEventListener('click', function (e) {
+
+        // Theme pills
+        p.querySelectorAll('.painel-tema-btn').forEach(function (btn) {
+            if (btn.dataset.ligado === 'true') return;
+            btn.dataset.ligado = 'true';
+            btn.addEventListener('click', function (e) {
                 e.preventDefault();
-                var k = el.getAttribute('data-acessibilidade');
-                window.alternarAcessibilidadeOpcao(k);
+                var modo = btn.getAttribute('data-tema');
+                window.definirTemaModo(modo);
+                sincronizarEstadoVisualPainel();
+                atualizarPreviewPainel('tema-' + (modo === 'sistema' ? 'auto' : modo));
             });
         });
+
+        // Accessibility toggle rows
+        p.querySelectorAll('.painel-opt-row').forEach(function (row) {
+            if (row.dataset.ligado === 'true') return;
+            row.dataset.ligado = 'true';
+            row.addEventListener('click', function (e) {
+                e.preventDefault();
+                var key = row.getAttribute('data-acess-key');
+                window.alternarAcessibilidadeOpcao(key);
+                sincronizarEstadoVisualPainel();
+                atualizarPreviewPainel(key);
+            });
+        });
+
+        // Hover / focus preview
+        var elementosPreview = p.querySelectorAll('[data-preview-key]');
+        elementosPreview.forEach(function (el) {
+            var chave = el.getAttribute('data-preview-key');
+            el.addEventListener('mouseenter', function () {
+                atualizarPreviewPainel(chave);
+            });
+            el.addEventListener('focus', function () {
+                atualizarPreviewPainel(chave);
+            });
+        });
+
+        var gridOpcoes = p.querySelector('.onboarding-grid');
+        if (gridOpcoes) {
+            gridOpcoes.addEventListener('mouseleave', function () {
+                atualizarPreviewPainel('padrao');
+            });
+        }
+
+        // Close buttons: x and Concluir
+        p.querySelectorAll('.acessibilidade-fechar, .btn-painel-fechar').forEach(function (btn) {
+            if (btn.dataset.ligado === 'true') return;
+            btn.dataset.ligado = 'true';
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                window.fecharPainelAcessibilidade();
+            });
+        });
+
+        // Reset button
         var re = p.querySelector('.acessibilidade-resetar');
         if (re && re.dataset.ligado !== 'true') {
             re.dataset.ligado = 'true';
@@ -958,10 +1409,21 @@
                 if (si) si.value = 'pt-BR';
                 aplicarAcessibilidade();
                 aplicarIdioma();
+                sincronizarEstadoVisualPainel();
+                atualizarPreviewPainel('padrao');
             });
         }
+
+        // Escape key to close
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && p.classList.contains('aberto')) {
+                window.fecharPainelAcessibilidade();
+            }
+        });
+
         aplicarAcessibilidade();
         aplicarIdioma();
+        sincronizarEstadoVisualPainel();
     }
 
     window.definirTemaModo = function (modo) {
@@ -1027,9 +1489,7 @@
             var ml = e.target.closest('.btn-abrir-acessibilidade, .btn-acessibilidade, [onclick*="togglePainelAcessibilidade"], [onclick*="abrirPainelAcessibilidade"], .nav-dropdown-mobile');
             if (pa && pa.classList.contains('aberto')) {
                 if (!pa.contains(e.target) && (!ba || !ba.contains(e.target)) && !ml) {
-                    pa.classList.remove('aberto');
-                    pa.setAttribute('data-aberto', 'false');
-                    if (ba) ba.setAttribute('aria-expanded', 'false');
+                    window.fecharPainelAcessibilidade();
                 }
             }
         });
