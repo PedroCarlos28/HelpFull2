@@ -20,18 +20,6 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
     session_start();
 }
 
-// Persistência de sessão para Vercel via cookie assinado (evita logout entre chamadas serverless)
-if (!isset($_SESSION['usuario_id']) && !empty($_COOKIE['helpfull_session'])) {
-    $rawCookie = @json_decode(base64_decode($_COOKIE['helpfull_session']), true);
-    if ($rawCookie && !empty($rawCookie['id']) && !empty($rawCookie['sig'])) {
-        $expected = hash_hmac('sha256', (string)$rawCookie['id'], 'HelpFullSessionSecretKey2026');
-        if (hash_equals($expected, $rawCookie['sig'])) {
-            $_SESSION['usuario_id']   = $rawCookie['id'];
-            $_SESSION['usuario_nome'] = $rawCookie['nome'] ?? '';
-        }
-    }
-}
-
 if (!function_exists('salvarSessaoUsuario')) {
     function salvarSessaoUsuario($id, $nome) {
         $_SESSION['usuario_id']   = $id;
@@ -51,7 +39,25 @@ if (!function_exists('salvarSessaoUsuario')) {
     }
 }
 
-// Novas configurações usando o Agrupador de Sessões (Session Pooler) para funcionar no IPv4
+if (!function_exists('limparSessaoUsuario')) {
+    function limparSessaoUsuario() {
+        unset($_SESSION['usuario_id']);
+        unset($_SESSION['usuario_nome']);
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            @session_destroy();
+        }
+        $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+        setcookie('helpfull_session', '', [
+            'expires'  => time() - 3600,
+            'path'     => '/',
+            'httponly' => true,
+            'secure'   => $secure,
+            'samesite' => 'Lax'
+        ]);
+    }
+}
+
+// Configurações usando o Agrupador de Sessões (Session Pooler) para funcionar no IPv4
 $host = 'aws-1-us-west-2.pooler.supabase.com';
 $port = '5432';
 $dbname = 'postgres';
@@ -73,5 +79,41 @@ try {
 
 } catch (PDOException $e) {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
+}
+
+// Validação e restauração de sessão persistente via cookie
+if (!isset($_SESSION['usuario_id']) && !empty($_COOKIE['helpfull_session'])) {
+    $rawCookie = @json_decode(base64_decode($_COOKIE['helpfull_session']), true);
+    if ($rawCookie && !empty($rawCookie['id']) && !empty($rawCookie['sig'])) {
+        $expected = hash_hmac('sha256', (string)$rawCookie['id'], 'HelpFullSessionSecretKey2026');
+        if (hash_equals($expected, $rawCookie['sig'])) {
+            try {
+                $stmtVal = $pdo->prepare("SELECT id, nome FROM usuarios WHERE id = ?");
+                $stmtVal->execute([$rawCookie['id']]);
+                $uExist = $stmtVal->fetch();
+                if ($uExist) {
+                    $_SESSION['usuario_id']   = $uExist['id'];
+                    $_SESSION['usuario_nome'] = $uExist['nome'];
+                } else {
+                    // Usuário não existe mais no banco: limpa cookie órfão
+                    limparSessaoUsuario();
+                }
+            } catch (Exception $e) {
+            }
+        } else {
+            limparSessaoUsuario();
+        }
+    }
+} elseif (isset($_SESSION['usuario_id'])) {
+    // Se a sessão está ativa, valida se o usuário ainda existe no banco
+    try {
+        $stmtVal = $pdo->prepare("SELECT id, nome FROM usuarios WHERE id = ?");
+        $stmtVal->execute([$_SESSION['usuario_id']]);
+        $uExist = $stmtVal->fetch();
+        if (!$uExist) {
+            limparSessaoUsuario();
+        }
+    } catch (Exception $e) {
+    }
 }
 ?>

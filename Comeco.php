@@ -2,8 +2,22 @@
 require_once 'conexao.php';
 
 if (isset($_SESSION['usuario_id'])) {
-    header("Location: inicio.php");
-    exit();
+    if (isset($_GET['trocar']) || isset($_GET['logout'])) {
+        limparSessaoUsuario();
+    } else {
+        try {
+            $stmtVal = $pdo->prepare("SELECT id FROM usuarios WHERE id = ?");
+            $stmtVal->execute([$_SESSION['usuario_id']]);
+            if ($stmtVal->fetch()) {
+                header("Location: inicio.php");
+                exit();
+            } else {
+                limparSessaoUsuario();
+            }
+        } catch (Exception $e) {
+            limparSessaoUsuario();
+        }
+    }
 }
 ?>
 <!DOCTYPE html>

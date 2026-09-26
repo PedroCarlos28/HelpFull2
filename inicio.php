@@ -10,7 +10,7 @@ if (isset($_SESSION['usuario_id'])) {
     $usuarioLogado = $stmt->fetch();
 
     if (!$usuarioLogado) {
-        session_destroy();
+        limparSessaoUsuario();
         $usuarioLogado = null;
     }
 }
