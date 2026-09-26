@@ -2043,7 +2043,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             .post-texto { font-size: 1.05rem; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v1">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
 </head>
 
 <body>
@@ -2983,7 +2983,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         });
     </script>
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
-    <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260926-v3" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260926-v3';document.body.appendChild(s);}"></script>
 </body>
 
 </html>
