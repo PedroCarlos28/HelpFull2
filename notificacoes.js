@@ -199,7 +199,8 @@
         contraste:    'acessibilidade-contraste',
         textoGrande:  'acessibilidade-texto-grande',
         sublinhar:    'acessibilidade-sublinhar',
-        semAnimacao:  'acessibilidade-sem-animacao'
+        semAnimacao:  'acessibilidade-sem-animacao',
+        libras:       'acessibilidade-libras'
     };
 
     var tradInterface = {
@@ -212,6 +213,7 @@
             textoGrande:['Texto maior','Aumenta a leitura sem trocar de página'],
             sublinhar:['Sublinhar links','Facilita localizar elementos clicáveis'],
             semAnimacao:['Reduzir animações','Diminui movimentos e transições'],
+            libras:['Tradutor de Libras (Gov.br)','Ativa o avatar VLibras do Governo Federal'],
             restaurar:'Restaurar padrão',
             nav:{'Diario.php':'Diário','Comunidade.php':'Comunidade','ChatBOT.php':'Helpy','Atividades.php':'Atividades','Perfil.php':'Perfil','inicio.php':'Início'}
         },
@@ -224,6 +226,7 @@
             textoGrande:['Larger text','Improves readability without changing pages'],
             sublinhar:['Underline links','Makes clickable elements easier to find'],
             semAnimacao:['Reduce motion','Reduces movement and transitions'],
+            libras:['Libras Translator (Gov.br)','Enables Brazilian Sign Language (VLibras) avatar'],
             restaurar:'Restore defaults',
             nav:{'Diario.php':'Journal','Comunidade.php':'Community','ChatBOT.php':'Helpy','Atividades.php':'Activities','Perfil.php':'Profile','inicio.php':'Home'}
         }
@@ -645,6 +648,60 @@
         iniciarObservadorTraducao();
     }
 
+    function gerenciarVLibras(ativo) {
+        var vwContainer = document.querySelector('[vw]');
+        if (ativo) {
+            if (!vwContainer) {
+                vwContainer = document.createElement('div');
+                vwContainer.setAttribute('vw', '');
+                vwContainer.className = 'enabled';
+                vwContainer.innerHTML = '<div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>';
+                document.body.appendChild(vwContainer);
+            }
+            vwContainer.classList.remove('vlibras-oculto');
+            vwContainer.style.removeProperty('display');
+            var wrapper = document.querySelector('[vw-plugin-wrapper]');
+            if (wrapper) wrapper.style.removeProperty('display');
+
+            var iniciarWidget = function () {
+                try {
+                    if (window.VLibras && !window._vlibrasIniciado) {
+                        window._vlibrasInstance = new window.VLibras.Widget('https://vlibras.gov.br/app');
+                        window._vlibrasIniciado = true;
+                    }
+                } catch (e) {
+                    console.warn('Erro ao inicializar VLibras:', e);
+                }
+            };
+
+            if (typeof window.VLibras === 'undefined') {
+                var scriptExistente = document.getElementById('vlibrasGovScript');
+                if (!scriptExistente) {
+                    var script = document.createElement('script');
+                    script.id = 'vlibrasGovScript';
+                    script.src = 'https://vlibras.gov.br/app/vlibras-plugin.js';
+                    script.async = true;
+                    script.onload = iniciarWidget;
+                    script.onerror = function () {
+                        console.warn('Não foi possível carregar a API do VLibras Gov.');
+                    };
+                    document.body.appendChild(script);
+                } else {
+                    scriptExistente.addEventListener('load', iniciarWidget);
+                }
+            } else {
+                iniciarWidget();
+            }
+        } else {
+            if (vwContainer) {
+                vwContainer.classList.add('vlibras-oculto');
+                vwContainer.style.setProperty('display', 'none', 'important');
+                var wrapperOcultar = document.querySelector('[vw-plugin-wrapper]');
+                if (wrapperOcultar) wrapperOcultar.style.setProperty('display', 'none', 'important');
+            }
+        }
+    }
+
     function aplicarAcessibilidade() {
         var tg = localStorage.getItem('helpfull_textoGrande') === 'true';
         document.documentElement.classList.toggle('acessibilidade-texto-grande', tg);
@@ -657,6 +714,8 @@
             var el = document.querySelector('[data-acessibilidade="' + k + '"]');
             if (el) { el.classList.toggle('ativo', ativo); el.setAttribute('aria-pressed', ativo ? 'true' : 'false'); }
         });
+        var lb = localStorage.getItem('helpfull_libras') === 'true';
+        gerenciarVLibras(lb);
     }
 
     function criarPainelAcessibilidade() {
@@ -685,6 +744,7 @@
                         <button type="button" class="acessibilidade-opcao" data-acessibilidade="textoGrande"><span><strong>Texto maior</strong><small>Aumenta a leitura sem trocar de página</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
                         <button type="button" class="acessibilidade-opcao" data-acessibilidade="sublinhar"><span><strong>Sublinhar links</strong><small>Facilita localizar elementos clicáveis</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
                         <button type="button" class="acessibilidade-opcao" data-acessibilidade="semAnimacao"><span><strong>Reduzir animações</strong><small>Diminui movimentos e transições</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
+                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="libras"><span><strong>Tradutor de Libras (Gov.br)</strong><small>Ativa o avatar VLibras do Governo Federal</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
                     </div>
                     <div class="acessibilidade-rodape"><button type="button" class="acessibilidade-resetar">Restaurar padrão</button></div>
                 </section>
