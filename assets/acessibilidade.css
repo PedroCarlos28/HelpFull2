@@ -593,10 +593,34 @@ body.acessibilidade-escuro .bloco-grande {
     color: var(--tema-texto) !important;
 }
 
+body.acessibilidade-escuro .foto-carrossel-glow {
+    opacity: 1;
+    filter: blur(32px);
+    -webkit-filter: blur(32px);
+}
+
+body.acessibilidade-escuro .foto-carrossel-wrapper::before {
+    opacity: 0.95;
+    filter: blur(28px);
+    -webkit-filter: blur(28px);
+    background: var(--cor-brilho-sombra, rgba(240, 150, 80, 0.65));
+}
+
 body.acessibilidade-escuro .quadrado-grafico {
     background: rgba(16, 20, 24, 0.70) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25) !important;
+    border: none !important;
+    box-shadow: 
+        0 20px 42px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.50)),
+        0 10px 20px -3px rgba(0, 0, 0, 0.65),
+        0 2px 6px rgba(0, 0, 0, 0.40),
+        0 0 0 1px rgba(255, 255, 255, 0.20) inset !important;
+}
+
+body.acessibilidade-escuro .foto-carrossel-wrapper:hover .quadrado-grafico {
+    box-shadow: 
+        0 28px 56px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.70)),
+        0 14px 26px -3px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.30) inset !important;
 }
 
 body.acessibilidade-escuro .nav-dropdown-mobile {

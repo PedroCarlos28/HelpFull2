@@ -253,15 +253,87 @@ if (isset($_SESSION['usuario_id'])) {
             font-weight: 500;
         }
 
-        .quadrado-grafico {
+        /* WRAPPER COM EFEITO DE PROFUNDIDADE E BRILHO AMBIENTE */
+        .foto-carrossel-wrapper {
+            position: relative;
             width: 250px;
             height: 180px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 800px;
+        }
+
+        /* 1. Halo difuso com a cor da foto ativa que abraça todo o fundo do card */
+        .foto-carrossel-glow {
+            position: absolute;
+            inset: -22px -28px -34px -28px;
+            border-radius: 40px;
+            background: radial-gradient(
+                ellipse 92% 78% at 50% 50%,
+                var(--cor-brilho-1, rgba(255, 175, 105, 0.92)) 0%,
+                var(--cor-brilho-2, rgba(45, 195, 215, 0.75)) 45%,
+                transparent 76%
+            );
+            filter: blur(28px);
+            -webkit-filter: blur(28px);
+            opacity: 0.92;
+            z-index: 1;
+            pointer-events: none;
+            transform: translateZ(0);
+            transition: background 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease;
+        }
+
+        /* 2. Sombra inferior colorida de elevação para sensação de profundidade 3D */
+        .foto-carrossel-wrapper::before {
+            content: '';
+            position: absolute;
+            bottom: -18px;
+            left: 10px;
+            right: 10px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--cor-brilho-sombra, rgba(240, 150, 80, 0.55));
+            filter: blur(22px);
+            -webkit-filter: blur(22px);
+            opacity: 0.85;
+            z-index: 1;
+            pointer-events: none;
+            transition: background 0.75s ease, opacity 0.75s ease;
+        }
+
+        /* 3. Card da foto com relevo, borda interna de cristal e sombra volumétrica */
+        .quadrado-grafico {
+            width: 100%;
+            height: 100%;
             border-radius: 20px;
             overflow: hidden;
             flex-shrink: 0;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            background: #eef6f8;
             position: relative;
+            z-index: 2;
+            background: #eef6f8;
+            box-shadow: 
+                0 18px 38px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.45)),
+                0 8px 18px -4px rgba(0, 0, 0, 0.16),
+                0 2px 6px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.55) inset;
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+        }
+
+        .foto-carrossel-wrapper:hover .quadrado-grafico {
+            transform: translateY(-5px) scale(1.025);
+            box-shadow: 
+                0 28px 54px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.65)),
+                0 14px 28px -4px rgba(0, 0, 0, 0.22),
+                0 4px 10px rgba(0, 0, 0, 0.12),
+                0 0 0 1px rgba(255, 255, 255, 0.75) inset;
+        }
+
+        .foto-carrossel-wrapper:hover .foto-carrossel-glow {
+            opacity: 1;
+            filter: blur(32px);
+            -webkit-filter: blur(32px);
         }
 
         .quadrado-grafico::after {
@@ -916,6 +988,7 @@ if (isset($_SESSION['usuario_id'])) {
                 margin-bottom: 22px;
             }
 
+            .foto-carrossel-wrapper,
             .quadrado-grafico {
                 width: 100%;
                 height: 180px;
@@ -1042,6 +1115,36 @@ if (isset($_SESSION['usuario_id'])) {
             border: none !important;
             box-shadow: 0 0 8px rgba(43, 122, 140, 0.8), 0 0 16px rgba(43, 122, 140, 0.45) !important;
             animation: brilhoDot 2.4s ease-in-out infinite !important;
+        }
+
+        body.acessibilidade-escuro .foto-carrossel-glow {
+            opacity: 1;
+            filter: blur(32px);
+            -webkit-filter: blur(32px);
+        }
+
+        body.acessibilidade-escuro .foto-carrossel-wrapper::before {
+            opacity: 0.95;
+            filter: blur(28px);
+            -webkit-filter: blur(28px);
+            background: var(--cor-brilho-sombra, rgba(240, 150, 80, 0.65));
+        }
+
+        body.acessibilidade-escuro .quadrado-grafico {
+            background: rgba(16, 20, 24, 0.70) !important;
+            border: none !important;
+            box-shadow: 
+                0 20px 42px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.50)),
+                0 10px 20px -3px rgba(0, 0, 0, 0.65),
+                0 2px 6px rgba(0, 0, 0, 0.40),
+                0 0 0 1px rgba(255, 255, 255, 0.20) inset !important;
+        }
+
+        body.acessibilidade-escuro .foto-carrossel-wrapper:hover .quadrado-grafico {
+            box-shadow: 
+                0 28px 56px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.70)),
+                0 14px 26px -3px rgba(0, 0, 0, 0.75),
+                0 0 0 1px rgba(255, 255, 255, 0.30) inset !important;
         }
 
         body.acessibilidade-contraste .carrossel-slide .slide-titulo,
@@ -1276,17 +1379,20 @@ if (isset($_SESSION['usuario_id'])) {
                 </div>
             </div>
 
-            <div class="quadrado-grafico" id="carrosselImagens">
-                <img src="assets/slides/slide_0.jpg" class="carrossel-img ativo" data-index="0" alt="Cada pequeno passo conta">
-                <img src="assets/slides/slide_1.jpg" class="carrossel-img" data-index="1" alt="Você não está sozinho nessa">
-                <img src="assets/slides/slide_2.jpg" class="carrossel-img" data-index="2" alt="Bem-estar é um hábito">
-                <img src="assets/slides/slide_3.jpg" class="carrossel-img" data-index="3" alt="Sua mente merece atenção todos os dias">
-                <img src="assets/slides/slide_4.jpg" class="carrossel-img" data-index="4" alt="Um espaço só seu para respirar">
-                <img src="assets/slides/slide_5.jpg" class="carrossel-img" data-index="5" alt="Pequenos hábitos grandes transformações">
-                <img src="assets/slides/slide_6.jpg" class="carrossel-img" data-index="6" alt="Cuidar de você também é produtivo">
-                <img src="assets/slides/slide_7.jpg" class="carrossel-img" data-index="7" alt="Sua jornada emocional começa com um gesto simples">
-                <img src="assets/slides/slide_8.jpg" class="carrossel-img" data-index="8" alt="Entenda o que você sente no seu próprio ritmo">
-                <img src="assets/slides/slide_9.jpg" class="carrossel-img" data-index="9" alt="Porque toda emoção merece ser ouvida">
+            <div class="foto-carrossel-wrapper" id="fotoCarrosselWrapper">
+                <div class="foto-carrossel-glow" id="fotoCarrosselGlow" aria-hidden="true"></div>
+                <div class="quadrado-grafico" id="carrosselImagens">
+                    <img src="assets/slides/slide_0.jpg" class="carrossel-img ativo" data-index="0" alt="Cada pequeno passo conta">
+                    <img src="assets/slides/slide_1.jpg" class="carrossel-img" data-index="1" alt="Você não está sozinho nessa">
+                    <img src="assets/slides/slide_2.jpg" class="carrossel-img" data-index="2" alt="Bem-estar é um hábito">
+                    <img src="assets/slides/slide_3.jpg" class="carrossel-img" data-index="3" alt="Sua mente merece atenção todos os dias">
+                    <img src="assets/slides/slide_4.jpg" class="carrossel-img" data-index="4" alt="Um espaço só seu para respirar">
+                    <img src="assets/slides/slide_5.jpg" class="carrossel-img" data-index="5" alt="Pequenos hábitos grandes transformações">
+                    <img src="assets/slides/slide_6.jpg" class="carrossel-img" data-index="6" alt="Cuidar de você também é produtivo">
+                    <img src="assets/slides/slide_7.jpg" class="carrossel-img" data-index="7" alt="Sua jornada emocional começa com um gesto simples">
+                    <img src="assets/slides/slide_8.jpg" class="carrossel-img" data-index="8" alt="Entenda o que você sente no seu próprio ritmo">
+                    <img src="assets/slides/slide_9.jpg" class="carrossel-img" data-index="9" alt="Porque toda emoção merece ser ouvida">
+                </div>
             </div>
         </div>
     </div>
@@ -1420,6 +1526,7 @@ if (isset($_SESSION['usuario_id'])) {
             const cardHero = document.getElementById('heroCarrosselCard');
             const slides = document.querySelectorAll('.carrossel-slide');
             const imagens = document.querySelectorAll('.carrossel-img');
+            const wrapperFoto = document.getElementById('fotoCarrosselWrapper');
             const dotsContainer = document.getElementById('carrosselDots');
             const dots = document.querySelectorAll('.carrossel-dot');
 
@@ -1430,6 +1537,40 @@ if (isset($_SESSION['usuario_id'])) {
             let timerCarrossel = null;
             let timeoutDots = null;
             let cooldownScroll = false;
+
+            // Paleta de iluminação ambiente e profundidade 3D adaptada para cada slide
+            const paletaSlides = [
+                // Slide 0: Praia pôr do sol (ouro âmbar quente + turquesa oceânico)
+                { c1: 'rgba(255, 175, 105, 0.92)', c2: 'rgba(45, 195, 215, 0.75)', sombra: 'rgba(240, 150, 80, 0.55)' },
+                // Slide 1: Terra vista do espaço à noite (luzes douradas de cidades + azul cósmico)
+                { c1: 'rgba(255, 195, 90, 0.90)',  c2: 'rgba(45, 120, 235, 0.80)', sombra: 'rgba(50, 115, 220, 0.60)' },
+                // Slide 2: Montanha com Via Láctea (magenta/roxo galáctico + azul escuro)
+                { c1: 'rgba(195, 95, 230, 0.90)',  c2: 'rgba(60, 120, 215, 0.75)', sombra: 'rgba(165, 80, 210, 0.55)' },
+                // Slide 3: Superfície do oceano sereno (turquesa água + azul petróleo)
+                { c1: 'rgba(45, 175, 195, 0.90)',  c2: 'rgba(25, 95, 125, 0.75)',  sombra: 'rgba(35, 135, 155, 0.60)' },
+                // Slide 4: Lago Moraine e montanhas (turquesa glacial + azul cerúleo)
+                { c1: 'rgba(40, 195, 230, 0.92)',  c2: 'rgba(30, 140, 205, 0.75)', sombra: 'rgba(35, 165, 215, 0.55)' },
+                // Slide 5: Veleiro em mar espelho estrelado (dourado horizonte + azul noite)
+                { c1: 'rgba(245, 180, 100, 0.90)', c2: 'rgba(40, 95, 165, 0.80)',  sombra: 'rgba(205, 140, 75, 0.50)' },
+                // Slide 6: Mar de nuvens e céu infinito (azul celeste límpido + branco nuvem)
+                { c1: 'rgba(80, 175, 255, 0.90)',  c2: 'rgba(155, 215, 255, 0.75)', sombra: 'rgba(65, 150, 235, 0.55)' },
+                // Slide 7: Vista aérea de praia e mar azul (turquesa vibrante + areia quente)
+                { c1: 'rgba(0, 195, 215, 0.92)',   c2: 'rgba(235, 210, 175, 0.70)', sombra: 'rgba(0, 165, 190, 0.60)' },
+                // Slide 8: Vale Yosemite pôr do sol (coral pêssego suave + azul montanha)
+                { c1: 'rgba(250, 145, 120, 0.90)', c2: 'rgba(70, 150, 175, 0.70)', sombra: 'rgba(230, 125, 100, 0.52)' },
+                // Slide 9: Alpes Suíços e geleira (azul glacial cristalino + branco ártico)
+                { c1: 'rgba(160, 215, 255, 0.92)', c2: 'rgba(95, 170, 225, 0.75)', sombra: 'rgba(120, 190, 240, 0.50)' }
+            ];
+
+            function atualizarBrilhoFoto(idx) {
+                if (!wrapperFoto) return;
+                const paleta = paletaSlides[idx % paletaSlides.length];
+                if (paleta) {
+                    wrapperFoto.style.setProperty('--cor-brilho-1', paleta.c1);
+                    wrapperFoto.style.setProperty('--cor-brilho-2', paleta.c2);
+                    wrapperFoto.style.setProperty('--cor-brilho-sombra', paleta.sombra);
+                }
+            }
 
             function exibirDotsTemporariamente() {
                 if (!dotsContainer) return;
@@ -1459,12 +1600,16 @@ if (isset($_SESSION['usuario_id'])) {
                 if (imagens[slideAtual]) imagens[slideAtual].classList.add('ativo');
                 if (dots[slideAtual]) dots[slideAtual].classList.add('ativo');
 
+                atualizarBrilhoFoto(slideAtual);
+
                 // Revela as bolinhas para indicar que o texto trocou e há mais opções
                 exibirDotsTemporariamente();
 
                 // Reinicia a contagem de 1 minuto a partir do momento da troca
                 reiniciarTimer();
             }
+
+            atualizarBrilhoFoto(0);
 
             function proximoSlide() {
                 irParaSlide(slideAtual + 1);
