@@ -2480,17 +2480,19 @@ body:not(.acessibilidade-libras) [vw],
 
 #vlibras-access-wrapper,
 [vw] [vw-access-button] {
-    transition: transform 0.25s ease, filter 0.25s ease !important;
+    transition: filter 0.2s ease, opacity 0.2s ease !important;
     z-index: 99990 !important;
 }
 
 #vlibras-access-wrapper:hover,
 [vw] [vw-access-button]:hover {
-    transform: scale(1.08) !important;
+    filter: brightness(1.15) !important;
+    transform: translateY(-50%) !important;
 }
 
 body.acessibilidade-escuro #vlibras-access-wrapper,
 body.acessibilidade-escuro [vw] [vw-access-button] {
     filter: brightness(0.92) contrast(1.1) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5)) !important;
 }
+
 

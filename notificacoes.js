@@ -518,7 +518,7 @@
         dicionarioENLower[k.toLowerCase()] = dicionarioEN[k];
     });
 
-    var selConteudo = '.post-texto,.post-nome,.post-data,.comentario-nome,.post-avatar,.post-midias-container,.attachment-name';
+    var selConteudo = '.post-texto,.post-nome,.post-data,.comentario-nome,.post-avatar,.post-midias-container,.attachment-name,[vw],[vw-plugin-wrapper],.vw-plugin-wrapper,#vlibras-access-wrapper,#vlibras-app-root';
 
     function traduzirPagina() {
         var idioma = localStorage.getItem('helpfull_idioma') || 'pt-BR';
@@ -604,16 +604,26 @@
         _observerTraducao = new MutationObserver(function (mutations) {
             var temNovosNodes = false;
             for (var i = 0; i < mutations.length; i++) {
+                var target = mutations[i].target;
+                if (target && target.closest && target.closest('[vw], [vw-plugin-wrapper], .vw-plugin-wrapper, #vlibras-access-wrapper, #vlibras-app-root')) {
+                    continue;
+                }
                 if (mutations[i].addedNodes && mutations[i].addedNodes.length > 0) {
-                    temNovosNodes = true;
-                    break;
+                    for (var j = 0; j < mutations[i].addedNodes.length; j++) {
+                        var node = mutations[i].addedNodes[j];
+                        if (node.nodeType === 1 && (node.matches && (node.matches('[vw], [vw] *, [vw-plugin-wrapper], .vw-plugin-wrapper, #vlibras-access-wrapper, #vlibras-app-root') || (node.closest && node.closest('[vw], [vw-plugin-wrapper]'))))) {
+                            continue;
+                        }
+                        temNovosNodes = true;
+                        break;
+                    }
                 }
             }
             if (temNovosNodes) {
                 clearTimeout(timeoutId);
                 timeoutId = setTimeout(function () {
                     traduzirPagina();
-                }, 100);
+                }, 150);
             }
         });
         _observerTraducao.observe(document.body, { childList: true, subtree: true });
@@ -657,6 +667,17 @@
         var vwContainer = document.querySelector('[vw]');
 
         if (ativo) {
+            if (!vwContainer) {
+                vwContainer = document.createElement('div');
+                vwContainer.setAttribute('vw', '');
+                vwContainer.className = 'enabled';
+                vwContainer.innerHTML = '<div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>';
+                document.body.appendChild(vwContainer);
+            }
+
+            vwContainer.classList.remove('vlibras-oculto');
+            vwContainer.style.removeProperty('display');
+
             if (wrapper) {
                 wrapper.classList.remove('vlibras-oculto');
                 wrapper.style.removeProperty('display');
@@ -664,10 +685,6 @@
             if (appRoot) {
                 appRoot.classList.remove('vlibras-oculto');
                 appRoot.style.removeProperty('display');
-            }
-            if (vwContainer) {
-                vwContainer.classList.remove('vlibras-oculto');
-                vwContainer.style.removeProperty('display');
             }
 
             var iniciarWidget = function () {
@@ -710,10 +727,11 @@
                 appRoot.style.setProperty('display', 'none', 'important');
                 if (appRoot.dataset) appRoot.dataset.active = 'false';
             }
-            if (vwContainer) {
-                vwContainer.classList.add('vlibras-oculto');
-                vwContainer.style.setProperty('display', 'none', 'important');
-            }
+            var allVw = document.querySelectorAll('[vw], .vw-plugin-wrapper');
+            allVw.forEach(function(el) {
+                el.classList.add('vlibras-oculto');
+                el.style.setProperty('display', 'none', 'important');
+            });
             try {
                 if (localStorage.getItem('@vlibras-widget')) {
                     var c = JSON.parse(localStorage.getItem('@vlibras-widget') || '{}');
