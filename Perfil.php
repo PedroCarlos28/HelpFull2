@@ -1334,11 +1334,14 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             transition: all 0.3s ease;
         }
 
-        .relatorio-card-info {
+        .relatorio-bloco-info {
             display: flex;
             align-items: center;
             gap: 18px;
             flex: 1;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
 
         .relatorio-icone-circ {
@@ -1358,19 +1361,28 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             display: flex;
             flex-direction: column;
             gap: 4px;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
 
-        .relatorio-card-titulo {
+        .relatorio-titulo-texto {
             font-size: 1.12rem;
             font-weight: 800;
             color: #222;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
 
-        .relatorio-card-subtitulo {
+        .relatorio-subtitulo-texto {
             font-size: 0.86rem;
             color: #555;
             line-height: 1.45;
             font-weight: 500;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
 
         .btn-gerar-relatorio {
@@ -1388,6 +1400,15 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             box-shadow: 0 6px 20px rgba(43, 122, 140, 0.35);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
+        }
+
+        .btn-gerar-relatorio span {
+            color: #ffffff !important;
+        }
+
+        .btn-gerar-relatorio svg {
+            stroke: #ffffff !important;
+            color: #ffffff !important;
         }
 
         .btn-gerar-relatorio:hover {
@@ -2008,7 +2029,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         <!-- ÁREA DO RELATÓRIO EM PDF (FORA DO BLOCO DE GRÁFICOS) -->
         <div class="relatorio-acao-container">
-            <div class="relatorio-card-info">
+            <div class="relatorio-bloco-info">
                 <div class="relatorio-icone-circ">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -2019,20 +2040,20 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     </svg>
                 </div>
                 <div class="relatorio-textos">
-                    <h4 class="relatorio-card-titulo">Relatório Completo de Uso e Bem-Estar</h4>
-                    <p class="relatorio-card-subtitulo">
+                    <h4 class="relatorio-titulo-texto">Relatório Completo de Uso e Bem-Estar</h4>
+                    <p class="relatorio-subtitulo-texto">
                         Gere um documento em PDF com suas reações emocionais, gráficos do mês, publicações da comunidade e conteúdos assistidos.
                         <strong>100% confidencial: nenhum texto escrito do seu diário é exposto.</strong>
                     </p>
                 </div>
             </div>
             <a href="relatorio_pdf.php" target="_blank" class="btn-gerar-relatorio" id="btnGerarRelatorioPdf">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 6 2 18 2 18 9"></polyline>
                     <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
                     <rect x="6" y="14" width="12" height="8"></rect>
                 </svg>
-                <span>Criar Relatório em PDF</span>
+                <span style="color: #ffffff !important;">Criar Relatório em PDF</span>
             </a>
         </div>
     </div>

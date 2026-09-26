@@ -4140,17 +4140,49 @@ html body.acessibilidade-escuro .relatorio-acao-container {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
 }
 
+html body.acessibilidade-escuro .relatorio-bloco-info,
+html body.acessibilidade-escuro .relatorio-textos,
+html body.acessibilidade-escuro .relatorio-titulo-texto,
+html body.acessibilidade-escuro .relatorio-subtitulo-texto,
+html body.acessibilidade-escuro .relatorio-card-info,
+html body.acessibilidade-escuro .relatorio-card-titulo,
+html body.acessibilidade-escuro .relatorio-card-subtitulo,
+html body.acessibilidade-escuro [class*="relatorio-"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+html body.acessibilidade-escuro .relatorio-icone-circ {
+    background: linear-gradient(135deg, #2b7a8c 0%, #1e5a67 100%) !important;
+    box-shadow: 0 4px 14px rgba(43, 122, 140, 0.25) !important;
+}
+
+html body.acessibilidade-escuro .relatorio-titulo-texto,
 html body.acessibilidade-escuro .relatorio-card-titulo {
     color: #f5f5f7 !important;
 }
 
+html body.acessibilidade-escuro .relatorio-subtitulo-texto,
 html body.acessibilidade-escuro .relatorio-card-subtitulo {
     color: #a1a1a6 !important;
 }
 
-html body.acessibilidade-escuro .btn-gerar-relatorio {
-    background: linear-gradient(135deg, #328498 0%, #205c6a 100%) !important;
+html body.acessibilidade-escuro .btn-gerar-relatorio,
+html body.acessibilidade-escuro a.btn-gerar-relatorio,
+html body.acessibilidade-escuro .btn-gerar-relatorio span,
+html body.acessibilidade-escuro .btn-imprimir-pdf,
+html body.acessibilidade-escuro .btn-imprimir-pdf span {
+    background: linear-gradient(135deg, #2b7a8c 0%, #1a5b6a 100%) !important;
+    color: #ffffff !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+html body.acessibilidade-escuro .btn-gerar-relatorio svg,
+html body.acessibilidade-escuro .btn-imprimir-pdf svg {
+    stroke: #ffffff !important;
+    color: #ffffff !important;
 }
 
 html body.acessibilidade-contraste .relatorio-acao-container,
@@ -4159,12 +4191,24 @@ html body.acessibilidade-contraste.acessibilidade-escuro .relatorio-acao-contain
     border: 2px solid #ffff00 !important;
 }
 
+html body.acessibilidade-contraste .relatorio-bloco-info,
+html body.acessibilidade-contraste .relatorio-textos,
+html body.acessibilidade-contraste .relatorio-titulo-texto,
+html body.acessibilidade-contraste .relatorio-subtitulo-texto {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+html body.acessibilidade-contraste .relatorio-titulo-texto,
 html body.acessibilidade-contraste .relatorio-card-titulo,
+html body.acessibilidade-contraste.acessibilidade-escuro .relatorio-titulo-texto,
 html body.acessibilidade-contraste.acessibilidade-escuro .relatorio-card-titulo {
     color: #ffff00 !important;
 }
 
+html body.acessibilidade-contraste .relatorio-subtitulo-texto,
 html body.acessibilidade-contraste .relatorio-card-subtitulo,
+html body.acessibilidade-contraste.acessibilidade-escuro .relatorio-subtitulo-texto,
 html body.acessibilidade-contraste.acessibilidade-escuro .relatorio-card-subtitulo {
     color: #ffffff !important;
 }
@@ -4174,6 +4218,11 @@ html body.acessibilidade-contraste.acessibilidade-escuro .btn-gerar-relatorio {
     background: #ffff00 !important;
     color: #000000 !important;
     border: 2px solid #ffffff !important;
+}
+
+html body.acessibilidade-contraste .btn-gerar-relatorio span,
+html body.acessibilidade-contraste.acessibilidade-escuro .btn-gerar-relatorio span {
+    color: #000000 !important;
 }
 
 html body.acessibilidade-contraste .btn-gerar-relatorio svg,
