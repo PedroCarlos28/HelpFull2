@@ -1318,18 +1318,19 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         /* Card e Botão de Relatório em PDF */
         .relatorio-acao-container {
-            margin-top: 30px;
+            margin-top: 25px;
+            margin-bottom: 25px;
             background: rgba(234, 234, 234, 0.85);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: 24px 30px;
+            border-radius: 35px;
+            padding: 24px 32px;
             border: 1px solid rgba(255, 255, 255, 0.7);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
 
@@ -2003,36 +2004,36 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- ÁREA DO RELATÓRIO EM PDF -->
-            <div class="relatorio-acao-container">
-                <div class="relatorio-card-info">
-                    <div class="relatorio-icone-circ">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                    </div>
-                    <div class="relatorio-textos">
-                        <h4 class="relatorio-card-titulo">Relatório Completo de Uso e Bem-Estar</h4>
-                        <p class="relatorio-card-subtitulo">
-                            Gere um documento em PDF com suas reações emocionais, gráficos do mês, publicações da comunidade e conteúdos assistidos.
-                            <strong>100% confidencial: nenhum texto escrito do seu diário é exposto.</strong>
-                        </p>
-                    </div>
-                </div>
-                <a href="relatorio_pdf.php" target="_blank" class="btn-gerar-relatorio" id="btnGerarRelatorioPdf">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                        <rect x="6" y="14" width="12" height="8"></rect>
+        <!-- ÁREA DO RELATÓRIO EM PDF (FORA DO BLOCO DE GRÁFICOS) -->
+        <div class="relatorio-acao-container">
+            <div class="relatorio-card-info">
+                <div class="relatorio-icone-circ">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
-                    <span>Criar Relatório em PDF</span>
-                </a>
+                </div>
+                <div class="relatorio-textos">
+                    <h4 class="relatorio-card-titulo">Relatório Completo de Uso e Bem-Estar</h4>
+                    <p class="relatorio-card-subtitulo">
+                        Gere um documento em PDF com suas reações emocionais, gráficos do mês, publicações da comunidade e conteúdos assistidos.
+                        <strong>100% confidencial: nenhum texto escrito do seu diário é exposto.</strong>
+                    </p>
+                </div>
             </div>
+            <a href="relatorio_pdf.php" target="_blank" class="btn-gerar-relatorio" id="btnGerarRelatorioPdf">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Criar Relatório em PDF</span>
+            </a>
         </div>
     </div>
 

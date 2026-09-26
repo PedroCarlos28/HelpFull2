@@ -744,7 +744,6 @@ $dataHoraEmissao = date('d/m/Y \à\s H:i');
         <!-- CABEÇALHO -->
         <header class="relatorio-cabecalho">
             <div class="logo-marca">
-                <img src="assets/logoHelpFull.png" alt="HelpFull" onerror="this.style.display='none'">
                 <div>
                     <h1>HELPFULL<span>✦</span></h1>
                     <div class="logo-slogan">Relatório Pessoal de Bem-Estar e Saúde Mental</div>
