@@ -887,7 +887,7 @@ if (isset($_SESSION['usuario_id'])) {
 
         window.mostrarInstrucoesFirebase = mostrarInstrucoesFirebase;
     </script>
-    <script src="assets/fundo-animado.js?v=20260925-v3"></script>
+    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
 </body>
 
 </html>

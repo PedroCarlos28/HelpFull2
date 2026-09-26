@@ -72,15 +72,23 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             min-height: 100vh;
         }
 
-        .imagem-fundo {
+        .fundo-animado-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
             z-index: 0;
             pointer-events: none;
+            display: block;
+            filter: blur(32px);
+            -webkit-filter: blur(32px);
+            transform: scale(1.08);
+            transform-origin: center center;
+        }
+
+        .imagem-fundo {
+            display: none;
         }
 
         .conteudo-site {
@@ -1117,6 +1125,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 
 <body>
 
+    <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas sem-mouse" data-mouse="false"></canvas>
     <img class="imagem-fundo" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
 
     <div class="nav-container-global">
@@ -1452,6 +1461,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
 
 
     </script>
+    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
     <script src="notificacoes.js?v=20260924-v7"
         onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
 </body>

@@ -1183,13 +1183,33 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
 
         .graficos-container {
-            background-image: url('assets/HELPFULL.png');
-            background-size: cover;
-            background-position: center;
+            background-color: #F3F3F3;
             border-radius: 35px;
             padding: 30px;
             position: relative;
             margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .graficos-container > *:not(.fundo-animado-canvas) {
+            position: relative;
+            z-index: 2;
+        }
+
+        .fundo-animado-canvas.fundo-animado-bloco {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            z-index: 0;
+            pointer-events: none;
+            display: block;
+            filter: blur(28px);
+            -webkit-filter: blur(28px);
+            transform: scale(1.08);
+            transform-origin: center center;
         }
 
         .graficos-badge {
@@ -1855,6 +1875,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         </div>
 
         <div class="graficos-container">
+            <canvas class="fundo-animado-canvas fundo-animado-bloco sem-mouse" data-mouse="false"></canvas>
             <div class="graficos-badge">Gráficos</div>
             <div class="grid-duplo">
                 <div class="grafico-card">
@@ -2253,6 +2274,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             }
         }
     </script>
+    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
     <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
 </body>
 </html>

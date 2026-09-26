@@ -176,15 +176,34 @@ if (isset($_SESSION['usuario_id'])) {
 
         .cabecalho-imagem {
             background-color: #F3F3F3;
-            background-image: url('assets/HELPFULL.png');
-            background-size: cover;
-            background-position: center;
             border-radius: 30px;
             padding: 40px;
             margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             width: 100%;
             position: relative;
+            overflow: hidden;
+        }
+
+        .cabecalho-imagem > *:not(.fundo-animado-canvas) {
+            position: relative;
+            z-index: 2;
+        }
+
+        .fundo-animado-canvas.fundo-animado-bloco {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            z-index: 0;
+            pointer-events: none;
+            display: block;
+            filter: blur(28px);
+            -webkit-filter: blur(28px);
+            transform: scale(1.08);
+            transform-origin: center center;
         }
 
         .sobre-content {
@@ -1499,6 +1518,7 @@ if (isset($_SESSION['usuario_id'])) {
 
     <div class="conteudo-site">
         <div class="cabecalho-imagem" id="cabecalhoFundo">
+            <canvas class="fundo-animado-canvas fundo-animado-bloco sem-mouse" data-mouse="false"></canvas>
             <div id="tabs-original-container">
                 <div class="tabs-capsula" id="tabsElement">
                     <div class="tab-slider" id="tabSlider"></div>
@@ -2212,6 +2232,7 @@ if (isset($_SESSION['usuario_id'])) {
             }
         }
     </script>
+    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
     <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
 </body>
 
