@@ -46,9 +46,9 @@ if (isset($_SESSION['usuario_id'])) {
             z-index: 0;
             pointer-events: none;
             display: block;
-            filter: blur(16px);
-            -webkit-filter: blur(16px);
-            transform: scale(1.04);
+            filter: blur(32px);
+            -webkit-filter: blur(32px);
+            transform: scale(1.08);
             transform-origin: center center;
         }
 
@@ -887,7 +887,7 @@ if (isset($_SESSION['usuario_id'])) {
 
         window.mostrarInstrucoesFirebase = mostrarInstrucoesFirebase;
     </script>
-    <script src="assets/fundo-animado.js?v=20260925-v2"></script>
+    <script src="assets/fundo-animado.js?v=20260925-v3"></script>
 </body>
 
 </html>

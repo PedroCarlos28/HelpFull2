@@ -66,9 +66,9 @@ if (isset($_SESSION['usuario_id'])) {
             z-index: 0;
             pointer-events: none;
             display: block;
-            filter: blur(16px);
-            -webkit-filter: blur(16px);
-            transform: scale(1.04);
+            filter: blur(32px);
+            -webkit-filter: blur(32px);
+            transform: scale(1.08);
             transform-origin: center center;
         }
 
@@ -1556,7 +1556,7 @@ if (isset($_SESSION['usuario_id'])) {
             }, { passive: true });
         })();
     </script>
-    <script src="assets/fundo-animado.js?v=20260925-v2"></script>
+    <script src="assets/fundo-animado.js?v=20260925-v3"></script>
     <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
 
 </body>
