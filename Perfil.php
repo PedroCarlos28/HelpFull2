@@ -1678,7 +1678,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v21">
 </head>
 
-<body>
+<body class="pagina-perfil">
     <div class="overlay-editar" id="overlayEditar" onclick="toggleEdicao(false)"></div>
 
     <div class="nav-container-global" id="nav-container-global">
@@ -1725,26 +1725,6 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
             </button>
-
-            <button class="btn-notificacao-separado" id="btnNotificacaoDetached" onclick="togglePainelNotificacoes()">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
-                </svg>
-            </button>
-        </div>
-
-        <div class="painel-notificacoes" id="painelNotificacoes">
-            <div class="painel-header-top">
-                <h3>Notificações</h3>
-                <button class="btn-fechar-painel" onclick="togglePainelNotificacoes()">×</button>
-            </div>
-            <div class="painel-actions">
-                <button class="btn-limpar-pill" onclick="limparNotificacoes()">Limpar</button>
-            </div>
-            <div class="lista-notificacoes" id="containerListaNotificacoes">
-                <p style="font-size: 0.8rem; text-align: left; opacity: 0.6;">Nenhuma notificação nova.</p>
-            </div>
         </div>
     </div>
 
@@ -1809,6 +1789,21 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     </div>
                 </div>
             </form>
+        </div>
+
+        <div class="card-perfil card-notificacoes-bloco" id="cardNotificacoesPerfil">
+            <div class="notificacoes-bloco-header">
+                <div class="notificacoes-bloco-titulo">
+                    <span class="notificacoes-icone-tag">🔔</span>
+                    <h2 class="titulo-secao" style="margin: 0;" id="tituloNotificacoesPerfil">Notificações</h2>
+                </div>
+                <div class="painel-actions" style="margin: 0;">
+                    <button type="button" class="btn-limpar-pill" id="btnLimparNotificacoesPerfil" onclick="limparNotificacoes()">Limpar</button>
+                </div>
+            </div>
+            <div class="lista-notificacoes" id="containerListaNotificacoesPerfil">
+                <p style="font-size: 0.88rem; text-align: left; opacity: 0.6; margin: 8px 0;" class="nenhuma-notif-texto">Nenhuma notificação nova.</p>
+            </div>
         </div>
 
         <div class="card-perfil stats-container">

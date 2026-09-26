@@ -3130,4 +3130,168 @@ body.acessibilidade-escuro .onboarding-dica-painel {
     border-color: rgba(56, 163, 184, 0.4) !important;
 }
 
+/* =============================================================
+   BLOCO DE NOTIFICAÇÕES NO PERFIL & VISIBILIDADE RESPONSIVA
+   ============================================================= */
+
+/* Bloco incorporado no Perfil */
+.card-notificacoes-bloco {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 28px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card-notificacoes-bloco.destaque-notificacoes {
+    animation: pulsoDestaqueNotif 1.4s ease;
+}
+
+@keyframes pulsoDestaqueNotif {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(43, 122, 140, 0); }
+    50% { transform: scale(1.015); box-shadow: 0 0 25px rgba(43, 122, 140, 0.45); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(43, 122, 140, 0); }
+}
+
+.notificacoes-bloco-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.notificacoes-bloco-titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notificacoes-icone-tag {
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.card-notificacoes-bloco .lista-notificacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.card-notificacoes-bloco .item-notificacao {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    padding: 14px 18px 14px 28px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.card-notificacoes-bloco .item-notificacao:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateX(4px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.card-notificacoes-bloco .item-notificacao .barra-intensidade {
+    position: absolute;
+    left: 10px;
+    top: 14px;
+    bottom: 14px;
+    width: 5px;
+    border-radius: 6px;
+}
+
+.card-notificacoes-bloco .item-notificacao.alta .barra-intensidade { background: #eab8b8; }
+.card-notificacoes-bloco .item-notificacao.media .barra-intensidade { background: #fff1a0; }
+.card-notificacoes-bloco .item-notificacao.baixa .barra-intensidade { background: #b5ff99; }
+
+.card-notificacoes-bloco .notif-content strong {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.card-notificacoes-bloco .notif-content p {
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.35;
+    margin: 0;
+}
+
+.card-notificacoes-bloco .notif-link-btn {
+    padding: 6px 16px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #2b7a8c, #236878);
+    color: #ffffff !important;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.card-notificacoes-bloco .notif-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(43, 122, 140, 0.35);
+    filter: brightness(1.08);
+}
+
+/* Modo Escuro */
+body.acessibilidade-escuro .card-notificacoes-bloco .item-notificacao {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.acessibilidade-escuro .card-notificacoes-bloco .item-notificacao:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.acessibilidade-escuro .card-notificacoes-bloco .notif-content strong {
+    color: #ffffff !important;
+}
+
+body.acessibilidade-escuro .card-notificacoes-bloco .notif-content p {
+    color: #94a3b8 !important;
+}
+
+body.acessibilidade-escuro .card-notificacoes-bloco .btn-limpar-pill {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #e2e8f0 !important;
+}
+
+body.acessibilidade-escuro .card-notificacoes-bloco .btn-limpar-pill:hover {
+    background: rgba(239, 68, 68, 0.25) !important;
+    color: #fca5a5 !important;
+}
+
+/* Ocultação na página de Perfil (já possui o bloco visível) */
+body.pagina-perfil .btn-notificacao-separado,
+body.pagina-perfil .btn-notificacao-separado.visivel,
+body.pagina-perfil .painel-notificacoes,
+body.pagina-perfil .painel-notificacoes.aberto {
+    display: none !important;
+}
+
+/* No celular (telas menores ou iguais a 768px), o botão flutuante e o dropdown de notificações
+   são ocultados em todas as telas, pois o usuário visualiza suas notificações pela aba do Perfil */
+@media (max-width: 768px) {
+    .btn-notificacao-separado,
+    .btn-notificacao-separado.visivel,
+    .painel-notificacoes,
+    .painel-notificacoes.aberto {
+        display: none !important;
+    }
+}
+
+
 

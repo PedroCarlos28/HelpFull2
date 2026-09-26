@@ -16,16 +16,36 @@
     function getToast()     { return document.getElementById('notificacaoHelpFull'); }
     function getSininho()   { return document.getElementById('sininhoNavbar'); }
     function getPainel()    { return document.getElementById('painelNotificacoes'); }
-    function getContainer() { return document.getElementById('containerListaNotificacoes'); }
+    function getContainers() {
+        var arr = [];
+        var c1 = document.getElementById('containerListaNotificacoes');
+        if (c1) arr.push(c1);
+        var c2 = document.getElementById('containerListaNotificacoesPerfil');
+        if (c2 && c2 !== c1) arr.push(c2);
+        return arr;
+    }
+    function getContainer() {
+        var arr = getContainers();
+        return arr.length > 0 ? arr[0] : null;
+    }
 
     /* ── Badge sininho ────────────────────────────────────── */
     function atualizarBadge() {
         var s = getSininho();
-        if (s) s.style.display = _totalNotifs > 0 ? 'flex' : 'none';
+        if (s) {
+            // Se estiver na tela de perfil com o bloco de notificações aberto, oculta o badge no sino
+            if (document.getElementById('cardNotificacoesPerfil') || document.body.classList.contains('pagina-perfil')) {
+                s.style.display = 'none';
+            } else {
+                s.style.display = _totalNotifs > 0 ? 'flex' : 'none';
+            }
+        }
     }
 
     /* ── Botão sino flutuante ─────────────────────────────── */
     function mostrarBtnSino() {
+        // Se estiver na página do perfil, não mostra o botão flutuante pois as notificações estão no bloco
+        if (document.body.classList.contains('pagina-perfil') || document.getElementById('cardNotificacoesPerfil')) return;
         var btn = getBtnSino();
         if (!btn) return;
         btn.classList.add('visivel');
@@ -58,7 +78,10 @@
     };
 
     window.limparNotificacoes = function () {
-        if (!confirm('Deseja limpar as notificações?')) return;
+        var msgConfirm = (localStorage.getItem('helpfull_idioma') === 'en')
+            ? 'Do you want to clear notifications?'
+            : 'Deseja limpar as notificações?';
+        if (!confirm(msgConfirm)) return;
         fetch('notificacao_ia.php?acao=limpar').catch(function () {});
         fetch('social_notificacoes_proc.php?acao=limpar').catch(function () {});
         _totalNotifs = 0;
@@ -66,40 +89,52 @@
         esconderBtnSino();
         var p = getPainel();
         if (p) p.classList.remove('aberto');
-        var c = getContainer();
-        if (c) c.innerHTML = '<p style="font-size:0.8rem;text-align:left;opacity:0.6;">Nenhuma notificação nova.</p>';
+        var emptyMsg = (localStorage.getItem('helpfull_idioma') === 'en')
+            ? 'No new notifications.'
+            : 'Nenhuma notificação nova.';
+        var targets = getContainers();
+        targets.forEach(function (c) {
+            c.innerHTML = '<p style="font-size:0.88rem;text-align:left;opacity:0.6;margin:8px 0;" class="nenhuma-notif-texto">' + emptyMsg + '</p>';
+        });
     };
 
     /* ── Popular painel ───────────────────────────────────── */
     function popularPainel(data, append) {
-        var c = getContainer();
-        if (!c || !data) return;
-        if (!append) {
-            c.innerHTML = '';
-        } else {
-            var ph = c.querySelector('p');
-            if (ph) ph.remove();
-        }
-        var item = document.createElement('div');
-        item.className = 'item-notificacao ' + (data.intensidade || 'baixa');
+        var targets = getContainers();
+        if (!targets.length || !data) return;
         var href = data.link || '#';
+        var txtBtn = data.textoBotao || (localStorage.getItem('helpfull_idioma') === 'en' ? 'View' : 'Ver');
         var btnHtml = (href !== '#')
-            ? '<a href="' + _esc(href) + '" class="notif-link-btn">' + _esc(data.textoBotao || 'Ver') + '</a>'
+            ? '<a href="' + _esc(href) + '" class="notif-link-btn">' + _esc(txtBtn) + '</a>'
             : '';
-        item.innerHTML =
-            '<div class="barra-intensidade"></div>' +
-            '<div class="notif-content">' +
-            '<strong>' + _esc(data.titulo || 'Notificação') + '</strong>' +
-            '<p>' + _esc(data.mensagem || '') + '</p>' +
-            '</div>' + btnHtml;
-        if (href !== '#') {
-            item.style.cursor = 'pointer';
-            item.addEventListener('click', function (e) {
-                if (!e.target.classList.contains('notif-link-btn'))
-                    window.location.href = href;
-            });
-        }
-        c.appendChild(item);
+
+        targets.forEach(function (c) {
+            if (!append) {
+                c.innerHTML = '';
+            } else {
+                var ph = c.querySelector('p.nenhuma-notif-texto, p');
+                if (ph && (ph.classList.contains('nenhuma-notif-texto') || ph.textContent.indexOf('Nenhuma') !== -1 || ph.textContent.indexOf('No new') !== -1)) {
+                    ph.remove();
+                }
+            }
+            var item = document.createElement('div');
+            item.className = 'item-notificacao ' + (data.intensidade || 'baixa');
+            item.innerHTML =
+                '<div class="barra-intensidade"></div>' +
+                '<div class="notif-content">' +
+                '<strong>' + _esc(data.titulo || 'Notificação') + '</strong>' +
+                '<p>' + _esc(data.mensagem || '') + '</p>' +
+                '</div>' + btnHtml;
+            if (href !== '#') {
+                item.style.cursor = 'pointer';
+                item.addEventListener('click', function (e) {
+                    if (!e.target.classList.contains('notif-link-btn'))
+                        window.location.href = href;
+                });
+            }
+            c.appendChild(item);
+        });
+
         _totalNotifs++;
         atualizarBadge();
     }
@@ -186,11 +221,22 @@
             }
         } catch(e) {}
 
-        // garante placeholder se sem notificações
-        var c = getContainer();
-        if (c && c.children.length === 0) {
-            c.innerHTML = '<p style="font-size:0.8rem;text-align:left;opacity:0.6;">Nenhuma notificação nova.</p>';
+        // Se estiver na tela de perfil com o bloco de notificações aberto, marca como lidas
+        if (document.getElementById('cardNotificacoesPerfil') || document.body.classList.contains('pagina-perfil')) {
+            fetch('notificacao_ia.php?acao=marcar_lidas').catch(function () {});
+            fetch('social_notificacoes_proc.php?acao=marcar_lidas').catch(function () {});
         }
+
+        // garante placeholder se sem notificações
+        var emptyMsg = (localStorage.getItem('helpfull_idioma') === 'en')
+            ? 'No new notifications.'
+            : 'Nenhuma notificação nova.';
+        var targets = getContainers();
+        targets.forEach(function (c) {
+            if (c.children.length === 0) {
+                c.innerHTML = '<p style="font-size:0.88rem;text-align:left;opacity:0.6;margin:8px 0;" class="nenhuma-notif-texto">' + emptyMsg + '</p>';
+            }
+        });
     }
 
     /* ── Acessibilidade ───────────────────────────────────── */
@@ -403,6 +449,10 @@
         'Sublinhar Links': 'Underline Links',
         'Reduzir Animações': 'Reduce Motion',
         'Tradutor de Libras (Gov.br)': 'Libras Translator (Gov.br)',
+        'Notificações': 'Notifications',
+        'Nenhuma notificação nova.': 'No new notifications.',
+        'Limpar': 'Clear',
+        'Ver': 'View',
         'Calendário': 'Calendar',
         'Detalhes do dia': 'Day details',
         'Gráficos': 'Charts',
@@ -756,6 +806,16 @@
                     else if (k === 'libras') span.textContent = 'Tradutor de Libras (Gov.br)';
                 }
             });
+        }
+
+        var titNotif = document.getElementById('tituloNotificacoesPerfil');
+        var btnLimparNotif = document.getElementById('btnLimparNotificacoesPerfil');
+        if (idioma === 'en') {
+            if (titNotif) titNotif.textContent = 'Notifications';
+            if (btnLimparNotif) btnLimparNotif.textContent = 'Clear';
+        } else {
+            if (titNotif) titNotif.textContent = 'Notificações';
+            if (btnLimparNotif) btnLimparNotif.textContent = 'Limpar';
         }
 
         document.querySelectorAll('.nav-links a,.links-capsula a,.nav-dropdown-mobile a').forEach(function (a) {
@@ -1470,6 +1530,21 @@
         garantirBotaoAcessibilidade();
         vincularHoverPerfil();
         carregarNotificacoes();
+
+        var sNav = document.getElementById('sininhoNavbar');
+        var cardNotif = document.getElementById('cardNotificacoesPerfil');
+        if (sNav && cardNotif) {
+            sNav.style.cursor = 'pointer';
+            sNav.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                cardNotif.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                cardNotif.classList.add('destaque-notificacoes');
+                setTimeout(function () {
+                    cardNotif.classList.remove('destaque-notificacoes');
+                }, 1400);
+            });
+        }
 
         // fechar painel ao clicar fora
         document.addEventListener('click', function (e) {
