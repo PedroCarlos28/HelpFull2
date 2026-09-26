@@ -70,15 +70,25 @@ $password = 'HelpFull-2026';
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
 
 try {
-    // Tenta fazer a conexão com o banco de dados
-    $pdo = new PDO($dsn, $user, $password);
-
-    // Configura o PDO para mostrar os erros caso algo dê errado
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
+    // Conexão otimizada com persistência para evitar novo handshake SSL/TCP a cada navegação
+    $pdoOptions = [
+        PDO::ATTR_PERSISTENT => true,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_TIMEOUT => 5
+    ];
+    $pdo = new PDO($dsn, $user, $password, $pdoOptions);
 } catch (PDOException $e) {
-    die("Erro ao conectar com o banco de dados: " . $e->getMessage());
+    // Fallback sem conexao persistente caso o servidor limite conexoes persistentes
+    try {
+        $pdo = new PDO($dsn, $user, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_TIMEOUT => 5
+        ]);
+    } catch (PDOException $e2) {
+        die("Erro ao conectar com o banco de dados: " . $e2->getMessage());
+    }
 }
 
 // Validação e restauração de sessão persistente via cookie

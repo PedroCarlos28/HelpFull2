@@ -1124,6 +1124,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
         }
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
+    <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
 <body>
@@ -1467,6 +1468,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
     <script src="notificacoes.js?v=20260926-v3"
         onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260926-v3';document.body.appendChild(s);}"></script>
+    <script src="assets/transicao.js?v=20260926-v1"></script>
 </body>
 
 </html>
