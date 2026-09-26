@@ -1404,11 +1404,15 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         .btn-gerar-relatorio span {
             color: #ffffff !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
 
         .btn-gerar-relatorio svg {
             stroke: #ffffff !important;
             color: #ffffff !important;
+            fill: none !important;
         }
 
         .btn-gerar-relatorio:hover {
