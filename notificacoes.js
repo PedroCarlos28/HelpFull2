@@ -209,6 +209,7 @@
             preferencias:'Preferências aplicadas em todo o site',
             fechar:'Fechar acessibilidade',
             escuro:['Modo noturno','Fundo preto e superfícies cinza escuro'],
+            autoTema:['Seguir dispositivo','Sincroniza com o tema do seu aparelho'],
             contraste:['Mais contraste','Realça bordas, textos e links'],
             textoGrande:['Texto maior','Aumenta a leitura sem trocar de página'],
             sublinhar:['Sublinhar links','Facilita localizar elementos clicáveis'],
@@ -222,6 +223,7 @@
             preferencias:'Preferences applied across the site',
             fechar:'Close accessibility options',
             escuro:['Dark mode','Dark background and gray surfaces'],
+            autoTema:['Sync with device','Matches your device appearance'],
             contraste:['High contrast','Highlights borders, text and links'],
             textoGrande:['Larger text','Improves readability without changing pages'],
             sublinhar:['Underline links','Makes clickable elements easier to find'],
@@ -645,7 +647,7 @@
         if (fec) fec.setAttribute('aria-label', t.fechar);
         if (rot) rot.textContent = t.idioma;
         if (res) res.textContent = t.restaurar;
-        Object.keys(prefAcess).forEach(function (k) {
+        Object.keys(prefAcess).concat(['autoTema']).forEach(function (k) {
             var el = document.querySelector('[data-acessibilidade="' + k + '"]');
             if (!el || !t[k]) return;
             var ti = el.querySelector('strong');
@@ -743,6 +745,12 @@
     }
 
     function aplicarAcessibilidade() {
+        var modoTema = localStorage.getItem('helpfull_tema_modo') || 'manual';
+        if (modoTema === 'sistema') {
+            var prefereEscuro = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            localStorage.setItem('helpfull_escuro', prefereEscuro ? 'true' : 'false');
+        }
+
         var tg = localStorage.getItem('helpfull_textoGrande') === 'true';
         document.documentElement.classList.toggle('acessibilidade-texto-grande', tg);
         document.body.classList.toggle('acessibilidade-texto-grande', tg);
@@ -754,8 +762,32 @@
             var el = document.querySelector('[data-acessibilidade="' + k + '"]');
             if (el) { el.classList.toggle('ativo', ativo); el.setAttribute('aria-pressed', ativo ? 'true' : 'false'); }
         });
+
+        var btnAuto = document.querySelector('[data-acessibilidade="autoTema"]');
+        if (btnAuto) {
+            var autoAtivo = modoTema === 'sistema';
+            btnAuto.classList.toggle('ativo', autoAtivo);
+            btnAuto.setAttribute('aria-pressed', autoAtivo ? 'true' : 'false');
+        }
+
         var lb = localStorage.getItem('helpfull_libras') === 'true';
         gerenciarVLibras(lb);
+    }
+
+    if (window.matchMedia) {
+        try {
+            var mq = window.matchMedia('(prefers-color-scheme: dark)');
+            var onPrefChange = function () {
+                if (localStorage.getItem('helpfull_tema_modo') === 'sistema') {
+                    aplicarAcessibilidade();
+                }
+            };
+            if (mq.addEventListener) {
+                mq.addEventListener('change', onPrefChange);
+            } else if (mq.addListener) {
+                mq.addListener(onPrefChange);
+            }
+        } catch (e) {}
     }
 
     function criarPainelAcessibilidade() {
@@ -780,6 +812,7 @@
                             </select>
                         </div>
                         <button type="button" class="acessibilidade-opcao" data-acessibilidade="escuro"><span><strong>Modo noturno</strong><small>Fundo preto e superfícies cinza escuro</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
+                        <button type="button" class="acessibilidade-opcao" data-acessibilidade="autoTema"><span><strong>Seguir dispositivo</strong><small>Sincroniza com o tema do seu aparelho</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
                         <button type="button" class="acessibilidade-opcao" data-acessibilidade="contraste"><span><strong>Mais contraste</strong><small>Realça bordas, textos e links</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
                         <button type="button" class="acessibilidade-opcao" data-acessibilidade="textoGrande"><span><strong>Texto maior</strong><small>Aumenta a leitura sem trocar de página</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
                         <button type="button" class="acessibilidade-opcao" data-acessibilidade="sublinhar"><span><strong>Sublinhar links</strong><small>Facilita localizar elementos clicáveis</small></span><span class="acessibilidade-status" aria-hidden="true"></span></button>
@@ -910,9 +943,7 @@
             el.addEventListener('click', function (e) {
                 e.preventDefault();
                 var k = el.getAttribute('data-acessibilidade');
-                var ativo = localStorage.getItem('helpfull_' + k) === 'true';
-                localStorage.setItem('helpfull_' + k, (!ativo).toString());
-                aplicarAcessibilidade();
+                window.alternarAcessibilidadeOpcao(k);
             });
         });
         var re = p.querySelector('.acessibilidade-resetar');
@@ -922,6 +953,7 @@
                 e.preventDefault();
                 Object.keys(prefAcess).forEach(function (k) { localStorage.removeItem('helpfull_' + k); });
                 localStorage.removeItem('helpfull_textoGrande');
+                localStorage.removeItem('helpfull_tema_modo');
                 localStorage.setItem('helpfull_idioma', 'pt-BR');
                 if (si) si.value = 'pt-BR';
                 aplicarAcessibilidade();
@@ -931,6 +963,38 @@
         aplicarAcessibilidade();
         aplicarIdioma();
     }
+
+    window.definirTemaModo = function (modo) {
+        if (modo === 'sistema') {
+            localStorage.setItem('helpfull_tema_modo', 'sistema');
+        } else if (modo === 'escuro') {
+            localStorage.setItem('helpfull_tema_modo', 'escuro');
+            localStorage.setItem('helpfull_escuro', 'true');
+        } else {
+            localStorage.setItem('helpfull_tema_modo', 'claro');
+            localStorage.setItem('helpfull_escuro', 'false');
+        }
+        aplicarAcessibilidade();
+    };
+
+    window.alternarAcessibilidadeOpcao = function (k) {
+        if (k === 'autoTema') {
+            var modoAtual = localStorage.getItem('helpfull_tema_modo');
+            if (modoAtual === 'sistema') {
+                localStorage.setItem('helpfull_tema_modo', 'manual');
+            } else {
+                localStorage.setItem('helpfull_tema_modo', 'sistema');
+            }
+            aplicarAcessibilidade();
+            return;
+        }
+        if (k === 'escuro') {
+            localStorage.setItem('helpfull_tema_modo', 'manual');
+        }
+        var ativo = localStorage.getItem('helpfull_' + k) === 'true';
+        localStorage.setItem('helpfull_' + k, (!ativo).toString());
+        aplicarAcessibilidade();
+    };
 
     /* ── Inicialização ────────────────────────────────────── */
     aplicarAcessibilidade();

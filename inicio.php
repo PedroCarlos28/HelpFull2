@@ -14,6 +14,7 @@ if (isset($_SESSION['usuario_id'])) {
         $usuarioLogado = null;
     }
 }
+$primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_concluido']);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -1697,6 +1698,289 @@ if (isset($_SESSION['usuario_id'])) {
     </script>
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
     <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
+
+    <!-- MODAL DE BOAS-VINDAS / ONBOARDING DE CONFIGURAÇÕES -->
+    <?php if ($usuarioLogado): ?>
+    <div id="modal-onboarding" class="modal-onboarding-overlay" role="dialog" aria-modal="true" aria-labelledby="onboarding-titulo">
+        <div class="onboarding-card">
+            <div class="onboarding-cabecalho">
+                <div class="onboarding-badge">✨ Boas-vindas ao HelpFull!</div>
+                <h2 id="onboarding-titulo">Personalize sua experiência</h2>
+                <p>Configure como deseja visualizar a plataforma. Você pode alterar tudo a qualquer momento.</p>
+            </div>
+
+            <div class="onboarding-grid">
+                <!-- Coluna Esquerda: Controles -->
+                <div class="onboarding-col-opcoes">
+                    <div>
+                        <div class="onboarding-secao-titulo">🎨 Aparência e Modo Noturno</div>
+                        <div class="onboarding-tema-pills">
+                            <button type="button" class="onboarding-tema-btn" data-tema="claro" data-preview-key="tema-claro" onclick="selecionarTemaOnboarding('claro')">
+                                <span class="tema-icone">☀️</span>
+                                <span>Claro</span>
+                            </button>
+                            <button type="button" class="onboarding-tema-btn" data-tema="escuro" data-preview-key="tema-escuro" onclick="selecionarTemaOnboarding('escuro')">
+                                <span class="tema-icone">🌙</span>
+                                <span>Escuro</span>
+                            </button>
+                            <button type="button" class="onboarding-tema-btn" data-tema="sistema" data-preview-key="tema-auto" onclick="selecionarTemaOnboarding('sistema')">
+                                <span class="tema-icone">💻</span>
+                                <span>Do Dispositivo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="onboarding-secao-titulo">⚙️ Acessibilidade e Leitura</div>
+                        <div class="onboarding-lista-opcoes">
+                            <div class="onboarding-opt-row" data-acess-key="contraste" data-preview-key="contraste" onclick="toggleAcessOnboarding('contraste')">
+                                <div class="onboarding-opt-info">
+                                    <span class="onboarding-opt-icone">👁️</span>
+                                    <span class="onboarding-opt-nome">Mais Contraste</span>
+                                </div>
+                                <div class="onboarding-switch" aria-hidden="true"></div>
+                            </div>
+
+                            <div class="onboarding-opt-row" data-acess-key="textoGrande" data-preview-key="textoGrande" onclick="toggleAcessOnboarding('textoGrande')">
+                                <div class="onboarding-opt-info">
+                                    <span class="onboarding-opt-icone">🔍</span>
+                                    <span class="onboarding-opt-nome">Texto Maior</span>
+                                </div>
+                                <div class="onboarding-switch" aria-hidden="true"></div>
+                            </div>
+
+                            <div class="onboarding-opt-row" data-acess-key="sublinhar" data-preview-key="sublinhar" onclick="toggleAcessOnboarding('sublinhar')">
+                                <div class="onboarding-opt-info">
+                                    <span class="onboarding-opt-icone">🔗</span>
+                                    <span class="onboarding-opt-nome">Sublinhar Links</span>
+                                </div>
+                                <div class="onboarding-switch" aria-hidden="true"></div>
+                            </div>
+
+                            <div class="onboarding-opt-row" data-acess-key="semAnimacao" data-preview-key="semAnimacao" onclick="toggleAcessOnboarding('semAnimacao')">
+                                <div class="onboarding-opt-info">
+                                    <span class="onboarding-opt-icone">⚡</span>
+                                    <span class="onboarding-opt-nome">Reduzir Animações</span>
+                                </div>
+                                <div class="onboarding-switch" aria-hidden="true"></div>
+                            </div>
+
+                            <div class="onboarding-opt-row" data-acess-key="libras" data-preview-key="libras" onclick="toggleAcessOnboarding('libras')">
+                                <div class="onboarding-opt-info">
+                                    <span class="onboarding-opt-icone">🤟</span>
+                                    <span class="onboarding-opt-nome">Tradutor de Libras (Gov.br)</span>
+                                </div>
+                                <div class="onboarding-switch" aria-hidden="true"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Preview Explicativo Dinâmico -->
+                <div class="onboarding-col-preview">
+                    <div class="onboarding-preview-card" id="onboardingPreviewCard">
+                        <div class="onboarding-preview-topo">
+                            <span class="onboarding-preview-tag" id="onboardingPreviewTag">EXPLICAÇÃO</span>
+                            <div class="onboarding-preview-icone-badge" id="onboardingPreviewIcone">✨</div>
+                            <h3 class="onboarding-preview-titulo" id="onboardingPreviewTitulo">Personalize tudo agora</h3>
+                            <p class="onboarding-preview-desc" id="onboardingPreviewDesc">Passe o mouse ou toque sobre qualquer opção ao lado para entender como ela funciona e o que muda na sua tela.</p>
+                        </div>
+                        <div class="onboarding-preview-dica" id="onboardingPreviewDica">
+                            💡 Você pode testar e ativar as funções em tempo real!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dica / Tutorial de onde alterar depois -->
+            <div class="onboarding-dica-painel">
+                <div class="onboarding-dica-icone">💡</div>
+                <div class="onboarding-dica-corpo">
+                    <strong>Onde alterar essas configurações depois?</strong>
+                    <p>
+                        💻 <b>No Computador (PC):</b> Vá na página do seu <b>Perfil</b> e clique no ícone de configurações (⚙️).<br>
+                        📱 <b>No Celular:</b> Em qualquer aba do site, abra o menu na <b>barra de navegação</b> e toque em <b>Configurações</b>.
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" class="btn-onboarding-concluir" onclick="concluirOnboarding()">
+                Tudo pronto! Entrar no site 🚀
+            </button>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        const explicativos = {
+            'padrao': {
+                icone: '✨',
+                tag: 'BOAS-VINDAS',
+                titulo: 'Personalize tudo agora',
+                desc: 'Passe o mouse ou toque sobre qualquer opção para ver os benefícios e detalhes de cada recurso.',
+                dica: '💡 Suas preferências são salvas e funcionam em todas as páginas do HelpFull!'
+            },
+            'tema-claro': {
+                icone: '☀️',
+                tag: 'TEMA VISUAL',
+                titulo: 'Modo Claro',
+                desc: 'Aparência tradicional e luminosa com tons suaves de azul e branco, ideal para ambientes claros e leitura sob a luz do dia.',
+                dica: '💡 Proporciona visual limpo, refrescante e acolhedor.'
+            },
+            'tema-escuro': {
+                icone: '🌙',
+                tag: 'TEMA VISUAL',
+                titulo: 'Modo Noturno',
+                desc: 'Substitui fundos claros por superfícies escuras relaxantes, diminuindo o cansaço dos olhos à noite e economizando bateria em telas OLED.',
+                dica: '💡 Recomendado para ambientes com pouca luz e relaxamento visual.'
+            },
+            'tema-auto': {
+                icone: '💻',
+                tag: 'APARÊNCIA INTELIGENTE',
+                titulo: 'Seguir o Dispositivo',
+                desc: 'Acompanha automaticamente as configurações do seu celular ou PC: claro de dia e escuro se o seu sistema ativar o modo noturno.',
+                dica: '💡 Você não precisa trocar manualmente: o HelpFull sincroniza sozinho!'
+            },
+            'contraste': {
+                icone: '👁️',
+                tag: 'ACESSIBILIDADE VISUAL',
+                titulo: 'Mais Contraste',
+                desc: 'Realça nitidamente as bordas, cartões e tipografia do site, eliminando tons apagados e facilitando a leitura.',
+                dica: '💡 Excelente sob claridade intensa ou para quem tem baixa visão.'
+            },
+            'textoGrande': {
+                icone: '🔍',
+                tag: 'LEGIBILIDADE',
+                titulo: 'Texto Maior',
+                desc: 'Aumenta as letras de títulos, relatos, artigos e botões em toda a plataforma sem deformar o layout.',
+                dica: '💡 Melhora a experiência de leitura sem precisar aproximar a tela.'
+            },
+            'sublinhar': {
+                icone: '🔗',
+                tag: 'NAVEGAÇÃO',
+                titulo: 'Sublinhar Links',
+                desc: 'Destaca de forma inequívoca todos os links, botões e elementos clicáveis com uma linha inferior.',
+                dica: '💡 Facilita identificar rapidamente onde é possível clicar.'
+            },
+            'semAnimacao': {
+                icone: '⚡',
+                tag: 'CONFORTO E FOCO',
+                titulo: 'Reduzir Animações',
+                desc: 'Diminui movimentos e efeitos de transição, resultando em uma navegação mais direta, estática e suave.',
+                dica: '💡 Recomendado para evitar tonturas visuais ou acelerar aparelhos mais lentos.'
+            },
+            'libras': {
+                icone: '🤟',
+                tag: 'INCLUSÃO OFICIAL',
+                titulo: 'Tradutor de Libras (Gov.br)',
+                desc: 'Integra o avatar 3D do VLibras do Governo Federal para tradução simultânea de textos para a Língua Brasileira de Sinais.',
+                dica: '💡 O avatar fica disponível no canto da tela para traduzir o que você selecionar.'
+            }
+        };
+
+        function atualizarPreview(chave) {
+            const item = explicativos[chave] || explicativos['padrao'];
+            const tag = document.getElementById('onboardingPreviewTag');
+            const icone = document.getElementById('onboardingPreviewIcone');
+            const titulo = document.getElementById('onboardingPreviewTitulo');
+            const desc = document.getElementById('onboardingPreviewDesc');
+            const dica = document.getElementById('onboardingPreviewDica');
+            if (!tag || !icone || !titulo || !desc || !dica) return;
+
+            tag.textContent = item.tag;
+            icone.textContent = item.icone;
+            titulo.textContent = item.titulo;
+            desc.textContent = item.desc;
+            dica.textContent = item.dica;
+        }
+
+        function sincronizarEstadoVisual() {
+            const modo = localStorage.getItem('helpfull_tema_modo') || (localStorage.getItem('helpfull_escuro') === 'true' ? 'escuro' : 'claro');
+            document.querySelectorAll('.onboarding-tema-btn').forEach(btn => {
+                const tema = btn.getAttribute('data-tema');
+                btn.classList.toggle('ativo', tema === modo);
+            });
+
+            document.querySelectorAll('.onboarding-opt-row').forEach(row => {
+                const key = row.getAttribute('data-acess-key');
+                const ativo = localStorage.getItem('helpfull_' + key) === 'true';
+                row.classList.toggle('ativo', ativo);
+            });
+        }
+
+        window.selecionarTemaOnboarding = function (modo) {
+            if (typeof window.definirTemaModo === 'function') {
+                window.definirTemaModo(modo);
+            } else {
+                localStorage.setItem('helpfull_tema_modo', modo);
+                if (modo === 'sistema') {
+                    const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    localStorage.setItem('helpfull_escuro', dark ? 'true' : 'false');
+                } else {
+                    localStorage.setItem('helpfull_escuro', modo === 'escuro' ? 'true' : 'false');
+                }
+            }
+            sincronizarEstadoVisual();
+            atualizarPreview(modo === 'sistema' ? 'tema-auto' : (modo === 'escuro' ? 'tema-escuro' : 'tema-claro'));
+        };
+
+        window.toggleAcessOnboarding = function (key) {
+            if (typeof window.alternarAcessibilidadeOpcao === 'function') {
+                window.alternarAcessibilidadeOpcao(key);
+            } else {
+                const ativo = localStorage.getItem('helpfull_' + key) === 'true';
+                localStorage.setItem('helpfull_' + key, (!ativo).toString());
+            }
+            sincronizarEstadoVisual();
+            atualizarPreview(key);
+        };
+
+        window.abrirModalOnboarding = function () {
+            const modal = document.getElementById('modal-onboarding');
+            if (!modal) return;
+            sincronizarEstadoVisual();
+            modal.classList.add('aberto');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.concluirOnboarding = function () {
+            const modal = document.getElementById('modal-onboarding');
+            if (modal) {
+                modal.classList.remove('aberto');
+                document.body.style.overflow = '';
+            }
+
+            const usuarioId = "<?php echo $usuarioLogado ? $usuarioLogado['id'] : ''; ?>";
+            if (usuarioId) {
+                localStorage.setItem('helpfull_onboarding_' + usuarioId, 'true');
+            }
+
+            fetch('concluir_onboarding.php', { method: 'POST' }).catch(() => {});
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('modal-onboarding');
+            if (!modal) return;
+
+            document.querySelectorAll('[data-preview-key]').forEach(el => {
+                el.addEventListener('mouseenter', function () {
+                    const key = this.getAttribute('data-preview-key');
+                    atualizarPreview(key);
+                });
+            });
+
+            <?php if ($primeiraVezOnboarding): ?>
+            const uid = "<?php echo $usuarioLogado['id']; ?>";
+            if (!localStorage.getItem('helpfull_onboarding_' + uid)) {
+                setTimeout(function () {
+                    abrirModalOnboarding();
+                }, 500);
+            }
+            <?php endif; ?>
+        });
+    })();
+    </script>
+    <?php endif; ?>
 
 </body>
 

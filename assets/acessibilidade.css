@@ -2567,4 +2567,453 @@ body.acessibilidade-escuro [vw] [vw-access-button] {
     filter: brightness(0.92) contrast(1.1) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5)) !important;
 }
 
+/* ========================================================
+   MODAL DE BOAS-VINDAS / ONBOARDING DE CONFIGURAÇÕES INICIAIS
+   ======================================================== */
+#modal-onboarding {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(8, 14, 18, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+#modal-onboarding.aberto {
+    opacity: 1;
+    visibility: visible;
+}
+
+.onboarding-card {
+    width: 100%;
+    max-width: 860px;
+    max-height: 92vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 36px;
+    padding: 36px 36px 28px 36px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    animation: onboardingFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes onboardingFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.onboarding-cabecalho {
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.onboarding-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: rgba(43, 122, 140, 0.12);
+    color: #2b7a8c;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.onboarding-cabecalho h2 {
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: #1f2937;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.5px;
+}
+
+.onboarding-cabecalho p {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #64748b;
+    margin: 0;
+}
+
+.onboarding-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.95fr;
+    gap: 22px;
+    align-items: stretch;
+}
+
+@media (max-width: 768px) {
+    .onboarding-grid {
+        grid-template-columns: 1fr;
+    }
+    .onboarding-card {
+        padding: 24px 20px 22px 20px;
+        border-radius: 28px;
+    }
+    .onboarding-cabecalho h2 {
+        font-size: 1.35rem;
+    }
+}
+
+.onboarding-col-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.onboarding-secao-titulo {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #94a3b8;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.onboarding-tema-pills {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.onboarding-tema-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 6px;
+    border-radius: 18px;
+    border: 1.5px solid rgba(0, 0, 0, 0.08);
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+}
+
+.onboarding-tema-btn .tema-icone {
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.onboarding-tema-btn:hover {
+    border-color: #2b7a8c;
+    background: #f0f7f9;
+    color: #1e293b;
+    transform: translateY(-2px);
+}
+
+.onboarding-tema-btn.ativo {
+    background: linear-gradient(135deg, #2b7a8c, #236878);
+    color: #ffffff;
+    border-color: #2b7a8c;
+    box-shadow: 0 6px 16px rgba(43, 122, 140, 0.35);
+}
+
+.onboarding-lista-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.onboarding-opt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 16px;
+    border: 1.5px solid rgba(0, 0, 0, 0.06);
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.onboarding-opt-row:hover {
+    border-color: #2b7a8c;
+    background: #f0f7f9;
+    transform: translateX(3px);
+}
+
+.onboarding-opt-row.ativo {
+    border-color: #2b7a8c;
+    background: rgba(43, 122, 140, 0.09);
+}
+
+.onboarding-opt-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.onboarding-opt-icone {
+    font-size: 1.15rem;
+}
+
+.onboarding-opt-nome {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.onboarding-switch {
+    width: 36px;
+    height: 20px;
+    background: #cbd5e1;
+    border-radius: 20px;
+    position: relative;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+}
+
+.onboarding-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.onboarding-opt-row.ativo .onboarding-switch {
+    background: #2b7a8c;
+}
+
+.onboarding-opt-row.ativo .onboarding-switch::after {
+    transform: translateX(16px);
+}
+
+/* Coluna de Preview Explicativo */
+.onboarding-col-preview {
+    display: flex;
+    flex-direction: column;
+}
+
+.onboarding-preview-card {
+    flex: 1;
+    background: linear-gradient(145deg, #f0f7f9, #e5eef2);
+    border-radius: 26px;
+    padding: 24px;
+    border: 1.5px solid rgba(43, 122, 140, 0.18);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    box-sizing: border-box;
+    transition: all 0.25s ease;
+}
+
+.onboarding-preview-topo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.onboarding-preview-tag {
+    align-self: flex-start;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #2b7a8c;
+    background: rgba(43, 122, 140, 0.12);
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.onboarding-preview-icone-badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.65rem;
+    box-shadow: 0 6px 18px rgba(43, 122, 140, 0.15);
+}
+
+.onboarding-preview-titulo {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: #1f2937;
+    margin: 0;
+}
+
+.onboarding-preview-desc {
+    font-size: 0.88rem;
+    line-height: 1.48;
+    color: #475569;
+    font-weight: 600;
+    margin: 0;
+}
+
+.onboarding-preview-dica {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #2b7a8c;
+    border: 1px solid rgba(43, 122, 140, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Banner de Dica / Tutorial */
+.onboarding-dica-painel {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(43, 122, 140, 0.08);
+    border: 1.5px dashed rgba(43, 122, 140, 0.35);
+    padding: 14px 18px;
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+
+.onboarding-dica-icone {
+    font-size: 1.45rem;
+    line-height: 1;
+}
+
+.onboarding-dica-corpo strong {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.onboarding-dica-corpo p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: #475569;
+    font-weight: 600;
+    margin: 0;
+}
+
+.btn-onboarding-concluir {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 30px;
+    border: none;
+    background: linear-gradient(135deg, #2b7a8c, #236878);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(43, 122, 140, 0.35);
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-onboarding-concluir:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(43, 122, 140, 0.5);
+    filter: brightness(1.08);
+}
+
+.btn-onboarding-concluir:active {
+    transform: scale(0.98);
+}
+
+/* Modo Escuro do Onboarding */
+body.acessibilidade-escuro .onboarding-card {
+    background: rgba(20, 26, 31, 0.96) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.75) !important;
+    color: #f1f5f9 !important;
+}
+
+body.acessibilidade-escuro .onboarding-cabecalho h2,
+body.acessibilidade-escuro .onboarding-preview-titulo,
+body.acessibilidade-escuro .onboarding-opt-nome,
+body.acessibilidade-escuro .onboarding-dica-corpo strong {
+    color: #ffffff !important;
+}
+
+body.acessibilidade-escuro .onboarding-cabecalho p,
+body.acessibilidade-escuro .onboarding-preview-desc,
+body.acessibilidade-escuro .onboarding-dica-corpo p {
+    color: #94a3b8 !important;
+}
+
+body.acessibilidade-escuro .onboarding-tema-btn,
+body.acessibilidade-escuro .onboarding-opt-row {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+body.acessibilidade-escuro .onboarding-tema-btn:hover,
+body.acessibilidade-escuro .onboarding-opt-row:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: #38a3b8 !important;
+    color: #ffffff !important;
+}
+
+body.acessibilidade-escuro .onboarding-tema-btn.ativo {
+    background: linear-gradient(135deg, #2b7a8c, #1f5f6e) !important;
+    color: #ffffff !important;
+    border-color: #2b7a8c !important;
+    box-shadow: 0 6px 18px rgba(43, 122, 140, 0.45) !important;
+}
+
+body.acessibilidade-escuro .onboarding-opt-row.ativo {
+    background: rgba(43, 122, 140, 0.2) !important;
+    border-color: #38a3b8 !important;
+}
+
+body.acessibilidade-escuro .onboarding-preview-card {
+    background: linear-gradient(145deg, #182329, #131c21) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+body.acessibilidade-escuro .onboarding-preview-icone-badge,
+body.acessibilidade-escuro .onboarding-preview-dica {
+    background: #1e2830 !important;
+    color: #38a3b8 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.acessibilidade-escuro .onboarding-dica-painel {
+    background: rgba(43, 122, 140, 0.15) !important;
+    border-color: rgba(56, 163, 184, 0.4) !important;
+}
+
 
