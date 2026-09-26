@@ -1497,9 +1497,8 @@ body.acessibilidade-escuro .conta-input {
     border-color: var(--tema-borda) !important;
 }
 
-body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ):not(.btn-fechar-painel):not(.btn-fechar-bv):not(.attachment-remove):not(.busca-btn):not(.btn-buscar-api),
+body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ):not(.btn-fechar-painel):not(.btn-fechar-bv):not(.attachment-remove):not(.busca-btn):not(.btn-buscar-api):not(.btn-painel-fechar):not(.btn-onboarding-concluir):not(.painel-tema-btn):not(.onboarding-tema-btn),
 body.acessibilidade-escuro .item-notificacao,
-body.acessibilidade-escuro .lista-notificacoes,
 body.acessibilidade-escuro .btn-limpar-pill,
 body.acessibilidade-escuro .toast-btn {
     background: var(--tema-superficie-elevada) !important;
@@ -1507,7 +1506,24 @@ body.acessibilidade-escuro .toast-btn {
     border-color: var(--tema-borda) !important;
 }
 
-body.acessibilidade-escuro button:hover:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.busca-btn):not(.btn-buscar-api),
+body.acessibilidade-escuro .lista-notificacoes,
+body.acessibilidade-escuro .card-notificacoes-bloco .lista-notificacoes,
+body.acessibilidade-escuro .painel-notificacoes .lista-notificacoes,
+body.acessibilidade-escuro #containerListaNotificacoes,
+body.acessibilidade-escuro #containerListaNotificacoesPerfil {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .nenhuma-notif-texto {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #94a3b8 !important;
+}
+
+body.acessibilidade-escuro button:hover:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.busca-btn):not(.btn-buscar-api):not(.btn-painel-fechar):not(.btn-onboarding-concluir):not(.painel-tema-btn):not(.onboarding-tema-btn),
 body.acessibilidade-escuro .acessibilidade-opcao:hover,
 body.acessibilidade-escuro .acessibilidade-opcao.ativo {
     background: #34434a !important;
@@ -3086,30 +3102,89 @@ body.acessibilidade-escuro .acessibilidade-fechar:hover {
     color: #ffffff !important;
 }
 
-body.acessibilidade-escuro .onboarding-tema-btn,
-body.acessibilidade-escuro .onboarding-opt-row {
+body.acessibilidade-escuro .onboarding-tema-btn:not(.ativo),
+body.acessibilidade-escuro .painel-tema-btn:not(.ativo) {
     background: rgba(255, 255, 255, 0.05) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+    box-shadow: none !important;
+}
+
+body.acessibilidade-escuro .onboarding-opt-row:not(.ativo) {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
     color: #cbd5e1 !important;
 }
 
-body.acessibilidade-escuro .onboarding-tema-btn:hover,
-body.acessibilidade-escuro .onboarding-opt-row:hover {
+body.acessibilidade-escuro .onboarding-tema-btn:not(.ativo):hover,
+body.acessibilidade-escuro .painel-tema-btn:not(.ativo):hover,
+body.acessibilidade-escuro .onboarding-opt-row:not(.ativo):hover {
     background: rgba(255, 255, 255, 0.1) !important;
     border-color: #38a3b8 !important;
     color: #ffffff !important;
 }
 
-body.acessibilidade-escuro .onboarding-tema-btn.ativo {
-    background: linear-gradient(135deg, #2b7a8c, #1f5f6e) !important;
+body.acessibilidade-escuro .onboarding-tema-btn.ativo,
+body.acessibilidade-escuro .painel-tema-btn.ativo,
+body.acessibilidade-escuro button.painel-tema-btn.ativo,
+body.acessibilidade-escuro button.onboarding-tema-btn.ativo {
+    background: linear-gradient(135deg, #2b7a8c, #236878) !important;
     color: #ffffff !important;
-    border-color: #2b7a8c !important;
-    box-shadow: 0 6px 18px rgba(43, 122, 140, 0.45) !important;
+    border: 1.5px solid #2b7a8c !important;
+    box-shadow: 0 6px 18px rgba(43, 122, 140, 0.55) !important;
+}
+
+body.acessibilidade-escuro .onboarding-tema-btn.ativo:hover,
+body.acessibilidade-escuro .painel-tema-btn.ativo:hover,
+body.acessibilidade-escuro button.painel-tema-btn.ativo:hover,
+body.acessibilidade-escuro button.onboarding-tema-btn.ativo:hover {
+    background: linear-gradient(135deg, #328c9f, #287789) !important;
+    color: #ffffff !important;
+    border-color: #38a3b8 !important;
+    box-shadow: 0 8px 22px rgba(43, 122, 140, 0.65) !important;
+}
+
+body.acessibilidade-escuro .onboarding-tema-btn.ativo *,
+body.acessibilidade-escuro .painel-tema-btn.ativo * {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
 }
 
 body.acessibilidade-escuro .onboarding-opt-row.ativo {
     background: rgba(43, 122, 140, 0.2) !important;
     border-color: #38a3b8 !important;
+}
+
+body.acessibilidade-escuro .btn-painel-fechar,
+body.acessibilidade-escuro button.btn-painel-fechar {
+    background: linear-gradient(135deg, #2b7a8c, #236878) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(43, 122, 140, 0.45) !important;
+}
+
+body.acessibilidade-escuro .btn-painel-fechar:hover,
+body.acessibilidade-escuro button.btn-painel-fechar:hover {
+    background: linear-gradient(135deg, #328c9f, #287789) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(43, 122, 140, 0.6) !important;
+    transform: translateY(-2px);
+}
+
+body.acessibilidade-escuro .btn-onboarding-concluir,
+body.acessibilidade-escuro button.btn-onboarding-concluir {
+    background: linear-gradient(135deg, #2b7a8c, #236878) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 8px 24px rgba(43, 122, 140, 0.45) !important;
+}
+
+body.acessibilidade-escuro .btn-onboarding-concluir:hover,
+body.acessibilidade-escuro button.btn-onboarding-concluir:hover {
+    background: linear-gradient(135deg, #328c9f, #287789) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 28px rgba(43, 122, 140, 0.6) !important;
+    transform: translateY(-2px);
 }
 
 body.acessibilidade-escuro .onboarding-preview-card {
