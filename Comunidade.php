@@ -2,13 +2,16 @@
 require_once 'conexao.php';
 
 $usuarioLogado = null;
+$isAdmin = false;
 if (isset($_SESSION['usuario_id'])) {
-    $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil FROM usuarios WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, COALESCE(is_admin, false) as is_admin FROM usuarios WHERE id = ?");
     $stmt->execute([$_SESSION['usuario_id']]);
     $usuarioLogado = $stmt->fetch();
     if (!$usuarioLogado) {
         session_destroy();
         $usuarioLogado = null;
+    } else {
+        $isAdmin = (bool)($usuarioLogado['is_admin'] ?? false);
     }
 }
 
@@ -113,15 +116,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post_id = $_POST['post_id'] ?? '';
         if (!empty($post_id)) {
             try {
-                $stmt = $pdo->prepare("DELETE FROM curtidas_comunidade WHERE post_id = ?");
-                $stmt->execute([$post_id]);
-                $stmt = $pdo->prepare("DELETE FROM reacoes_comunidade WHERE post_id = ?");
-                $stmt->execute([$post_id]);
-                $stmt = $pdo->prepare("DELETE FROM notificacoes_sociais WHERE post_id = ?");
-                $stmt->execute([$post_id]);
+                // Permite apagar se for o próprio autor do post ou administrador
+                $stmtCheck = $pdo->prepare("SELECT usuario_id FROM posts_comunidade WHERE id = ?");
+                $stmtCheck->execute([$post_id]);
+                $postInfo = $stmtCheck->fetch();
 
-                $stmt = $pdo->prepare("DELETE FROM posts_comunidade WHERE id = ? AND usuario_id = ?");
-                $stmt->execute([$post_id, $_SESSION['usuario_id']]);
+                if ($postInfo && ($isAdmin || $postInfo['usuario_id'] == $_SESSION['usuario_id'])) {
+                    $stmt = $pdo->prepare("DELETE FROM curtidas_comunidade WHERE post_id = ?");
+                    $stmt->execute([$post_id]);
+                    $stmt = $pdo->prepare("DELETE FROM reacoes_comunidade WHERE post_id = ?");
+                    $stmt->execute([$post_id]);
+                    $stmt = $pdo->prepare("DELETE FROM notificacoes_sociais WHERE post_id = ?");
+                    $stmt->execute([$post_id]);
+
+                    $stmt = $pdo->prepare("DELETE FROM posts_comunidade WHERE id = ?");
+                    $stmt->execute([$post_id]);
+                }
             } catch (PDOException $e) {
             }
         }
@@ -2112,7 +2122,11 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                                 <div class="post-nome"><?= htmlspecialchars($post['autor_nome']) ?></div>
                                 <div class="post-data"><?= $dataCriacao ?></div>
 
-                                <?php if (isset($_SESSION['usuario_id']) && $post['usuario_id'] == $_SESSION['usuario_id']): ?>
+                                <?php 
+                                    $isAutorPost = (isset($_SESSION['usuario_id']) && $post['usuario_id'] == $_SESSION['usuario_id']);
+                                    $podeExibirMenu = ($isAutorPost || $isAdmin);
+                                ?>
+                                <?php if ($podeExibirMenu): ?>
                                     <div class="acoes-post-proprio">
                                         <button type="button" class="btn-dots" onclick="toggleMenuOpcoes(this)" aria-label="Opções do post">
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -2133,15 +2147,17 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                                                 </svg>
                                                 Apagar
                                             </button>
-                                            <div class="divisor-menu"></div>
-                                            <button type="button" class="btn-menu-opcao"
-                                                onclick="abrirEdicaoPost('<?= $post['id'] ?>', this)">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2.5">
-                                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                                </svg>
-                                                Editar
-                                            </button>
+                                            <?php if ($isAutorPost): ?>
+                                                <div class="divisor-menu"></div>
+                                                <button type="button" class="btn-menu-opcao"
+                                                    onclick="abrirEdicaoPost('<?= $post['id'] ?>', this)">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2.5">
+                                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                                    </svg>
+                                                    Editar
+                                                </button>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 <?php endif; ?>
