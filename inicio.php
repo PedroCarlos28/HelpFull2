@@ -265,45 +265,45 @@ if (isset($_SESSION['usuario_id'])) {
             perspective: 800px;
         }
 
-        /* 1. Halo difuso com a cor da foto ativa que abraça todo o fundo do card */
+        /* 1. Halo difuso com a cor da foto ativa que abraça sutilmente a foto */
         .foto-carrossel-glow {
             position: absolute;
-            inset: -22px -28px -34px -28px;
-            border-radius: 40px;
+            inset: -10px -12px -16px -12px;
+            border-radius: 28px;
             background: radial-gradient(
-                ellipse 92% 78% at 50% 50%,
-                var(--cor-brilho-1, rgba(255, 175, 105, 0.92)) 0%,
-                var(--cor-brilho-2, rgba(45, 195, 215, 0.75)) 45%,
-                transparent 76%
+                ellipse 88% 75% at 50% 50%,
+                var(--cor-brilho-1, rgba(255, 175, 105, 0.72)) 0%,
+                var(--cor-brilho-2, rgba(45, 195, 215, 0.45)) 50%,
+                transparent 78%
             );
-            filter: blur(28px);
-            -webkit-filter: blur(28px);
-            opacity: 0.92;
+            filter: blur(16px);
+            -webkit-filter: blur(16px);
+            opacity: 0.60;
             z-index: 1;
             pointer-events: none;
             transform: translateZ(0);
             transition: background 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease;
         }
 
-        /* 2. Sombra inferior colorida de elevação para sensação de profundidade 3D */
+        /* 2. Sombra inferior colorida de elevação para sensação de profundidade 3D sutil */
         .foto-carrossel-wrapper::before {
             content: '';
             position: absolute;
-            bottom: -18px;
-            left: 10px;
-            right: 10px;
-            height: 55px;
+            bottom: -8px;
+            left: 12px;
+            right: 12px;
+            height: 32px;
             border-radius: 50%;
-            background: var(--cor-brilho-sombra, rgba(240, 150, 80, 0.55));
-            filter: blur(22px);
-            -webkit-filter: blur(22px);
-            opacity: 0.85;
+            background: var(--cor-brilho-sombra, rgba(240, 150, 80, 0.35));
+            filter: blur(13px);
+            -webkit-filter: blur(13px);
+            opacity: 0.45;
             z-index: 1;
             pointer-events: none;
             transition: background 0.75s ease, opacity 0.75s ease;
         }
 
-        /* 3. Card da foto com relevo, borda interna de cristal e sombra volumétrica */
+        /* 3. Card da foto com relevo, borda interna de cristal e sombra volumétrica sutil */
         .quadrado-grafico {
             width: 100%;
             height: 100%;
@@ -314,26 +314,26 @@ if (isset($_SESSION['usuario_id'])) {
             z-index: 2;
             background: #eef6f8;
             box-shadow: 
-                0 18px 38px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.45)),
-                0 8px 18px -4px rgba(0, 0, 0, 0.16),
-                0 2px 6px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(255, 255, 255, 0.55) inset;
+                0 12px 24px -5px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.30)),
+                0 6px 14px -3px rgba(0, 0, 0, 0.12),
+                0 2px 5px rgba(0, 0, 0, 0.06),
+                0 0 0 1px rgba(255, 255, 255, 0.50) inset;
             transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
         }
 
         .foto-carrossel-wrapper:hover .quadrado-grafico {
-            transform: translateY(-5px) scale(1.025);
+            transform: translateY(-3px) scale(1.015);
             box-shadow: 
-                0 28px 54px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.65)),
-                0 14px 28px -4px rgba(0, 0, 0, 0.22),
-                0 4px 10px rgba(0, 0, 0, 0.12),
-                0 0 0 1px rgba(255, 255, 255, 0.75) inset;
+                0 16px 28px -4px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.42)),
+                0 8px 18px -3px rgba(0, 0, 0, 0.16),
+                0 2px 6px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.70) inset;
         }
 
         .foto-carrossel-wrapper:hover .foto-carrossel-glow {
-            opacity: 1;
-            filter: blur(32px);
-            -webkit-filter: blur(32px);
+            opacity: 0.78;
+            filter: blur(20px);
+            -webkit-filter: blur(20px);
         }
 
         .quadrado-grafico::after {
@@ -1118,33 +1118,33 @@ if (isset($_SESSION['usuario_id'])) {
         }
 
         body.acessibilidade-escuro .foto-carrossel-glow {
-            opacity: 1;
-            filter: blur(32px);
-            -webkit-filter: blur(32px);
+            opacity: 0.65;
+            filter: blur(18px);
+            -webkit-filter: blur(18px);
         }
 
         body.acessibilidade-escuro .foto-carrossel-wrapper::before {
-            opacity: 0.95;
-            filter: blur(28px);
-            -webkit-filter: blur(28px);
-            background: var(--cor-brilho-sombra, rgba(240, 150, 80, 0.65));
+            opacity: 0.55;
+            filter: blur(15px);
+            -webkit-filter: blur(15px);
+            background: var(--cor-brilho-sombra, rgba(240, 150, 80, 0.45));
         }
 
         body.acessibilidade-escuro .quadrado-grafico {
             background: rgba(16, 20, 24, 0.70) !important;
             border: none !important;
             box-shadow: 
-                0 20px 42px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.50)),
-                0 10px 20px -3px rgba(0, 0, 0, 0.65),
-                0 2px 6px rgba(0, 0, 0, 0.40),
-                0 0 0 1px rgba(255, 255, 255, 0.20) inset !important;
+                0 14px 28px -5px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.35)),
+                0 8px 16px -3px rgba(0, 0, 0, 0.60),
+                0 2px 5px rgba(0, 0, 0, 0.35),
+                0 0 0 1px rgba(255, 255, 255, 0.16) inset !important;
         }
 
         body.acessibilidade-escuro .foto-carrossel-wrapper:hover .quadrado-grafico {
             box-shadow: 
-                0 28px 56px -6px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.70)),
-                0 14px 26px -3px rgba(0, 0, 0, 0.75),
-                0 0 0 1px rgba(255, 255, 255, 0.30) inset !important;
+                0 18px 34px -4px var(--cor-brilho-sombra, rgba(240, 150, 80, 0.48)),
+                0 10px 20px -3px rgba(0, 0, 0, 0.70),
+                0 0 0 1px rgba(255, 255, 255, 0.24) inset !important;
         }
 
         body.acessibilidade-contraste .carrossel-slide .slide-titulo,
@@ -1538,28 +1538,28 @@ if (isset($_SESSION['usuario_id'])) {
             let timeoutDots = null;
             let cooldownScroll = false;
 
-            // Paleta de iluminação ambiente e profundidade 3D adaptada para cada slide
+            // Paleta de iluminação ambiente e profundidade 3D sutil adaptada para cada slide
             const paletaSlides = [
-                // Slide 0: Praia pôr do sol (ouro âmbar quente + turquesa oceânico)
-                { c1: 'rgba(255, 175, 105, 0.92)', c2: 'rgba(45, 195, 215, 0.75)', sombra: 'rgba(240, 150, 80, 0.55)' },
+                // Slide 0: Praia pôr do sol (ouro âmbar suave + turquesa oceânico)
+                { c1: 'rgba(255, 175, 105, 0.70)', c2: 'rgba(45, 195, 215, 0.45)', sombra: 'rgba(240, 150, 80, 0.35)' },
                 // Slide 1: Terra vista do espaço à noite (luzes douradas de cidades + azul cósmico)
-                { c1: 'rgba(255, 195, 90, 0.90)',  c2: 'rgba(45, 120, 235, 0.80)', sombra: 'rgba(50, 115, 220, 0.60)' },
+                { c1: 'rgba(255, 195, 90, 0.68)',  c2: 'rgba(45, 120, 235, 0.50)', sombra: 'rgba(50, 115, 220, 0.38)' },
                 // Slide 2: Montanha com Via Láctea (magenta/roxo galáctico + azul escuro)
-                { c1: 'rgba(195, 95, 230, 0.90)',  c2: 'rgba(60, 120, 215, 0.75)', sombra: 'rgba(165, 80, 210, 0.55)' },
+                { c1: 'rgba(195, 95, 230, 0.68)',  c2: 'rgba(60, 120, 215, 0.48)', sombra: 'rgba(165, 80, 210, 0.35)' },
                 // Slide 3: Superfície do oceano sereno (turquesa água + azul petróleo)
-                { c1: 'rgba(45, 175, 195, 0.90)',  c2: 'rgba(25, 95, 125, 0.75)',  sombra: 'rgba(35, 135, 155, 0.60)' },
+                { c1: 'rgba(45, 175, 195, 0.68)',  c2: 'rgba(25, 95, 125, 0.48)',  sombra: 'rgba(35, 135, 155, 0.38)' },
                 // Slide 4: Lago Moraine e montanhas (turquesa glacial + azul cerúleo)
-                { c1: 'rgba(40, 195, 230, 0.92)',  c2: 'rgba(30, 140, 205, 0.75)', sombra: 'rgba(35, 165, 215, 0.55)' },
+                { c1: 'rgba(40, 195, 230, 0.70)',  c2: 'rgba(30, 140, 205, 0.48)', sombra: 'rgba(35, 165, 215, 0.35)' },
                 // Slide 5: Veleiro em mar espelho estrelado (dourado horizonte + azul noite)
-                { c1: 'rgba(245, 180, 100, 0.90)', c2: 'rgba(40, 95, 165, 0.80)',  sombra: 'rgba(205, 140, 75, 0.50)' },
+                { c1: 'rgba(245, 180, 100, 0.68)', c2: 'rgba(40, 95, 165, 0.50)',  sombra: 'rgba(205, 140, 75, 0.32)' },
                 // Slide 6: Mar de nuvens e céu infinito (azul celeste límpido + branco nuvem)
-                { c1: 'rgba(80, 175, 255, 0.90)',  c2: 'rgba(155, 215, 255, 0.75)', sombra: 'rgba(65, 150, 235, 0.55)' },
+                { c1: 'rgba(80, 175, 255, 0.68)',  c2: 'rgba(155, 215, 255, 0.48)', sombra: 'rgba(65, 150, 235, 0.35)' },
                 // Slide 7: Vista aérea de praia e mar azul (turquesa vibrante + areia quente)
-                { c1: 'rgba(0, 195, 215, 0.92)',   c2: 'rgba(235, 210, 175, 0.70)', sombra: 'rgba(0, 165, 190, 0.60)' },
+                { c1: 'rgba(0, 195, 215, 0.70)',   c2: 'rgba(235, 210, 175, 0.45)', sombra: 'rgba(0, 165, 190, 0.38)' },
                 // Slide 8: Vale Yosemite pôr do sol (coral pêssego suave + azul montanha)
-                { c1: 'rgba(250, 145, 120, 0.90)', c2: 'rgba(70, 150, 175, 0.70)', sombra: 'rgba(230, 125, 100, 0.52)' },
+                { c1: 'rgba(250, 145, 120, 0.68)', c2: 'rgba(70, 150, 175, 0.45)', sombra: 'rgba(230, 125, 100, 0.34)' },
                 // Slide 9: Alpes Suíços e geleira (azul glacial cristalino + branco ártico)
-                { c1: 'rgba(160, 215, 255, 0.92)', c2: 'rgba(95, 170, 225, 0.75)', sombra: 'rgba(120, 190, 240, 0.50)' }
+                { c1: 'rgba(160, 215, 255, 0.70)', c2: 'rgba(95, 170, 225, 0.48)', sombra: 'rgba(120, 190, 240, 0.32)' }
             ];
 
             function atualizarBrilhoFoto(idx) {
