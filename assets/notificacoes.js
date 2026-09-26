@@ -747,12 +747,12 @@
         var fec = document.querySelector('.acessibilidade-fechar');
 
         if (idioma === 'en') {
-            if (badge) badge.textContent = '⚙️ Preferences';
+            if (badge) badge.innerHTML = (typeof svgIconesPainel !== 'undefined' ? svgIconesPainel.gear : '') + ' <span>Preferences</span>';
             if (tit) tit.textContent = 'Settings & Accessibility';
             if (sub) sub.textContent = 'Customize your HelpFull experience at any time.';
-            if (secTema) secTema.textContent = '🎨 Appearance & Dark Mode';
-            if (secAcess) secAcess.textContent = '⚙️ Accessibility & Reading';
-            if (rotIdioma) rotIdioma.textContent = '🌐 Language';
+            if (secTema) secTema.innerHTML = (typeof svgIconesPainel !== 'undefined' ? svgIconesPainel.palette : '') + ' <span>Appearance & Dark Mode</span>';
+            if (secAcess) secAcess.innerHTML = (typeof svgIconesPainel !== 'undefined' ? svgIconesPainel.sliders : '') + ' <span>Accessibility & Reading</span>';
+            if (rotIdioma) rotIdioma.innerHTML = (typeof svgIconesPainel !== 'undefined' ? svgIconesPainel.globe : '') + ' <span>Language</span>';
             if (btnConcluir) btnConcluir.textContent = 'Done';
             if (res) res.textContent = 'Restore defaults';
             if (fec) fec.setAttribute('aria-label', 'Close settings');
@@ -777,12 +777,12 @@
                 }
             });
         } else {
-            if (badge) badge.textContent = '⚙️ Preferências';
+            if (badge) badge.innerHTML = (typeof svgIconesPainel !== 'undefined' ? svgIconesPainel.gear : '') + ' <span>Preferências</span>';
             if (tit) tit.textContent = 'Configurações & Acessibilidade';
             if (sub) sub.textContent = 'Personalize sua experiência no HelpFull a qualquer momento.';
-            if (secTema) secTema.textContent = '🎨 Aparência e Modo Noturno';
-            if (secAcess) secAcess.textContent = '⚙️ Acessibilidade e Leitura';
-            if (rotIdioma) rotIdioma.textContent = '🌐 Idioma / Language';
+            if (secTema) secTema.innerHTML = (typeof svgIconesPainel !== 'undefined' ? svgIconesPainel.palette : '') + ' <span>Aparência e Modo Noturno</span>';
+            if (secAcess) secAcess.innerHTML = (typeof svgIconesPainel !== 'undefined' ? svgIconesPainel.sliders : '') + ' <span>Acessibilidade e Leitura</span>';
+            if (rotIdioma) rotIdioma.innerHTML = (typeof svgIconesPainel !== 'undefined' ? svgIconesPainel.globe : '') + ' <span>Idioma / Language</span>';
             if (btnConcluir) btnConcluir.textContent = 'Concluir';
             if (res) res.textContent = 'Restaurar padrão';
             if (fec) fec.setAttribute('aria-label', 'Fechar configurações');
@@ -959,149 +959,166 @@
         } catch (e) {}
     }
 
+    var svgIconesPainel = {
+        'sparkles': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>',
+        'gear': '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>',
+        'palette': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>',
+        'sliders': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>',
+        'globe': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>',
+        'sun': '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>',
+        'moon': '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
+        'device': '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>',
+        'contrast': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"></path></svg>',
+        'text': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>',
+        'link': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
+        'zap': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
+        'libras': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"></circle><path d="m18 19 1-7-6 1"></path><path d="m5 8 3-3 5.5 3-2.36 3.5"></path><path d="M4.24 14.5a5 5 0 0 0 6.88 6"></path><path d="M13.76 17.5a5 5 0 0 0-6.88-6"></path></svg>',
+        'bulb': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>'
+    };
+
     var explicativosPainel = {
         'pt-BR': {
             'padrao': {
-                icone: '✨',
+                icone: svgIconesPainel.sparkles,
                 tag: 'CONFIGURAÇÕES',
                 titulo: 'Configurações Rápidas',
                 desc: 'Passe o mouse ou toque sobre qualquer opção ao lado para conferir sua finalidade e visualizar o efeito em tempo real.',
-                dica: '💡 As alterações são salvas automaticamente em seu perfil e navegador.'
+                dica: 'As alterações são salvas automaticamente em seu perfil e navegador.'
             },
             'idioma': {
-                icone: '🌐',
+                icone: svgIconesPainel.globe,
                 tag: 'LINGUAGEM',
                 titulo: 'Idioma da Plataforma',
                 desc: 'Alterne todo o conteúdo, menus e metas diárias entre Português e Inglês com tradução instantânea.',
-                dica: '💡 A tradução é aplicada imediatamente em todas as páginas.'
+                dica: 'A tradução é aplicada imediatamente em todas as páginas.'
             },
             'tema-claro': {
-                icone: '☀️',
+                icone: svgIconesPainel.sun,
                 tag: 'TEMA VISUAL',
                 titulo: 'Modo Claro',
                 desc: 'Aparência tradicional e luminosa com tons suaves de azul e branco, ideal para ambientes claros e leitura diurna.',
-                dica: '💡 Proporciona visual limpo, refrescante e acolhedor.'
+                dica: 'Proporciona visual limpo, refrescante e acolhedor.'
             },
             'tema-escuro': {
-                icone: '🌙',
+                icone: svgIconesPainel.moon,
                 tag: 'TEMA VISUAL',
                 titulo: 'Modo Noturno',
                 desc: 'Substitui fundos claros por superfícies escuras relaxantes, diminuindo o cansaço dos olhos à noite e economizando bateria.',
-                dica: '💡 Recomendado para ambientes com pouca luz e relaxamento visual.'
+                dica: 'Recomendado para ambientes com pouca luz e relaxamento visual.'
             },
             'tema-auto': {
-                icone: '💻',
+                icone: svgIconesPainel.device,
                 tag: 'APARÊNCIA INTELIGENTE',
                 titulo: 'Seguir o Dispositivo',
                 desc: 'Acompanha automaticamente as configurações do seu celular ou PC: claro de dia e escuro quando o sistema ativar o modo noturno.',
-                dica: '💡 O HelpFull sincroniza sozinho sem você precisar trocar manualmente!'
+                dica: 'O HelpFull sincroniza sozinho sem você precisar trocar manualmente!'
             },
             'contraste': {
-                icone: '👁️',
+                icone: svgIconesPainel.contrast,
                 tag: 'ACESSIBILIDADE VISUAL',
                 titulo: 'Mais Contraste',
                 desc: 'Realça nitidamente as bordas, cartões e tipografia do site, eliminando tons apagados e facilitando a leitura.',
-                dica: '💡 Excelente sob claridade intensa ou para quem tem baixa visão.'
+                dica: 'Excelente sob claridade intensa ou para quem tem baixa visão.'
             },
             'textoGrande': {
-                icone: '🔍',
+                icone: svgIconesPainel.text,
                 tag: 'LEGIBILIDADE',
                 titulo: 'Texto Maior',
                 desc: 'Aumenta as letras de títulos, relatos, artigos e botões em toda a plataforma sem deformar o layout.',
-                dica: '💡 Melhora a experiência de leitura sem precisar aproximar a tela.'
+                dica: 'Melhora a experiência de leitura sem precisar aproximar a tela.'
             },
             'sublinhar': {
-                icone: '🔗',
+                icone: svgIconesPainel.link,
                 tag: 'NAVEGAÇÃO',
                 titulo: 'Sublinhar Links',
                 desc: 'Destaca de forma inequívoca todos os links, botões e elementos clicáveis com uma linha inferior.',
-                dica: '💡 Facilita identificar rapidamente onde é possível clicar.'
+                dica: 'Facilita identificar rapidamente onde é possível clicar.'
             },
             'semAnimacao': {
-                icone: '⚡',
+                icone: svgIconesPainel.zap,
                 tag: 'CONFORTO E FOCO',
                 titulo: 'Reduzir Animações',
                 desc: 'Diminui movimentos e efeitos de transição, resultando em uma navegação mais direta, estática e suave.',
-                dica: '💡 Recomendado para evitar tonturas visuais ou acelerar aparelhos mais lentos.'
+                dica: 'Recomendado para evitar tonturas visuais ou acelerar aparelhos mais lentos.'
             },
             'libras': {
-                icone: '🤟',
+                icone: svgIconesPainel.libras,
                 tag: 'INCLUSÃO OFICIAL',
                 titulo: 'Tradutor de Libras (Gov.br)',
                 desc: 'Integra o avatar 3D do VLibras do Governo Federal para tradução simultânea de textos para a Língua Brasileira de Sinais.',
-                dica: '💡 O avatar fica disponível no canto da tela para traduzir o que você selecionar.'
+                dica: 'O avatar fica disponível no canto da tela para traduzir o que você selecionar.'
             }
         },
         'en': {
             'padrao': {
-                icone: '✨',
+                icone: svgIconesPainel.sparkles,
                 tag: 'SETTINGS',
                 titulo: 'Quick Settings',
                 desc: 'Hover or tap on any option on the left to see what it does and test the effect in real time.',
-                dica: '💡 Changes are automatically saved to your profile and browser.'
+                dica: 'Changes are automatically saved to your profile and browser.'
             },
             'idioma': {
-                icone: '🌐',
+                icone: svgIconesPainel.globe,
                 tag: 'LANGUAGE',
                 titulo: 'Platform Language',
                 desc: 'Switch interface, menus, and daily goals between Portuguese and English with instant translation.',
-                dica: '💡 Changes are applied immediately across all sections.'
+                dica: 'Changes are applied immediately across all sections.'
             },
             'tema-claro': {
-                icone: '☀️',
+                icone: svgIconesPainel.sun,
                 tag: 'THEME',
                 titulo: 'Light Mode',
                 desc: 'Bright and traditional look with soothing blue and white tones, ideal for daytime and bright rooms.',
-                dica: '💡 Clean, refreshing and friendly visual feel.'
+                dica: 'Clean, refreshing and friendly visual feel.'
             },
             'tema-escuro': {
-                icone: '🌙',
+                icone: svgIconesPainel.moon,
                 tag: 'THEME',
                 titulo: 'Dark Mode',
                 desc: 'Replaces bright backgrounds with relaxing dark surfaces to ease eye strain and save battery life.',
-                dica: '💡 Great for nighttime and low-light relaxation.'
+                dica: 'Great for nighttime and low-light relaxation.'
             },
             'tema-auto': {
-                icone: '💻',
+                icone: svgIconesPainel.device,
                 tag: 'SMART THEME',
                 titulo: 'Match Device',
                 desc: 'Automatically synchronizes with your device theme: light by day, dark when your system enables dark mode.',
-                dica: '💡 HelpFull stays in sync without manual changes!'
+                dica: 'HelpFull stays in sync without manual changes!'
             },
             'contraste': {
-                icone: '👁️',
+                icone: svgIconesPainel.contrast,
                 tag: 'VISUAL ACCESSIBILITY',
                 titulo: 'High Contrast',
                 desc: 'Sharpens card borders, buttons and text for maximal visibility and clarity.',
-                dica: '💡 Helpful in bright sunlight or for low-vision readers.'
+                dica: 'Helpful in bright sunlight or for low-vision readers.'
             },
             'textoGrande': {
-                icone: '🔍',
+                icone: svgIconesPainel.text,
                 tag: 'READABILITY',
                 titulo: 'Larger Text',
                 desc: 'Increases text size throughout titles, articles and buttons without breaking layouts.',
-                dica: '💡 Easier reading without zooming your screen.'
+                dica: 'Easier reading without zooming your screen.'
             },
             'sublinhar': {
-                icone: '🔗',
+                icone: svgIconesPainel.link,
                 tag: 'NAVIGATION',
                 titulo: 'Underline Links',
                 desc: 'Highlights clickable links and buttons with clear underline indicators.',
-                dica: '💡 Makes interactive targets unmistakable.'
+                dica: 'Makes interactive targets unmistakable.'
             },
             'semAnimacao': {
-                icone: '⚡',
+                icone: svgIconesPainel.zap,
                 tag: 'COMFORT & FOCUS',
                 titulo: 'Reduce Motion',
                 desc: 'Minimizes motion and transitions for a straightforward, quiet experience.',
-                dica: '💡 Prevents visual fatigue and speeds up low-end devices.'
+                dica: 'Prevents visual fatigue and speeds up low-end devices.'
             },
             'libras': {
-                icone: '🤟',
+                icone: svgIconesPainel.libras,
                 tag: 'ACCESSIBILITY',
                 titulo: 'Libras Translator (Gov.br)',
                 desc: 'Integrates the Brazilian Government VLibras 3D avatar for text-to-sign-language translation.',
-                dica: '💡 The avatar rests on screen to translate any selected text.'
+                dica: 'The avatar rests on screen to translate any selected text.'
             }
         }
     };
@@ -1118,10 +1135,10 @@
         if (!tag || !icone || !titulo || !desc || !dica) return;
 
         tag.textContent = item.tag;
-        icone.textContent = item.icone;
+        icone.innerHTML = item.icone;
         titulo.textContent = item.titulo;
         desc.textContent = item.desc;
-        dica.textContent = item.dica;
+        dica.innerHTML = svgIconesPainel.bulb + ' <span>' + item.dica + '</span>';
     }
 
     function sincronizarEstadoVisualPainel() {
@@ -1160,7 +1177,10 @@
                 <section id="painelAcessibilidade" aria-label="Configurações e Acessibilidade" role="dialog" aria-modal="true">
                     <div class="acessibilidade-cabecalho">
                         <div>
-                            <div class="onboarding-badge" id="painelAcessBadge">⚙️ Preferências</div>
+                            <div class="onboarding-badge" id="painelAcessBadge">
+                                ${svgIconesPainel.gear}
+                                <span>Preferências</span>
+                            </div>
                             <h2 id="painelAcessTitulo">Configurações & Acessibilidade</h2>
                             <p id="painelAcessSubtitulo">Personalize sua experiência no HelpFull a qualquer momento.</p>
                         </div>
@@ -1171,7 +1191,10 @@
                         <!-- Coluna Esquerda: Controles -->
                         <div class="onboarding-col-opcoes">
                             <div class="acessibilidade-idioma">
-                                <label for="seletorIdioma" id="rotuloIdiomaPainel">🌐 Idioma / Language</label>
+                                <label for="seletorIdioma" id="rotuloIdiomaPainel">
+                                    ${svgIconesPainel.globe}
+                                    <span>Idioma / Language</span>
+                                </label>
                                 <select id="seletorIdioma" aria-label="Selecionar idioma" data-preview-key="idioma">
                                     <option value="pt-BR">Português (Brasil)</option>
                                     <option value="en">English (US)</option>
@@ -1179,29 +1202,35 @@
                             </div>
 
                             <div>
-                                <div class="onboarding-secao-titulo" id="secaoTemaTitulo">🎨 Aparência e Modo Noturno</div>
+                                <div class="onboarding-secao-titulo" id="secaoTemaTitulo">
+                                    ${svgIconesPainel.palette}
+                                    <span>Aparência e Modo Noturno</span>
+                                </div>
                                 <div class="onboarding-tema-pills">
                                     <button type="button" class="onboarding-tema-btn painel-tema-btn" data-tema="claro" data-preview-key="tema-claro">
-                                        <span class="tema-icone">☀️</span>
+                                        <span class="tema-icone">${svgIconesPainel.sun}</span>
                                         <span class="tema-nome">Claro</span>
                                     </button>
                                     <button type="button" class="onboarding-tema-btn painel-tema-btn" data-tema="escuro" data-preview-key="tema-escuro">
-                                        <span class="tema-icone">🌙</span>
+                                        <span class="tema-icone">${svgIconesPainel.moon}</span>
                                         <span class="tema-nome">Escuro</span>
                                     </button>
                                     <button type="button" class="onboarding-tema-btn painel-tema-btn" data-tema="sistema" data-preview-key="tema-auto">
-                                        <span class="tema-icone">💻</span>
+                                        <span class="tema-icone">${svgIconesPainel.device}</span>
                                         <span class="tema-nome">Do Dispositivo</span>
                                     </button>
                                 </div>
                             </div>
 
                             <div>
-                                <div class="onboarding-secao-titulo" id="secaoAcessTitulo">⚙️ Acessibilidade e Leitura</div>
+                                <div class="onboarding-secao-titulo" id="secaoAcessTitulo">
+                                    ${svgIconesPainel.sliders}
+                                    <span>Acessibilidade e Leitura</span>
+                                </div>
                                 <div class="onboarding-lista-opcoes">
                                     <div class="onboarding-opt-row painel-opt-row" data-acess-key="contraste" data-preview-key="contraste">
                                         <div class="onboarding-opt-info">
-                                            <span class="onboarding-opt-icone">👁️</span>
+                                            <span class="onboarding-opt-icone">${svgIconesPainel.contrast}</span>
                                             <span class="onboarding-opt-nome">Mais Contraste</span>
                                         </div>
                                         <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1209,7 +1238,7 @@
 
                                     <div class="onboarding-opt-row painel-opt-row" data-acess-key="textoGrande" data-preview-key="textoGrande">
                                         <div class="onboarding-opt-info">
-                                            <span class="onboarding-opt-icone">🔍</span>
+                                            <span class="onboarding-opt-icone">${svgIconesPainel.text}</span>
                                             <span class="onboarding-opt-nome">Texto Maior</span>
                                         </div>
                                         <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1217,7 +1246,7 @@
 
                                     <div class="onboarding-opt-row painel-opt-row" data-acess-key="sublinhar" data-preview-key="sublinhar">
                                         <div class="onboarding-opt-info">
-                                            <span class="onboarding-opt-icone">🔗</span>
+                                            <span class="onboarding-opt-icone">${svgIconesPainel.link}</span>
                                             <span class="onboarding-opt-nome">Sublinhar Links</span>
                                         </div>
                                         <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1225,7 +1254,7 @@
 
                                     <div class="onboarding-opt-row painel-opt-row" data-acess-key="semAnimacao" data-preview-key="semAnimacao">
                                         <div class="onboarding-opt-info">
-                                            <span class="onboarding-opt-icone">⚡</span>
+                                            <span class="onboarding-opt-icone">${svgIconesPainel.zap}</span>
                                             <span class="onboarding-opt-nome">Reduzir Animações</span>
                                         </div>
                                         <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1233,7 +1262,7 @@
 
                                     <div class="onboarding-opt-row painel-opt-row" data-acess-key="libras" data-preview-key="libras">
                                         <div class="onboarding-opt-info">
-                                            <span class="onboarding-opt-icone">🤟</span>
+                                            <span class="onboarding-opt-icone">${svgIconesPainel.libras}</span>
                                             <span class="onboarding-opt-nome">Tradutor de Libras (Gov.br)</span>
                                         </div>
                                         <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1247,12 +1276,13 @@
                             <div class="onboarding-preview-card" id="painelPreviewCard">
                                 <div class="onboarding-preview-topo">
                                     <span class="onboarding-preview-tag" id="painelPreviewTag">CONFIGURAÇÕES</span>
-                                    <div class="onboarding-preview-icone-badge" id="painelPreviewIcone">✨</div>
+                                    <div class="onboarding-preview-icone-badge" id="painelPreviewIcone">${svgIconesPainel.sparkles}</div>
                                     <h3 class="onboarding-preview-titulo" id="painelPreviewTitulo">Configurações Rápidas</h3>
                                     <p class="onboarding-preview-desc" id="painelPreviewDesc">Passe o mouse ou toque sobre qualquer opção ao lado para conferir sua finalidade e visualizar o efeito em tempo real.</p>
                                 </div>
                                 <div class="onboarding-preview-dica" id="painelPreviewDica">
-                                    💡 As alterações são salvas automaticamente em seu perfil e navegador.
+                                    ${svgIconesPainel.bulb}
+                                    <span>As alterações são salvas automaticamente em seu perfil e navegador.</span>
                                 </div>
                             </div>
                         </div>

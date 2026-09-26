@@ -1704,7 +1704,10 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
     <div id="modal-onboarding" class="modal-onboarding-overlay" role="dialog" aria-modal="true" aria-labelledby="onboarding-titulo">
         <div class="onboarding-card">
             <div class="onboarding-cabecalho">
-                <div class="onboarding-badge">✨ Boas-vindas ao HelpFull!</div>
+                <div class="onboarding-badge">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+                    <span>Boas-vindas ao HelpFull!</span>
+                </div>
                 <h2 id="onboarding-titulo">Personalize sua experiência</h2>
                 <p>Configure como deseja visualizar a plataforma. Você pode alterar tudo a qualquer momento.</p>
             </div>
@@ -1713,29 +1716,43 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 <!-- Coluna Esquerda: Controles -->
                 <div class="onboarding-col-opcoes">
                     <div>
-                        <div class="onboarding-secao-titulo">🎨 Aparência e Modo Noturno</div>
+                        <div class="onboarding-secao-titulo">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+                            <span>Aparência e Modo Noturno</span>
+                        </div>
                         <div class="onboarding-tema-pills">
                             <button type="button" class="onboarding-tema-btn" data-tema="claro" data-preview-key="tema-claro" onclick="selecionarTemaOnboarding('claro')">
-                                <span class="tema-icone">☀️</span>
+                                <span class="tema-icone">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                                </span>
                                 <span>Claro</span>
                             </button>
                             <button type="button" class="onboarding-tema-btn" data-tema="escuro" data-preview-key="tema-escuro" onclick="selecionarTemaOnboarding('escuro')">
-                                <span class="tema-icone">🌙</span>
+                                <span class="tema-icone">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                                </span>
                                 <span>Escuro</span>
                             </button>
                             <button type="button" class="onboarding-tema-btn" data-tema="sistema" data-preview-key="tema-auto" onclick="selecionarTemaOnboarding('sistema')">
-                                <span class="tema-icone">💻</span>
+                                <span class="tema-icone">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>
+                                </span>
                                 <span>Do Dispositivo</span>
                             </button>
                         </div>
                     </div>
 
                     <div>
-                        <div class="onboarding-secao-titulo">⚙️ Acessibilidade e Leitura</div>
+                        <div class="onboarding-secao-titulo">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                            <span>Acessibilidade e Leitura</span>
+                        </div>
                         <div class="onboarding-lista-opcoes">
                             <div class="onboarding-opt-row" data-acess-key="contraste" data-preview-key="contraste" onclick="toggleAcessOnboarding('contraste')">
                                 <div class="onboarding-opt-info">
-                                    <span class="onboarding-opt-icone">👁️</span>
+                                    <span class="onboarding-opt-icone">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"></path></svg>
+                                    </span>
                                     <span class="onboarding-opt-nome">Mais Contraste</span>
                                 </div>
                                 <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1743,7 +1760,9 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
 
                             <div class="onboarding-opt-row" data-acess-key="textoGrande" data-preview-key="textoGrande" onclick="toggleAcessOnboarding('textoGrande')">
                                 <div class="onboarding-opt-info">
-                                    <span class="onboarding-opt-icone">🔍</span>
+                                    <span class="onboarding-opt-icone">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+                                    </span>
                                     <span class="onboarding-opt-nome">Texto Maior</span>
                                 </div>
                                 <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1751,7 +1770,9 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
 
                             <div class="onboarding-opt-row" data-acess-key="sublinhar" data-preview-key="sublinhar" onclick="toggleAcessOnboarding('sublinhar')">
                                 <div class="onboarding-opt-info">
-                                    <span class="onboarding-opt-icone">🔗</span>
+                                    <span class="onboarding-opt-icone">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                    </span>
                                     <span class="onboarding-opt-nome">Sublinhar Links</span>
                                 </div>
                                 <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1759,7 +1780,9 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
 
                             <div class="onboarding-opt-row" data-acess-key="semAnimacao" data-preview-key="semAnimacao" onclick="toggleAcessOnboarding('semAnimacao')">
                                 <div class="onboarding-opt-info">
-                                    <span class="onboarding-opt-icone">⚡</span>
+                                    <span class="onboarding-opt-icone">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                                    </span>
                                     <span class="onboarding-opt-nome">Reduzir Animações</span>
                                 </div>
                                 <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1767,7 +1790,9 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
 
                             <div class="onboarding-opt-row" data-acess-key="libras" data-preview-key="libras" onclick="toggleAcessOnboarding('libras')">
                                 <div class="onboarding-opt-info">
-                                    <span class="onboarding-opt-icone">🤟</span>
+                                    <span class="onboarding-opt-icone">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"></circle><path d="m18 19 1-7-6 1"></path><path d="m5 8 3-3 5.5 3-2.36 3.5"></path><path d="M4.24 14.5a5 5 0 0 0 6.88 6"></path><path d="M13.76 17.5a5 5 0 0 0-6.88-6"></path></svg>
+                                    </span>
                                     <span class="onboarding-opt-nome">Tradutor de Libras (Gov.br)</span>
                                 </div>
                                 <div class="onboarding-switch" aria-hidden="true"></div>
@@ -1781,12 +1806,15 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                     <div class="onboarding-preview-card" id="onboardingPreviewCard">
                         <div class="onboarding-preview-topo">
                             <span class="onboarding-preview-tag" id="onboardingPreviewTag">EXPLICAÇÃO</span>
-                            <div class="onboarding-preview-icone-badge" id="onboardingPreviewIcone">✨</div>
+                            <div class="onboarding-preview-icone-badge" id="onboardingPreviewIcone">
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+                            </div>
                             <h3 class="onboarding-preview-titulo" id="onboardingPreviewTitulo">Personalize tudo agora</h3>
                             <p class="onboarding-preview-desc" id="onboardingPreviewDesc">Passe o mouse ou toque sobre qualquer opção ao lado para entender como ela funciona e o que muda na sua tela.</p>
                         </div>
                         <div class="onboarding-preview-dica" id="onboardingPreviewDica">
-                            💡 Você pode testar e ativar as funções em tempo real!
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>
+                            <span>Você pode testar e ativar as funções em tempo real!</span>
                         </div>
                     </div>
                 </div>
@@ -1794,87 +1822,103 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
 
             <!-- Dica / Tutorial de onde alterar depois -->
             <div class="onboarding-dica-painel">
-                <div class="onboarding-dica-icone">💡</div>
+                <div class="onboarding-dica-icone">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>
+                </div>
                 <div class="onboarding-dica-corpo">
                     <strong>Onde alterar essas configurações depois?</strong>
                     <p>
-                        💻 <b>No Computador (PC):</b> Vá na página do seu <b>Perfil</b> e clique no ícone de configurações (⚙️).<br>
-                        📱 <b>No Celular:</b> Em qualquer aba do site, abra o menu na <b>barra de navegação</b> e toque em <b>Configurações</b>.
+                        <b>No Computador (PC):</b> Vá na página do seu <b>Perfil</b> e clique no ícone de configurações.<br>
+                        <b>No Celular:</b> Em qualquer aba do site, abra o menu na <b>barra de navegação</b> e toque em <b>Configurações</b>.
                     </p>
                 </div>
             </div>
 
             <button type="button" class="btn-onboarding-concluir" onclick="concluirOnboarding()">
-                Tudo pronto! Entrar no site 🚀
+                <span>Tudo pronto! Entrar no site</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
             </button>
         </div>
     </div>
 
     <script>
     (function () {
+        const svgIcones = {
+            'sparkles': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>',
+            'sun': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>',
+            'moon': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
+            'device': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>',
+            'contrast': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"></path></svg>',
+            'text': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>',
+            'link': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
+            'zap': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
+            'libras': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"></circle><path d="m18 19 1-7-6 1"></path><path d="m5 8 3-3 5.5 3-2.36 3.5"></path><path d="M4.24 14.5a5 5 0 0 0 6.88 6"></path><path d="M13.76 17.5a5 5 0 0 0-6.88-6"></path></svg>',
+            'bulb': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>'
+        };
+
         const explicativos = {
             'padrao': {
-                icone: '✨',
+                icone: svgIcones.sparkles,
                 tag: 'BOAS-VINDAS',
                 titulo: 'Personalize tudo agora',
                 desc: 'Passe o mouse ou toque sobre qualquer opção para ver os benefícios e detalhes de cada recurso.',
-                dica: '💡 Suas preferências são salvas e funcionam em todas as páginas do HelpFull!'
+                dica: 'Suas preferências são salvas e funcionam em todas as páginas do HelpFull!'
             },
             'tema-claro': {
-                icone: '☀️',
+                icone: svgIcones.sun,
                 tag: 'TEMA VISUAL',
                 titulo: 'Modo Claro',
                 desc: 'Aparência tradicional e luminosa com tons suaves de azul e branco, ideal para ambientes claros e leitura sob a luz do dia.',
-                dica: '💡 Proporciona visual limpo, refrescante e acolhedor.'
+                dica: 'Proporciona visual limpo, refrescante e acolhedor.'
             },
             'tema-escuro': {
-                icone: '🌙',
+                icone: svgIcones.moon,
                 tag: 'TEMA VISUAL',
                 titulo: 'Modo Noturno',
                 desc: 'Substitui fundos claros por superfícies escuras relaxantes, diminuindo o cansaço dos olhos à noite e economizando bateria em telas OLED.',
-                dica: '💡 Recomendado para ambientes com pouca luz e relaxamento visual.'
+                dica: 'Recomendado para ambientes com pouca luz e relaxamento visual.'
             },
             'tema-auto': {
-                icone: '💻',
+                icone: svgIcones.device,
                 tag: 'APARÊNCIA INTELIGENTE',
                 titulo: 'Seguir o Dispositivo',
                 desc: 'Acompanha automaticamente as configurações do seu celular ou PC: claro de dia e escuro se o seu sistema ativar o modo noturno.',
-                dica: '💡 Você não precisa trocar manualmente: o HelpFull sincroniza sozinho!'
+                dica: 'Você não precisa trocar manualmente: o HelpFull sincroniza sozinho!'
             },
             'contraste': {
-                icone: '👁️',
+                icone: svgIcones.contrast,
                 tag: 'ACESSIBILIDADE VISUAL',
                 titulo: 'Mais Contraste',
                 desc: 'Realça nitidamente as bordas, cartões e tipografia do site, eliminando tons apagados e facilitando a leitura.',
-                dica: '💡 Excelente sob claridade intensa ou para quem tem baixa visão.'
+                dica: 'Excelente sob claridade intensa ou para quem tem baixa visão.'
             },
             'textoGrande': {
-                icone: '🔍',
+                icone: svgIcones.text,
                 tag: 'LEGIBILIDADE',
                 titulo: 'Texto Maior',
                 desc: 'Aumenta as letras de títulos, relatos, artigos e botões em toda a plataforma sem deformar o layout.',
-                dica: '💡 Melhora a experiência de leitura sem precisar aproximar a tela.'
+                dica: 'Melhora a experiência de leitura sem precisar aproximar a tela.'
             },
             'sublinhar': {
-                icone: '🔗',
+                icone: svgIcones.link,
                 tag: 'NAVEGAÇÃO',
                 titulo: 'Sublinhar Links',
                 desc: 'Destaca de forma inequívoca todos os links, botões e elementos clicáveis com uma linha inferior.',
-                dica: '💡 Facilita identificar rapidamente onde é possível clicar.'
+                dica: 'Facilita identificar rapidamente onde é possível clicar.'
             },
             'semAnimacao': {
-                icone: '⚡',
+                icone: svgIcones.zap,
                 tag: 'CONFORTO E FOCO',
                 titulo: 'Reduzir Animações',
                 desc: 'Diminui movimentos e efeitos de transição, resultando em uma navegação mais direta, estática e suave.',
-                dica: '💡 Recomendado para evitar tonturas visuais ou acelerar aparelhos mais lentos.'
+                dica: 'Recomendado para evitar tonturas visuais ou acelerar aparelhos mais lentos.'
             },
             'libras': {
-                icone: '🤟',
+                icone: svgIcones.libras,
                 tag: 'INCLUSÃO OFICIAL',
                 titulo: 'Tradutor de Libras (Gov.br)',
                 desc: 'Integra o avatar 3D do VLibras do Governo Federal para tradução simultânea de textos para a Língua Brasileira de Sinais.',
-                dica: '💡 O avatar fica disponível no canto da tela para traduzir o que você selecionar.'
+                dica: 'O avatar fica disponível no canto da tela para traduzir o que você selecionar.'
             }
         };
 
@@ -1888,10 +1932,10 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             if (!tag || !icone || !titulo || !desc || !dica) return;
 
             tag.textContent = item.tag;
-            icone.textContent = item.icone;
+            icone.innerHTML = item.icone;
             titulo.textContent = item.titulo;
             desc.textContent = item.desc;
-            dica.textContent = item.dica;
+            dica.innerHTML = svgIcones.bulb + ' <span>' + item.dica + '</span>';
         }
 
         function sincronizarEstadoVisual() {

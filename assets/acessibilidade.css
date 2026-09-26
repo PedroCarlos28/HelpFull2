@@ -3167,8 +3167,115 @@ body.acessibilidade-escuro .onboarding-dica-painel {
 }
 
 .notificacoes-icone-tag {
-    font-size: 1.35rem;
-    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #2b7a8c;
+}
+
+body.acessibilidade-escuro .notificacoes-icone-tag {
+    color: #38a3b8;
+}
+
+.tema-icone svg,
+.onboarding-opt-icone svg,
+.onboarding-secao-titulo svg,
+.onboarding-badge svg,
+.onboarding-dica-icone svg,
+.onboarding-preview-icone-badge svg,
+.notificacoes-icone-tag svg,
+.acessibilidade-idioma label svg,
+.onboarding-preview-dica svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.onboarding-badge,
+#painelAcessBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.onboarding-secao-titulo,
+#secaoTemaTitulo,
+#secaoAcessTitulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.onboarding-secao-titulo svg,
+#secaoTemaTitulo svg,
+#secaoAcessTitulo svg,
+.acessibilidade-idioma label svg,
+.onboarding-badge svg,
+#painelAcessBadge svg {
+    flex-shrink: 0;
+    color: #2b7a8c;
+}
+
+body.acessibilidade-escuro .onboarding-secao-titulo svg,
+body.acessibilidade-escuro #secaoTemaTitulo svg,
+body.acessibilidade-escuro #secaoAcessTitulo svg,
+body.acessibilidade-escuro .acessibilidade-idioma label svg,
+body.acessibilidade-escuro .onboarding-badge svg,
+body.acessibilidade-escuro #painelAcessBadge svg {
+    color: #38a3b8;
+}
+
+.acessibilidade-idioma label,
+#rotuloIdiomaPainel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.onboarding-preview-dica,
+#painelPreviewDica {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.onboarding-preview-dica svg,
+#painelPreviewDica svg {
+    flex-shrink: 0;
+    color: #2b7a8c;
+}
+
+body.acessibilidade-escuro .onboarding-preview-dica svg,
+body.acessibilidade-escuro #painelPreviewDica svg {
+    color: #38a3b8;
+}
+
+.onboarding-tema-btn .tema-icone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.onboarding-opt-icone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #2b7a8c;
+}
+
+body.acessibilidade-escuro .onboarding-opt-icone {
+    color: #38a3b8;
+}
+
+.onboarding-preview-icone-badge svg {
+    width: 28px;
+    height: 28px;
+    stroke: #2b7a8c;
+}
+
+body.acessibilidade-escuro .onboarding-preview-icone-badge svg {
+    stroke: #38a3b8;
 }
 
 .card-notificacoes-bloco .lista-notificacoes {

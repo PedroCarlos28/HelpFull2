@@ -1794,7 +1794,12 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         <div class="card-perfil card-notificacoes-bloco" id="cardNotificacoesPerfil">
             <div class="notificacoes-bloco-header">
                 <div class="notificacoes-bloco-titulo">
-                    <span class="notificacoes-icone-tag">🔔</span>
+                    <span class="notificacoes-icone-tag">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </span>
                     <h2 class="titulo-secao" style="margin: 0;" id="tituloNotificacoesPerfil">Notificações</h2>
                 </div>
                 <div class="painel-actions" style="margin: 0;">
