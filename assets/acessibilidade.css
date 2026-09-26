@@ -2465,20 +2465,31 @@ body.acessibilidade-texto-grande .navbar-topo:has(.nav-top-row) .nav-top-row {
 /* ========================================================
    VLIBRAS - API DE LIBRAS DO GOVERNO FEDERAL (GOV.BR)
    ======================================================== */
+body:not(.acessibilidade-libras) #vlibras-access-wrapper,
+body:not(.acessibilidade-libras) #vlibras-app-root,
+body:not(.acessibilidade-libras) [vw],
+#vlibras-access-wrapper.vlibras-oculto,
+#vlibras-app-root.vlibras-oculto,
 [vw].vlibras-oculto,
 [vw].vlibras-oculto * {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
+#vlibras-access-wrapper,
 [vw] [vw-access-button] {
     transition: transform 0.25s ease, filter 0.25s ease !important;
     z-index: 99990 !important;
 }
 
+#vlibras-access-wrapper:hover,
 [vw] [vw-access-button]:hover {
     transform: scale(1.08) !important;
 }
 
+body.acessibilidade-escuro #vlibras-access-wrapper,
 body.acessibilidade-escuro [vw] [vw-access-button] {
     filter: brightness(0.92) contrast(1.1) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5)) !important;
 }

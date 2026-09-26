@@ -649,19 +649,23 @@
     }
 
     function gerenciarVLibras(ativo) {
+        var wrapper = document.getElementById('vlibras-access-wrapper');
+        var appRoot = document.getElementById('vlibras-app-root');
         var vwContainer = document.querySelector('[vw]');
+
         if (ativo) {
-            if (!vwContainer) {
-                vwContainer = document.createElement('div');
-                vwContainer.setAttribute('vw', '');
-                vwContainer.className = 'enabled';
-                vwContainer.innerHTML = '<div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>';
-                document.body.appendChild(vwContainer);
+            if (wrapper) {
+                wrapper.classList.remove('vlibras-oculto');
+                wrapper.style.removeProperty('display');
             }
-            vwContainer.classList.remove('vlibras-oculto');
-            vwContainer.style.removeProperty('display');
-            var wrapper = document.querySelector('[vw-plugin-wrapper]');
-            if (wrapper) wrapper.style.removeProperty('display');
+            if (appRoot) {
+                appRoot.classList.remove('vlibras-oculto');
+                appRoot.style.removeProperty('display');
+            }
+            if (vwContainer) {
+                vwContainer.classList.remove('vlibras-oculto');
+                vwContainer.style.removeProperty('display');
+            }
 
             var iniciarWidget = function () {
                 try {
@@ -693,12 +697,27 @@
                 iniciarWidget();
             }
         } else {
+            // Oculta e desativa todos os elementos do VLibras da tela
+            if (wrapper) {
+                wrapper.classList.add('vlibras-oculto');
+                wrapper.style.setProperty('display', 'none', 'important');
+            }
+            if (appRoot) {
+                appRoot.classList.add('vlibras-oculto');
+                appRoot.style.setProperty('display', 'none', 'important');
+                if (appRoot.dataset) appRoot.dataset.active = 'false';
+            }
             if (vwContainer) {
                 vwContainer.classList.add('vlibras-oculto');
                 vwContainer.style.setProperty('display', 'none', 'important');
-                var wrapperOcultar = document.querySelector('[vw-plugin-wrapper]');
-                if (wrapperOcultar) wrapperOcultar.style.setProperty('display', 'none', 'important');
             }
+            try {
+                if (localStorage.getItem('@vlibras-widget')) {
+                    var c = JSON.parse(localStorage.getItem('@vlibras-widget') || '{}');
+                    c.isOpen = false;
+                    localStorage.setItem('@vlibras-widget', JSON.stringify(c));
+                }
+            } catch (e) {}
         }
     }
 
