@@ -56,19 +56,20 @@ if (isset($_SESSION['usuario_id'])) {
             max-width: 1100px;
         }
 
-        /* FUNDO */
-        .video-fundo {
+        /* FUNDO ANIMADO INTERATIVO */
+        .fundo-animado-canvas {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: cover;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             z-index: 0;
             pointer-events: none;
-            transform: translate(-50%, -50%);
+            display: block;
+            filter: blur(32px);
+            -webkit-filter: blur(32px);
+            transform: scale(1.08);
+            transform-origin: center center;
         }
 
         .imagem-fundo-mobile {
@@ -1127,10 +1128,8 @@ if (isset($_SESSION['usuario_id'])) {
 
 <body>
 
-    <video class="video-fundo" autoplay loop muted playsinline poster="assets/HELPFULL.png">
-        <source src="assets/HelpFullVideoFundo.mp4" type="video/mp4">
-    </video>
-    <img class="imagem-fundo-mobile" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
+    <!-- FUNDO ANIMADO INTERATIVO COM BRILHO QUE SEGUE O MOUSE -->
+    <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas"></canvas>
 
     <!-- Navbar Premium -->
     <div class="nav-container-global escondida" id="nav-container-global">
@@ -1557,6 +1556,7 @@ if (isset($_SESSION['usuario_id'])) {
             }, { passive: true });
         })();
     </script>
+    <script src="assets/fundo-animado.js?v=20260925-v1"></script>
     <script src="notificacoes.js?v=20260924-v7" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260924-v7';document.body.appendChild(s);}"></script>
 
 </body>

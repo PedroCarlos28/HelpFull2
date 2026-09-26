@@ -36,16 +36,20 @@ if (isset($_SESSION['usuario_id'])) {
             padding: 20px 0;
         }
 
-        /* === FUNDO DE VÍDEO E FAIXA === */
-        .video-fundo {
+        /* === FUNDO ANIMADO INTERATIVO COM BRILHO QUE SEGUE O MOUSE === */
+        .fundo-animado-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 70vh;
-            object-fit: cover;
             z-index: 0;
             pointer-events: none;
+            display: block;
+            filter: blur(32px);
+            -webkit-filter: blur(32px);
+            transform: scale(1.08);
+            transform-origin: center center;
         }
 
         .faixa-inferior {
@@ -469,10 +473,8 @@ if (isset($_SESSION['usuario_id'])) {
 
 <body>
 
-    <video class="video-fundo" autoplay loop muted playsinline poster="assets/HELPFULL.png">
-        <source src="assets/HelpFullVideoFundo.mp4" type="video/mp4">
-    </video>
-    <img class="imagem-fundo-mobile" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
+    <!-- FUNDO ANIMADO INTERATIVO COM BRILHO QUE SEGUE O MOUSE -->
+    <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas"></canvas>
     <div class="faixa-inferior"></div>
 
     <nav class="navbar-topo">
@@ -891,6 +893,7 @@ if (isset($_SESSION['usuario_id'])) {
 
         window.mostrarInstrucoesFirebase = mostrarInstrucoesFirebase;
     </script>
+    <script src="assets/fundo-animado.js?v=20260925-v1"></script>
 </body>
 
 </html>
