@@ -1232,6 +1232,134 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             transition: all 0.4s ease;
         }
 
+        /* Modal Pesquisa e Barra de Busca */
+        .btn-fechar-modal-pesquisa {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.06);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.35rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4b5563;
+            z-index: 20;
+            transition: all 0.2s ease;
+        }
+
+        .btn-fechar-modal-pesquisa:hover {
+            background: rgba(0, 0, 0, 0.12);
+            color: #111827;
+            transform: scale(1.08);
+        }
+
+        .modal-pesquisa-titulos {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .modal-pesquisa-titulos h2 {
+            color: #1f2937;
+            font-weight: 900;
+            margin: 0 0 6px 0;
+            font-size: 1.55rem;
+            letter-spacing: -0.3px;
+        }
+
+        .modal-pesquisa-titulos p {
+            color: #4b5563;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .modal-busca-barra {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 6px 8px 6px 20px;
+            border-radius: 40px;
+            margin-bottom: 24px;
+            width: 100%;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+        }
+
+        .modal-busca-barra:focus-within {
+            border-color: #2b7a8c;
+            box-shadow: 0 4px 22px rgba(43, 122, 140, 0.18);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .modal-busca-input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 4px 10px 0;
+            border: none !important;
+            background: transparent !important;
+            outline: none !important;
+            box-shadow: none !important;
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 0.95rem;
+            line-height: normal;
+        }
+
+        .modal-busca-input::placeholder {
+            color: #8b9aa7;
+            font-weight: 600;
+            opacity: 0.85;
+        }
+
+        .btn-buscar-api {
+            padding: 10px 26px;
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(135deg, #2b7a8c, #236877);
+            color: #ffffff;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.92rem;
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.35);
+            white-space: nowrap;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .btn-buscar-api:hover {
+            transform: translateY(-1px) scale(1.02);
+            background: linear-gradient(135deg, #338da1, #2b7a8c);
+            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.45);
+        }
+
+        .btn-buscar-api:active {
+            transform: scale(0.98);
+        }
+
+        .modal-filtros-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            width: 100%;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
         .loader-mini {
             width: 18px;
             height: 18px;
@@ -1358,13 +1486,13 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .compact-pill {
-            background: #607d8b;
+            background: #2b7a8c;
             color: #fff;
             font-weight: 800;
             padding: 8px 25px;
             border-radius: 25px;
             font-size: 0.9rem;
-            box-shadow: 0 4px 10px rgba(96, 125, 139, 0.3);
+            box-shadow: 0 4px 10px rgba(43, 122, 140, 0.3);
         }
 
         .compact-query {
@@ -1374,14 +1502,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             flex: 1;
         }
 
-
         .btn-filtro {
-            padding: 8px 22px;
-            border-radius: 25px;
-            border: none;
-            background: #e5e5e5;
-            font-weight: 700;
-            font-size: 0.9rem;
             padding: 10px 22px;
             border-radius: 25px;
             border: 1px solid rgba(0, 0, 0, 0.08);
@@ -2281,42 +2402,33 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
     <!-- MODAL DE PESQUISA (Ajustado ao Figma) -->
     <div id="modal-pesquisa">
         <div id="modal-content">
-            <button onclick="fecharModal()"
-                style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.06); width: 30px; height: 30px; border-radius: 50%; border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #333; z-index: 20; transition: 0.2s;"
-                onmouseover="this.style.background='rgba(0,0,0,0.1)'"
-                onmouseout="this.style.background='rgba(0,0,0,0.06)'">&times;</button>
+            <button type="button" onclick="fecharModal()" class="btn-fechar-modal-pesquisa" aria-label="Fechar" title="Fechar">&times;</button>
 
             <!-- Header Padrão -->
             <div id="modal-header-container">
-                <div style="text-align: center; margin-bottom: 15px;">
-                    <h2 style="color: #333; font-weight: 900; margin-bottom: 5px; font-size: 1.5rem;">Mídias e
-                        Atividades</h2>
-                    <p style="color: #555; font-weight: 700; font-size: 1rem; margin-top: 0; opacity: 0.8;">O que você
-                        consumiu?</p>
+                <div class="modal-pesquisa-titulos">
+                    <h2>Mídias e Atividades</h2>
+                    <p>O que você consumiu?</p>
                 </div>
 
-                <div
-                    style="display: flex; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); padding: 7px; border-radius: 35px; margin-bottom: 25px; width: 100%; border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                    <input type="text" id="input-busca-api" placeholder="Escreva aqui o nome..."
-                        style="flex: 1; padding: 10px 20px; border-radius: 25px; border: none; background: transparent; outline: none; font-weight: 700; color: #333; font-size: 0.95rem; width: 100%;">
-                    <button onclick="buscarNaAPI()"
-                        style="padding: 0 25px; border-radius: 30px; border: none; background: #607d8b; color: #fff; font-weight: 800; cursor: pointer; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(96, 125, 139, 0.3); white-space: nowrap; transition: 0.2s; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
-                        onmouseover="this.style.transform='scale(1.03)'; this.style.background='#546e7a'"
-                        onmouseout="this.style.transform='scale(1)'; this.style.background='#607d8b'">Buscar</button>
+                <div class="modal-busca-barra">
+                    <input type="text" id="input-busca-api" class="modal-busca-input" placeholder="Escreva aqui o nome..." autocomplete="off">
+                    <button type="button" onclick="buscarNaAPI()" class="btn-buscar-api">Buscar</button>
                 </div>
 
-                <div style="display: flex; gap: 15px; justify-content: center; width: 100%; margin: 0 auto;">
-                    <button class="btn-filtro active" id="btn-filtro-tudo"
+                <div class="modal-filtros-container">
+                    <button type="button" class="btn-filtro active" id="btn-filtro-tudo"
                         onclick="mudarFiltroPesquisa('tudo', this)">Tudo</button>
-                    <button class="btn-filtro" onclick="mudarFiltroPesquisa('video', this)">Filmes/Séries</button>
-                    <button class="btn-filtro" onclick="mudarFiltroPesquisa('book', this)">Livros</button>
+                    <button type="button" class="btn-filtro" onclick="mudarFiltroPesquisa('video', this)">Filmes/Séries</button>
+                    <button type="button" class="btn-filtro" onclick="mudarFiltroPesquisa('book', this)">Livros</button>
                 </div>
             </div>
 
             <!-- Header Compacto (Aparece após busca) -->
-            <div id="modal-compact-header">
+            <div id="modal-compact-header" onclick="reabrirBuscaNormal()" title="Clique para editar a pesquisa" style="cursor: pointer;">
                 <div class="compact-pill" id="compact-filter-name">Tudo</div>
                 <div class="compact-query" id="compact-search-query">Pesquisa aqui...</div>
+                <span class="compact-edit-hint" style="font-size: 0.82rem; margin-right: 14px; opacity: 0.75; font-weight: 700; white-space: nowrap;">✏️ Editar</span>
             </div>
 
             <!-- Grid de Resultados -->
@@ -2429,6 +2541,22 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 buscarNaAPI();
             }
         }
+
+        function reabrirBuscaNormal() {
+            document.getElementById('modal-header-container').style.display = 'block';
+            document.getElementById('modal-compact-header').style.display = 'none';
+            const input = document.getElementById('input-busca-api');
+            if (input) {
+                input.focus();
+                input.select();
+            }
+        }
+
+        document.getElementById('modal-pesquisa')?.addEventListener('click', function (e) {
+            if (e.target === this) {
+                fecharModal();
+            }
+        });
 
         document.getElementById('input-busca-api')?.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {

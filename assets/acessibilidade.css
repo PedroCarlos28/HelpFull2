@@ -2311,12 +2311,79 @@ body.acessibilidade-escuro #input-busca-api {
     color: var(--tema-texto) !important;
 }
 
-body.acessibilidade-escuro #modal-pesquisa input,
+body.acessibilidade-escuro #modal-pesquisa input:not(#input-busca-api),
 body.acessibilidade-escuro #modal-pesquisa .modal-filtros,
 body.acessibilidade-escuro #modal-edicao input,
 body.acessibilidade-escuro #modal-edicao textarea {
     background: var(--tema-campo) !important;
     border-color: var(--tema-borda) !important;
+}
+
+body.acessibilidade-escuro #input-busca-api,
+body.acessibilidade-contraste #input-busca-api {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--tema-texto) !important;
+}
+
+body.acessibilidade-escuro .modal-busca-barra {
+    background: rgba(18, 25, 30, 0.75) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.acessibilidade-escuro .modal-busca-barra:focus-within {
+    border-color: #38a3b8 !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(56, 163, 184, 0.25) !important;
+    background: rgba(18, 25, 30, 0.95) !important;
+}
+
+body.acessibilidade-escuro .modal-busca-input::placeholder {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+body.acessibilidade-escuro .btn-buscar-api {
+    background: linear-gradient(135deg, #2b7a8c, #1f5f6e) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(43, 122, 140, 0.45) !important;
+}
+
+body.acessibilidade-escuro .btn-buscar-api:hover {
+    background: linear-gradient(135deg, #3695aa, #267587) !important;
+    box-shadow: 0 6px 20px rgba(54, 149, 170, 0.55) !important;
+}
+
+body.acessibilidade-escuro .btn-fechar-modal-pesquisa {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #e2e8f0 !important;
+}
+
+body.acessibilidade-escuro .btn-fechar-modal-pesquisa:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+}
+
+body.acessibilidade-escuro .compact-edit-hint {
+    color: var(--tema-texto-suave) !important;
+}
+
+body.acessibilidade-contraste .modal-busca-barra {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+}
+
+body.acessibilidade-contraste .btn-buscar-api {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    font-weight: 900 !important;
+}
+
+body.acessibilidade-contraste .btn-fechar-modal-pesquisa {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
 }
 
 body.acessibilidade-escuro .post-midias-container img {
