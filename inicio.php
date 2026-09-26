@@ -1031,23 +1031,17 @@ if (isset($_SESSION['usuario_id'])) {
         }
         body.acessibilidade-escuro .carrossel-dot {
             background: rgba(255, 255, 255, 0.3) !important;
+            border: none !important;
         }
         body.acessibilidade-escuro .carrossel-dot:hover {
             background: rgba(255, 255, 255, 0.6) !important;
+            border: none !important;
         }
         body.acessibilidade-escuro .carrossel-dot.ativo {
-            background: var(--tema-link, #7ecfdb) !important;
-            box-shadow: 0 0 8px rgba(126, 207, 219, 0.8), 0 0 16px rgba(126, 207, 219, 0.45) !important;
-            animation: brilhoDotEscuro 2.4s ease-in-out infinite !important;
-        }
-
-        @keyframes brilhoDotEscuro {
-            0%, 100% {
-                box-shadow: 0 0 6px rgba(126, 207, 219, 0.75), 0 0 14px rgba(126, 207, 219, 0.35);
-            }
-            50% {
-                box-shadow: 0 0 11px rgba(126, 207, 219, 0.95), 0 0 22px rgba(126, 207, 219, 0.55);
-            }
+            background: #2b7a8c !important;
+            border: none !important;
+            box-shadow: 0 0 8px rgba(43, 122, 140, 0.8), 0 0 16px rgba(43, 122, 140, 0.45) !important;
+            animation: brilhoDot 2.4s ease-in-out infinite !important;
         }
 
         body.acessibilidade-contraste .carrossel-slide .slide-titulo,
@@ -1123,7 +1117,7 @@ if (isset($_SESSION['usuario_id'])) {
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v20">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260925-v22">
 </head>
 
 <body>
