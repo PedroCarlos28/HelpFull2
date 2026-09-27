@@ -1,5 +1,6 @@
 <?php
 require_once 'conexao.php';
+require_once 'email_helper.php';
 
 $usuarioLogado = null;
 if (isset($_SESSION['usuario_id'])) {
@@ -3559,7 +3560,7 @@ try {
                         <div class="input-com-icone-modal">
                             <input type="text" id="codigo2faApagar" class="modal-input input-codigo-destaque" maxlength="6" inputmode="numeric" placeholder="000000" autocomplete="one-time-code">
                         </div>
-                        <span class="modal-hint" id="hintEmailCodigoApagar">Os códigos são enviados para <?= htmlspecialchars(mascararEmail($usuarioLogado['email'])) ?></span>
+                        <span class="modal-hint" id="hintEmailCodigoApagar">Os códigos são enviados para <?= htmlspecialchars(function_exists('mascararEmail') ? mascararEmail($usuarioLogado['email']) : $usuarioLogado['email']) ?></span>
                     </div>
                 </div>
 
