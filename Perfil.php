@@ -1793,7 +1793,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             .toast-notificacao { width: 92%; max-width: 380px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v1">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
@@ -2427,7 +2427,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
     </script>
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
-    <script src="notificacoes.js?v=20260926-v4" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260926-v4';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260927-v1" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260927-v1';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
 </body>
 </html>

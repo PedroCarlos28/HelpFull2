@@ -252,12 +252,13 @@
 
     /* ── Acessibilidade ───────────────────────────────────── */
     var prefAcess = {
-        escuro:       'acessibilidade-escuro',
-        contraste:    'acessibilidade-contraste',
-        textoGrande:  'acessibilidade-texto-grande',
-        sublinhar:    'acessibilidade-sublinhar',
-        semAnimacao:  'acessibilidade-sem-animacao',
-        libras:       'acessibilidade-libras'
+        escuro:               'acessibilidade-escuro',
+        contraste:            'acessibilidade-contraste',
+        reduzirTransparencia: 'acessibilidade-reduzir-transparencia',
+        textoGrande:          'acessibilidade-texto-grande',
+        sublinhar:            'acessibilidade-sublinhar',
+        semAnimacao:          'acessibilidade-sem-animacao',
+        libras:               'acessibilidade-libras'
     };
 
     var tradInterface = {
@@ -268,6 +269,7 @@
             escuro:['Modo noturno','Fundo preto e superfícies cinza escuro'],
             autoTema:['Seguir dispositivo','Sincroniza com o tema do seu aparelho'],
             contraste:['Mais contraste','Realça bordas, textos e links'],
+            reduzirTransparencia:['Reduzir transparências','Remove vidros e fundos translúcidos'],
             textoGrande:['Texto maior','Aumenta a leitura sem trocar de página'],
             sublinhar:['Sublinhar links','Facilita localizar elementos clicáveis'],
             semAnimacao:['Reduzir animações','Diminui movimentos e transições'],
@@ -282,6 +284,7 @@
             escuro:['Dark mode','Dark background and gray surfaces'],
             autoTema:['Sync with device','Matches your device appearance'],
             contraste:['High contrast','Highlights borders, text and links'],
+            reduzirTransparencia:['Reduce transparency','Removes glass and translucent backgrounds'],
             textoGrande:['Larger text','Improves readability without changing pages'],
             sublinhar:['Underline links','Makes clickable elements easier to find'],
             semAnimacao:['Reduce motion','Reduces movement and transitions'],
@@ -318,6 +321,9 @@
         'Fundo preto e superfícies cinza escuro': 'Dark background and deep gray surfaces',
         'Mais contraste': 'High contrast',
         'Realça bordas, textos e links': 'Highlights borders, text and links',
+        'Reduzir transparências': 'Reduce transparency',
+        'Reduzir Transparências': 'Reduce Transparency',
+        'Remove vidros e fundos translúcidos': 'Removes glass and translucent backgrounds',
         'Texto maior': 'Larger text',
         'Aumenta a leitura sem trocar de página': 'Enhances readability without changing pages',
         'Sublinhar links': 'Underline links',
@@ -781,6 +787,7 @@
                 var span = row.querySelector('.onboarding-opt-nome');
                 if (span) {
                     if (k === 'contraste') span.textContent = 'High Contrast';
+                    else if (k === 'reduzirTransparencia') span.textContent = 'Reduce Transparency';
                     else if (k === 'textoGrande') span.textContent = 'Larger Text';
                     else if (k === 'sublinhar') span.textContent = 'Underline Links';
                     else if (k === 'semAnimacao') span.textContent = 'Reduce Motion';
@@ -811,6 +818,7 @@
                 var span = row.querySelector('.onboarding-opt-nome');
                 if (span) {
                     if (k === 'contraste') span.textContent = 'Mais Contraste';
+                    else if (k === 'reduzirTransparencia') span.textContent = 'Reduzir Transparências';
                     else if (k === 'textoGrande') span.textContent = 'Texto Maior';
                     else if (k === 'sublinhar') span.textContent = 'Sublinhar Links';
                     else if (k === 'semAnimacao') span.textContent = 'Reduzir Animações';
@@ -980,6 +988,7 @@
         'moon': '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
         'device': '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>',
         'contrast': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"></path></svg>',
+        'layers': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>',
         'text': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>',
         'link': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
         'zap': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
@@ -1030,6 +1039,13 @@
                 titulo: 'Mais Contraste',
                 desc: 'Realça nitidamente as bordas, cartões e tipografia do site, eliminando tons apagados e facilitando a leitura.',
                 dica: 'Excelente sob claridade intensa ou para quem tem baixa visão.'
+            },
+            'reduzirTransparencia': {
+                icone: svgIconesPainel.layers,
+                tag: 'CONFORTO VISUAL',
+                titulo: 'Reduzir Transparências',
+                desc: 'Remove o efeito de vidro embaçado (blur) e transparências de cartões, menus e cabeçalhos, tornando os blocos 100% sólidos e nítidos.',
+                dica: 'Aumenta a nitidez do texto sobre o fundo e melhora o desempenho visual.'
             },
             'textoGrande': {
                 icone: svgIconesPainel.text,
@@ -1102,6 +1118,13 @@
                 titulo: 'High Contrast',
                 desc: 'Sharpens card borders, buttons and text for maximal visibility and clarity.',
                 dica: 'Helpful in bright sunlight or for low-vision readers.'
+            },
+            'reduzirTransparencia': {
+                icone: svgIconesPainel.layers,
+                tag: 'VISUAL COMFORT',
+                titulo: 'Reduce Transparency',
+                desc: 'Removes blurred glass effects and translucency from cards, menus, and headers, making panels 100% solid and crisp.',
+                dica: 'Improves text readability over backgrounds and enhances graphics performance.'
             },
             'textoGrande': {
                 icone: svgIconesPainel.text,
@@ -1243,6 +1266,14 @@
                                         <div class="onboarding-opt-info">
                                             <span class="onboarding-opt-icone">${svgIconesPainel.contrast}</span>
                                             <span class="onboarding-opt-nome">Mais Contraste</span>
+                                        </div>
+                                        <div class="onboarding-switch" aria-hidden="true"></div>
+                                    </div>
+
+                                    <div class="onboarding-opt-row painel-opt-row" data-acess-key="reduzirTransparencia" data-preview-key="reduzirTransparencia">
+                                        <div class="onboarding-opt-info">
+                                            <span class="onboarding-opt-icone">${svgIconesPainel.layers}</span>
+                                            <span class="onboarding-opt-nome">Reduzir Transparências</span>
                                         </div>
                                         <div class="onboarding-switch" aria-hidden="true"></div>
                                     </div>

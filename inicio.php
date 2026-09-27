@@ -1218,7 +1218,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v1">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
@@ -1693,7 +1693,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
         })();
     </script>
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
-    <script src="notificacoes.js?v=20260926-v4" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260926-v4';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260927-v1" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260927-v1';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
 
     <!-- MODAL DE BOAS-VINDAS / ONBOARDING DE CONFIGURAÇÕES -->
@@ -1751,6 +1751,16 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"></path></svg>
                                     </span>
                                     <span class="onboarding-opt-nome">Mais Contraste</span>
+                                </div>
+                                <div class="onboarding-switch" aria-hidden="true"></div>
+                            </div>
+
+                            <div class="onboarding-opt-row" data-acess-key="reduzirTransparencia" data-preview-key="reduzirTransparencia" onclick="toggleAcessOnboarding('reduzirTransparencia')">
+                                <div class="onboarding-opt-info">
+                                    <span class="onboarding-opt-icone">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                                    </span>
+                                    <span class="onboarding-opt-nome">Reduzir Transparências</span>
                                 </div>
                                 <div class="onboarding-switch" aria-hidden="true"></div>
                             </div>
@@ -1846,6 +1856,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             'moon': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
             'device': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>',
             'contrast': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"></path></svg>',
+            'layers': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>',
             'text': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>',
             'link': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
             'zap': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
@@ -1888,6 +1899,13 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 titulo: 'Mais Contraste',
                 desc: 'Realça nitidamente as bordas, cartões e tipografia do site, eliminando tons apagados e facilitando a leitura.',
                 dica: 'Excelente sob claridade intensa ou para quem tem baixa visão.'
+            },
+            'reduzirTransparencia': {
+                icone: svgIcones.layers,
+                tag: 'CONFORTO VISUAL',
+                titulo: 'Reduzir Transparências',
+                desc: 'Remove o efeito de vidro embaçado (blur) e transparências de cartões, menus e cabeçalhos, tornando os blocos 100% sólidos e nítidos.',
+                dica: 'Aumenta a nitidez do texto sobre o fundo e melhora o desempenho visual.'
             },
             'textoGrande': {
                 icone: svgIcones.text,

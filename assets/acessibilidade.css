@@ -4236,6 +4236,169 @@ html body.acessibilidade-contraste.acessibilidade-escuro .btn-gerar-relatorio sv
     stroke: #000000 !important;
 }
 
+/* ==========================================================================
+   ACESSIBILIDADE: REDUZIR TRANSPARÊNCIAS (REDUCE TRANSPARENCY)
+   ========================================================================== */
+
+/* 1. Desativa desfoques de vidro (backdrop-filter) globalmente */
+html.acessibilidade-reduzir-transparencia,
+body.acessibilidade-reduzir-transparencia,
+html.acessibilidade-reduzir-transparencia *,
+body.acessibilidade-reduzir-transparencia * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* 2. Remove filtros de desfoque decorativos que criam névoa */
+body.acessibilidade-reduzir-transparencia .blur-topo,
+body.acessibilidade-reduzir-transparencia .blur-baixo,
+body.acessibilidade-reduzir-transparencia .blur-decorativo,
+body.acessibilidade-reduzir-transparencia .gradiente-fade {
+    display: none !important;
+}
+
+/* 3. Superfícies sólidas no MODO CLARO (padrão) */
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .caixa-vidro,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .cartao,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .bloco-grande,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .quadrado-grafico,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .faixa-meio-branca,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .secao-branca,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .post-card,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .card-sobre,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .card-artigo,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .video-card,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .caixa-chat,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .tabs-capsula,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .detalhes-wrapper,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .relatorio-acao-container,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .nav-fixa,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .navbar-capsula,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .menu-lateral,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .nav-dropdown-mobile,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .dropdown-notificacoes,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .notif-toast,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .menu-opcoes-post,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .dialog-box,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) #painelAcessibilidade,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .onboarding-modal-conteudo,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .bloco-diario,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .area-conteudo-diario,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .quadro-diario,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .card-diario-expandido,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .diario-card-registro,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .modal-conteudo,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .modal-edicao-conteudo,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .bv-comunidade-card,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .bv-diario-card,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .stat-item,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .onboarding-preview-card {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d2dbe5 !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08) !important;
+    opacity: 1 !important;
+}
+
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .balao-msg.bot {
+    background: #f1f5f9 !important;
+    background-color: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .balao-msg.usuario {
+    background: #0284c7 !important;
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+/* 4. Superfícies sólidas no MODO ESCURO */
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .caixa-vidro,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .cartao,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .bloco-grande,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .quadrado-grafico,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .faixa-meio-branca,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .secao-branca,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .post-card,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .card-sobre,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .card-artigo,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .video-card,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .caixa-chat,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .tabs-capsula,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .detalhes-wrapper,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .relatorio-acao-container,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .nav-fixa,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .navbar-capsula,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .menu-lateral,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .nav-dropdown-mobile,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .dropdown-notificacoes,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .notif-toast,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .menu-opcoes-post,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .dialog-box,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro #painelAcessibilidade,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .onboarding-modal-conteudo,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .bloco-diario,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .area-conteudo-diario,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .quadro-diario,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .card-diario-expandido,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .diario-card-registro,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .modal-conteudo,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .modal-edicao-conteudo,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .bv-comunidade-card,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .bv-diario-card,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .stat-item,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .onboarding-preview-card {
+    background: #141c24 !important;
+    background-color: #141c24 !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55) !important;
+    opacity: 1 !important;
+}
+
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .balao-msg.bot {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #f1f5f9 !important;
+}
+
+/* 5. Overlays (fundos de modal / diálogos) com opacidade sólida e alta */
+body.acessibilidade-reduzir-transparencia #painelAcessibilidadeOverlay,
+body.acessibilidade-reduzir-transparencia .modal-overlay,
+body.acessibilidade-reduzir-transparencia .onboarding-overlay,
+body.acessibilidade-reduzir-transparencia .dialog-overlay {
+    background: rgba(8, 12, 16, 0.88) !important;
+    background-color: rgba(8, 12, 16, 0.88) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* 6. Inputs e caixas de texto com fundo 100% opaco */
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) input[type="text"],
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) input[type="search"],
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) textarea,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) select,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .busca-row,
+body.acessibilidade-reduzir-transparencia:not(.acessibilidade-escuro) .input-container {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    opacity: 1 !important;
+}
+
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro input[type="text"],
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro input[type="search"],
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro textarea,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro select,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .busca-row,
+body.acessibilidade-reduzir-transparencia.acessibilidade-escuro .input-container {
+    background: #0d1319 !important;
+    background-color: #0d1319 !important;
+    border: 1px solid rgba(255, 255, 255, 0.20) !important;
+    opacity: 1 !important;
+}
+
 
 
 
