@@ -184,6 +184,7 @@
     window.mostrarNotificacaoAtiva = mostrarToast;
     window.popularPainel           = popularPainel;
     window.fecharNotificacao       = fecharToast;
+    window.carregarNotificacoes    = carregarNotificacoes;
 
     /* ── Hover no perfil — SEMPRE mostra o sino ───────────── */
     function vincularHoverPerfil() {
@@ -206,7 +207,17 @@
         try {
             var r    = await fetch('notificacao_ia.php');
             var data = await r.json();
-            if (data && data.mostrar) {
+            if (data && data.notificacoes && Array.isArray(data.notificacoes)) {
+                data.notificacoes.forEach(function (n, idx) {
+                    popularPainel(n, idx > 0);
+                    if (n.nova) mostrarToast(n);
+                });
+            } else if (Array.isArray(data)) {
+                data.forEach(function (n, idx) {
+                    popularPainel(n, idx > 0);
+                    if (n.nova) mostrarToast(n);
+                });
+            } else if (data && data.mostrar) {
                 popularPainel(data, false);
                 if (data.nova) mostrarToast(data);
             }

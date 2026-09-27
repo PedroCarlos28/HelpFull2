@@ -41,10 +41,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
         $stmt = $pdo->prepare("INSERT INTO diario (usuario_id, texto_diario, emocao_selecionada, criado_em) VALUES (?, ?, ?, NOW())");
         $stmt->execute([$_SESSION['usuario_id'], $conteudo, $emocao]);
         
+        $notificacaoStreak = null;
+        if (!empty($emocao)) {
+            require_once 'notificacao_helper.php';
+            $notif = verificarOuGerarNotificacaoStreak($pdo, $_SESSION['usuario_id']);
+            if ($notif && !empty($notif['nova'])) {
+                $notificacaoStreak = $notif;
+            }
+        }
+
         echo json_encode([
             'sucesso' => true,
             'meta_diario_concluida' => $primeiroDiario,
-            'meta_emocao_concluida' => $primeiraEmocao
+            'meta_emocao_concluida' => $primeiraEmocao,
+            'notificacao_streak' => $notificacaoStreak
         ]);
     } catch (PDOException $e) {
         echo json_encode(['sucesso' => false, 'mensagem' => $e->getMessage()]);
@@ -1072,10 +1082,25 @@ if (!empty($usuarioLogado['id'])) {
                                 if (window.mostrarNotificacaoAtiva) mostrarNotificacaoAtiva(NOTIF_TEMPLATES.meta_diario);
                             }, 1000);
                         }
-                        if (result.meta_emocao_concluida) {
+                        if (result.notificacao_streak) {
                             setTimeout(() => {
-                                if (window.mostrarNotificacaoAtiva) mostrarNotificacaoAtiva(NOTIF_TEMPLATES.meta_emocao);
-                            }, 2000);
+                                if (typeof mostrarNotificacaoAtiva === 'function') {
+                                    mostrarNotificacaoAtiva(result.notificacao_streak);
+                                } else if (window.mostrarNotificacaoAtiva) {
+                                    window.mostrarNotificacaoAtiva(result.notificacao_streak);
+                                }
+                                if (typeof popularPainel === 'function') {
+                                    popularPainel(result.notificacao_streak, true);
+                                } else if (window.popularPainel) {
+                                    window.popularPainel(result.notificacao_streak, true);
+                                }
+                            }, 1200);
+                        }
+
+                        if (typeof carregarNotificacoes === 'function') {
+                            carregarNotificacoes();
+                        } else if (window.carregarNotificacoes) {
+                            window.carregarNotificacoes();
                         }
                     } catch (notifErr) {
                         console.warn("Aviso ao exibir notificação:", notifErr);
@@ -1113,7 +1138,7 @@ if (!empty($usuarioLogado['id'])) {
         }
     </script>
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
-    <script src="notificacoes.js?v=20260926-v3" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260926-v3';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20260926-v4" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260926-v4';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
 </body>
 
