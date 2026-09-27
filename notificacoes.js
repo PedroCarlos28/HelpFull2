@@ -70,6 +70,7 @@
         if (abrindo) {
             clearTimeout(_hoverTimer);
             mostrarBtnSino();
+            carregarNotificacoes();
             fetch('notificacao_ia.php?acao=marcar_lidas').catch(function () {});
             fetch('social_notificacoes_proc.php?acao=marcar_lidas').catch(function () {});
         } else {
@@ -102,6 +103,8 @@
     function popularPainel(data, append) {
         var targets = getContainers();
         if (!targets.length || !data) return;
+        var notifKey = data.chave || (data.id ? ('id_' + data.id) : null) || data.mensagem;
+
         var href = data.link || '#';
         var txtBtn = data.textoBotao || (localStorage.getItem('helpfull_idioma') === 'en' ? 'View' : 'Ver');
         var btnHtml = (href !== '#')
@@ -109,6 +112,11 @@
             : '';
 
         targets.forEach(function (c) {
+            // Evita duplicar a mesma notificação no mesmo container
+            if (notifKey && c.querySelector('[data-notif-key="' + _esc(notifKey) + '"]')) {
+                return;
+            }
+
             if (!append) {
                 c.innerHTML = '';
             } else {
@@ -119,6 +127,7 @@
             }
             var item = document.createElement('div');
             item.className = 'item-notificacao ' + (data.intensidade || 'baixa');
+            if (notifKey) item.setAttribute('data-notif-key', notifKey);
             item.innerHTML =
                 '<div class="barra-intensidade"></div>' +
                 '<div class="notif-content">' +
@@ -143,9 +152,51 @@
         return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
+    /* ── Controle de Toasts Exibidos (Não repetir entre telas) ── */
+    function jaExibiuToast(data) {
+        if (!data) return true;
+        // Na tela de Perfil, NUNCA exibe o balão flutuante (toast)
+        if (document.body.classList.contains('pagina-perfil') || document.getElementById('cardNotificacoesPerfil')) {
+            return true;
+        }
+        var chave = data.chave || (data.id ? ('id_' + data.id) : null) || data.mensagem;
+        if (!chave) return false;
+        try {
+            var vistos = JSON.parse(localStorage.getItem('helpfull_toasts_vistos') || '[]');
+            return vistos.indexOf(chave) !== -1;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function marcarToastExibido(data) {
+        if (!data) return;
+        var chave = data.chave || (data.id ? ('id_' + data.id) : null) || data.mensagem;
+        if (!chave) return;
+        try {
+            var vistos = JSON.parse(localStorage.getItem('helpfull_toasts_vistos') || '[]');
+            if (vistos.indexOf(chave) === -1) {
+                vistos.push(chave);
+                if (vistos.length > 50) vistos = vistos.slice(-50);
+                localStorage.setItem('helpfull_toasts_vistos', JSON.stringify(vistos));
+            }
+        } catch (e) {}
+
+        // Atualiza no backend para que a notificação seja marcada como lida (lida = 1) e não volte como nova
+        var idParam = data.id || data.chave;
+        if (idParam) {
+            fetch('notificacao_ia.php?acao=marcar_toast_visto&id=' + encodeURIComponent(idParam)).catch(function () {});
+        } else {
+            fetch('notificacao_ia.php?acao=marcar_toast_visto').catch(function () {});
+        }
+    }
+
     /* ── Toast (com fila) ─────────────────────────────────── */
     function mostrarToast(data) {
         if (!data) return;
+        // Se já foi exibido em qualquer tela ou se estiver no perfil, não exibe o balão
+        if (jaExibiuToast(data)) return;
+        marcarToastExibido(data);
         _toastQueue.push(data);
         if (!_toastRunning) _nextToast();
     }
@@ -203,6 +254,8 @@
 
     /* ── Carregar notificações do servidor ────────────────── */
     async function carregarNotificacoes() {
+        var isPerfil = document.body.classList.contains('pagina-perfil') || document.getElementById('cardNotificacoesPerfil');
+
         // 1) IA — emoções negativas no diário
         try {
             var r    = await fetch('notificacao_ia.php');
@@ -210,16 +263,16 @@
             if (data && data.notificacoes && Array.isArray(data.notificacoes)) {
                 data.notificacoes.forEach(function (n, idx) {
                     popularPainel(n, idx > 0);
-                    if (n.nova) mostrarToast(n);
+                    if (n.nova && !isPerfil && !jaExibiuToast(n)) mostrarToast(n);
                 });
             } else if (Array.isArray(data)) {
                 data.forEach(function (n, idx) {
                     popularPainel(n, idx > 0);
-                    if (n.nova) mostrarToast(n);
+                    if (n.nova && !isPerfil && !jaExibiuToast(n)) mostrarToast(n);
                 });
             } else if (data && data.mostrar) {
                 popularPainel(data, false);
-                if (data.nova) mostrarToast(data);
+                if (data.nova && !isPerfil && !jaExibiuToast(data)) mostrarToast(data);
             }
         } catch(e) {}
 
@@ -232,8 +285,8 @@
             }
         } catch(e) {}
 
-        // Se estiver na tela de perfil com o bloco de notificações aberto, marca como lidas
-        if (document.getElementById('cardNotificacoesPerfil') || document.body.classList.contains('pagina-perfil')) {
+        // Se estiver na tela de perfil, marca como lidas imediatamente para não exibir toasts
+        if (isPerfil) {
             fetch('notificacao_ia.php?acao=marcar_lidas').catch(function () {});
             fetch('social_notificacoes_proc.php?acao=marcar_lidas').catch(function () {});
         }

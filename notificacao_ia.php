@@ -26,9 +26,15 @@ if ($acao === 'limpar') {
     exit;
 }
 
-if ($acao === 'marcar_lidas') {
-    $stmt = $pdo->prepare("UPDATE notificacoes_sistema SET lida = 1 WHERE usuario_id = ? AND lida = 0");
-    $stmt->execute([$id]);
+if ($acao === 'marcar_lidas' || $acao === 'marcar_toast_visto') {
+    $notifId = $_GET['id'] ?? null;
+    if (!empty($notifId)) {
+        $stmt = $pdo->prepare("UPDATE notificacoes_sistema SET lida = 1 WHERE usuario_id = ? AND (id::text = ? OR chave = ?) AND lida = 0");
+        $stmt->execute([$id, (string)$notifId, (string)$notifId]);
+    } else {
+        $stmt = $pdo->prepare("UPDATE notificacoes_sistema SET lida = 1 WHERE usuario_id = ? AND lida = 0");
+        $stmt->execute([$id]);
+    }
     echo json_encode(['sucesso' => true]);
     exit;
 }

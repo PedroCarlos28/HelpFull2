@@ -1120,8 +1120,10 @@ $totalOutros = count($outrasSessoes);
         /* =======================================================
            SUPORTE A TEMA ESCURO (Acessibilidade)
            ======================================================= */
+        html.acessibilidade-escuro,
         body.acessibilidade-escuro {
             background-color: var(--tema-fundo, #121619) !important;
+            background: var(--tema-fundo, #121619) !important;
             color: var(--tema-texto, #f1f5f9) !important;
         }
 
@@ -1471,6 +1473,18 @@ $totalOutros = count($outrasSessoes);
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
+    <script>
+        (function() {
+            try {
+                var modo = localStorage.getItem('helpfull_tema_modo');
+                var escuro = localStorage.getItem('helpfull_escuro') === 'true';
+                if (modo === 'escuro' || (!modo && escuro) || (modo === 'sistema' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('acessibilidade-escuro');
+                    if (document.body) document.body.classList.add('acessibilidade-escuro');
+                }
+            } catch(e) {}
+        })();
+    </script>
 </head>
 
 <body>
@@ -2294,7 +2308,40 @@ $totalOutros = count($outrasSessoes);
         }
     </script>
 
-    <script src="assets/acessibilidade.js?v=20260927-v3"></script>
+    <!-- CODIGO DA NOTIFICACAO INTELIGENTE (TOAST CENTRAL) -->
+    <div id="notificacaoHelpFull" class="toast-notificacao">
+        <div class="toast-barra" id="toastBarra"></div>
+        <div class="toast-conteudo">
+            <p id="textoNotificacao"></p>
+        </div>
+        <div class="toast-btn-container">
+            <a id="linkNotificacao" href="#" class="toast-btn"></a>
+        </div>
+    </div>
+
+    <script>
+        function togglePainelAcessibilidade(e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            if (window.togglePainelAcessibilidade && window.togglePainelAcessibilidade !== togglePainelAcessibilidade) {
+                window.togglePainelAcessibilidade(e);
+            }
+        }
+        function abrirPainelAcessibilidade(e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            if (window.togglePainelAcessibilidade && window.togglePainelAcessibilidade !== togglePainelAcessibilidade) {
+                window.togglePainelAcessibilidade(e);
+            }
+        }
+        function abrirPainelAcessibilidadeMobile(e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            if (window.togglePainelAcessibilidade) {
+                window.togglePainelAcessibilidade(e);
+            }
+        }
+    </script>
+    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
+    <script src="notificacoes.js?v=20260927-v4" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260927-v4';document.body.appendChild(s);}"></script>
+    <script src="assets/transicao.js?v=20260926-v1"></script>
 </body>
 
 </html>
