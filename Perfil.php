@@ -2830,17 +2830,17 @@ try {
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            padding: 24px 30px;
-            background: #ffffff;
-            border-radius: 28px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(43, 122, 140, 0.15);
+            padding: 24px 35px;
+            background: #eaeaea;
+            border-radius: 30px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             margin-bottom: 25px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .card-dispositivos-preview:hover {
-            box-shadow: 0 14px 40px rgba(43, 122, 140, 0.12);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
         }
 
         .disp-preview-info {
@@ -2853,18 +2853,18 @@ try {
             width: 48px;
             height: 48px;
             border-radius: 16px;
-            background: #e6f6f9;
+            background: #d6d6d6;
             color: #204953;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(43, 122, 140, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             flex-shrink: 0;
         }
 
         .disp-preview-desc {
             font-size: 0.88rem;
-            color: #64748b;
+            color: #555;
             margin: 4px 0 0 0;
             font-weight: 500;
         }
