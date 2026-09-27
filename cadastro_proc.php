@@ -53,6 +53,10 @@ try {
     
     salvarSessaoUsuario($novoId, $nome);
 
+    // Envia e-mail de boas-vindas e confirmação de criação de conta
+    require_once 'email_helper.php';
+    enviarEmailBoasVindas($email, $nome);
+
     responderJson(['sucesso' => true, 'mensagem' => 'Cadastro realizado com sucesso!']);
 } catch (PDOException $e) {
     responderJson(['sucesso' => false, 'mensagem' => 'Erro ao cadastrar: ' . $e->getMessage()]);

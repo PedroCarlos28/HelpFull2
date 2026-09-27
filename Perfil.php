@@ -4,7 +4,7 @@ require_once 'conexao.php';
 $usuarioLogado = null;
 if (isset($_SESSION['usuario_id'])) {
     try {
-        $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, videos_assistidos, ultimo_video_data FROM usuarios WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, videos_assistidos, ultimo_video_data, COALESCE(dois_fatores_ativo, false) as dois_fatores_ativo FROM usuarios WHERE id = ?");
         $stmt->execute([$_SESSION['usuario_id']]);
         $usuarioLogado = $stmt->fetch();
     } catch (Exception $e) {
@@ -16,10 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         $novoNome = trim($_POST['nome']);
         $novoEmail = trim($_POST['email']);
         $novaFoto = $_POST['foto_base64'] ?? null;
+        $novo2FA = isset($_POST['dois_fatores_ativo']) && $_POST['dois_fatores_ativo'] === '1';
         if (!empty($novoNome) && !empty($novoEmail)) {
             // Atualiza sempre a foto, permitindo que ela seja removida (vazia)
-            $stmtUp = $pdo->prepare("UPDATE usuarios SET nome = ?, email = ?, foto_perfil = ? WHERE id = ?");
-            $stmtUp->execute([$novoNome, $novoEmail, $novaFoto, $_SESSION['usuario_id']]);
+            $stmtUp = $pdo->prepare("UPDATE usuarios SET nome = ?, email = ?, foto_perfil = ?, dois_fatores_ativo = ? WHERE id = ?");
+            $stmtUp->execute([$novoNome, $novoEmail, $novaFoto, $novo2FA ? 'true' : 'false', $_SESSION['usuario_id']]);
             $_SESSION['usuario_nome'] = $novoNome;
         }
         header("Location: Perfil.php?sucesso=1");
@@ -299,11 +300,190 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
         }
 
-        /* Esconde outros cards e elementos quando editando */
-        body.modo-edicao .conteudo-site > *:not(#cardSuaConta) {
+        /* Esconde outros cards e elementos quando editando, exceto o card de conta e o balão de 2FA */
+        body.modo-edicao .conteudo-site > *:not(#cardSuaConta):not(#balao2faContainer) {
             opacity: 0;
             pointer-events: none;
             transform: translateY(20px);
+        }
+
+        /* BALÃO FLUTUANTE 2FA (DESIGN PAINEL DE CONFIGURAÇÃO) */
+        #balao2faContainer {
+            display: none;
+            position: relative;
+            z-index: 2100;
+            width: 100%;
+            max-width: 1000px;
+            margin: 22px auto 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 24px 30px;
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.16);
+            border: 1.5px solid rgba(43, 122, 140, 0.22);
+            box-sizing: border-box;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body.modo-edicao #balao2faContainer {
+            display: block;
+            animation: balao2faSurgir 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes balao2faSurgir {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .balao-2fa-pointer {
+            position: absolute;
+            top: -10px;
+            left: 54px;
+            width: 18px;
+            height: 18px;
+            background: #ffffff;
+            border-top: 1.5px solid rgba(43, 122, 140, 0.22);
+            border-left: 1.5px solid rgba(43, 122, 140, 0.22);
+            transform: rotate(45deg);
+            border-top-left-radius: 4px;
+        }
+
+        .balao-2fa-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .balao-2fa-info {
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .balao-2fa-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(43, 122, 140, 0.1);
+            color: #2b7a8c;
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .balao-2fa-titulo {
+            margin: 0 0 6px 0;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balao-2fa-desc {
+            margin: 0;
+            font-size: 0.88rem;
+            color: #64748b;
+            line-height: 1.5;
+            max-width: 620px;
+        }
+
+        .balao-2fa-switch-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+
+        .balao-2fa-status-pill {
+            font-size: 0.82rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .balao-2fa-status-pill.ativo {
+            background: #e6f6f9;
+            color: #2b7a8c;
+            border: 1px solid rgba(43, 122, 140, 0.25);
+        }
+
+        .balao-2fa-status-pill.inativo {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .balao-2fa-email-aviso {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed rgba(43, 122, 140, 0.2);
+            font-size: 0.82rem;
+            color: #64748b;
+        }
+
+        .balao-2fa-email-aviso strong {
+            color: #2b7a8c;
+        }
+
+        /* Suporte ao Modo Escuro */
+        body.acessibilidade-escuro #balao2faContainer {
+            background: var(--tema-superficie) !important;
+            border-color: var(--tema-borda) !important;
+            color: var(--tema-texto) !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        body.acessibilidade-escuro .balao-2fa-pointer {
+            background: var(--tema-superficie) !important;
+            border-color: var(--tema-borda) !important;
+        }
+
+        body.acessibilidade-escuro .balao-2fa-titulo {
+            color: var(--tema-texto) !important;
+        }
+
+        body.acessibilidade-escuro .balao-2fa-desc,
+        body.acessibilidade-escuro .balao-2fa-email-aviso {
+            color: var(--tema-texto-secundario) !important;
+            border-color: var(--tema-borda) !important;
+        }
+
+        body.acessibilidade-escuro .balao-2fa-status-pill.ativo {
+            background: rgba(43, 122, 140, 0.25) !important;
+            color: #7dd3fc !important;
+            border-color: rgba(43, 122, 140, 0.4) !important;
+        }
+
+        body.acessibilidade-escuro .balao-2fa-status-pill.inativo {
+            background: rgba(255, 255, 255, 0.06) !important;
+            color: #94a3b8 !important;
+            border-color: var(--tema-borda) !important;
+        }
+
+        body.acessibilidade-escuro .balao-2fa-badge {
+            background: rgba(43, 122, 140, 0.25) !important;
+            color: #7dd3fc !important;
+        }
+
+        body.acessibilidade-escuro.modo-edicao #cardSuaConta,
+        body.acessibilidade-escuro.modo-edicao #balao2faContainer {
+            background: var(--tema-superficie) !important;
         }
 
         /* Ajuste na Navbar durante edição para não sobrepor o foco */
@@ -1854,6 +2034,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             <form class="conta-grid" method="POST" id="formConta">
                 <input type="hidden" name="acao" id="acaoConta" value="editar_conta">
                 <input type="hidden" name="foto_base64" id="fotoBase64Input" value="<?= $fotoPerfilDb ?>">
+                <input type="hidden" name="dois_fatores_ativo" id="inputDoisFatores" value="<?= !empty($usuarioLogado['dois_fatores_ativo']) ? '1' : '0' ?>">
 
                 <div class="conta-form">
                     <label>Nome:</label>
@@ -1908,6 +2089,45 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     </div>
                 </div>
             </form>
+        </div>
+
+        <!-- BALÃO FLUTUANTE DE CONFIGURAÇÃO DE 2FA (ESTILO PAINEL DE CONFIGURAÇÃO) -->
+        <?php $ativo2fa = !empty($usuarioLogado['dois_fatores_ativo']); ?>
+        <div class="card-perfil balao-2fa-container" id="balao2faContainer" role="region" aria-label="Configuração de Verificação em Duas Etapas">
+            <div class="balao-2fa-pointer" aria-hidden="true"></div>
+            <div class="balao-2fa-header">
+                <div class="balao-2fa-info">
+                    <div class="balao-2fa-badge">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <span>Segurança da Conta</span>
+                    </div>
+                    <h3 class="balao-2fa-titulo">
+                        Verificação em Duas Etapas (2FA)
+                    </h3>
+                    <p class="balao-2fa-desc">
+                        Exige um código de segurança de 6 dígitos enviado ao seu e-mail a cada login para proteger sua conta contra acessos não autorizados.
+                    </p>
+                </div>
+
+                <div class="balao-2fa-switch-box">
+                    <span class="balao-2fa-status-pill <?= $ativo2fa ? 'ativo' : 'inativo' ?>" id="statusPill2FA">
+                        <?= $ativo2fa ? 'Ativado' : 'Desativado' ?>
+                    </span>
+                    <div class="onboarding-opt-row painel-opt-row <?= $ativo2fa ? 'ativo' : '' ?>" id="optRow2FA" onclick="alternar2FA()" role="switch" aria-checked="<?= $ativo2fa ? 'true' : 'false' ?>" tabindex="0" title="Alternar verificação em duas etapas" style="margin: 0; cursor: pointer;">
+                        <div class="onboarding-switch" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="balao-2fa-email-aviso">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>Os códigos serão enviados para: <strong id="emailDestinoTag"><?= htmlspecialchars($usuarioLogado['email']) ?></strong></span>
+            </div>
         </div>
 
         <div class="card-perfil card-notificacoes-bloco" id="cardNotificacoesPerfil">
@@ -2262,6 +2482,9 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                         placeholder.classList.remove('tem-foto');
                         document.getElementById('placeholderIcon').style.display = 'block';
                     }
+
+                    // Reverte estado visual de 2FA para o inicial caso tenha cancelado sem salvar
+                    reverterEstado2FA();
                     toggleEdicao(false);
                 };
                 btnSalvar.style.display = 'inline-flex';
@@ -2286,6 +2509,129 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     input.style.boxShadow = '';
                 });
             }
+        }
+
+        // === CONTROLE DE 2FA (VERIFICAÇÃO EM DUAS ETAPAS) ===
+        let initial2FA = <?= $ativo2fa ? 'true' : 'false' ?>;
+        let estado2FAAtual = initial2FA;
+
+        function reverterEstado2FA() {
+            estado2FAAtual = initial2FA;
+            const optRow = document.getElementById('optRow2FA');
+            const pill = document.getElementById('statusPill2FA');
+            const inputHidden = document.getElementById('inputDoisFatores');
+            if (optRow) {
+                optRow.classList.toggle('ativo', initial2FA);
+                optRow.setAttribute('aria-checked', initial2FA ? 'true' : 'false');
+            }
+            if (pill) {
+                pill.textContent = initial2FA ? 'Ativado' : 'Desativado';
+                pill.className = 'balao-2fa-status-pill ' + (initial2FA ? 'ativo' : 'inativo');
+            }
+            if (inputHidden) {
+                inputHidden.value = initial2FA ? '1' : '0';
+            }
+            // Sincroniza também no servidor para manter paridade
+            fetch('atualizar_2fa.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ativo: initial2FA })
+            }).catch(() => {});
+        }
+
+        async function alternar2FA() {
+            const novoEstado = !estado2FAAtual;
+            const optRow = document.getElementById('optRow2FA');
+            const pill = document.getElementById('statusPill2FA');
+            const inputHidden = document.getElementById('inputDoisFatores');
+
+            estado2FAAtual = novoEstado;
+            if (optRow) {
+                optRow.classList.toggle('ativo', novoEstado);
+                optRow.setAttribute('aria-checked', novoEstado ? 'true' : 'false');
+            }
+            if (pill) {
+                pill.textContent = novoEstado ? 'Ativado' : 'Desativado';
+                pill.className = 'balao-2fa-status-pill ' + (novoEstado ? 'ativo' : 'inativo');
+            }
+            if (inputHidden) {
+                inputHidden.value = novoEstado ? '1' : '0';
+            }
+
+            try {
+                const resp = await fetch('atualizar_2fa.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ativo: novoEstado })
+                });
+                const data = await resp.json();
+                if (data.sucesso) {
+                    initial2FA = novoEstado; // Atualiza o estado salvo
+                    mostrarToastFeedback(data.mensagem || (novoEstado ? '2FA ativado com sucesso!' : '2FA desativado.'), 'sucesso');
+                } else {
+                    // Reverte se falhou
+                    estado2FAAtual = !novoEstado;
+                    if (optRow) {
+                        optRow.classList.toggle('ativo', estado2FAAtual);
+                        optRow.setAttribute('aria-checked', estado2FAAtual ? 'true' : 'false');
+                    }
+                    if (pill) {
+                        pill.textContent = estado2FAAtual ? 'Ativado' : 'Desativado';
+                        pill.className = 'balao-2fa-status-pill ' + (estado2FAAtual ? 'ativo' : 'inativo');
+                    }
+                    if (inputHidden) {
+                        inputHidden.value = estado2FAAtual ? '1' : '0';
+                    }
+                    mostrarToastFeedback(data.mensagem || 'Erro ao alterar 2FA.', 'erro');
+                }
+            } catch (e) {
+                mostrarToastFeedback('Erro de conexão ao salvar 2FA.', 'erro');
+            }
+        }
+
+        function mostrarToastFeedback(msg, tipo = 'info') {
+            let t = document.getElementById('toast2FAFeedback');
+            if (!t) {
+                t = document.createElement('div');
+                t.id = 'toast2FAFeedback';
+                t.style.position = 'fixed';
+                t.style.bottom = '30px';
+                t.style.left = '50%';
+                t.style.transform = 'translateX(-50%) translateY(30px)';
+                t.style.background = '#1b3d45';
+                t.style.color = '#ffffff';
+                t.style.padding = '12px 26px';
+                t.style.borderRadius = '30px';
+                t.style.fontSize = '0.92rem';
+                t.style.fontWeight = '700';
+                t.style.boxShadow = '0 12px 30px rgba(0,0,0,0.25)';
+                t.style.zIndex = '3500';
+                t.style.opacity = '0';
+                t.style.transition = 'all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                t.style.pointerEvents = 'none';
+                t.style.display = 'flex';
+                t.style.alignItems = 'center';
+                t.style.gap = '10px';
+                document.body.appendChild(t);
+            }
+            const icone = tipo === 'erro' ? '⚠️' : '🛡️';
+            t.innerHTML = `<span>${icone}</span><span>${msg}</span>`;
+            t.style.opacity = '1';
+            t.style.transform = 'translateX(-50%) translateY(0)';
+            clearTimeout(window.__toast2FATimer);
+            window.__toast2FATimer = setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.transform = 'translateX(-50%) translateY(20px)';
+            }, 3600);
+        }
+
+        // Sincroniza o e-mail no aviso do balão se o usuário editar o campo
+        const inputEmailPerfil = document.querySelector('input[name="email"]');
+        if (inputEmailPerfil) {
+            inputEmailPerfil.addEventListener('input', function () {
+                const tag = document.getElementById('emailDestinoTag');
+                if (tag) tag.textContent = this.value || 'seu e-mail';
+            });
         }
 
         function confirmarApagar() { if (confirm("Tem certeza absoluta que deseja apagar sua conta? Todo o seu histórico no HelpFull será perdido para sempre.")) { document.getElementById('acaoConta').value = 'apagar_conta'; document.getElementById('formConta').submit(); } }

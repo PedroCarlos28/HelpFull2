@@ -117,6 +117,13 @@ try {
         } catch (\Exception $ignored) {}
 
         salvarSessaoUsuario($usuario['id'], $usuario['nome']);
+
+        // Notifica o usuário por e-mail sobre o novo login via Google
+        require_once 'email_helper.php';
+        enviarEmailNovoLogin($usuario['email'], $usuario['nome'], [
+            'metodo' => 'Conta Google (OAuth)'
+        ]);
+
         responderJson(['sucesso' => true, 'novo' => false]);
     }
 
@@ -167,6 +174,10 @@ try {
     $novoId = $novoUsuario['id'];
 
     salvarSessaoUsuario($novoId, $nome);
+
+    // Envia e-mail de boas-vindas para a nova conta criada via Google
+    require_once 'email_helper.php';
+    enviarEmailBoasVindas($email, $nome);
 
     responderJson(['sucesso' => true, 'novo' => true]);
 } catch (PDOException $e) {

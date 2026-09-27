@@ -352,6 +352,156 @@ if (isset($_SESSION['usuario_id'])) {
             transform: translateX(-50%);
         }
 
+        /* === TELA 2FA NO CARD DE ACESSO === */
+        .card-acesso.modo-2fa .forms-slider {
+            display: none !important;
+        }
+
+        .card-acesso.modo-2fa .view-2fa {
+            display: flex !important;
+            flex-direction: column;
+            padding: 40px 60px 45px 60px;
+            animation: fadeIn2FA 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fadeIn2FA {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .badge-2fa-seguranca {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            align-self: flex-start;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: rgba(43, 122, 140, 0.12);
+            color: #2b7a8c;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .texto-2fa-info {
+            margin-bottom: 20px;
+        }
+
+        .titulo-2fa {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin: 0 0 6px 0;
+        }
+
+        .desc-2fa {
+            font-size: 0.95rem;
+            color: #555;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .desc-2fa strong {
+            color: #2b7a8c;
+            word-break: break-all;
+        }
+
+        .input-group-2fa {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .input-group-2fa label {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-left: 5px;
+        }
+
+        .input-group-2fa input {
+            width: 100%;
+            height: 60px;
+            background: #ffffff;
+            border: 2px solid transparent;
+            border-radius: 30px;
+            padding: 0 20px;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 12px;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+            color: #1b3d45;
+            outline: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .input-group-2fa input:focus {
+            border-color: #2b7a8c;
+            box-shadow: 0 5px 25px rgba(43, 122, 140, 0.2);
+        }
+
+        .reenviar-2fa-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 18px;
+            font-size: 0.88rem;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .btn-link-reenviar {
+            background: none;
+            border: none;
+            color: #2b7a8c;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            font-size: 0.88rem;
+            transition: color 0.2s;
+        }
+
+        .btn-link-reenviar:hover {
+            color: #1b3d45;
+        }
+
+        .btn-link-reenviar:disabled {
+            color: #94a3b8;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .timer-reenviar {
+            font-weight: 700;
+            color: #888;
+            font-size: 0.82rem;
+        }
+
+        @media (max-width: 520px) {
+            .card-acesso.modo-2fa .view-2fa {
+                padding: 30px 24px 35px 24px;
+            }
+            .input-group-2fa input {
+                font-size: 1.6rem;
+                letter-spacing: 8px;
+                height: 52px;
+            }
+        }
+
         /* === BOTÃO BOLINHA GOOGLE === */
         .btn-google-circle {
             width: 52px;
@@ -581,6 +731,44 @@ if (isset($_SESSION['usuario_id'])) {
                 </form>
 
             </div>
+
+            <!-- TELA DE VERIFICAÇÃO EM DUAS ETAPAS (2FA) -->
+            <div class="view-2fa" id="view2FA" style="display: none;">
+                <div class="badge-2fa-seguranca">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Segurança da Conta</span>
+                </div>
+
+                <div class="texto-2fa-info">
+                    <h3 class="titulo-2fa">Código de Verificação</h3>
+                    <p class="desc-2fa">
+                        Enviamos um código de 6 dígitos para o e-mail:<br>
+                        <strong id="emailDestino2FA">seu-email@dominio.com</strong>
+                    </p>
+                </div>
+
+                <form id="form2FA" class="form-2fa-inner" onsubmit="event.preventDefault(); verificarCodigo2FA();">
+                    <div class="input-group-2fa">
+                        <label for="inputCodigo2FA">Digite o código:</label>
+                        <input type="text" id="inputCodigo2FA" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="------" required>
+                    </div>
+                    <span id="erro2FA" class="msg-erro-inline"></span>
+
+                    <div class="footer-botoes" style="margin-top: 18px;">
+                        <button type="button" class="btn-form btn-secundario" id="btnVoltarLogin" onclick="voltarAoLogin()">Voltar</button>
+                        <button type="submit" class="btn-form btn-primario" id="btnConfirmar2FA">Confirmar</button>
+                    </div>
+
+                    <div class="reenviar-2fa-box">
+                        <span id="textoReenviar">Não recebeu o código?</span>
+                        <button type="button" id="btnReenviar2FA" onclick="reenviarCodigo2FA()" class="btn-link-reenviar">Reenviar código</button>
+                        <span id="timerReenviar2FA" class="timer-reenviar" style="display: none;"></span>
+                    </div>
+                </form>
+            </div>
+
         </div>
 
 
@@ -809,6 +997,9 @@ if (isset($_SESSION['usuario_id'])) {
         }
 
         // === LOGIN ===
+        let emailPendente2FA = '';
+        let timerCooldown2FA = null;
+
         document.getElementById('formLogin').addEventListener('submit', async (e) => {
             e.preventDefault();
             limparErro('erroLogin');
@@ -818,7 +1009,7 @@ if (isset($_SESSION['usuario_id'])) {
             btn.innerHTML = loadingHTML;
             btn.disabled = true;
 
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const senha = document.getElementById('loginSenha').value;
 
             try {
@@ -829,7 +1020,13 @@ if (isset($_SESSION['usuario_id'])) {
                 });
                 const data = await response.json();
                 if (data.sucesso) {
-                    window.location.href = 'inicio.php';
+                    if (data.requer_2fa) {
+                        // Ativa a tela de verificação em duas etapas
+                        emailPendente2FA = email;
+                        abrirModo2FA(data.email_mascarado || email, data.debug_codigo);
+                    } else {
+                        window.location.href = 'inicio.php';
+                    }
                 } else {
                     mostrarErro('erroLogin', data.mensagem || 'Email ou senha incorretos.');
                 }
@@ -840,6 +1037,190 @@ if (isset($_SESSION['usuario_id'])) {
                 btn.disabled = false;
             }
         });
+
+        // === FUNÇÕES DE 2FA ===
+        function abrirModo2FA(emailMascarado, debugCodigo = null) {
+            const card = document.getElementById('mainCard');
+            const mainTitle = document.getElementById('mainTitle');
+            const emailDest = document.getElementById('emailDestino2FA');
+            const inputCodigo = document.getElementById('inputCodigo2FA');
+
+            card.classList.add('modo-2fa');
+            if (mainTitle) {
+                mainTitle.innerText = 'Verificação';
+                mainTitle.classList.remove('blur-fade');
+                void mainTitle.offsetWidth;
+                mainTitle.classList.add('blur-fade');
+            }
+            if (emailDest) emailDest.innerText = emailMascarado;
+            limparErro('erro2FA');
+            if (inputCodigo) {
+                inputCodigo.value = '';
+                setTimeout(() => inputCodigo.focus(), 300);
+            }
+
+            iniciarCooldownReenviar(25);
+
+            if (debugCodigo) {
+                mostrarToastLocal(`Código de teste gerado: ${debugCodigo}`);
+            }
+        }
+
+        function voltarAoLogin() {
+            const card = document.getElementById('mainCard');
+            const mainTitle = document.getElementById('mainTitle');
+            card.classList.remove('modo-2fa');
+            if (mainTitle) {
+                mainTitle.innerText = 'Entrar';
+                mainTitle.classList.remove('blur-fade');
+                void mainTitle.offsetWidth;
+                mainTitle.classList.add('blur-fade');
+            }
+            limparErro('erro2FA');
+            if (timerCooldown2FA) clearInterval(timerCooldown2FA);
+        }
+
+        async function verificarCodigo2FA() {
+            limparErro('erro2FA');
+            const btn = document.getElementById('btnConfirmar2FA');
+            const inputCodigo = document.getElementById('inputCodigo2FA');
+            const codigo = inputCodigo.value.trim().replace(/\D/g, '');
+
+            if (!codigo || codigo.length !== 6) {
+                mostrarErro('erro2FA', 'Digite o código de 6 dígitos.');
+                inputCodigo.focus();
+                return;
+            }
+
+            const textoOriginal = btn.innerText;
+            btn.innerHTML = loadingHTML;
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch('verificar_2fa.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        acao: 'verificar',
+                        email: emailPendente2FA,
+                        codigo: codigo
+                    })
+                });
+                const data = await resp.json();
+                if (data.sucesso) {
+                    window.location.href = 'inicio.php';
+                } else {
+                    mostrarErro('erro2FA', data.mensagem || 'Código incorreto.');
+                    inputCodigo.focus();
+                    inputCodigo.select();
+                }
+            } catch (e) {
+                mostrarErro('erro2FA', 'Erro de conexão. Tente novamente.');
+            } finally {
+                btn.innerText = textoOriginal;
+                btn.disabled = false;
+            }
+        }
+
+        async function reenviarCodigo2FA() {
+            limparErro('erro2FA');
+            const btnReenviar = document.getElementById('btnReenviar2FA');
+            btnReenviar.disabled = true;
+            btnReenviar.textContent = 'Enviando...';
+
+            try {
+                const resp = await fetch('verificar_2fa.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        acao: 'reenviar',
+                        email: emailPendente2FA
+                    })
+                });
+                const data = await resp.json();
+                if (data.sucesso) {
+                    mostrarToastLocal(data.mensagem || 'Código reenviado com sucesso!');
+                    if (data.debug_codigo) {
+                        setTimeout(() => mostrarToastLocal(`Código de teste gerado: ${data.debug_codigo}`), 1000);
+                    }
+                    iniciarCooldownReenviar(25);
+                } else {
+                    mostrarErro('erro2FA', data.mensagem || 'Erro ao reenviar código.');
+                    btnReenviar.disabled = false;
+                    btnReenviar.textContent = 'Reenviar código';
+                }
+            } catch (e) {
+                mostrarErro('erro2FA', 'Erro de conexão ao reenviar código.');
+                btnReenviar.disabled = false;
+                btnReenviar.textContent = 'Reenviar código';
+            }
+        }
+
+        function iniciarCooldownReenviar(segundos) {
+            const btnReenviar = document.getElementById('btnReenviar2FA');
+            const timer = document.getElementById('timerReenviar2FA');
+            if (!btnReenviar || !timer) return;
+
+            if (timerCooldown2FA) clearInterval(timerCooldown2FA);
+
+            let restante = segundos;
+            btnReenviar.style.display = 'none';
+            timer.style.display = 'inline';
+            timer.textContent = `(${restante}s)`;
+
+            timerCooldown2FA = setInterval(() => {
+                restante--;
+                if (restante <= 0) {
+                    clearInterval(timerCooldown2FA);
+                    timer.style.display = 'none';
+                    btnReenviar.style.display = 'inline';
+                    btnReenviar.disabled = false;
+                    btnReenviar.textContent = 'Reenviar código';
+                } else {
+                    timer.textContent = `(${restante}s)`;
+                }
+            }, 1000);
+        }
+
+        // Auto-envio ao preencher os 6 dígitos
+        document.getElementById('inputCodigo2FA')?.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 6);
+            if (this.value.length === 6) {
+                verificarCodigo2FA();
+            }
+        });
+
+        function mostrarToastLocal(msg) {
+            let toast = document.getElementById('toastLocal2FA');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toastLocal2FA';
+                toast.style.position = 'fixed';
+                toast.style.bottom = '25px';
+                toast.style.left = '50%';
+                toast.style.transform = 'translateX(-50%) translateY(30px)';
+                toast.style.background = '#1b3d45';
+                toast.style.color = '#fff';
+                toast.style.padding = '12px 24px';
+                toast.style.borderRadius = '30px';
+                toast.style.fontSize = '0.9rem';
+                toast.style.fontWeight = '700';
+                toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+                toast.style.zIndex = '3000';
+                toast.style.opacity = '0';
+                toast.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                toast.style.pointerEvents = 'none';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            clearTimeout(window.__toastLocalTimer);
+            window.__toastLocalTimer = setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+            }, 4000);
+        }
 
         // === CADASTRO ===
         document.getElementById('formCadastro').addEventListener('submit', async (e) => {
