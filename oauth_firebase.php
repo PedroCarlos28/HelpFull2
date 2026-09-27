@@ -116,6 +116,31 @@ try {
             $upd->execute(['uid' => $firebaseUid, 'id' => $usuario['id']]);
         } catch (\Exception $ignored) {}
 
+        // Se a verificação em duas etapas estiver ativada para esta conta
+        if (!empty($usuario['dois_fatores_ativo'])) {
+            $codigo = sprintf("%06d", mt_rand(100000, 999999));
+            $stmtUp = $pdo->prepare("UPDATE usuarios SET codigo_2fa = :codigo, codigo_2fa_expira = (NOW() + INTERVAL '10 minutes') WHERE id = :id");
+            $stmtUp->execute([
+                'codigo' => $codigo,
+                'id' => $usuario['id']
+            ]);
+
+            $_SESSION['temp_2fa_user_id'] = $usuario['id'];
+            $_SESSION['temp_2fa_email'] = $usuario['email'];
+            $_SESSION['temp_2fa_ultimo_envio'] = time();
+
+            require_once 'email_helper.php';
+            $envio = enviarEmail2FA($usuario['email'], $usuario['nome'], $codigo);
+
+            responderJson([
+                'sucesso' => true,
+                'requer_2fa' => true,
+                'email' => $usuario['email'],
+                'email_mascarado' => mascararEmail($usuario['email']),
+                'debug_codigo' => $envio['debug_codigo'] ?? null
+            ]);
+        }
+
         salvarSessaoUsuario($usuario['id'], $usuario['nome']);
 
         // Notifica o usuário por e-mail sobre o novo login via Google

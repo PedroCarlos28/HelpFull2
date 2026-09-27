@@ -840,7 +840,14 @@ if (isset($_SESSION['usuario_id'])) {
                 }
 
                 if (data && data.sucesso) {
-                    window.location.href = 'inicio.php';
+                    if (data.requer_2fa) {
+                        if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
+                        if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
+                        emailPendente2FA = data.email || user.email;
+                        abrirModo2FA(data.email_mascarado || emailPendente2FA, data.debug_codigo);
+                    } else {
+                        window.location.href = 'inicio.php';
+                    }
                 } else if (data) {
                     alert('Erro no login: ' + (data.mensagem || 'Tente novamente.'));
                     if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
