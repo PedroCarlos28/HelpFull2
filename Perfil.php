@@ -293,9 +293,21 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        body.modo-edicao {
+            overflow-y: auto;
+        }
+
         body.modo-edicao .conteudo-site {
             position: relative;
             z-index: 2100;
+            min-height: 100vh;
+            padding-top: 25px !important;
+            padding-bottom: 25px !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
         }
 
         .overlay-editar {
@@ -315,17 +327,37 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         body.modo-edicao #cardSuaConta {
             position: relative;
-            z-index: 2105; /* Acima de tudo, inclusive da navbar */
+            z-index: 2105;
             background: #ffffff !important;
-            transform: scale(1.02);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            transform: none;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+            padding: 24px 30px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 950px;
         }
 
-        /* Esconde outros cards e elementos quando editando, exceto o card de conta e o balão de 2FA */
+        body.modo-edicao #cardSuaConta .titulo-secao {
+            margin-bottom: 14px;
+            font-size: 1.45rem;
+        }
+
+        body.modo-edicao #cardSuaConta .conta-grid {
+            gap: 28px;
+        }
+
+        body.modo-edicao #cardSuaConta .conta-imagem-placeholder {
+            width: 135px;
+            height: 135px;
+        }
+
+        body.modo-edicao #cardSuaConta .conta-input {
+            padding: 10px 18px;
+        }
+
+        /* Oculta os outros cards para não ocuparem espaço vertical no fluxo da tela */
         body.modo-edicao .conteudo-site > *:not(#cardSuaConta):not(#balao2faContainer) {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(20px);
+            display: none !important;
         }
 
         /* BALÃO FLUTUANTE 2FA (DESIGN PAINEL DE CONFIGURAÇÃO) */
@@ -334,11 +366,11 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             position: relative;
             z-index: 2100;
             width: 100%;
-            max-width: 1000px;
-            margin: 22px auto 0 auto;
+            max-width: 950px;
+            margin: 0 auto;
             background: #ffffff;
             border-radius: 28px;
-            padding: 24px 30px;
+            padding: 18px 28px;
             box-shadow: 0 16px 45px rgba(0, 0, 0, 0.16);
             border: 1.5px solid rgba(43, 122, 140, 0.22);
             box-sizing: border-box;
@@ -347,7 +379,25 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         body.modo-edicao #balao2faContainer {
             display: block;
-            animation: balao2faSurgir 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
+            z-index: 2104;
+            animation: balao2faSurgir 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        body.modo-edicao .balao-2fa-titulo {
+            font-size: 1.08rem;
+            margin: 0 0 4px 0;
+        }
+
+        body.modo-edicao .balao-2fa-desc {
+            font-size: 0.83rem;
+            line-height: 1.4;
+        }
+
+        body.modo-edicao .balao-2fa-email-aviso {
+            margin-top: 10px;
+            padding-top: 10px;
+            font-size: 0.8rem;
         }
 
         @keyframes balao2faSurgir {
@@ -2585,7 +2635,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             const card = document.getElementById('cardSuaConta');
 
             if (ativar) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'instant' });
                 body.classList.add('modo-edicao');
                 btnSair.style.display = 'none';
                 btnEditar.textContent = 'Cancelar';
@@ -2610,9 +2660,11 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 };
                 btnSalvar.style.display = 'inline-flex';
                 btnApagar.style.display = 'inline-flex';
+                const isDark = body.classList.contains('acessibilidade-escuro');
                 inputs.forEach(input => {
                     input.removeAttribute('readonly');
-                    input.style.background = '#fff';
+                    input.style.background = isDark ? '#252d32' : '#fff';
+                    input.style.color = isDark ? '#f1f5f9' : '#333';
                     input.style.boxShadow = 'inset 0 2px 5px rgba(0,0,0,0.05)';
                 });
             } else {
@@ -2627,6 +2679,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 inputs.forEach(input => {
                     input.setAttribute('readonly', true);
                     input.style.background = '';
+                    input.style.color = '';
                     input.style.boxShadow = '';
                 });
             }
