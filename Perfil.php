@@ -1743,7 +1743,7 @@ try {
             width: 52px;
             height: 52px;
             border-radius: 16px;
-            background: linear-gradient(135deg, #2b7a8c 0%, #1e5a67 100%);
+            background: #2b7a8c;
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -1784,7 +1784,7 @@ try {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, #2b7a8c 0%, #1a5b6a 100%);
+            background: #2b7a8c;
             color: #ffffff !important;
             font-weight: 800;
             font-size: 0.95rem;
@@ -1792,7 +1792,7 @@ try {
             border-radius: 30px;
             text-decoration: none;
             white-space: nowrap;
-            box-shadow: 0 6px 20px rgba(43, 122, 140, 0.35);
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.3);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
         }
@@ -1812,8 +1812,8 @@ try {
 
         .btn-gerar-relatorio:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(43, 122, 140, 0.5);
-            filter: brightness(1.05);
+            background: #236877;
+            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -2786,26 +2786,26 @@ try {
         }
 
         .modal-btn-salvar {
-            background: #204953;
+            background: #2b7a8c;
             color: #ffffff;
-            box-shadow: 0 4px 14px rgba(32, 73, 83, 0.28);
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.28);
         }
 
         .modal-btn-salvar:hover:not(:disabled) {
-            background: #1b3d45;
+            background: #236877;
             transform: scale(1.02);
-            box-shadow: 0 6px 18px rgba(32, 73, 83, 0.38);
+            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.38);
         }
 
         body.acessibilidade-escuro .modal-btn-salvar {
-            background: #204953 !important;
+            background: #2b7a8c !important;
             color: #ffffff !important;
             border: 1px solid rgba(125, 211, 252, 0.25) !important;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
         }
 
         body.acessibilidade-escuro .modal-btn-salvar:hover:not(:disabled) {
-            background: #275965 !important;
+            background: #236877 !important;
             transform: scale(1.02);
         }
 
@@ -2854,7 +2854,7 @@ try {
             height: 48px;
             border-radius: 16px;
             background: #d6d6d6;
-            color: #204953;
+            color: #2b7a8c;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2875,20 +2875,20 @@ try {
             gap: 8px;
             padding: 10px 20px;
             border-radius: 18px;
-            background: #204953;
+            background: #2b7a8c;
             color: #ffffff;
             font-size: 0.88rem;
             font-weight: 700;
             text-decoration: none;
             transition: all 0.2s ease;
             white-space: nowrap;
-            box-shadow: 0 4px 14px rgba(32, 73, 83, 0.2);
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.2);
         }
 
         .btn-gerenciar-dispositivos:hover {
-            background: #18373e;
+            background: #236877;
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(32, 73, 83, 0.3);
+            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.3);
         }
 
         body.acessibilidade-escuro .card-dispositivos-preview {
@@ -2908,7 +2908,7 @@ try {
         }
 
         body.acessibilidade-escuro .btn-gerenciar-dispositivos {
-            background: #204953 !important;
+            background: #2b7a8c !important;
             color: #ffffff !important;
             border: 1px solid rgba(125, 211, 252, 0.25) !important;
         }

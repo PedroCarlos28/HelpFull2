@@ -1325,12 +1325,12 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             padding: 10px 26px;
             border-radius: 30px;
             border: none;
-            background: linear-gradient(135deg, #2b7a8c, #236877);
+            background: #2b7a8c;
             color: #ffffff;
             font-weight: 800;
             cursor: pointer;
             font-size: 0.92rem;
-            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.35);
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.3);
             white-space: nowrap;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
@@ -1341,8 +1341,8 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
 
         .btn-buscar-api:hover {
             transform: translateY(-1px) scale(1.02);
-            background: linear-gradient(135deg, #338da1, #2b7a8c);
-            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.45);
+            background: #236877;
+            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.4);
         }
 
         .btn-buscar-api:active {

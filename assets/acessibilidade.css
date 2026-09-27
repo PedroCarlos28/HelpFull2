@@ -351,7 +351,7 @@
     padding: 10px 24px;
     border: none;
     border-radius: 24px;
-    background: linear-gradient(135deg, #2b7a8c, #236878);
+    background: #2b7a8c;
     color: #ffffff;
     font: inherit;
     font-size: 0.88rem;
@@ -363,8 +363,8 @@
 
 .btn-painel-fechar:hover {
     transform: translateY(-2px);
+    background: #236877;
     box-shadow: 0 6px 18px rgba(43, 122, 140, 0.45);
-    filter: brightness(1.08);
 }
 
 /* Os temas usam camadas de superficie e nao aplicam filtros sobre midias. */
@@ -3184,7 +3184,7 @@ body.acessibilidade-escuro .onboarding-opt-row.ativo {
 
 body.acessibilidade-escuro .btn-painel-fechar,
 body.acessibilidade-escuro button.btn-painel-fechar {
-    background: linear-gradient(135deg, #2b7a8c, #236878) !important;
+    background: #2b7a8c !important;
     color: #ffffff !important;
     border: none !important;
     box-shadow: 0 4px 14px rgba(43, 122, 140, 0.45) !important;
@@ -3192,7 +3192,7 @@ body.acessibilidade-escuro button.btn-painel-fechar {
 
 body.acessibilidade-escuro .btn-painel-fechar:hover,
 body.acessibilidade-escuro button.btn-painel-fechar:hover {
-    background: linear-gradient(135deg, #328c9f, #287789) !important;
+    background: #236877 !important;
     color: #ffffff !important;
     box-shadow: 0 6px 18px rgba(43, 122, 140, 0.6) !important;
     transform: translateY(-2px);
@@ -3200,7 +3200,7 @@ body.acessibilidade-escuro button.btn-painel-fechar:hover {
 
 body.acessibilidade-escuro .btn-onboarding-concluir,
 body.acessibilidade-escuro button.btn-onboarding-concluir {
-    background: linear-gradient(135deg, #2b7a8c, #236878) !important;
+    background: #2b7a8c !important;
     color: #ffffff !important;
     border: none !important;
     box-shadow: 0 8px 24px rgba(43, 122, 140, 0.45) !important;
@@ -3208,7 +3208,7 @@ body.acessibilidade-escuro button.btn-onboarding-concluir {
 
 body.acessibilidade-escuro .btn-onboarding-concluir:hover,
 body.acessibilidade-escuro button.btn-onboarding-concluir:hover {
-    background: linear-gradient(135deg, #328c9f, #287789) !important;
+    background: #236877 !important;
     color: #ffffff !important;
     box-shadow: 0 12px 28px rgba(43, 122, 140, 0.6) !important;
     transform: translateY(-2px);
@@ -4173,7 +4173,7 @@ html body.acessibilidade-escuro .relatorio-subtitulo-texto {
 }
 
 html body.acessibilidade-escuro .relatorio-icone-circ {
-    background: linear-gradient(135deg, #2b7a8c 0%, #1e5a67 100%) !important;
+    background: #2b7a8c !important;
     box-shadow: 0 4px 14px rgba(43, 122, 140, 0.25) !important;
 }
 
@@ -4188,7 +4188,7 @@ html body.acessibilidade-escuro .relatorio-subtitulo-texto {
 html body.acessibilidade-escuro .btn-gerar-relatorio,
 html body.acessibilidade-escuro a.btn-gerar-relatorio,
 html body.acessibilidade-escuro .btn-imprimir-pdf {
-    background: linear-gradient(135deg, #2b7a8c 0%, #1a5b6a 100%) !important;
+    background: #2b7a8c !important;
     color: #ffffff !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
 }

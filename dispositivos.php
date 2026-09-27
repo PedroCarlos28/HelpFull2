@@ -281,7 +281,7 @@ $totalOutros = count($outrasSessoes);
             padding: 6px 14px;
             border-radius: 20px;
             background: #d6d6d6;
-            color: #204953;
+            color: #2b7a8c;
             border: 1px solid rgba(255, 255, 255, 0.6);
             font-size: 0.76rem;
             font-weight: 800;
@@ -325,7 +325,7 @@ $totalOutros = count($outrasSessoes);
             padding: 7px 16px;
             border-radius: 20px;
             background: #d6d6d6;
-            color: #204953;
+            color: #2b7a8c;
             font-size: 0.82rem;
             font-weight: 700;
             border: 1px solid rgba(255, 255, 255, 0.6);
@@ -414,23 +414,11 @@ $totalOutros = count($outrasSessoes);
             padding: 26px 35px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            border-left: 6px solid #2b7a8c;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 22px;
             position: relative;
-            overflow: hidden;
-        }
-
-        .card-dispositivo-atual::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 6px;
-            background: #2b7a8c;
         }
 
         .disp-esquerda {
@@ -450,7 +438,7 @@ $totalOutros = count($outrasSessoes);
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #204953;
+            color: #2b7a8c;
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
@@ -489,7 +477,7 @@ $totalOutros = count($outrasSessoes);
             gap: 5px;
             padding: 4px 10px;
             border-radius: 12px;
-            background: #204953;
+            background: #2b7a8c;
             color: #ffffff;
             font-size: 0.72rem;
             font-weight: 800;
@@ -611,7 +599,7 @@ $totalOutros = count($outrasSessoes);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #204953;
+            color: #2b7a8c;
             margin-bottom: 4px;
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
@@ -657,7 +645,7 @@ $totalOutros = count($outrasSessoes);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #204953;
+            color: #2b7a8c;
             border: 1px solid rgba(255, 255, 255, 0.6);
             flex-shrink: 0;
         }
@@ -675,7 +663,7 @@ $totalOutros = count($outrasSessoes);
         .dicas-titulo {
             font-size: 0.98rem;
             font-weight: 800;
-            color: #204953;
+            color: #2b7a8c;
             margin: 0 0 6px 0;
         }
 
@@ -687,7 +675,7 @@ $totalOutros = count($outrasSessoes);
         }
 
         .dicas-link {
-            color: #204953;
+            color: #2b7a8c;
             font-weight: 700;
             text-decoration: underline;
             text-underline-offset: 3px;
@@ -850,7 +838,7 @@ $totalOutros = count($outrasSessoes);
         }
 
         .modal-disp-preview svg {
-            stroke: #204953;
+            stroke: #2b7a8c;
             width: 18px;
             height: 18px;
             flex-shrink: 0;
@@ -871,7 +859,7 @@ $totalOutros = count($outrasSessoes);
             padding: 12px 20px;
             border-radius: 16px;
             background: #d6d6d6;
-            color: #204953;
+            color: #2b7a8c;
             border: 1px solid rgba(255, 255, 255, 0.6);
             font-size: 0.88rem;
             font-weight: 700;
