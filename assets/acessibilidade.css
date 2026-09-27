@@ -4255,6 +4255,42 @@ html body.acessibilidade-contraste.acessibilidade-escuro .btn-gerar-relatorio sv
     stroke: #000000 !important;
 }
 
+/* Modal de Alterar Senha nos modos Escuro e Alto Contraste */
+body.acessibilidade-escuro .modal-alterar-senha-card {
+    background: var(--tema-superficie, #1e2428) !important;
+    border-color: var(--tema-borda, #2f383e) !important;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.75) !important;
+    color: var(--tema-texto, #f1f5f9) !important;
+}
 
+body.acessibilidade-escuro .modal-alterar-senha-card .modal-senha-titulo {
+    color: #ffffff !important;
+}
 
+body.acessibilidade-escuro .modal-alterar-senha-card .modal-label {
+    color: #f1f5f9 !important;
+}
 
+body.acessibilidade-escuro .modal-alterar-senha-card .modal-input {
+    background: #252d32 !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #f1f5f9 !important;
+}
+
+body.acessibilidade-escuro .modal-alterar-senha-card .modal-input:focus {
+    background: #182228 !important;
+    border-color: #7dd3fc !important;
+    box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.25) !important;
+}
+
+body.acessibilidade-escuro .modal-alterar-senha-card .modal-btn-cancelar {
+    background: #252d32 !important;
+    color: #cbd5e1 !important;
+    border: 1px solid var(--tema-borda, #2f383e) !important;
+}
+
+body.acessibilidade-escuro .modal-alterar-senha-card .modal-btn-salvar {
+    background: #204953 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(125, 211, 252, 0.25) !important;
+}

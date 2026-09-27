@@ -2347,15 +2347,15 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             position: fixed;
             inset: 0;
             z-index: 99999;
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(8, 14, 18, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 18px;
+            padding: 20px;
             opacity: 0;
-            transition: opacity 0.25s ease;
+            transition: opacity 0.28s ease;
         }
 
         .modal-alterar-senha-overlay.aberto {
@@ -2367,14 +2367,15 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             background: #ffffff;
             width: 100%;
             max-width: 480px;
-            border-radius: 26px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            border-radius: 32px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.22);
             border: 1px solid rgba(43, 122, 140, 0.15);
-            padding: 30px 28px;
+            padding: 34px 32px 30px 32px;
             position: relative;
             box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif !important;
             transform: scale(0.92);
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .modal-alterar-senha-overlay.aberto .modal-alterar-senha-card {
@@ -2382,100 +2383,90 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
 
         body.acessibilidade-escuro .modal-alterar-senha-card {
-            background: #182228;
-            border-color: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-            color: #f1f5f9;
+            background: var(--tema-superficie, #1e2428) !important;
+            border: 1px solid var(--tema-borda, #2f383e) !important;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.75) !important;
+            color: var(--tema-texto, #f1f5f9) !important;
         }
 
         .modal-fechar-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: transparent;
+            top: 22px;
+            right: 22px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.05);
             border: none;
-            color: #718096;
+            color: #555;
             cursor: pointer;
-            padding: 6px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s, color 0.2s, transform 0.2s;
+            transition: all 0.2s ease;
         }
 
         .modal-fechar-btn:hover {
-            background: rgba(0, 0, 0, 0.06);
-            color: #1a202c;
-            transform: rotate(90deg);
+            background: rgba(0, 0, 0, 0.1);
+            color: #111;
+            transform: scale(1.08) rotate(90deg);
         }
 
         body.acessibilidade-escuro .modal-fechar-btn {
-            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.08);
+            color: #cbd5e1;
         }
 
         body.acessibilidade-escuro .modal-fechar-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
         }
 
         .modal-senha-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
             margin-bottom: 22px;
-            padding-right: 32px;
+            padding-right: 36px;
         }
 
-        .modal-senha-icon-box {
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
-            color: #0284c7;
+        .modal-senha-header-topo {
             display: flex;
             align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        body.acessibilidade-escuro .modal-senha-icon-box {
-            background: linear-gradient(135deg, #0c4a6e, #075985);
-            color: #38bdf8;
+            margin-bottom: 10px;
         }
 
         .modal-senha-titulo {
-            margin: 0;
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #1b3d45;
+            font-size: 1.5rem !important;
+            font-weight: 900 !important;
+            color: #333 !important;
+            margin: 0 0 6px 0 !important;
+            letter-spacing: -0.5px !important;
         }
 
         body.acessibilidade-escuro .modal-senha-titulo {
-            color: #f1f5f9;
+            color: var(--tema-texto, #ffffff) !important;
         }
 
         .modal-senha-subtitulo {
-            margin: 4px 0 0 0;
+            margin: 0;
             font-size: 0.88rem;
             color: #64748b;
-            line-height: 1.4;
+            line-height: 1.45;
+            font-weight: 500;
         }
 
         body.acessibilidade-escuro .modal-senha-subtitulo {
-            color: #94a3b8;
+            color: var(--tema-texto-secundario, #94a3b8) !important;
         }
 
         .modal-alerta-info {
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            border-radius: 14px;
-            padding: 12px 14px;
+            background: rgba(43, 122, 140, 0.08);
+            border: 1px solid rgba(43, 122, 140, 0.2);
+            border-radius: 20px;
+            padding: 14px 16px;
             font-size: 0.86rem;
-            color: #0369a1;
+            color: #204953;
             line-height: 1.45;
             margin-bottom: 18px;
         }
@@ -2483,41 +2474,43 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         .modal-alerta-info svg {
             flex-shrink: 0;
             margin-top: 2px;
-            stroke: #0284c7;
+            stroke: #204953;
         }
 
         body.acessibilidade-escuro .modal-alerta-info {
-            background: rgba(14, 165, 233, 0.12);
-            border-color: rgba(56, 189, 248, 0.25);
-            color: #7dd3fc;
+            background: rgba(125, 211, 252, 0.08) !important;
+            border-color: rgba(125, 211, 252, 0.2) !important;
+            color: #7dd3fc !important;
         }
 
         body.acessibilidade-escuro .modal-alerta-info svg {
-            stroke: #38bdf8;
+            stroke: #7dd3fc !important;
         }
 
         .campo-grupo-modal {
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .modal-label {
             display: block;
             font-size: 0.88rem;
-            font-weight: 700;
-            color: #334155;
-            margin-bottom: 6px;
+            font-weight: 800;
+            color: #444;
+            margin-bottom: 7px;
+            margin-left: 2px;
         }
 
         body.acessibilidade-escuro .modal-label {
-            color: #cbd5e1;
+            color: var(--tema-texto, #f1f5f9) !important;
         }
 
         .btn-reenviar-codigo-modal {
             background: none;
             border: none;
-            color: #0284c7;
+            color: #204953;
             font-size: 0.82rem;
-            font-weight: 700;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif !important;
             cursor: pointer;
             padding: 0;
             text-decoration: underline;
@@ -2525,7 +2518,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
 
         .btn-reenviar-codigo-modal:hover:not(:disabled) {
-            color: #0369a1;
+            color: #2b7a8c;
         }
 
         .btn-reenviar-codigo-modal:disabled {
@@ -2535,45 +2528,48 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
 
         body.acessibilidade-escuro .btn-reenviar-codigo-modal {
-            color: #38bdf8;
+            color: #7dd3fc !important;
         }
 
         .input-com-icone-modal {
             position: relative;
             display: flex;
             align-items: center;
+            width: 100%;
         }
 
         .modal-input {
             width: 100%;
-            height: 46px;
-            border-radius: 14px;
-            border: 1.5px solid #cbd5e1;
-            background: #f8fafc;
-            padding: 0 44px 0 14px;
+            height: 48px;
+            border-radius: 20px;
+            border: 1.5px solid transparent;
+            background: #e6ebed;
+            padding: 0 46px 0 18px;
             font-size: 0.95rem;
-            color: #1e293b;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif !important;
+            color: #333;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            transition: all 0.25s ease;
         }
 
         .modal-input:focus {
             background: #ffffff;
-            border-color: #0284c7;
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+            border-color: #8ed6e4;
+            box-shadow: 0 0 0 3px rgba(142, 214, 228, 0.35);
         }
 
         body.acessibilidade-escuro .modal-input {
-            background: #1e293b;
-            border-color: #334155;
-            color: #f8fafc;
+            background: #252d32 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            color: #f1f5f9 !important;
         }
 
         body.acessibilidade-escuro .modal-input:focus {
-            background: #0f172a;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+            background: #182228 !important;
+            border-color: #7dd3fc !important;
+            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.25) !important;
         }
 
         .input-codigo-destaque {
@@ -2581,8 +2577,8 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             font-size: 1.3rem;
             font-weight: 800;
             text-align: center;
-            font-family: 'Courier New', Courier, monospace;
-            padding-right: 14px !important;
+            font-family: 'Montserrat', monospace !important;
+            padding-right: 18px !important;
         }
 
         .modal-hint {
@@ -2590,27 +2586,32 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             font-size: 0.78rem;
             color: #64748b;
             margin-top: 5px;
+            margin-left: 4px;
         }
 
         body.acessibilidade-escuro .modal-hint {
-            color: #94a3b8;
+            color: var(--tema-texto-secundario, #94a3b8) !important;
         }
 
         .btn-olho-toggle {
             position: absolute;
             right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             background: transparent;
             border: none;
             color: #64748b;
             cursor: pointer;
-            padding: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: color 0.2s, background 0.2s;
         }
 
         .btn-olho-toggle:hover {
-            color: #0f172a;
+            color: #204953;
+            background: rgba(0, 0, 0, 0.04);
         }
 
         body.acessibilidade-escuro .btn-olho-toggle {
@@ -2618,13 +2619,15 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         }
 
         body.acessibilidade-escuro .btn-olho-toggle:hover {
-            color: #f8fafc;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .modal-msg-alerta {
-            border-radius: 12px;
-            padding: 12px 14px;
-            font-size: 0.86rem;
+            border-radius: 16px;
+            padding: 12px 16px;
+            font-size: 0.88rem;
+            font-weight: 600;
             margin: 14px 0;
             line-height: 1.4;
             display: none;
@@ -2632,86 +2635,103 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         .modal-msg-alerta.erro {
             display: block;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #b91c1c;
+            background: #ffe6e6;
+            border: 1px solid #ffb3b3;
+            color: #cc0000;
         }
 
         body.acessibilidade-escuro .modal-msg-alerta.erro {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: rgba(248, 113, 113, 0.3);
-            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.15) !important;
+            border-color: rgba(248, 113, 113, 0.3) !important;
+            color: #fca5a5 !important;
         }
 
         .modal-msg-alerta.sucesso {
             display: block;
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            color: #15803d;
+            background: #e6f6f9;
+            border: 1px solid rgba(43, 122, 140, 0.25);
+            color: #2b7a8c;
         }
 
         body.acessibilidade-escuro .modal-msg-alerta.sucesso {
-            background: rgba(34, 197, 94, 0.15);
-            border-color: rgba(74, 222, 128, 0.3);
-            color: #86efac;
+            background: rgba(34, 197, 94, 0.15) !important;
+            border-color: rgba(74, 222, 128, 0.3) !important;
+            color: #86efac !important;
         }
 
         .modal-senha-acoes {
             display: flex;
             gap: 12px;
-            margin-top: 22px;
+            margin-top: 24px;
         }
 
         .modal-btn {
-            height: 46px;
-            border-radius: 16px;
-            font-size: 0.92rem;
-            font-weight: 700;
+            height: 48px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif !important;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             flex: 1;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             box-sizing: border-box;
             border: none;
         }
 
         .modal-btn-cancelar {
-            background: #e2e8f0;
-            color: #475569;
+            background: #bce0e6;
+            color: #444;
         }
 
         .modal-btn-cancelar:hover {
-            background: #cbd5e1;
+            background: #a8d5dd;
+            transform: scale(1.02);
         }
 
         body.acessibilidade-escuro .modal-btn-cancelar {
-            background: #334155;
-            color: #cbd5e1;
+            background: #252d32 !important;
+            color: #cbd5e1 !important;
+            border: 1px solid var(--tema-borda, #2f383e) !important;
         }
 
         body.acessibilidade-escuro .modal-btn-cancelar:hover {
-            background: #475569;
+            background: #2f383e !important;
+            color: #ffffff !important;
+            transform: scale(1.02);
         }
 
         .modal-btn-salvar {
-            background: linear-gradient(135deg, #1b3d45, #2b7a8c);
+            background: #204953;
             color: #ffffff;
-            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.35);
+            box-shadow: 0 4px 14px rgba(32, 73, 83, 0.28);
         }
 
         .modal-btn-salvar:hover:not(:disabled) {
-            opacity: 0.95;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.45);
+            background: #1b3d45;
+            transform: scale(1.02);
+            box-shadow: 0 6px 18px rgba(32, 73, 83, 0.38);
+        }
+
+        body.acessibilidade-escuro .modal-btn-salvar {
+            background: #204953 !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(125, 211, 252, 0.25) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        body.acessibilidade-escuro .modal-btn-salvar:hover:not(:disabled) {
+            background: #275965 !important;
+            transform: scale(1.02);
         }
 
         .modal-btn-salvar:disabled {
-            opacity: 0.65;
+            opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+            transform: none !important;
         }
 
         .modal-btn-salvar .btn-spinner {
@@ -3063,16 +3083,17 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             </button>
 
             <div class="modal-senha-header">
-                <div class="modal-senha-icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    </svg>
+                <div class="modal-senha-header-topo">
+                    <div class="balao-2fa-badge" style="margin-bottom: 0;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span>Segurança da Conta</span>
+                    </div>
                 </div>
-                <div>
-                    <h3 id="modalSenhaTitulo" class="modal-senha-titulo">Alterar Senha</h3>
-                    <p id="modalSenhaSubtitulo" class="modal-senha-subtitulo">Atualize sua senha de acesso com segurança.</p>
-                </div>
+                <h3 id="modalSenhaTitulo" class="titulo-secao modal-senha-titulo">Alterar Senha</h3>
+                <p id="modalSenhaSubtitulo" class="modal-senha-subtitulo">Atualize sua senha de acesso com segurança.</p>
             </div>
 
             <form id="formAlterarSenha" onsubmit="submeterAlterarSenha(event)" novalidate>
