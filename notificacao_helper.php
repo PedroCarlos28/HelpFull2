@@ -20,7 +20,7 @@ function garantirTabelaNotificacoesSistema(PDO $pdo): void
             link VARCHAR(80),
             texto_botao VARCHAR(40),
             lida SMALLINT DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at TIMESTAMPTZ DEFAULT NOW(),
             UNIQUE (usuario_id, chave)
         )");
         $garantida = true;

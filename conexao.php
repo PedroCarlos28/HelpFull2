@@ -1,4 +1,7 @@
 <?php
+// Configura fuso horário padrão para o Brasil (America/Sao_Paulo / UTC-3)
+date_default_timezone_set('America/Sao_Paulo');
+
 // Desativa exibição de notices/warnings na tela (evita textos vazando na interface)
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 @ini_set('display_errors', '0');
@@ -76,6 +79,7 @@ try {
         PDO::ATTR_TIMEOUT => 6
     ];
     $pdo = new PDO($dsn, $user, $password, $pdoOptions);
+    $pdo->exec("SET TIME ZONE 'America/Sao_Paulo'");
 } catch (PDOException $e) {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }

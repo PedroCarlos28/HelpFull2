@@ -1,6 +1,5 @@
 <?php
 require_once 'conexao.php';
-session_start();
 
 if (!isset($_SESSION['usuario_id'])) {
     http_response_code(403);
