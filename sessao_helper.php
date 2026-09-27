@@ -8,53 +8,57 @@ if (!defined('HELPFULL_SESSION_HELPER')) {
     define('HELPFULL_SESSION_HELPER', true);
 }
 
-/**
- * Obtém o IP real do cliente, considerando proxies e Cloudflare
- */
-function obterIpCliente() {
-    $ipKeys = [
-        'HTTP_CF_CONNECTING_IP',
-        'HTTP_X_FORWARDED_FOR',
-        'HTTP_CLIENT_IP',
-        'REMOTE_ADDR'
-    ];
+if (!function_exists('obterIpCliente')) {
+    /**
+     * Obtém o IP real do cliente, considerando proxies e Cloudflare
+     */
+    function obterIpCliente() {
+        $ipKeys = [
+            'HTTP_CF_CONNECTING_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_CLIENT_IP',
+            'REMOTE_ADDR'
+        ];
 
-    foreach ($ipKeys as $key) {
-        if (!empty($_SERVER[$key])) {
-            $ips = explode(',', $_SERVER[$key]);
-            $ip = trim($ips[0]);
-            if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                return $ip;
+        foreach ($ipKeys as $key) {
+            if (!empty($_SERVER[$key])) {
+                $ips = explode(',', $_SERVER[$key]);
+                $ip = trim($ips[0]);
+                if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                    return $ip;
+                }
             }
         }
-    }
 
-    return $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        return $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+    }
 }
 
-/**
- * Mascara o IP para privacidade (ex: 189.120.***.*** ou 2804:14d:***)
- */
-function mascararIp($ip) {
-    if (!$ip || $ip === '127.0.0.1' || $ip === '::1') {
-        return 'Rede local';
-    }
-
-    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-        $partes = explode('.', $ip);
-        if (count($partes) === 4) {
-            return $partes[0] . '.' . $partes[1] . '.*.*';
+if (!function_exists('mascararIp')) {
+    /**
+     * Mascara o IP para privacidade (ex: 189.120.***.*** ou 2804:14d:***)
+     */
+    function mascararIp($ip) {
+        if (!$ip || $ip === '127.0.0.1' || $ip === '::1') {
+            return 'Rede local';
         }
-    }
 
-    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-        $partes = explode(':', $ip);
-        if (count($partes) >= 2) {
-            return $partes[0] . ':' . $partes[1] . ':****:****';
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            $partes = explode('.', $ip);
+            if (count($partes) === 4) {
+                return $partes[0] . '.' . $partes[1] . '.*.*';
+            }
         }
-    }
 
-    return $ip;
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            $partes = explode(':', $ip);
+            if (count($partes) >= 2) {
+                return $partes[0] . ':' . $partes[1] . ':****:****';
+            }
+        }
+
+        return $ip;
+    }
 }
 
 /**

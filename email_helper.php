@@ -43,21 +43,23 @@ function mascararEmail($email) {
     return $maskedUser . '@' . $domain;
 }
 
-/**
- * Obtém o IP do cliente considerando proxies (Cloudflare, Vercel, etc.)
- */
-function obterIpCliente() {
-    if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
-        return $_SERVER['HTTP_CF_CONNECTING_IP'];
-    }
-    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $partes = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-        $ip = trim($partes[0]);
-        if (filter_var($ip, FILTER_VALIDATE_IP)) {
-            return $ip;
+if (!function_exists('obterIpCliente')) {
+    /**
+     * Obtém o IP do cliente considerando proxies (Cloudflare, Vercel, etc.)
+     */
+    function obterIpCliente() {
+        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            return $_SERVER['HTTP_CF_CONNECTING_IP'];
         }
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $partes = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = trim($partes[0]);
+            if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                return $ip;
+            }
+        }
+        return $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
     }
-    return $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
 }
 
 /**

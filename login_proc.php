@@ -57,19 +57,29 @@ try {
         salvarSessaoUsuario($usuario['id'], $usuario['nome']);
 
         // Notifica o usuário por e-mail sobre o novo login
-        enviarEmailNovoLogin($usuario['email'], $usuario['nome'], [
-            'metodo' => 'Senha e E-mail'
-        ]);
+        try {
+            enviarEmailNovoLogin($usuario['email'], $usuario['nome'], [
+                'metodo' => 'Senha e E-mail'
+            ]);
+        } catch (Throwable $tEmail) {
+            error_log("Erro ao enviar email de login: " . $tEmail->getMessage());
+        }
 
         // Registra também na central de notificações do site
-        require_once __DIR__ . '/notificacao_helper.php';
-        registrarNotificacaoNovoLogin($pdo, $usuario['id']);
+        try {
+            require_once __DIR__ . '/notificacao_helper.php';
+            if (function_exists('registrarNotificacaoNovoLogin')) {
+                registrarNotificacaoNovoLogin($pdo, $usuario['id']);
+            }
+        } catch (Throwable $tNotif) {
+            error_log("Erro ao registrar notificacao de login: " . $tNotif->getMessage());
+        }
 
         responderJson(['sucesso' => true]);
     } else {
         responderJson(['sucesso' => false, 'mensagem' => 'Email ou senha incorretos.']);
     }
-} catch (PDOException $e) {
+} catch (Throwable $e) {
     responderJson(['sucesso' => false, 'mensagem' => 'Erro no servidor: ' . $e->getMessage()]);
 }
 ?>

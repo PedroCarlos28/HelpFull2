@@ -106,20 +106,30 @@ try {
     salvarSessaoUsuario($usuario['id'], $usuario['nome']);
 
     // Notifica o usuário por e-mail sobre o novo login após confirmação do 2FA
-    enviarEmailNovoLogin($usuario['email'], $usuario['nome'], [
-        'metodo' => 'Autenticação em Duas Etapas (2FA)'
-    ]);
+    try {
+        enviarEmailNovoLogin($usuario['email'], $usuario['nome'], [
+            'metodo' => 'Autenticação em Duas Etapas (2FA)'
+        ]);
+    } catch (Throwable $tEmail) {
+        error_log("Erro ao enviar email 2FA: " . $tEmail->getMessage());
+    }
 
     // Registra também na central de notificações do site
-    require_once __DIR__ . '/notificacao_helper.php';
-    registrarNotificacaoNovoLogin($pdo, $usuario['id']);
+    try {
+        require_once __DIR__ . '/notificacao_helper.php';
+        if (function_exists('registrarNotificacaoNovoLogin')) {
+            registrarNotificacaoNovoLogin($pdo, $usuario['id']);
+        }
+    } catch (Throwable $tNotif) {
+        error_log("Erro ao registrar notificacao 2FA: " . $tNotif->getMessage());
+    }
 
     responderJson([
         'sucesso' => true,
         'mensagem' => 'Autenticação confirmada com sucesso!'
     ]);
 
-} catch (PDOException $e) {
+} catch (Throwable $e) {
     responderJson(['sucesso' => false, 'mensagem' => 'Erro ao processar verificação: ' . $e->getMessage()]);
 }
 ?>
