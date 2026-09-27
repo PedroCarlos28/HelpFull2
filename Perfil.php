@@ -486,6 +486,104 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             background: var(--tema-superficie) !important;
         }
 
+        /* === TOAST FEEDBACK MODERNO COM VIDRO FOSCO (GLASSMORPHISM) === */
+        .toast-feedback-2fa {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px) scale(0.95);
+            padding: 10px 22px 10px 14px;
+            border-radius: 50px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.2px;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            
+            /* Vidro Fosco no Modo Claro */
+            background: rgba(255, 255, 255, 0.82);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            backdrop-filter: blur(18px) saturate(180%);
+            color: #133842;
+            border: 1px solid rgba(43, 122, 140, 0.24);
+            box-shadow: 0 16px 36px rgba(27, 61, 69, 0.16), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .toast-feedback-2fa.mostrar {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+
+        .toast-feedback-2fa .toast-icone-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: rgba(43, 122, 140, 0.12);
+            color: #2b7a8c;
+            transition: all 0.25s ease;
+        }
+
+        .toast-feedback-2fa .toast-icone-wrap svg {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2.2;
+            display: block;
+        }
+
+        .toast-feedback-2fa.toast-sucesso .toast-icone-wrap {
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+
+        .toast-feedback-2fa.toast-desativado .toast-icone-wrap {
+            background: rgba(43, 122, 140, 0.12);
+            color: #2b7a8c;
+        }
+
+        .toast-feedback-2fa.toast-erro .toast-icone-wrap {
+            background: rgba(239, 68, 68, 0.15);
+            color: #dc2626;
+        }
+
+        /* Vidro Fosco no Modo Escuro */
+        body.acessibilidade-escuro .toast-feedback-2fa {
+            background: rgba(22, 30, 34, 0.82) !important;
+            -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+            backdrop-filter: blur(18px) saturate(180%) !important;
+            color: #f1f5f9 !important;
+            border-color: rgba(146, 208, 222, 0.22) !important;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.58), 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+        }
+
+        body.acessibilidade-escuro .toast-feedback-2fa .toast-icone-wrap {
+            background: rgba(43, 122, 140, 0.32) !important;
+            color: #7dd3fc !important;
+        }
+
+        body.acessibilidade-escuro .toast-feedback-2fa.toast-sucesso .toast-icone-wrap {
+            background: rgba(16, 185, 129, 0.26) !important;
+            color: #34d399 !important;
+        }
+
+        body.acessibilidade-escuro .toast-feedback-2fa.toast-desativado .toast-icone-wrap {
+            background: rgba(43, 122, 140, 0.32) !important;
+            color: #92d0de !important;
+        }
+
+        body.acessibilidade-escuro .toast-feedback-2fa.toast-erro .toast-icone-wrap {
+            background: rgba(239, 68, 68, 0.28) !important;
+            color: #f87171 !important;
+        }
+
         /* Ajuste na Navbar durante edição para não sobrepor o foco */
         body.modo-edicao .nav-container-global {
             opacity: 0.3;
@@ -2594,34 +2692,42 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             if (!t) {
                 t = document.createElement('div');
                 t.id = 'toast2FAFeedback';
-                t.style.position = 'fixed';
-                t.style.bottom = '30px';
-                t.style.left = '50%';
-                t.style.transform = 'translateX(-50%) translateY(30px)';
-                t.style.background = '#1b3d45';
-                t.style.color = '#ffffff';
-                t.style.padding = '12px 26px';
-                t.style.borderRadius = '30px';
-                t.style.fontSize = '0.92rem';
-                t.style.fontWeight = '700';
-                t.style.boxShadow = '0 12px 30px rgba(0,0,0,0.25)';
-                t.style.zIndex = '3500';
-                t.style.opacity = '0';
-                t.style.transition = 'all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                t.style.pointerEvents = 'none';
-                t.style.display = 'flex';
-                t.style.alignItems = 'center';
-                t.style.gap = '10px';
+                t.className = 'toast-feedback-2fa';
                 document.body.appendChild(t);
             }
-            const icone = tipo === 'erro' ? '⚠️' : '🛡️';
-            t.innerHTML = `<span>${icone}</span><span>${msg}</span>`;
-            t.style.opacity = '1';
-            t.style.transform = 'translateX(-50%) translateY(0)';
+
+            const msgLower = (msg || '').toLowerCase();
+            const isDesativado = tipo === 'desativado' || msgLower.includes('desativad');
+            const isSucesso = tipo === 'sucesso' || msgLower.includes('ativad') || msgLower.includes('sucesso');
+            const isErro = tipo === 'erro' || msgLower.includes('erro') || msgLower.includes('falh');
+
+            let classeTipo = 'toast-info';
+            let svgIcon = '';
+
+            if (isErro) {
+                classeTipo = 'toast-erro';
+                svgIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+            } else if (isDesativado) {
+                classeTipo = 'toast-desativado';
+                svgIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`;
+            } else if (isSucesso) {
+                classeTipo = 'toast-sucesso';
+                svgIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`;
+            } else {
+                classeTipo = 'toast-info';
+                svgIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+            }
+
+            t.className = `toast-feedback-2fa ${classeTipo}`;
+            t.innerHTML = `<span class="toast-icone-wrap">${svgIcon}</span><span>${msg}</span>`;
+
+            // Força o navegador a calcular o layout antes de animar
+            void t.offsetWidth;
+            t.classList.add('mostrar');
+
             clearTimeout(window.__toast2FATimer);
             window.__toast2FATimer = setTimeout(() => {
-                t.style.opacity = '0';
-                t.style.transform = 'translateX(-50%) translateY(20px)';
+                t.classList.remove('mostrar');
             }, 3600);
         }
 

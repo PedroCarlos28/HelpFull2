@@ -656,6 +656,35 @@ body.acessibilidade-escuro .toast-notificacao {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35) !important;
 }
 
+body.acessibilidade-escuro .toast-feedback-2fa {
+    background: rgba(22, 30, 34, 0.82) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+    backdrop-filter: blur(18px) saturate(180%) !important;
+    color: #f1f5f9 !important;
+    border-color: rgba(146, 208, 222, 0.22) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.58), 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+body.acessibilidade-escuro .toast-feedback-2fa .toast-icone-wrap {
+    background: rgba(43, 122, 140, 0.32) !important;
+    color: #7dd3fc !important;
+}
+
+body.acessibilidade-escuro .toast-feedback-2fa.toast-sucesso .toast-icone-wrap {
+    background: rgba(16, 185, 129, 0.26) !important;
+    color: #34d399 !important;
+}
+
+body.acessibilidade-escuro .toast-feedback-2fa.toast-desativado .toast-icone-wrap {
+    background: rgba(43, 122, 140, 0.32) !important;
+    color: #92d0de !important;
+}
+
+body.acessibilidade-escuro .toast-feedback-2fa.toast-erro .toast-icone-wrap {
+    background: rgba(239, 68, 68, 0.28) !important;
+    color: #f87171 !important;
+}
+
 body.acessibilidade-escuro .caixa-vidro {
     background: rgba(22, 28, 33, 0.62) !important;
     backdrop-filter: blur(25px) !important;
