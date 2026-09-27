@@ -79,13 +79,11 @@ if (isset($_SESSION['usuario_id'])) {
             z-index: 1000;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: #ffffff;
             padding: 12px 30px;
             border-radius: 50px;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 30px rgba(15, 43, 53, 0.06);
+            border: 1px solid rgba(43, 122, 140, 0.12);
         }
 
         .nav-col-esq { flex: 1; display: flex; justify-content: flex-start; }
@@ -124,7 +122,8 @@ if (isset($_SESSION['usuario_id'])) {
         }
 
         .btn-voltar-inicio {
-            background: #ffffff;
+            background: #f1f7f9;
+            border: 1px solid #d4e7ee;
             color: #1a1a1a;
             text-decoration: none;
             padding: 8px 18px;
@@ -134,14 +133,16 @@ if (isset($_SESSION['usuario_id'])) {
             display: flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             white-space: nowrap;
             transition: 0.3s;
         }
 
         .btn-voltar-inicio:hover {
+            background: #ffffff;
+            border-color: #2b7a8c;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 20px rgba(43, 122, 140, 0.15);
         }
 
         /* === CONTAINER PRINCIPAL DO LOGIN === */
@@ -156,14 +157,12 @@ if (isset($_SESSION['usuario_id'])) {
             gap: 16px;
         }
 
-        /* === CARD DE FORMULÁRIO === */
+        /* === CARD DE FORMULÁRIO (BRANCO SÓLIDO SEM VIDRO FOSCO) === */
         .card-acesso {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: #ffffff;
+            border: 1px solid rgba(43, 122, 140, 0.12);
             border-radius: 45px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 20px 60px rgba(15, 43, 53, 0.08), 0 4px 16px rgba(0, 0, 0, 0.03);
             overflow: hidden;
             position: relative;
             width: 100%;
@@ -206,20 +205,22 @@ if (isset($_SESSION['usuario_id'])) {
         .input-group input {
             width: 100%;
             height: 55px;
-            background: #ffffff;
-            border: 2px solid transparent;
+            background: #f1f7f9;
+            border: 1.5px solid #d4e7ee;
             border-radius: 30px;
             padding: 0 25px;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 700;
-            color: #333;
+            color: #1a2f38;
             outline: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-            transition: 0.3s;
+            box-shadow: inset 0 2px 4px rgba(27, 61, 69, 0.04);
+            transition: all 0.25s ease;
         }
 
         .input-group input:focus {
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            border-color: #2b7a8c;
+            box-shadow: 0 0 0 4px rgba(43, 122, 140, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.02);
             transform: translateY(-1px);
         }
 
@@ -431,8 +432,8 @@ if (isset($_SESSION['usuario_id'])) {
         .input-group-2fa input {
             width: 100%;
             height: 60px;
-            background: #ffffff;
-            border: 2px solid transparent;
+            background: #f1f7f9;
+            border: 1.5px solid #d4e7ee;
             border-radius: 30px;
             padding: 0 20px;
             font-size: 2rem;
@@ -442,14 +443,15 @@ if (isset($_SESSION['usuario_id'])) {
             font-family: 'Courier New', Courier, monospace;
             color: #1b3d45;
             outline: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s;
+            box-shadow: inset 0 2px 4px rgba(27, 61, 69, 0.04);
+            transition: all 0.25s ease;
             box-sizing: border-box;
         }
 
         .input-group-2fa input:focus {
+            background: #ffffff;
             border-color: #2b7a8c;
-            box-shadow: 0 5px 25px rgba(43, 122, 140, 0.2);
+            box-shadow: 0 0 0 4px rgba(43, 122, 140, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
         .reenviar-2fa-box {
@@ -507,21 +509,23 @@ if (isset($_SESSION['usuario_id'])) {
             width: 52px;
             height: 52px;
             border-radius: 50%;
-            border: none;
-            background: #ffffff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1.5px solid #d4e7ee;
+            background: #f8fafc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.25s, box-shadow 0.25s;
+            transition: transform 0.25s, box-shadow 0.25s, background-color 0.25s, border-color 0.25s;
             flex-shrink: 0;
             position: relative;
         }
 
         .btn-google-circle:hover {
+            background: #ffffff;
+            border-color: #2b7a8c;
             transform: translateY(-2px) scale(1.07);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.13);
+            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.15);
         }
 
         .btn-google-circle:active { transform: scale(0.95); }
@@ -767,6 +771,47 @@ if (isset($_SESSION['usuario_id'])) {
         body.acessibilidade-escuro .toast-feedback-2fa.toast-erro .toast-icone-wrap {
             background: rgba(239, 68, 68, 0.28) !important;
             color: #f87171 !important;
+        }
+
+        /* === MODO ESCURO PARA CARD E NAVBAR SÓLIDOS (SEM VIDRO FOSCO) === */
+        body.acessibilidade-escuro .card-acesso,
+        body.acessibilidade-escuro .navbar-topo {
+            background: #182228 !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        body.acessibilidade-escuro .nav-logo,
+        body.acessibilidade-escuro .titulo-central,
+        body.acessibilidade-escuro .input-group label,
+        body.acessibilidade-escuro .titulo-2fa,
+        body.acessibilidade-escuro .input-group-2fa label {
+            color: #f1f5f9 !important;
+        }
+
+        body.acessibilidade-escuro .btn-voltar-inicio {
+            background: #23313a !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            color: #f1f5f9 !important;
+        }
+
+        body.acessibilidade-escuro .input-group input,
+        body.acessibilidade-escuro .input-group-2fa input {
+            background: #23313a !important;
+            border-color: #354752 !important;
+            color: #f8fafc !important;
+        }
+
+        body.acessibilidade-escuro .input-group input:focus,
+        body.acessibilidade-escuro .input-group-2fa input:focus {
+            background: #1c272e !important;
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2) !important;
+        }
+
+        body.acessibilidade-escuro .btn-google-circle {
+            background: #23313a !important;
+            border-color: #354752 !important;
         }
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
