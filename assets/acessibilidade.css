@@ -953,7 +953,8 @@ body.acessibilidade-escuro .texto-extra-scrolled,
 body.acessibilidade-escuro .link-extra,
 body.acessibilidade-escuro .rodape-simples,
 body.acessibilidade-escuro .rodape-simples strong,
-body.acessibilidade-escuro .contato-info {
+body.acessibilidade-escuro .contato-info,
+body.acessibilidade-escuro .contato-info a {
     color: var(--tema-texto) !important;
 }
 
@@ -1246,7 +1247,8 @@ body.acessibilidade-contraste .bloco-grande p,
 body.acessibilidade-contraste .texto-extra-scrolled,
 body.acessibilidade-contraste .link-extra,
 body.acessibilidade-contraste .rodape-simples,
-body.acessibilidade-contraste .contato-info {
+body.acessibilidade-contraste .contato-info,
+body.acessibilidade-contraste .contato-info a {
     color: var(--tema-texto) !important;
 }
 

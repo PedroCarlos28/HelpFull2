@@ -1747,7 +1747,10 @@ if (isset($_SESSION['usuario_id'])) {
         <div class="secao-branca-conteudo">
             <footer class="rodape-simples">
                 <strong>HELPFULL</strong>
-                <div class="contato-info">Entre em contato:<br><br>Email:<br>Intagram:<br>WhatsApp:</div>
+                <div class="contato-info">
+                    Entre em contato:<br><br>
+                    Email: <a href="mailto:contatohelpfull@gmail.com" style="color: inherit; text-decoration: none;">contatohelpfull@gmail.com</a>
+                </div>
             </footer>
         </div>
     </div>

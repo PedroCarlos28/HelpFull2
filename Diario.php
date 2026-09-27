@@ -960,16 +960,7 @@ if (!empty($usuarioLogado['id'])) {
         </div>
     </div>
 
-    <div class="secao-branca">
-        <div class="secao-branca-conteudo">
-            <footer class="rodape-simples">
-                <strong>HELPFULL</strong>
-                <div class="contato-info">
-                    Entre em contato:<br><br>Email:<br>Intagram:<br>WhatsApp:
-                </div>
-            </footer>
-        </div>
-    </div>
+
 
     <!-- TOAST CENTRALIZADO -->
     <div id="notificacaoHelpFull" class="toast-notificacao">
