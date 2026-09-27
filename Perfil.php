@@ -300,14 +300,11 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         body.modo-edicao .conteudo-site {
             position: relative;
             z-index: 2100;
-            min-height: 100vh;
-            padding-top: 25px !important;
-            padding-bottom: 25px !important;
+            padding-top: 32px !important; /* Sobe o painel para caber na tela sem rolagem */
+            padding-bottom: 35px !important;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
+            gap: 18px;
         }
 
         .overlay-editar {
@@ -329,33 +326,13 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             position: relative;
             z-index: 2105;
             background: #ffffff !important;
-            transform: none;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
-            padding: 24px 30px;
+            transform: scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             margin: 0 auto;
             width: 100%;
-            max-width: 950px;
         }
 
-        body.modo-edicao #cardSuaConta .titulo-secao {
-            margin-bottom: 14px;
-            font-size: 1.45rem;
-        }
-
-        body.modo-edicao #cardSuaConta .conta-grid {
-            gap: 28px;
-        }
-
-        body.modo-edicao #cardSuaConta .conta-imagem-placeholder {
-            width: 135px;
-            height: 135px;
-        }
-
-        body.modo-edicao #cardSuaConta .conta-input {
-            padding: 10px 18px;
-        }
-
-        /* Oculta os outros cards para não ocuparem espaço vertical no fluxo da tela */
+        /* Oculta os outros cards para não ocuparem espaço vertical na página */
         body.modo-edicao .conteudo-site > *:not(#cardSuaConta):not(#balao2faContainer) {
             display: none !important;
         }
@@ -366,11 +343,11 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             position: relative;
             z-index: 2100;
             width: 100%;
-            max-width: 950px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 18px auto 0 auto;
             background: #ffffff;
             border-radius: 28px;
-            padding: 18px 28px;
+            padding: 24px 30px;
             box-shadow: 0 16px 45px rgba(0, 0, 0, 0.16);
             border: 1.5px solid rgba(43, 122, 140, 0.22);
             box-sizing: border-box;
@@ -381,23 +358,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             display: block;
             position: relative;
             z-index: 2104;
-            animation: balao2faSurgir 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        body.modo-edicao .balao-2fa-titulo {
-            font-size: 1.08rem;
-            margin: 0 0 4px 0;
-        }
-
-        body.modo-edicao .balao-2fa-desc {
-            font-size: 0.83rem;
-            line-height: 1.4;
-        }
-
-        body.modo-edicao .balao-2fa-email-aviso {
-            margin-top: 10px;
-            padding-top: 10px;
-            font-size: 0.8rem;
+            animation: balao2faSurgir 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         @keyframes balao2faSurgir {
