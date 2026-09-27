@@ -251,6 +251,12 @@
     }
 
     /* ── Acessibilidade ───────────────────────────────────── */
+    try {
+        localStorage.removeItem('helpfull_reduzirTransparencia');
+        if (document.documentElement) document.documentElement.classList.remove('acessibilidade-reduzir-transparencia');
+        if (document.body) document.body.classList.remove('acessibilidade-reduzir-transparencia');
+    } catch (e) {}
+
     var prefAcess = {
         escuro:       'acessibilidade-escuro',
         contraste:    'acessibilidade-contraste',
