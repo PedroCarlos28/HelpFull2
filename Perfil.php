@@ -293,9 +293,30 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        body.modo-edicao .conteudo-site {
+            position: relative;
+            z-index: 2100;
+        }
+
+        .overlay-editar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1550;
+            cursor: pointer;
+        }
+
+        body.modo-edicao .overlay-editar {
+            display: block;
+        }
+
         body.modo-edicao #cardSuaConta {
             position: relative;
-            z-index: 2100; /* Acima de tudo, inclusive da navbar */
+            z-index: 2105; /* Acima de tudo, inclusive da navbar */
+            background: #ffffff !important;
             transform: scale(1.02);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
         }
@@ -584,11 +605,13 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             color: #f87171 !important;
         }
 
-        /* Ajuste na Navbar durante edição para não sobrepor o foco */
+        /* Ajuste na Navbar durante edição para ficar estritamente ATRÁS do painel */
         body.modo-edicao .nav-container-global {
-            opacity: 0.3;
+            z-index: 1000 !important; /* Menor que o painel (2100) e que o backdrop (1500) */
+            opacity: 0.35;
             pointer-events: none;
             filter: blur(5px);
+            transition: opacity 0.3s ease, filter 0.3s ease;
         }
 
         @keyframes fadeInBlur {
