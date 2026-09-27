@@ -2350,6 +2350,21 @@ try {
             background: #254454;
         }
 
+        /* TRAVAMENTO DO FUNDO QUANDO MODAL ESTIVER ABERTO */
+        html.modal-aberto-travar,
+        body.modal-aberto-travar {
+            overflow: hidden !important;
+            overscroll-behavior: none !important;
+            touch-action: none !important;
+        }
+
+        body.modal-aberto-travar {
+            position: fixed !important;
+            width: 100% !important;
+            left: 0 !important;
+            right: 0 !important;
+        }
+
         .modal-alterar-senha-overlay {
             position: fixed;
             inset: 0;
@@ -2363,6 +2378,10 @@ try {
             padding: 20px;
             opacity: 0;
             transition: opacity 0.28s ease;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-y;
         }
 
         .modal-alterar-senha-overlay.aberto {
@@ -2374,6 +2393,11 @@ try {
             background: #ffffff;
             width: 100%;
             max-width: 480px;
+            max-height: min(88vh, 88dvh);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-y;
             border-radius: 32px;
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.22);
             border: 1px solid rgba(43, 122, 140, 0.15);
@@ -2383,6 +2407,17 @@ try {
             font-family: 'Montserrat', sans-serif !important;
             transform: scale(0.92);
             transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(43, 122, 140, 0.35) transparent;
+        }
+
+        .modal-alterar-senha-card::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-alterar-senha-card::-webkit-scrollbar-thumb {
+            background: rgba(43, 122, 140, 0.3);
+            border-radius: 10px;
         }
 
         .modal-alterar-senha-overlay.aberto .modal-alterar-senha-card {
@@ -2394,8 +2429,10 @@ try {
             border: 1px solid var(--tema-borda, #2f383e) !important;
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.75) !important;
             color: var(--tema-texto, #f1f5f9) !important;
+            scrollbar-color: rgba(125, 211, 252, 0.3) transparent;
         }
 
+        /* BOTÃO DE FECHAR SEM ANIMAÇÃO */
         .modal-fechar-btn {
             position: absolute;
             top: 22px;
@@ -2410,23 +2447,60 @@ try {
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: none !important;
+            transform: none !important;
+            animation: none !important;
         }
 
-        .modal-fechar-btn:hover {
+        .modal-fechar-btn:hover,
+        .modal-fechar-btn:active,
+        .modal-fechar-btn:focus {
             background: rgba(0, 0, 0, 0.1);
             color: #111;
-            transform: scale(1.08) rotate(90deg);
+            transform: none !important;
+            transition: none !important;
+            animation: none !important;
         }
 
         body.acessibilidade-escuro .modal-fechar-btn {
             background: rgba(255, 255, 255, 0.08);
             color: #cbd5e1;
+            transition: none !important;
+            transform: none !important;
+            animation: none !important;
         }
 
-        body.acessibilidade-escuro .modal-fechar-btn:hover {
+        body.acessibilidade-escuro .modal-fechar-btn:hover,
+        body.acessibilidade-escuro .modal-fechar-btn:active,
+        body.acessibilidade-escuro .modal-fechar-btn:focus {
             background: rgba(255, 255, 255, 0.16);
             color: #ffffff;
+            transform: none !important;
+            transition: none !important;
+            animation: none !important;
+        }
+
+        @media (max-width: 600px) {
+            .modal-alterar-senha-overlay {
+                padding: 12px 10px;
+                align-items: center;
+            }
+
+            .modal-alterar-senha-card {
+                max-height: calc(100dvh - 24px);
+                padding: 26px 18px 22px 18px;
+                border-radius: 24px;
+            }
+
+            .modal-fechar-btn {
+                top: 16px;
+                right: 16px;
+            }
+
+            .modal-senha-header {
+                padding-right: 32px;
+                margin-bottom: 16px;
+            }
         }
 
         .modal-senha-header {
@@ -3715,13 +3789,29 @@ try {
             }
 
             modal.classList.add('aberto');
-            document.body.style.overflow = 'hidden';
+            travarScrollFundo();
+        }
+
+        let scrollPosBloqueioModal = 0;
+
+        function travarScrollFundo() {
+            scrollPosBloqueioModal = window.pageYOffset || document.documentElement.scrollTop || 0;
+            document.body.style.top = `-${scrollPosBloqueioModal}px`;
+            document.body.classList.add('modal-aberto-travar');
+            document.documentElement.classList.add('modal-aberto-travar');
+        }
+
+        function destravarScrollFundo() {
+            document.body.classList.remove('modal-aberto-travar');
+            document.documentElement.classList.remove('modal-aberto-travar');
+            document.body.style.top = '';
+            window.scrollTo(0, scrollPosBloqueioModal);
         }
 
         function fecharModalAlterarSenha() {
             const modal = document.getElementById('modalAlterarSenha');
             if (modal) modal.classList.remove('aberto');
-            document.body.style.overflow = '';
+            destravarScrollFundo();
         }
 
         document.addEventListener('keydown', function(e) {

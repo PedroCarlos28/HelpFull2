@@ -698,6 +698,21 @@ $totalOutros = count($outrasSessoes);
             color: #2b7a8c;
         }
 
+        /* TRAVAMENTO DO FUNDO QUANDO MODAL ESTIVER ABERTO */
+        html.modal-aberto-travar,
+        body.modal-aberto-travar {
+            overflow: hidden !important;
+            overscroll-behavior: none !important;
+            touch-action: none !important;
+        }
+
+        body.modal-aberto-travar {
+            position: fixed !important;
+            width: 100% !important;
+            left: 0 !important;
+            right: 0 !important;
+        }
+
         /* MODAL DE CONFIRMAÇÃO */
         .modal-overlay {
             position: fixed;
@@ -712,6 +727,10 @@ $totalOutros = count($outrasSessoes);
             padding: 20px;
             opacity: 0;
             transition: opacity 0.25s ease;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-y;
         }
 
         .modal-overlay.aberto {
@@ -723,6 +742,11 @@ $totalOutros = count($outrasSessoes);
             background: #ffffff;
             width: 100%;
             max-width: 480px;
+            max-height: min(88vh, 88dvh);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            touch-action: pan-y;
             border-radius: 30px;
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.22);
             border: 1px solid rgba(43, 122, 140, 0.15);
@@ -731,12 +755,24 @@ $totalOutros = count($outrasSessoes);
             box-sizing: border-box;
             transform: scale(0.94);
             transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(43, 122, 140, 0.35) transparent;
+        }
+
+        .modal-card::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-card::-webkit-scrollbar-thumb {
+            background: rgba(43, 122, 140, 0.3);
+            border-radius: 10px;
         }
 
         .modal-overlay.aberto .modal-card {
             transform: scale(1);
         }
 
+        /* BOTÃO DE FECHAR SEM ANIMAÇÃO */
         .modal-fechar-btn {
             position: absolute;
             top: 20px;
@@ -751,13 +787,19 @@ $totalOutros = count($outrasSessoes);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: none !important;
+            transform: none !important;
+            animation: none !important;
         }
 
-        .modal-fechar-btn:hover {
+        .modal-fechar-btn:hover,
+        .modal-fechar-btn:active,
+        .modal-fechar-btn:focus {
             background: rgba(0, 0, 0, 0.1);
             color: #111;
-            transform: scale(1.06);
+            transform: none !important;
+            transition: none !important;
+            animation: none !important;
         }
 
         .modal-icone-topo {
@@ -1082,6 +1124,9 @@ $totalOutros = count($outrasSessoes);
         body.acessibilidade-escuro .modal-btn-cancelar:hover {
             background: rgba(255, 255, 255, 0.16) !important;
             color: #ffffff !important;
+            transform: none !important;
+            transition: none !important;
+            animation: none !important;
         }
 
         /* =======================================================
@@ -1615,6 +1660,7 @@ $totalOutros = count($outrasSessoes);
 
             dispNome.textContent = nome;
             modal.classList.add('aberto');
+            travarScrollFundo();
         }
 
         // Abre modal para desconectar todas as outras sessões
@@ -1633,6 +1679,23 @@ $totalOutros = count($outrasSessoes);
             btnConfirmar.textContent = 'Desconectar todos';
 
             modal.classList.add('aberto');
+            travarScrollFundo();
+        }
+
+        let scrollPosBloqueioModal = 0;
+
+        function travarScrollFundo() {
+            scrollPosBloqueioModal = window.pageYOffset || document.documentElement.scrollTop || 0;
+            document.body.style.top = `-${scrollPosBloqueioModal}px`;
+            document.body.classList.add('modal-aberto-travar');
+            document.documentElement.classList.add('modal-aberto-travar');
+        }
+
+        function destravarScrollFundo() {
+            document.body.classList.remove('modal-aberto-travar');
+            document.documentElement.classList.remove('modal-aberto-travar');
+            document.body.style.top = '';
+            window.scrollTo(0, scrollPosBloqueioModal);
         }
 
         function fecharModalConfirmacao(e) {
@@ -1643,6 +1706,7 @@ $totalOutros = count($outrasSessoes);
             if (modal) {
                 modal.classList.remove('aberto');
             }
+            destravarScrollFundo();
             acaoPendente = null;
         }
 
