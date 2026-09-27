@@ -89,46 +89,38 @@ $totalOutros = count($outrasSessoes);
             min-height: 100vh;
         }
 
-        /* NAVBAR GLOBAL */
+        /* NAVBAR GLOBAL (UNIVERSAL HELPFULL) */
         .nav-container-global {
-            width: 100%;
-            position: sticky;
-            top: 25px;
-            z-index: 1000;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin-bottom: 25px;
-            pointer-events: none;
-            padding: 0 20px;
+            gap: 15px;
+            z-index: 2000;
         }
 
         .navbar-topo {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            padding: 6px 12px 6px 20px;
-            border-radius: 40px;
-            width: 100%;
-            max-width: 900px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            pointer-events: auto;
+            padding: 12px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            align-items: center;
+            gap: 30px;
             position: relative;
         }
 
         .nav-logo {
             font-weight: 900;
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             letter-spacing: -0.5px;
-            color: #1a1a1a;
-            display: flex;
-            align-items: center;
-            gap: 4px;
             text-decoration: none;
+            color: inherit;
         }
 
         .nav-seta-dropdown {
@@ -136,10 +128,10 @@ $totalOutros = count($outrasSessoes);
         }
 
         .nav-links {
-            list-style: none;
             display: flex;
+            gap: 25px;
+            list-style: none;
             align-items: center;
-            gap: 24px;
             margin: 0;
             padding: 0;
         }
@@ -147,34 +139,37 @@ $totalOutros = count($outrasSessoes);
         .nav-links a {
             text-decoration: none;
             color: #1a1a1a;
-            font-weight: 600;
-            font-size: 0.92rem;
-            transition: color 0.2s;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: color 0.3s;
         }
 
         .nav-links a:hover {
+            opacity: 0.7;
             color: #2b7a8c;
         }
 
         .perfil-capsula {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
+            background: #333;
             border-radius: 50%;
-            background: #dbe7eb;
-            background-size: cover;
-            background-position: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #1a1a1a;
-            border: 1.5px solid #2b7a8c;
-            transition: transform 0.2s, box-shadow 0.2s;
+            color: #fff;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            box-shadow: 0 0 0 3px #2b7a8c;
             cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .perfil-capsula:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(43, 122, 140, 0.2);
+            box-shadow: 0 0 0 3px #2b7a8c, 0 4px 12px rgba(43, 122, 140, 0.2);
         }
 
         .acessibilidade-anchor {
@@ -187,22 +182,22 @@ $totalOutros = count($outrasSessoes);
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             color: #1a1a1a;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
         .btn-acessibilidade:hover {
-            background: #ffffff;
-            transform: scale(1.06);
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.6);
             color: #2b7a8c;
         }
 
@@ -217,7 +212,7 @@ $totalOutros = count($outrasSessoes);
             width: 100%;
             max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px 80px 20px;
+            padding: 120px 20px 80px 20px;
             display: flex;
             flex-direction: column;
             gap: 22px;
@@ -228,7 +223,8 @@ $totalOutros = count($outrasSessoes);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 4px;
+            margin-top: 10px;
+            margin-bottom: 12px;
         }
 
         .link-voltar {
@@ -1133,6 +1129,13 @@ $totalOutros = count($outrasSessoes);
            RESPONSIVIDADE (Mobile e Tablets)
            ======================================================= */
         @media (max-width: 768px) {
+            .nav-container-global {
+                width: 100%;
+                left: 0;
+                transform: none;
+                top: 15px;
+            }
+
             .nav-links {
                 display: none;
             }
@@ -1141,6 +1144,18 @@ $totalOutros = count($outrasSessoes);
                 display: inline-block;
                 margin-left: 6px;
                 vertical-align: middle;
+            }
+
+            .navbar-topo {
+                padding: 12px 25px;
+                width: calc(100% - 40px);
+                margin: 0 auto;
+                justify-content: space-between;
+                overflow: visible !important;
+            }
+
+            .nav-logo {
+                cursor: pointer;
             }
 
             .acessibilidade-anchor {
@@ -1184,6 +1199,17 @@ $totalOutros = count($outrasSessoes);
             .nav-dropdown-mobile a.ativo {
                 background: rgba(43, 122, 140, 0.1);
                 color: #2b7a8c;
+            }
+
+            .conteudo-site {
+                padding-top: 135px !important;
+                padding-left: 16px !important;
+                padding-right: 16px !important;
+            }
+
+            .topo-voltar-row {
+                margin-top: 5px;
+                margin-bottom: 12px;
             }
 
             .card-dispositivos-header {
