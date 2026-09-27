@@ -129,7 +129,7 @@ try {
             $_SESSION['temp_2fa_email'] = $usuario['email'];
             $_SESSION['temp_2fa_ultimo_envio'] = time();
 
-            require_once 'email_helper.php';
+            require_once __DIR__ . '/email_helper.php';
             $envio = enviarEmail2FA($usuario['email'], $usuario['nome'], $codigo);
 
             responderJson([
@@ -144,7 +144,7 @@ try {
         salvarSessaoUsuario($usuario['id'], $usuario['nome']);
 
         // Notifica o usuário por e-mail sobre o novo login via Google
-        require_once 'email_helper.php';
+        require_once __DIR__ . '/email_helper.php';
         enviarEmailNovoLogin($usuario['email'], $usuario['nome'], [
             'metodo' => 'Conta Google (OAuth)'
         ]);
@@ -201,7 +201,7 @@ try {
     salvarSessaoUsuario($novoId, $nome);
 
     // Envia e-mail de boas-vindas para a nova conta criada via Google
-    require_once 'email_helper.php';
+    require_once __DIR__ . '/email_helper.php';
     enviarEmailBoasVindas($email, $nome);
 
     responderJson(['sucesso' => true, 'novo' => true]);

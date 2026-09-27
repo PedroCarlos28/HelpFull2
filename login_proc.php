@@ -4,7 +4,7 @@ ini_set('display_errors', '0');
 ob_start();
 
 require_once 'conexao.php';
-require_once 'email_helper.php';
+require_once __DIR__ . '/email_helper.php';
 
 header('Content-Type: application/json; charset=utf-8');
 

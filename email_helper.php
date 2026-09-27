@@ -12,6 +12,22 @@ if (file_exists(__DIR__ . '/config_keys.php')) {
     require_once __DIR__ . '/config_keys.php';
 }
 
+if (!defined('SMTP_HOST')) {
+    define('SMTP_HOST', getenv('SMTP_HOST') ?: ($_ENV['SMTP_HOST'] ?? 'smtp.gmail.com'));
+}
+if (!defined('SMTP_PORT')) {
+    define('SMTP_PORT', (int)(getenv('SMTP_PORT') ?: ($_ENV['SMTP_PORT'] ?? 587)));
+}
+if (!defined('SMTP_USER')) {
+    define('SMTP_USER', getenv('SMTP_USER') ?: ($_ENV['SMTP_USER'] ?? 'contatohelpfull@gmail.com'));
+}
+if (!defined('SMTP_PASS')) {
+    define('SMTP_PASS', getenv('SMTP_PASS') ?: ($_ENV['SMTP_PASS'] ?? ''));
+}
+if (!defined('SMTP_FROM')) {
+    define('SMTP_FROM', getenv('SMTP_FROM') ?: ($_ENV['SMTP_FROM'] ?? 'contatohelpfull@gmail.com'));
+}
+
 /**
  * Mascara o e-mail para exibição segura (ex: pe***o@gmail.com)
  */
@@ -510,63 +526,84 @@ function enviarEmailBoasVindas($email, $nome) {
  * Envio direto via socket SMTP com suporte a STARTTLS / SSL
  */
 function enviarViaSMTPDirect($host, $port, $user, $pass, $from, $to, $subject, $html) {
-    $timeout = 8;
-    $socket = @fsockopen($host, $port, $errno, $errstr, $timeout);
-    if (!$socket) return false;
+    if (!$user || !$pass) return false;
 
-    $ler = function() use ($socket) {
-        $resp = '';
-        while ($str = @fgets($socket, 515)) {
-            $resp .= $str;
-            if (substr($str, 3, 1) === ' ') break;
-        }
-        return $resp;
-    };
-
-    $enviar = function($cmd) use ($socket) {
-        @fputs($socket, $cmd . "\r\n");
-    };
-
-    $ler();
-    $enviar("EHLO " . ($_SERVER['SERVER_NAME'] ?? 'localhost'));
-    $ler();
-
-    if ($port == 587) {
-        $enviar("STARTTLS");
-        $ler();
-        if (!@stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
-            fclose($socket);
-            return false;
-        }
-        $enviar("EHLO " . ($_SERVER['SERVER_NAME'] ?? 'localhost'));
-        $ler();
+    // Prepara portas para tentativa (587 STARTTLS e 465 SSL)
+    $tentativas = [];
+    if ($port == 465) {
+        $tentativas[] = ['port' => 465, 'ssl' => true];
+        $tentativas[] = ['port' => 587, 'ssl' => false];
+    } else {
+        $tentativas[] = ['port' => 587, 'ssl' => false];
+        $tentativas[] = ['port' => 465, 'ssl' => true];
     }
 
-    $enviar("AUTH LOGIN");
-    $ler();
-    $enviar(base64_encode($user));
-    $ler();
-    $enviar(base64_encode($pass));
-    $ler();
+    foreach ($tentativas as $tentativa) {
+        $p = $tentativa['port'];
+        $isSsl = $tentativa['ssl'];
+        $connectHost = $isSsl ? ('ssl://' . $host) : $host;
+        $timeout = 6;
+        $socket = @fsockopen($connectHost, $p, $errno, $errstr, $timeout);
+        if (!$socket) continue;
 
-    $enviar("MAIL FROM: <$from>");
-    $ler();
-    $enviar("RCPT TO: <$to>");
-    $ler();
-    $enviar("DATA");
-    $ler();
+        $ler = function() use ($socket) {
+            $resp = '';
+            while ($str = @fgets($socket, 515)) {
+                $resp .= $str;
+                if (substr($str, 3, 1) === ' ') break;
+            }
+            return $resp;
+        };
 
-    $headers  = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-    $headers .= "From: HelpFull <$from>\r\n";
-    $headers .= "To: <$to>\r\n";
-    $headers .= "Subject: =?UTF-8?B?" . base64_encode($subject) . "?=\r\n";
-    $headers .= "\r\n";
+        $enviar = function($cmd) use ($socket) {
+            @fputs($socket, $cmd . "\r\n");
+        };
 
-    $enviar($headers . $html . "\r\n.");
-    $resp = $ler();
-    $enviar("QUIT");
-    fclose($socket);
+        $ler();
+        $enviar("EHLO " . ($_SERVER['SERVER_NAME'] ?? 'localhost'));
+        $ler();
 
-    return strpos($resp, '250') !== false;
+        if ($p == 587 && !$isSsl) {
+            $enviar("STARTTLS");
+            $ler();
+            if (!@stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+                fclose($socket);
+                continue;
+            }
+            $enviar("EHLO " . ($_SERVER['SERVER_NAME'] ?? 'localhost'));
+            $ler();
+        }
+
+        $enviar("AUTH LOGIN");
+        $ler();
+        $enviar(base64_encode($user));
+        $ler();
+        $enviar(base64_encode($pass));
+        $ler();
+
+        $enviar("MAIL FROM: <$from>");
+        $ler();
+        $enviar("RCPT TO: <$to>");
+        $ler();
+        $enviar("DATA");
+        $ler();
+
+        $headers  = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $headers .= "From: HelpFull <$from>\r\n";
+        $headers .= "To: <$to>\r\n";
+        $headers .= "Subject: =?UTF-8?B?" . base64_encode($subject) . "?=\r\n";
+        $headers .= "\r\n";
+
+        $enviar($headers . $html . "\r\n.");
+        $resp = $ler();
+        $enviar("QUIT");
+        fclose($socket);
+
+        if (strpos($resp, '250') !== false) {
+            return true;
+        }
+    }
+
+    return false;
 }

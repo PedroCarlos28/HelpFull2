@@ -1973,13 +1973,140 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 display: none;
             }
 
+            /* Ajustes Mobile para Modo Edição e Painel 2FA */
+            body.modo-edicao .conteudo-site {
+                padding-top: 85px !important;
+                padding-bottom: 60px !important;
+                padding-left: 14px !important;
+                padding-right: 14px !important;
+                gap: 14px !important;
+            }
+
+            body.modo-edicao #cardSuaConta {
+                transform: none !important;
+                padding: 22px 18px !important;
+                border-radius: 24px !important;
+                box-sizing: border-box !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            body.modo-edicao .senha-row {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+                margin-top: 8px !important;
+            }
+
+            body.modo-edicao .senha-row .conta-input {
+                grid-column: span 2 !important;
+                width: 100% !important;
+            }
+
             body.modo-edicao .senha-row .btn-sair {
                 display: none !important;
             }
 
-            body.modo-edicao .senha-row .btn-salvar,
-            body.modo-edicao .senha-row .btn-apagar {
+            body.modo-edicao .senha-row #btnEditar {
+                grid-column: 1 !important;
+                width: 100% !important;
+                height: 44px !important;
+                border-radius: 16px !important;
+                font-size: 0.88rem !important;
+                font-weight: 700 !important;
+            }
+
+            body.modo-edicao .senha-row #btnSalvar {
+                grid-column: 2 !important;
                 display: inline-flex !important;
+                width: 100% !important;
+                height: 44px !important;
+                border-radius: 16px !important;
+                font-size: 0.88rem !important;
+                font-weight: 700 !important;
+            }
+
+            body.modo-edicao .senha-row #btnApagar {
+                grid-column: span 2 !important;
+                display: inline-flex !important;
+                width: 100% !important;
+                height: 42px !important;
+                border-radius: 16px !important;
+                font-size: 0.84rem !important;
+                font-weight: 600 !important;
+                margin-top: 4px !important;
+            }
+
+            /* Balão e Card 2FA Responsivo no Mobile */
+            #balao2faContainer {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
+                padding: 20px 18px !important;
+                border-radius: 22px !important;
+                box-sizing: border-box !important;
+            }
+
+            .balao-2fa-pointer {
+                display: none !important;
+            }
+
+            .balao-2fa-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+            }
+
+            .balao-2fa-info {
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+
+            .balao-2fa-titulo {
+                font-size: 1.1rem !important;
+                margin: 0 0 6px 0 !important;
+            }
+
+            .balao-2fa-desc {
+                font-size: 0.84rem !important;
+                line-height: 1.45 !important;
+                max-width: 100% !important;
+            }
+
+            .balao-2fa-switch-box {
+                width: 100% !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                padding: 10px 14px !important;
+                background: rgba(43, 122, 140, 0.08) !important;
+                border-radius: 14px !important;
+                box-sizing: border-box !important;
+                margin-top: 4px !important;
+            }
+
+            body.acessibilidade-escuro .balao-2fa-switch-box {
+                background: rgba(255, 255, 255, 0.06) !important;
+            }
+
+            .balao-2fa-email-aviso {
+                font-size: 0.78rem !important;
+                padding-top: 10px !important;
+                margin-top: 12px !important;
+                word-break: break-all !important;
+                line-height: 1.4 !important;
+            }
+
+            /* Toast Feedback 2FA no Mobile */
+            .toast-feedback-2fa {
+                bottom: 24px !important;
+                left: 50% !important;
+                width: calc(100% - 32px) !important;
+                max-width: 380px !important;
+                border-radius: 18px !important;
+                padding: 12px 16px !important;
+                font-size: 0.85rem !important;
+                box-sizing: border-box !important;
             }
 
             .grid-duplo {
