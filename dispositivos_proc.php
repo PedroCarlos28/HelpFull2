@@ -106,17 +106,21 @@ try {
                     if (file_exists(__DIR__ . '/notificacao_helper.php')) {
                         require_once __DIR__ . '/notificacao_helper.php';
                         if (function_exists('registrarNotificacaoSistema')) {
-                            registrarNotificacaoSistema(
-                                $pdo,
-                                $usuarioId,
-                                'disp_desc_' . time() . '_' . mt_rand(100, 999),
-                                'seguranca_dispositivo',
-                                'Dispositivo desconectado',
-                                'Uma sessão (' . htmlspecialchars($sessaoAlvo['dispositivo']) . ') foi desconectada da sua conta.',
-                                'baixa',
-                                'Perfil.php',
-                                'Segurança'
-                            );
+                            try {
+                                registrarNotificacaoSistema(
+                                    $pdo,
+                                    $usuarioId,
+                                    'disp_desc_' . time() . '_' . mt_rand(100, 999),
+                                    'seguranca_dispositivo',
+                                    'Dispositivo desconectado',
+                                    'Uma sessão (' . htmlspecialchars($sessaoAlvo['dispositivo']) . ') foi desconectada da sua conta.',
+                                    'baixa',
+                                    'Perfil.php',
+                                    'Segurança'
+                                );
+                            } catch (Throwable $tNotif) {
+                                error_log("Erro ao registrar notificação: " . $tNotif->getMessage());
+                            }
                         }
                     }
 
@@ -148,17 +152,21 @@ try {
             if (file_exists(__DIR__ . '/notificacao_helper.php')) {
                 require_once __DIR__ . '/notificacao_helper.php';
                 if (function_exists('registrarNotificacaoSistema')) {
-                    registrarNotificacaoSistema(
-                        $pdo,
-                        $usuarioId,
-                        'disp_desc_outros_' . time(),
-                        'seguranca_dispositivo',
-                        'Dispositivos desconectados',
-                        'Todas as outras sessões ativas foram desconectadas da sua conta.',
-                        'baixa',
-                        'Perfil.php',
-                        'Segurança'
-                    );
+                    try {
+                        registrarNotificacaoSistema(
+                            $pdo,
+                            $usuarioId,
+                            'disp_desc_outros_' . time(),
+                            'seguranca_dispositivo',
+                            'Dispositivos desconectados',
+                            'Todas as outras sessões ativas foram desconectadas da sua conta.',
+                            'baixa',
+                            'Perfil.php',
+                            'Segurança'
+                        );
+                    } catch (Throwable $tNotif) {
+                        error_log("Erro ao registrar notificação: " . $tNotif->getMessage());
+                    }
                 }
             }
 

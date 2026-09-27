@@ -1740,6 +1740,7 @@ $totalOutros = count($outrasSessoes);
         async function executarAcaoConfirmada() {
             if (!acaoPendente) return;
 
+            const acaoExecutada = { ...acaoPendente };
             const btnConfirmar = document.getElementById('btnConfirmarAcaoModal');
             const textoBtn = document.getElementById('textoBtnConfirmarModal');
             btnConfirmar.disabled = true;
@@ -1747,9 +1748,9 @@ $totalOutros = count($outrasSessoes);
 
             try {
                 let payload = {};
-                if (acaoPendente.tipo === 'item') {
-                    payload = { acao: 'desconectar', id: acaoPendente.id };
-                } else if (acaoPendente.tipo === 'outros') {
+                if (acaoExecutada.tipo === 'item') {
+                    payload = { acao: 'desconectar', id: acaoExecutada.id };
+                } else if (acaoExecutada.tipo === 'outros') {
                     payload = { acao: 'desconectar_outros' };
                 }
 
@@ -1759,7 +1760,12 @@ $totalOutros = count($outrasSessoes);
                     body: JSON.stringify(payload)
                 });
 
-                const dados = await resposta.json();
+                let dados;
+                try {
+                    dados = await resposta.json();
+                } catch (eParse) {
+                    throw new Error('Resposta inválida do servidor.');
+                }
 
                 if (!dados.sucesso) {
                     mostrarToast(dados.mensagem || 'Não foi possível concluir a ação.', 'erro');
@@ -1768,6 +1774,7 @@ $totalOutros = count($outrasSessoes);
 
                 // Se desconectou o dispositivo atual
                 if (dados.logout_atual) {
+                    fecharModalConfirmacao();
                     mostrarToast('Dispositivo desconectado. Redirecionando...', 'sucesso');
                     setTimeout(() => {
                         window.location.href = dados.redirecionar || 'Comeco.php';
@@ -1779,16 +1786,18 @@ $totalOutros = count($outrasSessoes);
                 mostrarToast(dados.mensagem || 'Dispositivo desconectado com sucesso.', 'sucesso');
 
                 // Atualiza a interface dinamicamente
-                if (acaoPendente.tipo === 'item') {
-                    const cardItem = document.getElementById('sessao-card-' + acaoPendente.id);
+                if (acaoExecutada.tipo === 'item') {
+                    const cardItem = document.getElementById('sessao-card-' + acaoExecutada.id);
                     if (cardItem) {
                         cardItem.classList.add('removendo');
                         setTimeout(() => {
                             cardItem.remove();
                             verificarListaVazia();
                         }, 250);
+                    } else {
+                        verificarListaVazia();
                     }
-                } else if (acaoPendente.tipo === 'outros') {
+                } else if (acaoExecutada.tipo === 'outros') {
                     const lista = document.getElementById('listaOutrosDispositivos');
                     if (lista) {
                         lista.innerHTML = `
@@ -1809,6 +1818,7 @@ $totalOutros = count($outrasSessoes);
                     atualizarContadores(0);
                 }
             } catch (err) {
+                console.error('Erro na ação de desconexão:', err);
                 mostrarToast('Falha na comunicação com o servidor. Tente novamente.', 'erro');
             } finally {
                 btnConfirmar.disabled = false;
