@@ -135,59 +135,97 @@ function detectarDispositivoInfo($userAgent = null) {
     ];
 }
 
-/**
- * Registra uma nova sessão de dispositivo para o usuário
- */
-function registrarNovaSessao($pdo, $usuarioId) {
-    if (!$pdo || empty($usuarioId)) {
-        return null;
-    }
+if (!function_exists('registrarNovaSessao')) {
+    /**
+     * Registra ou reutiliza a sessão de dispositivo para o usuário
+     */
+    function registrarNovaSessao($pdo, $usuarioId) {
+        if (!$pdo || empty($usuarioId)) {
+            return null;
+        }
 
-    try {
-        $info = detectarDispositivoInfo();
-        $ip = obterIpCliente();
-        $tokenSessao = bin2hex(random_bytes(32));
+        try {
+            $info = detectarDispositivoInfo();
+            $ip = obterIpCliente();
 
-        $stmt = $pdo->prepare("
-            INSERT INTO sessoes_usuario (
-                usuario_id,
-                token_sessao,
-                dispositivo,
-                navegador,
-                sistema_operacional,
-                tipo_dispositivo,
-                ip_origem,
-                criado_em,
-                ultimo_acesso,
-                ativo
-            ) VALUES (
-                :usuario_id,
-                :token_sessao,
-                :dispositivo,
-                :navegador,
-                :sistema_operacional,
-                :tipo_dispositivo,
-                :ip_origem,
-                NOW(),
-                NOW(),
-                TRUE
-            )
-        ");
+            // 1. Se já existe uma sessão ativa deste mesmo aparelho/navegador/SO, reutiliza-a
+            // evitando que simples trocas de tela ou reconexões aumentem a contagem
+            $stmtExist = $pdo->prepare("
+                SELECT id, token_sessao 
+                FROM sessoes_usuario 
+                WHERE usuario_id = :usuario_id 
+                  AND dispositivo = :dispositivo 
+                  AND navegador = :navegador 
+                  AND sistema_operacional = :sistema_operacional 
+                  AND ativo = TRUE 
+                ORDER BY ultimo_acesso DESC 
+                LIMIT 1
+            ");
+            $stmtExist->execute([
+                ':usuario_id'          => $usuarioId,
+                ':dispositivo'         => $info['dispositivo'],
+                ':navegador'           => $info['navegador'],
+                ':sistema_operacional' => $info['sistema_operacional']
+            ]);
+            $existente = $stmtExist->fetch();
 
-        $stmt->execute([
-            ':usuario_id' => $usuarioId,
-            ':token_sessao' => $tokenSessao,
-            ':dispositivo' => $info['dispositivo'],
-            ':navegador' => $info['navegador'],
-            ':sistema_operacional' => $info['sistema_operacional'],
-            ':tipo_dispositivo' => $info['tipo_dispositivo'],
-            ':ip_origem' => $ip
-        ]);
+            if ($existente && !empty($existente['token_sessao'])) {
+                $stmtUp = $pdo->prepare("
+                    UPDATE sessoes_usuario 
+                    SET ultimo_acesso = NOW(), ip_origem = :ip_origem 
+                    WHERE id = :id
+                ");
+                $stmtUp->execute([
+                    ':ip_origem' => $ip,
+                    ':id'        => $existente['id']
+                ]);
+                return $existente['token_sessao'];
+            }
 
-        return $tokenSessao;
-    } catch (Exception $e) {
-        error_log("Erro ao registrar sessao: " . $e->getMessage());
-        return null;
+            // 2. Se for um dispositivo novo, gera novo token único
+            $tokenSessao = bin2hex(random_bytes(32));
+
+            $stmt = $pdo->prepare("
+                INSERT INTO sessoes_usuario (
+                    usuario_id,
+                    token_sessao,
+                    dispositivo,
+                    navegador,
+                    sistema_operacional,
+                    tipo_dispositivo,
+                    ip_origem,
+                    criado_em,
+                    ultimo_acesso,
+                    ativo
+                ) VALUES (
+                    :usuario_id,
+                    :token_sessao,
+                    :dispositivo,
+                    :navegador,
+                    :sistema_operacional,
+                    :tipo_dispositivo,
+                    :ip_origem,
+                    NOW(),
+                    NOW(),
+                    TRUE
+                )
+            ");
+
+            $stmt->execute([
+                ':usuario_id'          => $usuarioId,
+                ':token_sessao'        => $tokenSessao,
+                ':dispositivo'         => $info['dispositivo'],
+                ':navegador'           => $info['navegador'],
+                ':sistema_operacional' => $info['sistema_operacional'],
+                ':tipo_dispositivo'    => $info['tipo_dispositivo'],
+                ':ip_origem'           => $ip
+            ]);
+
+            return $tokenSessao;
+        } catch (Exception $e) {
+            error_log("Erro ao registrar sessao: " . $e->getMessage());
+            return null;
+        }
     }
 }
 

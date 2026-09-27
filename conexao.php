@@ -140,6 +140,25 @@ if (isset($_SESSION['usuario_id']) && isset($pdo)) {
         $novoToken = registrarNovaSessao($pdo, $_SESSION['usuario_id']);
         if ($novoToken) {
             $_SESSION['token_sessao'] = $novoToken;
+
+            // Sincroniza o token no cookie persistente para que todas as navegações preservem o mesmo token
+            $sig = hash_hmac('sha256', (string)$_SESSION['usuario_id'] . '|' . $novoToken, 'HelpFullSessionSecretKey2026');
+            $payload = base64_encode(json_encode([
+                'id'    => $_SESSION['usuario_id'],
+                'nome'  => $_SESSION['usuario_nome'] ?? '',
+                'token' => $novoToken,
+                'sig'   => $sig
+            ]));
+            $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+            if (!headers_sent()) {
+                setcookie('helpfull_session', $payload, [
+                    'expires'  => time() + (30 * 24 * 60 * 60),
+                    'path'     => '/',
+                    'httponly' => true,
+                    'secure'   => $secure,
+                    'samesite' => 'Lax'
+                ]);
+            }
         }
     }
 }

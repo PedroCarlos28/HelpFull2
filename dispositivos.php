@@ -235,19 +235,18 @@ $totalOutros = count($outrasSessoes);
             text-decoration: none;
             font-size: 0.88rem;
             font-weight: 700;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            padding: 8px 18px;
+            background: #eaeaea;
             border-radius: 20px;
-            border: 1px solid rgba(43, 122, 140, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
             transition: all 0.2s ease;
         }
 
         .link-voltar:hover {
-            background: #ffffff;
+            background: #e0e0e0;
             transform: translateX(-3px);
-            box-shadow: 0 4px 15px rgba(43, 122, 140, 0.12);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
         }
 
         .link-voltar svg {
@@ -258,11 +257,11 @@ $totalOutros = count($outrasSessoes);
 
         /* CARD HEADER PRINCIPAL */
         .card-dispositivos-header {
-            background: #ffffff;
-            border-radius: 28px;
-            padding: 32px 36px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(43, 122, 140, 0.15);
+            background: #eaeaea;
+            border-radius: 30px;
+            padding: 35px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -281,8 +280,9 @@ $totalOutros = count($outrasSessoes);
             gap: 7px;
             padding: 6px 14px;
             border-radius: 20px;
-            background: rgba(43, 122, 140, 0.1);
-            color: #2b7a8c;
+            background: #d6d6d6;
+            color: #204953;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             font-size: 0.76rem;
             font-weight: 800;
             letter-spacing: 0.5px;
@@ -304,7 +304,7 @@ $totalOutros = count($outrasSessoes);
 
         .desc-pagina {
             font-size: 0.92rem;
-            color: #64748b;
+            color: #555;
             line-height: 1.55;
             margin: 0;
             max-width: 600px;
@@ -322,13 +322,13 @@ $totalOutros = count($outrasSessoes);
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 7px 14px;
+            padding: 7px 16px;
             border-radius: 20px;
-            background: #e6f6f9;
+            background: #d6d6d6;
             color: #204953;
             font-size: 0.82rem;
             font-weight: 700;
-            border: 1px solid rgba(43, 122, 140, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
         .ponto-pulse {
@@ -356,9 +356,9 @@ $totalOutros = count($outrasSessoes);
             display: inline-flex;
             align-items: center;
             gap: 9px;
-            background: #ffffff;
+            background: #d6d6d6;
             color: #dc2626;
-            border: 1.5px solid rgba(220, 38, 38, 0.25);
+            border: 1px solid rgba(220, 38, 38, 0.25);
             padding: 10px 18px;
             border-radius: 18px;
             font-size: 0.86rem;
@@ -369,17 +369,18 @@ $totalOutros = count($outrasSessoes);
         }
 
         .btn-desconectar-outros:hover:not(:disabled) {
-            background: #fef2f2;
+            background: #fde8e8;
             border-color: #dc2626;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.12);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.15);
         }
 
         .btn-desconectar-outros:disabled {
             opacity: 0.45;
             cursor: not-allowed;
-            border-color: #cbd5e1;
-            color: #94a3b8;
+            border-color: rgba(255, 255, 255, 0.4);
+            color: #888;
+            background: #d6d6d6;
         }
 
         .btn-desconectar-outros svg {
@@ -408,11 +409,12 @@ $totalOutros = count($outrasSessoes);
         }
 
         .card-dispositivo-atual {
-            background: #ffffff;
-            border-radius: 26px;
-            padding: 26px 30px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
-            border: 2px solid rgba(43, 122, 140, 0.35);
+            background: #eaeaea;
+            border-radius: 30px;
+            padding: 26px 35px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-left: 6px solid #2b7a8c;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -443,13 +445,13 @@ $totalOutros = count($outrasSessoes);
             width: 56px;
             height: 56px;
             border-radius: 20px;
-            background: #e6f6f9;
+            background: #d6d6d6;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             color: #204953;
-            border: 1px solid rgba(43, 122, 140, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
         .disp-icone-box svg {
@@ -501,7 +503,7 @@ $totalOutros = count($outrasSessoes);
             flex-wrap: wrap;
             gap: 16px;
             font-size: 0.84rem;
-            color: #64748b;
+            color: #555;
         }
 
         .disp-meta-item {
@@ -527,9 +529,9 @@ $totalOutros = count($outrasSessoes);
             gap: 7px;
             padding: 9px 18px;
             border-radius: 16px;
-            background: rgba(220, 38, 38, 0.08);
+            background: #d6d6d6;
             color: #dc2626;
-            border: 1px solid rgba(220, 38, 38, 0.2);
+            border: 1px solid rgba(220, 38, 38, 0.25);
             font-size: 0.84rem;
             font-weight: 800;
             font-family: inherit;
@@ -558,11 +560,11 @@ $totalOutros = count($outrasSessoes);
         }
 
         .card-dispositivo-outro {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 22px 28px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(43, 122, 140, 0.12);
+            background: #eaeaea;
+            border-radius: 30px;
+            padding: 24px 35px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -572,8 +574,7 @@ $totalOutros = count($outrasSessoes);
 
         .card-dispositivo-outro:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
-            border-color: rgba(43, 122, 140, 0.25);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
         }
 
         .card-dispositivo-outro.removendo {
@@ -582,18 +583,19 @@ $totalOutros = count($outrasSessoes);
         }
 
         .disp-icone-box.outro {
-            background: #f1f5f9;
+            background: #d6d6d6;
             color: #475569;
-            border-color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
         /* ESTADO VAZIO (SEM OUTROS DISPOSITIVOS) */
         .card-estado-vazio {
-            background: #ffffff;
-            border-radius: 26px;
+            background: #eaeaea;
+            border-radius: 30px;
             padding: 45px 30px;
             text-align: center;
-            border: 1px dashed rgba(43, 122, 140, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -605,12 +607,13 @@ $totalOutros = count($outrasSessoes);
             width: 68px;
             height: 68px;
             border-radius: 50%;
-            background: #e6f6f9;
+            background: #d6d6d6;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2b7a8c;
+            color: #204953;
             margin-bottom: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
         .vazio-icone-wrapper svg {
@@ -628,7 +631,7 @@ $totalOutros = count($outrasSessoes);
 
         .vazio-desc {
             font-size: 0.88rem;
-            color: #64748b;
+            color: #555;
             margin: 0;
             max-width: 480px;
             line-height: 1.5;
@@ -636,10 +639,11 @@ $totalOutros = count($outrasSessoes);
 
         /* CARD DE DICAS DE SEGURANÇA */
         .card-dicas-seguranca {
-            background: rgba(43, 122, 140, 0.05);
-            border-radius: 24px;
-            padding: 24px 28px;
-            border: 1px solid rgba(43, 122, 140, 0.16);
+            background: #eaeaea;
+            border-radius: 30px;
+            padding: 26px 35px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
             display: flex;
             align-items: flex-start;
             gap: 18px;
@@ -648,13 +652,13 @@ $totalOutros = count($outrasSessoes);
         .dicas-icone {
             width: 44px;
             height: 44px;
-            border-radius: 14px;
-            background: #ffffff;
+            border-radius: 16px;
+            background: #d6d6d6;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2b7a8c;
-            border: 1px solid rgba(43, 122, 140, 0.2);
+            color: #204953;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             flex-shrink: 0;
         }
 
@@ -677,7 +681,7 @@ $totalOutros = count($outrasSessoes);
 
         .dicas-texto {
             font-size: 0.86rem;
-            color: #475569;
+            color: #555;
             line-height: 1.5;
             margin: 0 0 10px 0;
         }
@@ -735,7 +739,7 @@ $totalOutros = count($outrasSessoes);
         }
 
         .modal-card {
-            background: #ffffff;
+            background: #eaeaea;
             width: 100%;
             max-width: 480px;
             max-height: min(88vh, 88dvh);
@@ -744,8 +748,8 @@ $totalOutros = count($outrasSessoes);
             overscroll-behavior: contain;
             touch-action: pan-y;
             border-radius: 30px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.22);
-            border: 1px solid rgba(43, 122, 140, 0.15);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             padding: 34px 32px 30px 32px;
             position: relative;
             box-sizing: border-box;
@@ -827,33 +831,33 @@ $totalOutros = count($outrasSessoes);
 
         .modal-subtitulo {
             font-size: 0.88rem;
-            color: #64748b;
+            color: #555;
             line-height: 1.5;
             margin: 0 0 18px 0;
         }
 
         .modal-disp-preview {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: #d6d6d6;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: 16px;
             padding: 12px 16px;
             margin-bottom: 22px;
             font-size: 0.86rem;
-            color: #334155;
+            color: #333;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .modal-disp-preview svg {
-            stroke: #2b7a8c;
+            stroke: #204953;
             width: 18px;
             height: 18px;
             flex-shrink: 0;
         }
 
         .modal-disp-preview strong {
-            color: #0f172a;
+            color: #1a1a1a;
         }
 
         .modal-acoes {
@@ -866,9 +870,9 @@ $totalOutros = count($outrasSessoes);
         .modal-btn-cancelar {
             padding: 12px 20px;
             border-radius: 16px;
-            background: #f1f5f9;
-            color: #475569;
-            border: none;
+            background: #d6d6d6;
+            color: #204953;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             font-size: 0.88rem;
             font-weight: 700;
             cursor: pointer;
@@ -877,8 +881,8 @@ $totalOutros = count($outrasSessoes);
         }
 
         .modal-btn-cancelar:hover {
-            background: #e2e8f0;
-            color: #1e293b;
+            background: #c8c8c8;
+            color: #16333a;
         }
 
         .modal-btn-confirmar {
