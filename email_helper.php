@@ -461,7 +461,7 @@ function enviarEmail2FA($email, $nome, $codigo) {
         );
     }
 
-    $resultado['debug_codigo'] = $isLocalhost ? $codigo : null;
+    $resultado['debug_codigo'] = ($isLocalhost && !$resultado['enviado_mail']) ? $codigo : null;
     return $resultado;
 }
 
