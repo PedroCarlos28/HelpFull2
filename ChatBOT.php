@@ -86,9 +86,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             transform-origin: center center;
         }
 
-        .imagem-fundo {
-            display: none;
-        }
+
 
         .conteudo-site {
             position: relative;
@@ -1122,14 +1120,13 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
 <body>
 
     <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas sem-mouse" data-mouse="false"></canvas>
-    <img class="imagem-fundo" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
 
     <div class="nav-container-global">
         <nav class="navbar-topo">

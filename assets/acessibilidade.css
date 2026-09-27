@@ -2605,21 +2605,11 @@ body.acessibilidade-texto-grande .navbar-topo:has(.nav-top-row) .nav-top-row {
         display: none !important;
     }
     
-    /* Oculta vídeo pausado com botão de play no celular e exibe a imagem de fundo estática */
-    .video-fundo {
-        display: none !important;
-    }
+    /* Oculta vídeos antigos e imagens estáticas antigas no celular em favor do canvas animado */
+    .video-fundo,
     .imagem-fundo,
     .imagem-fundo-mobile {
-        display: block !important;
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        z-index: 0 !important;
-        pointer-events: none !important;
+        display: none !important;
     }
 
     /* Exibe setinha ao lado de HELPFULL no celular */

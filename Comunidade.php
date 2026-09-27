@@ -249,9 +249,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             transform-origin: center center;
         }
 
-        .imagem-fundo {
-            display: none;
-        }
+
 
         .conteudo-site {
             width: 100%;
@@ -2043,14 +2041,13 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             .post-texto { font-size: 1.05rem; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
 <body>
 
     <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas sem-mouse" data-mouse="false"></canvas>
-    <img class="imagem-fundo" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
 
     <div class="nav-container-global">
         <nav class="navbar-topo" id="mainNavbar">

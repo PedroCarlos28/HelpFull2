@@ -129,9 +129,7 @@ if (!empty($usuarioLogado['id'])) {
             transform-origin: center center;
         }
 
-        .imagem-fundo {
-            display: none;
-        }
+
 
         .conteudo-site {
             position: relative;
@@ -860,14 +858,13 @@ if (!empty($usuarioLogado['id'])) {
             .btn-emocao { flex: 1 1 calc(50% - 10px); min-width: auto; font-size: 0.85rem; padding: 10px 5px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
 <body>
 
     <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas sem-mouse" data-mouse="false"></canvas>
-    <img class="imagem-fundo" src="assets/HELPFULL.png" alt="Plano de Fundo HelpFull">
 
     <div class="nav-container-global">
         <nav class="navbar-topo">

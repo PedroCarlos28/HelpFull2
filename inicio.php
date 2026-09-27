@@ -944,12 +944,10 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
 
         /* MOBILE */
         @media (max-width: 768px) {
-            .video-fundo {
-                display: none !important;
-            }
-
+            .video-fundo,
+            .imagem-fundo,
             .imagem-fundo-mobile {
-                display: block !important;
+                display: none !important;
             }
 
             .nav-container-global {
@@ -1218,7 +1216,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 

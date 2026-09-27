@@ -594,7 +594,7 @@ if (isset($_SESSION['usuario_id'])) {
 
         @media (max-width: 768px) {
             .video-fundo, .faixa-inferior { display: none !important; }
-            .imagem-fundo-mobile { display: block !important; }
+            .imagem-fundo, .imagem-fundo-mobile { display: none !important; }
         }
 
         @media (max-width: 480px) {
@@ -722,7 +722,7 @@ if (isset($_SESSION['usuario_id'])) {
             color: #f87171 !important;
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
