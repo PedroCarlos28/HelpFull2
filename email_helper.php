@@ -116,50 +116,45 @@ function montarHtmlEmail2FA($nome, $codigo) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <meta name="supported-color-schemes" content="light dark">
     <title>Código de Verificação HelpFull</title>
     <style>
-        :root { color-scheme: light dark; supported-color-schemes: light dark; }
-        body { margin: 0; padding: 0; background-color: #0b1114; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-        .wrapper { width: 100%; padding: 36px 14px; box-sizing: border-box; background-color: #0b1114; }
-        .card { max-width: 520px; margin: 0 auto; background-color: #152026; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); border: 1px solid #233742; }
-        .header { background: linear-gradient(135deg, #13323a 0%, #206170 100%); background-color: #1a4955; padding: 35px 24px; text-align: center; }
-        .header h1 { margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
-        .header p { margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; opacity: 0.95; }
-        .content { padding: 35px 28px; color: #ffffff !important; line-height: 1.6; text-align: center; background-color: #152026; }
-        .saudacao { font-size: 17px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 16px; font-weight: 700; }
-        .codigo-box { margin: 26px auto; padding: 20px 28px; background-color: #0d2830; border: 2px dashed #22d3ee; border-radius: 16px; display: inline-block; }
-        .codigo-numero { font-size: 36px; font-weight: 800; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; letter-spacing: 8px; font-family: 'Courier New', Courier, monospace; margin: 0; }
-        .aviso { font-size: 14px; color: #e2e8f0 !important; -webkit-text-fill-color: #e2e8f0 !important; margin-top: 16px; }
-        .destaque { color: #f87171 !important; -webkit-text-fill-color: #f87171 !important; font-weight: 700; }
-        .footer { background-color: #0f171c; padding: 22px 24px; text-align: center; border-top: 1px solid #233742; font-size: 12px; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important; }
-        .footer a { color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important; text-decoration: underline; font-weight: 600; }
-        u + #body a { color: #ffffff !important; }
+        body { margin: 0; padding: 0; background-color: #f4f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .wrapper { width: 100%; padding: 40px 15px; box-sizing: border-box; }
+        .card { max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(43, 122, 140, 0.1); border: 1px solid #e1edf2; }
+        .header { background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); padding: 35px 30px; text-align: center; }
+        .header h1 { margin: 0; color: #ffffff; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { margin: 8px 0 0 0; color: #c4e9f2; font-size: 14px; }
+        .content { padding: 35px 30px; color: #2d3748; line-height: 1.6; text-align: center; }
+        .saudacao { font-size: 16px; color: #4a5568; margin-bottom: 20px; }
+        .codigo-box { margin: 25px auto; padding: 18px 24px; background: #edf7fa; border: 2px dashed #92d0de; border-radius: 14px; display: inline-block; }
+        .codigo-numero { font-size: 34px; font-weight: 800; color: #1b3d45; letter-spacing: 8px; font-family: 'Courier New', Courier, monospace; margin: 0; }
+        .aviso { font-size: 13px; color: #718096; margin-top: 15px; }
+        .destaque { color: #e53e3e; font-weight: 600; }
+        .footer { background: #f8fafc; padding: 22px 30px; text-align: center; border-top: 1px solid #edf2f7; font-size: 12px; color: #a0aec0; }
+        .footer a { color: #2b7a8c; text-decoration: none; font-weight: 600; }
     </style>
 </head>
-<body id="body" style="margin: 0; padding: 0; background-color: #0b1114;">
-    <div class="wrapper" style="width: 100%; padding: 36px 14px; box-sizing: border-box; background-color: #0b1114;">
-        <div class="card" style="max-width: 520px; margin: 0 auto; background-color: #152026; border-radius: 20px; overflow: hidden; border: 1px solid #233742;">
-            <div class="header" style="background: linear-gradient(135deg, #13323a 0%, #206170 100%); background-color: #1a4955; padding: 35px 24px; text-align: center;">
-                <span style="display: inline-block; background-color: rgba(255, 255, 255, 0.2); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">🔐 Segurança HelpFull</span>
-                <h1 style="margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 26px; font-weight: 800; letter-spacing: 0.5px;">HelpFull</h1>
-                <p style="margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 500;">Verificação de Segurança em Duas Etapas</p>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="header">
+                <h1>HelpFull</h1>
+                <p>Verificação de Segurança em Duas Etapas</p>
             </div>
-            <div class="content" style="padding: 35px 28px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; line-height: 1.6; text-align: center; background-color: #152026;">
-                <div class="saudacao" style="font-size: 17px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 16px; font-weight: 700;">Olá, {$nomeEsc}!</div>
-                <p style="margin: 0; font-size: 15px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; line-height: 1.6;">Detectamos uma tentativa de login na sua conta. Use o código de 6 dígitos abaixo para concluir o acesso com segurança:</p>
+            <div class="content">
+                <div class="saudacao">Olá, <strong>{$nomeEsc}</strong>!</div>
+                <p style="margin: 0; font-size: 15px;">Detectamos uma tentativa de login na sua conta. Use o código de 6 dígitos abaixo para concluir o acesso com segurança:</p>
                 
-                <div class="codigo-box" style="margin: 26px auto; padding: 20px 28px; background-color: #0d2830; border: 2px dashed #22d3ee; border-radius: 16px; display: inline-block;">
-                    <div class="codigo-numero" style="font-size: 36px; font-weight: 800; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; letter-spacing: 8px; font-family: 'Courier New', Courier, monospace; margin: 0;">{$codigoEsc}</div>
+                <div class="codigo-box">
+                    <div class="codigo-numero">{$codigoEsc}</div>
                 </div>
 
-                <p class="aviso" style="font-size: 14px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-top: 16px;">⏱️ Este código é válido por <strong style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">10 minutos</strong>.</p>
-                <p class="aviso" style="font-size: 14px; color: #e2e8f0 !important; -webkit-text-fill-color: #e2e8f0 !important; margin-top: 8px;">Se você não solicitou este login, <span class="destaque" style="color: #f87171 !important; -webkit-text-fill-color: #f87171 !important; font-weight: 700;">não compartilhe este código</span> e recomendamos alterar sua senha imediatamente.</p>
+                <p class="aviso">⏱️ Este código é válido por <strong>10 minutos</strong>.</p>
+                <p class="aviso" style="margin-top: 5px;">Se você não solicitou este login, <span class="destaque">não compartilhe este código</span> e recomendamos alterar sua senha imediatamente.</p>
             </div>
-            <div class="footer" style="background-color: #0f171c; padding: 22px 24px; text-align: center; border-top: 1px solid #233742; font-size: 12px; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">
-                <p style="margin: 0 0 6px 0; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">HelpFull — Promovendo bem-estar e conexões reais.</p>
-                <p style="margin: 0; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">Dúvidas ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com" style="color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important; text-decoration: underline; font-weight: 600;"><span style="color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important;">contatohelpfull@gmail.com</span></a></p>
+            <div class="footer">
+                <p style="margin: 0 0 6px 0;">HelpFull — Promovendo bem-estar e conexões reais.</p>
+                <p style="margin: 0;">Dúvidas ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com">contatohelpfull@gmail.com</a></p>
             </div>
         </div>
     </div>
@@ -186,81 +181,79 @@ function montarHtmlEmailNovoLogin($nome, $dados = []) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <meta name="supported-color-schemes" content="light dark">
     <title>Novo Acesso à sua Conta HelpFull</title>
     <style>
-        :root { color-scheme: light dark; supported-color-schemes: light dark; }
-        body { margin: 0; padding: 0; background-color: #0b1114; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-        .wrapper { width: 100%; padding: 36px 14px; box-sizing: border-box; background-color: #0b1114; }
-        .card { max-width: 540px; margin: 0 auto; background-color: #152026; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); border: 1px solid #233742; }
-        .header { background: linear-gradient(135deg, #13323a 0%, #206170 100%); background-color: #1a4955; padding: 32px 24px; text-align: center; }
-        .header h1 { margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
-        .header p { margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; opacity: 0.95; }
-        .badge-alerta { display: inline-block; background-color: rgba(255, 255, 255, 0.2); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .content { padding: 32px 28px; color: #ffffff !important; line-height: 1.6; background-color: #152026; }
-        .saudacao { font-size: 18px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 12px; font-weight: 700; }
-        .descricao { font-size: 15px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin: 0 0 22px 0; line-height: 1.6; }
-        .detalhes-tabela { width: 100%; background-color: #0f181d; border: 1px solid #223742; border-radius: 14px; padding: 18px 20px; box-sizing: border-box; margin-bottom: 22px; }
-        .box-info { background-color: #0e2b34; border-left: 4px solid #22d3ee; padding: 14px 16px; border-radius: 8px; font-size: 13px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 16px; line-height: 1.5; }
-        .box-aviso { background-color: #3b1419; border-left: 4px solid #ef4444; padding: 14px 16px; border-radius: 8px; font-size: 13px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 24px; line-height: 1.5; }
-        .botao-wrap { text-align: center; margin: 26px 0 10px 0; }
-        .botao-cta { display: inline-block; background-color: #2b7a8c; background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 30px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); }
-        .footer { background-color: #0f171c; padding: 22px 24px; text-align: center; border-top: 1px solid #233742; font-size: 12px; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important; }
-        .footer a { color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important; text-decoration: underline; font-weight: 600; }
-        u + #body a { color: #ffffff !important; }
+        body { margin: 0; padding: 0; background-color: #f4f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .wrapper { width: 100%; padding: 40px 15px; box-sizing: border-box; }
+        .card { max-width: 540px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(43, 122, 140, 0.1); border: 1px solid #e1edf2; }
+        .header { background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); padding: 32px 30px; text-align: center; }
+        .header h1 { margin: 0; color: #ffffff; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { margin: 8px 0 0 0; color: #c4e9f2; font-size: 14px; }
+        .badge-alerta { display: inline-block; background: rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .content { padding: 32px 30px; color: #2d3748; line-height: 1.6; }
+        .saudacao { font-size: 17px; color: #2d3748; margin-bottom: 12px; }
+        .descricao { font-size: 15px; color: #4a5568; margin: 0 0 22px 0; }
+        .detalhes-tabela { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; box-sizing: border-box; margin-bottom: 24px; }
+        .item-linha { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; }
+        .item-linha:last-child { border-bottom: none; }
+        .item-label { color: #718096; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .item-valor { color: #1a202c; font-weight: 700; text-align: right; }
+        .box-info { background: #edf7fa; border-left: 4px solid #2b7a8c; padding: 14px 16px; border-radius: 8px; font-size: 13px; color: #2c5282; margin-bottom: 16px; line-height: 1.5; }
+        .box-aviso { background: #fff5f5; border-left: 4px solid #e53e3e; padding: 14px 16px; border-radius: 8px; font-size: 13px; color: #9b2c2c; margin-bottom: 24px; line-height: 1.5; }
+        .botao-wrap { text-align: center; margin: 25px 0 10px 0; }
+        .botao-cta { display: inline-block; background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); color: #ffffff !important; text-decoration: none; padding: 13px 30px; border-radius: 30px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 14px rgba(43, 122, 140, 0.25); }
+        .footer { background: #f8fafc; padding: 22px 30px; text-align: center; border-top: 1px solid #edf2f7; font-size: 12px; color: #a0aec0; }
+        .footer a { color: #2b7a8c; text-decoration: none; font-weight: 600; }
     </style>
 </head>
-<body id="body" style="margin: 0; padding: 0; background-color: #0b1114;">
-    <div class="wrapper" style="width: 100%; padding: 36px 14px; box-sizing: border-box; background-color: #0b1114;">
-        <div class="card" style="max-width: 540px; margin: 0 auto; background-color: #152026; border-radius: 20px; overflow: hidden; border: 1px solid #233742;">
-            <div class="header" style="background: linear-gradient(135deg, #13323a 0%, #206170 100%); background-color: #1a4955; padding: 32px 24px; text-align: center;">
-                <span class="badge-alerta" style="display: inline-block; background-color: rgba(255, 255, 255, 0.2); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">🔔 Alerta de Segurança</span>
-                <h1 style="margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 26px; font-weight: 800; letter-spacing: 0.5px;">HelpFull</h1>
-                <p style="margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 500;">Identificamos um novo login na sua conta</p>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="header">
+                <span class="badge-alerta">🔔 Alerta de Segurança</span>
+                <h1>HelpFull</h1>
+                <p>Identificamos um novo login na sua conta</p>
             </div>
-            <div class="content" style="padding: 32px 28px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; line-height: 1.6; background-color: #152026;">
-                <div class="saudacao" style="font-size: 18px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 12px; font-weight: 700;">Olá, {$nomeEsc}!</div>
-                <p class="descricao" style="font-size: 15px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin: 0 0 22px 0; line-height: 1.6;">Sua conta do HelpFull acabou de ser acessada. Acompanhe os detalhes da sessão abaixo:</p>
+            <div class="content">
+                <div class="saudacao">Olá, <strong>{$nomeEsc}</strong>!</div>
+                <p class="descricao">Sua conta do HelpFull acabou de ser acessada. Acompanhe os detalhes da sessão abaixo:</p>
 
-                <div class="detalhes-tabela" style="width: 100%; background-color: #0f181d; border: 1px solid #223742; border-radius: 14px; padding: 18px 20px; box-sizing: border-box; margin-bottom: 22px;">
+                <div class="detalhes-tabela">
                     <table style="width: 100%; border-collapse: collapse;">
-                        <tr style="border-bottom: 1px dashed rgba(255, 255, 255, 0.15);">
-                            <td style="padding: 10px 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 600;">🕒 Data e Horário:</td>
-                            <td style="padding: 10px 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: right;">{$dataHora}</td>
+                        <tr style="border-bottom: 1px dashed #e2e8f0;">
+                            <td style="padding: 9px 0; color: #718096; font-size: 14px; font-weight: 600;">🕒 Data e Horário:</td>
+                            <td style="padding: 9px 0; color: #1a202c; font-size: 14px; font-weight: 700; text-align: right;">{$dataHora}</td>
                         </tr>
-                        <tr style="border-bottom: 1px dashed rgba(255, 255, 255, 0.15);">
-                            <td style="padding: 10px 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 600;">💻 Dispositivo:</td>
-                            <td style="padding: 10px 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: right;">{$dispositivo}</td>
+                        <tr style="border-bottom: 1px dashed #e2e8f0;">
+                            <td style="padding: 9px 0; color: #718096; font-size: 14px; font-weight: 600;">💻 Dispositivo:</td>
+                            <td style="padding: 9px 0; color: #1a202c; font-size: 14px; font-weight: 700; text-align: right;">{$dispositivo}</td>
                         </tr>
-                        <tr style="border-bottom: 1px dashed rgba(255, 255, 255, 0.15);">
-                            <td style="padding: 10px 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 600;">📍 Endereço IP:</td>
-                            <td style="padding: 10px 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 700; text-align: right;"><code style="background-color: rgba(255, 255, 255, 0.1); padding: 3px 8px; border-radius: 4px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 13px;">{$ip}</code></td>
+                        <tr style="border-bottom: 1px dashed #e2e8f0;">
+                            <td style="padding: 9px 0; color: #718096; font-size: 14px; font-weight: 600;">📍 Endereço IP:</td>
+                            <td style="padding: 9px 0; color: #1a202c; font-size: 14px; font-weight: 700; text-align: right;"><code>{$ip}</code></td>
                         </tr>
                         <tr>
-                            <td style="padding: 10px 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; font-weight: 600;">🔐 Método de Login:</td>
-                            <td style="padding: 10px 0; color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important; font-size: 14px; font-weight: 700; text-align: right;">{$metodo}</td>
+                            <td style="padding: 9px 0; color: #718096; font-size: 14px; font-weight: 600;">🔐 Método de Login:</td>
+                            <td style="padding: 9px 0; color: #2b7a8c; font-size: 14px; font-weight: 700; text-align: right;">{$metodo}</td>
                         </tr>
                     </table>
                 </div>
 
-                <div class="box-info" style="background-color: #0e2b34; border-left: 4px solid #22d3ee; padding: 14px 16px; border-radius: 8px; font-size: 13px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 16px; line-height: 1.5;">
-                    <strong style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">✓ Foi você?</strong> <span style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">Se foi você quem acessou sua conta, nenhuma ação adicional é necessária. Fique tranquilo(a)!</span>
+                <div class="box-info">
+                    <strong>✓ Foi você?</strong> Se foi você quem acessou sua conta, nenhuma ação adicional é necessária. Fique tranquilo(a)!
                 </div>
 
-                <div class="box-aviso" style="background-color: #3b1419; border-left: 4px solid #ef4444; padding: 14px 16px; border-radius: 8px; font-size: 13px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 24px; line-height: 1.5;">
-                    <strong style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">⚠️ Não reconhece esta atividade?</strong> <span style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">Recomendamos acessar imediatamente as configurações do seu perfil para alterar sua senha e habilitar a <strong style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">Verificação em Duas Etapas (2FA)</strong>.</span>
+                <div class="box-aviso">
+                    <strong>⚠️ Não reconhece esta atividade?</strong> Recomendamos acessar imediatamente as configurações do seu perfil para alterar sua senha e habilitar a <strong>Verificação em Duas Etapas (2FA)</strong>.
                 </div>
 
-                <div class="botao-wrap" style="text-align: center; margin: 26px 0 10px 0;">
-                    <a href="{$linkPerfil}" class="botao-cta" target="_blank" style="display: inline-block; background-color: #2b7a8c; background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 30px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);">
-                        <span style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; text-decoration: none; font-weight: 700;">Acessar Meu Perfil e Segurança</span>
-                    </a>
+                <div class="botao-wrap">
+                    <a href="{$linkPerfil}" class="botao-cta" target="_blank">Acessar Meu Perfil e Segurança</a>
                 </div>
             </div>
-            <div class="footer" style="background-color: #0f171c; padding: 22px 24px; text-align: center; border-top: 1px solid #233742; font-size: 12px; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">
-                <p style="margin: 0 0 6px 0; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">HelpFull — Promovendo bem-estar, acolhimento e conexões reais.</p>
-                <p style="margin: 0; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">Precisa de ajuda ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com" style="color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important; text-decoration: underline; font-weight: 600;"><span style="color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important;">contatohelpfull@gmail.com</span></a></p>
+            <div class="footer">
+                <p style="margin: 0 0 6px 0;">HelpFull — Promovendo bem-estar, acolhimento e conexões reais.</p>
+                <p style="margin: 0;">Precisa de ajuda ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com">contatohelpfull@gmail.com</a></p>
             </div>
         </div>
     </div>
@@ -285,80 +278,74 @@ function montarHtmlEmailBoasVindas($nome, $emailDestino = '') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <meta name="supported-color-schemes" content="light dark">
     <title>Bem-vindo(a) ao HelpFull!</title>
     <style>
-        :root { color-scheme: light dark; supported-color-schemes: light dark; }
-        body { margin: 0; padding: 0; background-color: #0b1114; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-        .wrapper { width: 100%; padding: 36px 14px; box-sizing: border-box; background-color: #0b1114; }
-        .card { max-width: 560px; margin: 0 auto; background-color: #152026; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); border: 1px solid #233742; }
-        .header { background: linear-gradient(135deg, #13323a 0%, #206170 100%); background-color: #1a4955; padding: 36px 24px; text-align: center; }
-        .header h1 { margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 28px; font-weight: 800; letter-spacing: 0.5px; }
-        .header p { margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 15px; opacity: 0.95; }
-        .badge-welcome { display: inline-block; background-color: rgba(255, 255, 255, 0.2); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 12px; font-weight: 700; padding: 5px 16px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .content { padding: 35px 28px; color: #ffffff !important; line-height: 1.6; background-color: #152026; }
-        .saudacao { font-size: 19px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 12px; font-weight: 700; }
-        .descricao { font-size: 15px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin: 0 0 24px 0; line-height: 1.6; }
-        .features-grid { margin: 20px 0 24px 0; }
-        .feature-card { background-color: #0f181d; border: 1px solid #223742; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
-        .feature-title { font-size: 15px; font-weight: 700; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-        .feature-desc { font-size: 13px; color: #e2e8f0 !important; -webkit-text-fill-color: #e2e8f0 !important; margin: 0; line-height: 1.5; }
-        .dados-conta { background-color: #0e2b34; border: 1px solid #22d3ee; border-radius: 12px; padding: 15px 18px; font-size: 14px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin: 22px 0; }
+        body { margin: 0; padding: 0; background-color: #f4f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .wrapper { width: 100%; padding: 40px 15px; box-sizing: border-box; }
+        .card { max-width: 560px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(43, 122, 140, 0.1); border: 1px solid #e1edf2; }
+        .header { background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); padding: 36px 30px; text-align: center; }
+        .header h1 { margin: 0; color: #ffffff; font-size: 28px; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { margin: 8px 0 0 0; color: #c4e9f2; font-size: 15px; }
+        .badge-welcome { display: inline-block; background: rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 12px; font-weight: 700; padding: 5px 16px; border-radius: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .content { padding: 35px 30px; color: #2d3748; line-height: 1.6; }
+        .saudacao { font-size: 18px; color: #1b3d45; margin-bottom: 12px; font-weight: 700; }
+        .descricao { font-size: 15px; color: #4a5568; margin: 0 0 24px 0; }
+        .features-grid { margin: 20px 0 25px 0; }
+        .feature-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+        .feature-title { font-size: 14px; font-weight: 700; color: #1b3d45; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .feature-desc { font-size: 13px; color: #718096; margin: 0; }
+        .dados-conta { background: #edf7fa; border-radius: 12px; padding: 15px 18px; font-size: 13px; color: #2c5282; margin: 20px 0; }
         .botao-wrap { text-align: center; margin: 28px 0 10px 0; }
-        .botao-cta { display: inline-block; background-color: #2b7a8c; background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; text-decoration: none; padding: 14px 34px; border-radius: 30px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); }
-        .footer { background-color: #0f171c; padding: 22px 24px; text-align: center; border-top: 1px solid #233742; font-size: 12px; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important; }
-        .footer a { color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important; text-decoration: underline; font-weight: 600; }
-        u + #body a { color: #ffffff !important; }
+        .botao-cta { display: inline-block; background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); color: #ffffff !important; text-decoration: none; padding: 14px 34px; border-radius: 30px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 16px rgba(43, 122, 140, 0.3); }
+        .footer { background: #f8fafc; padding: 22px 30px; text-align: center; border-top: 1px solid #edf2f7; font-size: 12px; color: #a0aec0; }
+        .footer a { color: #2b7a8c; text-decoration: none; font-weight: 600; }
     </style>
 </head>
-<body id="body" style="margin: 0; padding: 0; background-color: #0b1114;">
-    <div class="wrapper" style="width: 100%; padding: 36px 14px; box-sizing: border-box; background-color: #0b1114;">
-        <div class="card" style="max-width: 560px; margin: 0 auto; background-color: #152026; border-radius: 20px; overflow: hidden; border: 1px solid #233742;">
-            <div class="header" style="background: linear-gradient(135deg, #13323a 0%, #206170 100%); background-color: #1a4955; padding: 36px 24px; text-align: center;">
-                <span class="badge-welcome" style="display: inline-block; background-color: rgba(255, 255, 255, 0.2); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 12px; font-weight: 700; padding: 5px 16px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">🌿 Boas-vindas</span>
-                <h1 style="margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 28px; font-weight: 800; letter-spacing: 0.5px;">HelpFull</h1>
-                <p style="margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 15px; font-weight: 500;">Sua conta foi criada com sucesso!</p>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="header">
+                <span class="badge-welcome">🌿 Boas-vindas</span>
+                <h1>HelpFull</h1>
+                <p>Sua conta foi criada com sucesso!</p>
             </div>
-            <div class="content" style="padding: 35px 28px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; line-height: 1.6; background-color: #152026;">
-                <div class="saudacao" style="font-size: 19px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 12px; font-weight: 700;">Olá, {$nomeEsc}!</div>
-                <p class="descricao" style="font-size: 15px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin: 0 0 24px 0; line-height: 1.6;">
-                    Estamos muito felizes em ter você aqui. O <strong style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">HelpFull</strong> foi pensado para ser o seu espaço seguro de acolhimento emocional, reflexão e conexões saudáveis.
+            <div class="content">
+                <div class="saudacao">Olá, {$nomeEsc}!</div>
+                <p class="descricao">
+                    Estamos muito felizes em ter você aqui. O <strong>HelpFull</strong> foi pensado para ser o seu espaço seguro de acolhimento emocional, reflexão e conexões saudáveis.
                 </p>
 
-                <div class="features-grid" style="margin: 20px 0 24px 0;">
-                    <div class="feature-card" style="background-color: #0f181d; border: 1px solid #223742; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px;">
-                        <div class="feature-title" style="font-size: 15px; font-weight: 700; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 6px;">📖 Diário Emocional</div>
-                        <p class="feature-desc" style="font-size: 13px; color: #e2e8f0 !important; -webkit-text-fill-color: #e2e8f0 !important; margin: 0; line-height: 1.5;">Registre seus sentimentos, pensamentos e acompanhe sua evolução pessoal com privacidade total.</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-title">📖 Diário Emocional</div>
+                        <p class="feature-desc">Registre seus sentimentos, pensamentos e acompanhe sua evolução pessoal com privacidade total.</p>
                     </div>
-                    <div class="feature-card" style="background-color: #0f181d; border: 1px solid #223742; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px;">
-                        <div class="feature-title" style="font-size: 15px; font-weight: 700; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 6px;">💬 Chat & Apoio Acolhedor</div>
-                        <p class="feature-desc" style="font-size: 13px; color: #e2e8f0 !important; -webkit-text-fill-color: #e2e8f0 !important; margin: 0; line-height: 1.5;">Converse, desabafe e encontre clareza com nossa inteligência acolhedora sempre disponível.</p>
+                    <div class="feature-card">
+                        <div class="feature-title">💬 Chat & Apoio Acolhedor</div>
+                        <p class="feature-desc">Converse, desabafe e encontre clareza com nossa inteligência acolhedora sempre disponível.</p>
                     </div>
-                    <div class="feature-card" style="background-color: #0f181d; border: 1px solid #223742; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px;">
-                        <div class="feature-title" style="font-size: 15px; font-weight: 700; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 6px;">👥 Comunidade Segura</div>
-                        <p class="feature-desc" style="font-size: 13px; color: #e2e8f0 !important; -webkit-text-fill-color: #e2e8f0 !important; margin: 0; line-height: 1.5;">Compartilhe relatos, leia histórias inspiradoras e receba apoio de pessoas que entendem você.</p>
+                    <div class="feature-card">
+                        <div class="feature-title">👥 Comunidade Segura</div>
+                        <p class="feature-desc">Compartilhe relatos, leia histórias inspiradoras e receba apoio de pessoas que entendem você.</p>
                     </div>
-                    <div class="feature-card" style="background-color: #0f181d; border: 1px solid #223742; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px;">
-                        <div class="feature-title" style="font-size: 15px; font-weight: 700; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin-bottom: 6px;">🛡️ Sua Segurança Sempre em 1º Lugar</div>
-                        <p class="feature-desc" style="font-size: 13px; color: #e2e8f0 !important; -webkit-text-fill-color: #e2e8f0 !important; margin: 0; line-height: 1.5;">Você pode ativar a Verificação em Duas Etapas (2FA) e personalizar suas preferências no seu perfil.</p>
+                    <div class="feature-card">
+                        <div class="feature-title">🛡️ Sua Segurança Sempre em 1º Lugar</div>
+                        <p class="feature-desc">Você pode ativar a Verificação em Duas Etapas (2FA) e personalizar suas preferências no seu perfil.</p>
                     </div>
                 </div>
 
-                <div class="dados-conta" style="background-color: #0e2b34; border: 1px solid #22d3ee; border-radius: 12px; padding: 15px 18px; font-size: 14px; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; margin: 22px 0;">
-                    <strong style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">Detalhes do seu cadastro:</strong><br>
-                    <span style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">E-mail: <strong style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">{$emailEsc}</strong> • Data de adesão: <strong style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;">{$dataHora}</strong></span>
+                <div class="dados-conta">
+                    <strong>Detalhes do seu cadastro:</strong><br>
+                    E-mail: <strong>{$emailEsc}</strong> • Data de adesão: <strong>{$dataHora}</strong>
                 </div>
 
-                <div class="botao-wrap" style="text-align: center; margin: 28px 0 10px 0;">
-                    <a href="{$linkInicio}" class="botao-cta" target="_blank" style="display: inline-block; background-color: #2b7a8c; background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; text-decoration: none; padding: 14px 34px; border-radius: 30px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);">
-                        <span style="color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; text-decoration: none; font-weight: 700;">Começar a Explorar o HelpFull</span>
-                    </a>
+                <div class="botao-wrap">
+                    <a href="{$linkInicio}" class="botao-cta" target="_blank">Começar a Explorar o HelpFull</a>
                 </div>
             </div>
-            <div class="footer" style="background-color: #0f171c; padding: 22px 24px; text-align: center; border-top: 1px solid #233742; font-size: 12px; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">
-                <p style="margin: 0 0 6px 0; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">HelpFull — Promovendo bem-estar, acolhimento e conexões reais.</p>
-                <p style="margin: 0; color: #cbd5e1 !important; -webkit-text-fill-color: #cbd5e1 !important;">Precisa de ajuda ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com" style="color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important; text-decoration: underline; font-weight: 600;"><span style="color: #38bdf8 !important; -webkit-text-fill-color: #38bdf8 !important;">contatohelpfull@gmail.com</span></a></p>
+            <div class="footer">
+                <p style="margin: 0 0 6px 0;">HelpFull — Promovendo bem-estar, acolhimento e conexões reais.</p>
+                <p style="margin: 0;">Precisa de ajuda ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com">contatohelpfull@gmail.com</a></p>
             </div>
         </div>
     </div>
