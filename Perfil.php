@@ -26,13 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         header("Location: Perfil.php?sucesso=1");
         exit;
     }
-    if ($_POST['acao'] === 'apagar_conta') {
-        $stmtDel = $pdo->prepare("DELETE FROM usuarios WHERE id = ?");
-        $stmtDel->execute([$_SESSION['usuario_id']]);
-        session_destroy();
-        header("Location: Comeco.php");
-        exit;
-    }
     if ($_POST['acao'] === 'apagar_diario') {
         $diarioId = $_POST['diario_id'];
         $stmtDel = $pdo->prepare("DELETE FROM diario WHERE id = ? AND usuario_id = ?");
@@ -2824,6 +2817,87 @@ try {
             animation: spinIt 0.7s linear infinite;
         }
 
+        .balao-2fa-badge-perigo {
+            background: rgba(220, 38, 38, 0.1) !important;
+            color: #dc2626 !important;
+            border: 1px solid rgba(220, 38, 38, 0.25) !important;
+        }
+
+        body.acessibilidade-escuro .balao-2fa-badge-perigo {
+            background: rgba(239, 68, 68, 0.16) !important;
+            color: #fca5a5 !important;
+            border-color: rgba(248, 113, 113, 0.3) !important;
+        }
+
+        .modal-alerta-perigo {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 20px;
+            padding: 14px 16px;
+            font-size: 0.86rem;
+            color: #991b1b;
+            line-height: 1.45;
+            margin-bottom: 18px;
+        }
+
+        .modal-alerta-perigo svg {
+            flex-shrink: 0;
+            margin-top: 2px;
+            stroke: #dc2626;
+        }
+
+        body.acessibilidade-escuro .modal-alerta-perigo {
+            background: rgba(239, 68, 68, 0.12) !important;
+            border-color: rgba(248, 113, 113, 0.25) !important;
+            color: #fca5a5 !important;
+        }
+
+        body.acessibilidade-escuro .modal-alerta-perigo svg {
+            stroke: #fca5a5 !important;
+        }
+
+        .modal-btn-apagar-confirmar {
+            background: #dc2626;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(220, 38, 38, 0.28);
+        }
+
+        .modal-btn-apagar-confirmar:hover:not(:disabled) {
+            background: #b91c1c;
+            transform: scale(1.02);
+            box-shadow: 0 6px 18px rgba(220, 38, 38, 0.38);
+        }
+
+        .modal-btn-apagar-confirmar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        body.acessibilidade-escuro .modal-btn-apagar-confirmar {
+            background: #b91c1c !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(248, 113, 113, 0.3) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        body.acessibilidade-escuro .modal-btn-apagar-confirmar:hover:not(:disabled) {
+            background: #991b1b !important;
+            transform: scale(1.02);
+        }
+
+        .modal-btn-apagar-confirmar .spinner-apagar {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spinIt 0.7s linear infinite;
+        }
+
         /* CARD DISPOSITIVOS CONECTADOS NO PERFIL */
         .card-dispositivos-preview {
             display: flex;
@@ -3382,6 +3456,97 @@ try {
         </div>
     </div>
 
+    <!-- MODAL CONFIRMAR APAGAR CONTA -->
+    <div class="modal-alterar-senha-overlay" id="modalConfirmarApagarConta" role="dialog" aria-modal="true" aria-labelledby="modalApagarTitulo" onclick="if(event.target===this) fecharModalApagarConta();">
+        <div class="modal-alterar-senha-card">
+            <button type="button" class="modal-fechar-btn" onclick="fecharModalApagarConta()" title="Fechar janela">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="modal-senha-header">
+                <div class="modal-senha-header-topo">
+                    <div class="balao-2fa-badge balao-2fa-badge-perigo" style="margin-bottom: 0;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>Aviso Importante</span>
+                    </div>
+                </div>
+                <h3 id="modalApagarTitulo" class="titulo-secao modal-senha-titulo">Apagar Conta</h3>
+                <p id="modalApagarSubtitulo" class="modal-senha-subtitulo">Esta ação é permanente e não poderá ser desfeita.</p>
+            </div>
+
+            <div class="modal-alerta-perigo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <div>
+                    <strong>Atenção:</strong> Todo o seu histórico no HelpFull, incluindo registros do diário emocional, conversas do chat e preferências serão excluídos definitivamente.
+                </div>
+            </div>
+
+            <form id="formApagarConta" onsubmit="submeterApagarConta(event)" novalidate>
+                <!-- ÁREA QUANDO 2FA ESTÁ ATIVO (EXIGE O CÓDIGO DO E-MAIL) -->
+                <div id="blocoApagar2FA" style="display: none;">
+                    <div class="modal-alerta-info">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <div>
+                            <strong>Verificação em Duas Etapas ativa:</strong> Enviamos um código de segurança de 6 dígitos para seu e-mail para validar a exclusão da conta.
+                        </div>
+                    </div>
+
+                    <div class="campo-grupo-modal">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label class="modal-label" for="codigo2faApagar">Código de Verificação (6 dígitos):</label>
+                            <button type="button" class="btn-reenviar-codigo-modal" id="btnReenviarCodigoApagar" onclick="solicitarCodigoApagarConta()">
+                                Reenviar código
+                            </button>
+                        </div>
+                        <div class="input-com-icone-modal">
+                            <input type="text" id="codigo2faApagar" class="modal-input input-codigo-destaque" maxlength="6" inputmode="numeric" placeholder="000000" autocomplete="one-time-code">
+                        </div>
+                        <span class="modal-hint" id="hintEmailCodigoApagar">Os códigos são enviados para <?= htmlspecialchars(mascararEmail($usuarioLogado['email'])) ?></span>
+                    </div>
+                </div>
+
+                <!-- ÁREA QUANDO 2FA ESTÁ DESATIVADO (EXIGE A SENHA DO USUÁRIO) -->
+                <div id="blocoApagarSem2FA" style="display: none;">
+                    <div class="campo-grupo-modal">
+                        <label class="modal-label" for="senhaApagarInput">Confirme sua senha para continuar:</label>
+                        <div class="input-com-icone-modal">
+                            <input type="password" id="senhaApagarInput" class="modal-input" placeholder="Digite sua senha" autocomplete="current-password">
+                            <button type="button" class="btn-olho-toggle" onclick="toggleMostrarSenha('senhaApagarInput', this)" title="Mostrar / Ocultar">
+                                <svg class="olho-aberto" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <svg class="olho-fechado" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </button>
+                        </div>
+                        <span class="modal-hint">A confirmação da senha é necessária para validar esta ação.</span>
+                    </div>
+                </div>
+
+                <!-- MENSAGENS DE FEEDBACK -->
+                <div id="msgAlertaApagar" class="modal-msg-alerta" style="display: none;"></div>
+
+                <div class="modal-senha-acoes">
+                    <button type="button" class="modal-btn modal-btn-cancelar" onclick="fecharModalApagarConta()">Cancelar</button>
+                    <button type="submit" class="modal-btn modal-btn-apagar-confirmar" id="btnConfirmarExclusaoConta">
+                        <span class="spinner-apagar" id="spinnerApagarConta" style="display: none;"></span>
+                        <span class="btn-texto">Excluir Conta</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- TOAST CENTRALIZADO -->
     <div id="notificacaoHelpFull" class="toast-notificacao">
         <div class="toast-barra" id="toastBarra"></div>
@@ -3817,6 +3982,7 @@ try {
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 fecharModalAlterarSenha();
+                fecharModalApagarConta();
             }
         });
 
@@ -3979,7 +4145,196 @@ try {
             }
         }
 
-        function confirmarApagar() { if (confirm("Tem certeza absoluta que deseja apagar sua conta? Todo o seu histórico no HelpFull será perdido para sempre.")) { document.getElementById('acaoConta').value = 'apagar_conta'; document.getElementById('formConta').submit(); } }
+        // === CONTROLE DO MODAL DE EXCLUSÃO DE CONTA ===
+        let timerCooldownApagar = null;
+
+        function confirmarApagar() {
+            abrirModalApagarConta();
+        }
+
+        function abrirModalApagarConta() {
+            const modal = document.getElementById('modalConfirmarApagarConta');
+            const bloco2FA = document.getElementById('blocoApagar2FA');
+            const blocoSem2FA = document.getElementById('blocoApagarSem2FA');
+            const alerta = document.getElementById('msgAlertaApagar');
+            const subtitulo = document.getElementById('modalApagarSubtitulo');
+
+            if (alerta) {
+                alerta.style.display = 'none';
+                alerta.className = 'modal-msg-alerta';
+                alerta.textContent = '';
+            }
+            const form = document.getElementById('formApagarConta');
+            if (form) form.reset();
+
+            // Reseta icones dos olhos para estado oculto
+            document.querySelectorAll('#formApagarConta .btn-olho-toggle').forEach(btn => {
+                const olhoAberto = btn.querySelector('.olho-aberto');
+                const olhoFechado = btn.querySelector('.olho-fechado');
+                if (olhoAberto) olhoAberto.style.display = 'block';
+                if (olhoFechado) olhoFechado.style.display = 'none';
+            });
+            const inpSenha = document.getElementById('senhaApagarInput');
+            if (inpSenha) inpSenha.type = 'password';
+
+            const tem2FA = !!estado2FAAtual;
+            if (tem2FA) {
+                bloco2FA.style.display = 'block';
+                blocoSem2FA.style.display = 'none';
+                subtitulo.textContent = 'Verificação em Duas Etapas ativa. Enviamos um código para seu e-mail.';
+                solicitarCodigoApagarConta();
+                setTimeout(() => {
+                    const inpCod = document.getElementById('codigo2faApagar');
+                    if (inpCod) inpCod.focus();
+                }, 180);
+            } else {
+                bloco2FA.style.display = 'none';
+                blocoSem2FA.style.display = 'block';
+                subtitulo.textContent = 'Confirme sua senha para validar a exclusão da conta.';
+                setTimeout(() => {
+                    if (inpSenha) inpSenha.focus();
+                }, 180);
+            }
+
+            modal.classList.add('aberto');
+            travarScrollFundo();
+        }
+
+        function fecharModalApagarConta() {
+            const modal = document.getElementById('modalConfirmarApagarConta');
+            if (modal) modal.classList.remove('aberto');
+            destravarScrollFundo();
+        }
+
+        async function solicitarCodigoApagarConta() {
+            const btnReenviar = document.getElementById('btnReenviarCodigoApagar');
+            const alerta = document.getElementById('msgAlertaApagar');
+            if (!btnReenviar) return;
+
+            btnReenviar.disabled = true;
+            btnReenviar.textContent = 'Enviando código...';
+
+            try {
+                const resp = await fetch('apagar_conta.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'solicitar_codigo' })
+                });
+
+                const data = await resp.json();
+
+                if (data.sucesso) {
+                    alerta.className = 'modal-msg-alerta sucesso';
+                    alerta.textContent = data.mensagem || 'Código enviado com sucesso.';
+                    alerta.style.display = 'block';
+
+                    iniciarCooldownApagar(20);
+                } else {
+                    alerta.className = 'modal-msg-alerta erro';
+                    alerta.textContent = data.mensagem || 'Erro ao enviar código de verificação.';
+                    alerta.style.display = 'block';
+                    btnReenviar.disabled = false;
+                    btnReenviar.textContent = 'Reenviar código';
+                }
+            } catch (err) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'Erro ao conectar ao servidor para envio do código.';
+                alerta.style.display = 'block';
+                btnReenviar.disabled = false;
+                btnReenviar.textContent = 'Reenviar código';
+            }
+        }
+
+        function iniciarCooldownApagar(segundos) {
+            const btnReenviar = document.getElementById('btnReenviarCodigoApagar');
+            if (!btnReenviar) return;
+
+            if (timerCooldownApagar) clearInterval(timerCooldownApagar);
+
+            let restante = segundos;
+            btnReenviar.disabled = true;
+            btnReenviar.textContent = `Reenviar (${restante}s)`;
+
+            timerCooldownApagar = setInterval(() => {
+                restante--;
+                if (restante <= 0) {
+                    clearInterval(timerCooldownApagar);
+                    btnReenviar.disabled = false;
+                    btnReenviar.textContent = 'Reenviar código';
+                } else {
+                    btnReenviar.textContent = `Reenviar (${restante}s)`;
+                }
+            }, 1000);
+        }
+
+        async function submeterApagarConta(e) {
+            if (e) e.preventDefault();
+            const alerta = document.getElementById('msgAlertaApagar');
+            const btnConfirmar = document.getElementById('btnConfirmarExclusaoConta');
+            const spinner = document.getElementById('spinnerApagarConta');
+            const btnTexto = btnConfirmar ? btnConfirmar.querySelector('.btn-texto') : null;
+
+            const tem2FA = !!estado2FAAtual;
+            const codigo2fa = tem2FA ? document.getElementById('codigo2faApagar').value.trim() : '';
+            const senha = !tem2FA ? document.getElementById('senhaApagarInput').value : '';
+
+            if (tem2FA && (!codigo2fa || codigo2fa.length !== 6)) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'Por favor, digite o código de 6 dígitos enviado ao seu e-mail.';
+                alerta.style.display = 'block';
+                return;
+            }
+
+            if (!tem2FA && !senha) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'Por favor, digite sua senha para confirmar a exclusão da conta.';
+                alerta.style.display = 'block';
+                return;
+            }
+
+            alerta.style.display = 'none';
+            if (btnConfirmar) btnConfirmar.disabled = true;
+            if (spinner) spinner.style.display = 'inline-block';
+            if (btnTexto) btnTexto.textContent = 'Excluindo...';
+
+            try {
+                const resp = await fetch('apagar_conta.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        acao: 'confirmar_apagar',
+                        codigo_2fa: codigo2fa,
+                        senha: senha
+                    })
+                });
+
+                const data = await resp.json();
+
+                if (data.sucesso) {
+                    alerta.className = 'modal-msg-alerta sucesso';
+                    alerta.textContent = data.mensagem || 'Conta excluída com sucesso. Redirecionando...';
+                    alerta.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = data.redirecionar || 'Comeco.php';
+                    }, 1200);
+                } else {
+                    alerta.className = 'modal-msg-alerta erro';
+                    alerta.textContent = data.mensagem || 'Não foi possível apagar a conta. Verifique os dados.';
+                    alerta.style.display = 'block';
+                    if (btnConfirmar) btnConfirmar.disabled = false;
+                    if (spinner) spinner.style.display = 'none';
+                    if (btnTexto) btnTexto.textContent = 'Excluir Conta';
+                }
+            } catch (err) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'Erro de comunicação com o servidor: ' + err.message;
+                alerta.style.display = 'block';
+                if (btnConfirmar) btnConfirmar.disabled = false;
+                if (spinner) spinner.style.display = 'none';
+                if (btnTexto) btnTexto.textContent = 'Excluir Conta';
+            }
+        }
 
         function removerFotoPerfil() {
             const placeholder = document.getElementById('placeholderFoto'); const icon = document.getElementById('placeholderIcon');

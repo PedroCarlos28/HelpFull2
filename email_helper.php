@@ -243,6 +243,71 @@ HTML;
 }
 
 /**
+ * Template de e-mail para autorização de exclusão permanente de conta (2FA ativo)
+ */
+function montarHtmlEmailCodigoApagarConta($nome, $codigo) {
+    $nomeEsc = htmlspecialchars($nome ?: 'Usuário');
+    $codigoEsc = htmlspecialchars($codigo);
+
+    return <<<HTML
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código para Exclusão de Conta - HelpFull</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #f4f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .wrapper { width: 100%; padding: 40px 15px; box-sizing: border-box; }
+        .card { max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border: 1px solid #e1edf2; }
+        .header { background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 100%); padding: 35px 30px; text-align: center; }
+        .header h1 { margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; opacity: 0.95; }
+        .content { padding: 35px 30px; color: #2d3748; line-height: 1.6; text-align: center; }
+        .saudacao { font-size: 16px; color: #4a5568; margin-bottom: 16px; font-weight: 700; }
+        .alerta-caixa { background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 14px 16px; font-size: 13px; color: #991b1b; text-align: left; margin-bottom: 20px; }
+        .codigo-box { margin: 20px auto; padding: 18px 24px; background: #fef2f2; border: 2px dashed #f87171; border-radius: 14px; display: inline-block; }
+        .codigo-numero { font-size: 34px; font-weight: 800; color: #991b1b; letter-spacing: 8px; font-family: 'Courier New', Courier, monospace; margin: 0; }
+        .aviso { font-size: 13px; color: #718096; margin-top: 15px; }
+        .destaque { color: #dc2626; font-weight: 700; }
+        .footer { background: #f8fafc; padding: 22px 30px; text-align: center; border-top: 1px solid #edf2f7; font-size: 12px; color: #a0aec0; }
+        .footer a { color: #2b7a8c; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="header">
+                <span style="display: inline-block; background: rgba(255, 255, 255, 0.2); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Segurança da Conta</span>
+                <h1>HelpFull</h1>
+                <p>Código para Exclusão Permanente de Conta</p>
+            </div>
+            <div class="content">
+                <div class="saudacao">Olá, <strong>{$nomeEsc}</strong></div>
+                <div class="alerta-caixa">
+                    <strong>Atenção:</strong> Uma solicitação para apagar permanentemente a sua conta foi iniciada no HelpFull. Ao confirmar, todos os seus dados, histórico do diário e chats serão apagados em definitivo.
+                </div>
+                <p style="margin: 0; font-size: 15px;">Use o código de verificação abaixo para autorizar a exclusão da sua conta:</p>
+                
+                <div class="codigo-box">
+                    <div class="codigo-numero">{$codigoEsc}</div>
+                </div>
+
+                <p class="aviso">Este código é válido por <strong>10 minutos</strong>.</p>
+                <p class="aviso" style="margin-top: 5px;">Se você não solicitou a exclusão, <span class="destaque">não compartilhe este código com ninguém</span>, acesse sua conta imediatamente e altere sua senha.</p>
+            </div>
+            <div class="footer">
+                <p style="margin: 0 0 6px 0;">HelpFull - Promovendo bem-estar e conexões reais.</p>
+                <p style="margin: 0;">Dúvidas ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com">contatohelpfull@gmail.com</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+HTML;
+}
+
+/**
  * Template de confirmação de senha alterada com sucesso
  */
 function montarHtmlEmailSenhaAlterada($nome) {
@@ -659,6 +724,31 @@ function enviarEmailCodigoAlterarSenha($email, $nome, $codigo) {
         @file_put_contents(
             __DIR__ . '/scratch/last_2fa_code.log',
             date('Y-m-d H:i:s') . " | $email | $codigo | ALTERAR_SENHA\n",
+            FILE_APPEND
+        );
+    }
+
+    $resultado['debug_codigo'] = ($isLocalhost && !$resultado['enviado_mail']) ? $codigo : null;
+    return $resultado;
+}
+
+/**
+ * Envia o código de autorização para exclusão definitiva da conta (2FA ativo)
+ */
+function enviarEmailCodigoApagarConta($email, $nome, $codigo) {
+    $assunto = "Código para exclusão de conta: " . $codigo . " - HelpFull";
+    $corpoHtml = montarHtmlEmailCodigoApagarConta($nome, $codigo);
+
+    $resultado = enviarEmailBase($email, $nome, $assunto, $corpoHtml, 'APAGAR_CONTA_2FA');
+
+    $isLocalhost = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1']) || 
+                   strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false ||
+                   php_sapi_name() === 'cli';
+
+    if (!$resultado['enviado_mail']) {
+        @file_put_contents(
+            __DIR__ . '/scratch/last_2fa_code.log',
+            date('Y-m-d H:i:s') . " | $email | $codigo | APAGAR_CONTA\n",
             FILE_APPEND
         );
     }
