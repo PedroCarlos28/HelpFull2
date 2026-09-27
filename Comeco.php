@@ -540,10 +540,57 @@ if (isset($_SESSION['usuario_id'])) {
             border-top-color: #4285F4;
             border-radius: 50%;
             animation: spinIt 0.7s linear infinite;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        /* Ícone do X Vermelho de Erro */
+        .btn-google-circle .social-error-icon {
+            display: none;
+            width: 22px;
+            height: 22px;
+            stroke: #ea4335;
         }
 
         .btn-google-circle.carregando .social-spinner { display: block; }
         .btn-google-circle.carregando .google-icon   { display: none; }
+        .btn-google-circle.carregando .social-error-icon { display: none; }
+
+        /* Estado de erro com transição para o X vermelho */
+        .btn-google-circle.erro {
+            background: #fff5f5 !important;
+            box-shadow: inset 0 0 0 2px #ea4335, 0 0 0 3px rgba(234, 67, 53, 0.2), 0 4px 12px rgba(234, 67, 53, 0.15) !important;
+            animation: shakeGoogleBtn 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        .btn-google-circle.erro .social-spinner { display: none !important; }
+        .btn-google-circle.erro .google-icon { display: none !important; }
+        .btn-google-circle.erro .social-error-icon {
+            display: block !important;
+            animation: popInX 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popInX {
+            0% {
+                transform: scale(0.2) rotate(-45deg);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.2) rotate(6deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shakeGoogleBtn {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-4px) rotate(-3deg); }
+            40% { transform: translateX(4px) rotate(3deg); }
+            60% { transform: translateX(-3px) rotate(-1.5deg); }
+            80% { transform: translateX(3px) rotate(1.5deg); }
+        }
 
         @keyframes spinIt {
             to { transform: rotate(360deg); }
@@ -772,6 +819,10 @@ if (isset($_SESSION['usuario_id'])) {
                     <div class="footer-botoes">
                         <button type="button" class="btn-google-circle" id="btnGoogleLogin" onclick="loginSocial('google')" title="Entrar com Google">
                             <div class="social-spinner"></div>
+                            <svg class="social-error-icon" viewBox="0 0 24 24" fill="none" stroke="#ea4335" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
                             <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -814,6 +865,10 @@ if (isset($_SESSION['usuario_id'])) {
                     <div class="footer-botoes">
                         <button type="button" class="btn-google-circle" id="btnGoogleCad" onclick="loginSocial('google')" title="Cadastrar com Google">
                             <div class="social-spinner"></div>
+                            <svg class="social-error-icon" viewBox="0 0 24 24" fill="none" stroke="#ea4335" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
                             <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -905,6 +960,39 @@ if (isset($_SESSION['usuario_id'])) {
 
         let app, auth;
 
+        // Animação de transição suave do spinner de carregamento para o X vermelho de erro
+        function animarErroBotaoGoogle(mensagem) {
+            const isCad = document.getElementById('mainCard').classList.contains('cad-mode');
+            const erroSpan = document.getElementById(isCad ? 'erroCadastro' : 'erroLogin');
+
+            if (erroSpan && mensagem) {
+                erroSpan.textContent = mensagem;
+                erroSpan.classList.add('visivel');
+            }
+
+            const botoes = [document.getElementById('btnGoogleLogin'), document.getElementById('btnGoogleCad')];
+            botoes.forEach(b => {
+                if (b) {
+                    b.classList.remove('carregando');
+                    b.classList.add('erro');
+                    b.disabled = true;
+                }
+            });
+
+            // Mantém o X vermelho visível e com animação e depois retorna ao ícone do Google
+            setTimeout(() => {
+                botoes.forEach(b => {
+                    if (b) {
+                        b.classList.remove('erro');
+                        b.disabled = false;
+                    }
+                });
+                if (erroSpan) {
+                    setTimeout(() => erroSpan.classList.remove('visivel'), 3500);
+                }
+            }, 2600);
+        }
+
         // Função compartilhada para enviar dados ao PHP e autenticar no sistema
         async function finalizarLoginOAuth(user) {
             const btnLogin = document.getElementById('btnGoogleLogin');
@@ -947,20 +1035,14 @@ if (isset($_SESSION['usuario_id'])) {
                         window.location.href = 'inicio.php';
                     }
                 } else if (data) {
-                    alert('Erro no login: ' + (data.mensagem || 'Tente novamente.'));
-                    if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
-                    if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
+                    animarErroBotaoGoogle('Erro no login: ' + (data.mensagem || 'Tente novamente.'));
                 } else {
                     const msgLimpa = rawText.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
-                    alert('Erro no servidor: ' + (msgLimpa || 'Resposta inválida do servidor.'));
-                    if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
-                    if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
+                    animarErroBotaoGoogle('Erro no servidor: ' + (msgLimpa || 'Resposta inválida do servidor.'));
                 }
             } catch (err) {
                 console.error('Erro ao autenticar com o servidor:', err);
-                alert('Erro de comunicação com o servidor: ' + (err.message || err));
-                if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
-                if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
+                animarErroBotaoGoogle('Erro de comunicação com o servidor: ' + (err.message || err));
             }
         }
 
@@ -975,6 +1057,7 @@ if (isset($_SESSION['usuario_id'])) {
                 }
             }).catch((err) => {
                 console.error('Redirect error:', err);
+                animarErroBotaoGoogle('Falha no redirecionamento do Google.');
             });
         }
 
@@ -987,7 +1070,11 @@ if (isset($_SESSION['usuario_id'])) {
 
             const isCad = document.getElementById('mainCard').classList.contains('cad-mode');
             const btn   = document.getElementById(isCad ? 'btnGoogleCad' : 'btnGoogleLogin');
-            if (btn) { btn.classList.add('carregando'); btn.disabled = true; }
+            if (btn) {
+                btn.classList.remove('erro');
+                btn.classList.add('carregando');
+                btn.disabled = true;
+            }
 
             const provider = new GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
@@ -1005,15 +1092,13 @@ if (isset($_SESSION['usuario_id'])) {
                     try {
                         await signInWithRedirect(auth, provider);
                     } catch (redirectErr) {
-                        alert('Erro ao redirecionar: ' + redirectErr.message);
-                        if (btn) { btn.classList.remove('carregando'); btn.disabled = false; }
+                        animarErroBotaoGoogle('Erro ao redirecionar: ' + redirectErr.message);
                     }
-                } else if (err.code !== 'auth/popup-closed-by-user') {
-                    alert('Erro ao conectar com Google: ' + (err.message || err.code));
-                    if (btn) { btn.classList.remove('carregando'); btn.disabled = false; }
+                } else if (err.code === 'auth/popup-closed-by-user') {
+                    // Usuário fechou ou cancelou o popup do Google: ativa a transição para o X vermelho
+                    animarErroBotaoGoogle('Login com o Google foi cancelado.');
                 } else {
-                    // Usuário apenas fechou a janela
-                    if (btn) { btn.classList.remove('carregando'); btn.disabled = false; }
+                    animarErroBotaoGoogle('Erro ao conectar com Google: ' + (err.message || err.code));
                 }
             }
         };

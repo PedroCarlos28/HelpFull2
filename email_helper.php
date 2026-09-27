@@ -180,6 +180,124 @@ HTML;
 }
 
 /**
+ * Template de e-mail para autorização de alteração de senha (2FA ativo)
+ */
+function montarHtmlEmailCodigoAlterarSenha($nome, $codigo) {
+    $nomeEsc = htmlspecialchars($nome ?: 'Usuário');
+    $codigoEsc = htmlspecialchars($codigo);
+
+    return <<<HTML
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código para Alteração de Senha - HelpFull</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #f4f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .wrapper { width: 100%; padding: 40px 15px; box-sizing: border-box; }
+        .card { max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(43, 122, 140, 0.1); border: 1px solid #e1edf2; }
+        .header { background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); padding: 35px 30px; text-align: center; }
+        .header h1 { margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; opacity: 0.95; }
+        .content { padding: 35px 30px; color: #2d3748; line-height: 1.6; text-align: center; }
+        .saudacao { font-size: 16px; color: #4a5568; margin-bottom: 16px; font-weight: 700; }
+        .codigo-box { margin: 25px auto; padding: 18px 24px; background: #edf7fa; border: 2px dashed #92d0de; border-radius: 14px; display: inline-block; }
+        .codigo-numero { font-size: 34px; font-weight: 800; color: #1b3d45; letter-spacing: 8px; font-family: 'Courier New', Courier, monospace; margin: 0; }
+        .aviso { font-size: 13px; color: #718096; margin-top: 15px; }
+        .destaque { color: #e53e3e; font-weight: 600; }
+        .footer { background: #f8fafc; padding: 22px 30px; text-align: center; border-top: 1px solid #edf2f7; font-size: 12px; color: #a0aec0; }
+        .footer a { color: #2b7a8c; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="header">
+                <span style="display: inline-block; background: rgba(255, 255, 255, 0.2); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🔑 Segurança da Conta</span>
+                <h1>HelpFull</h1>
+                <p>Código para Alteração de Senha</p>
+            </div>
+            <div class="content">
+                <div class="saudacao">Olá, <strong>{$nomeEsc}</strong>!</div>
+                <p style="margin: 0; font-size: 15px;">Uma solicitação para cadastrar uma nova senha foi iniciada no seu perfil. Use o código de verificação abaixo para confirmar a troca:</p>
+                
+                <div class="codigo-box">
+                    <div class="codigo-numero">{$codigoEsc}</div>
+                </div>
+
+                <p class="aviso">⏱️ Este código é válido por <strong>10 minutos</strong>.</p>
+                <p class="aviso" style="margin-top: 5px;">Se você não solicitou esta alteração, <span class="destaque">não compartilhe este código</span> e entre em contato conosco.</p>
+            </div>
+            <div class="footer">
+                <p style="margin: 0 0 6px 0;">HelpFull — Promovendo bem-estar e conexões reais.</p>
+                <p style="margin: 0;">Dúvidas ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com">contatohelpfull@gmail.com</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+HTML;
+}
+
+/**
+ * Template de confirmação de senha alterada com sucesso
+ */
+function montarHtmlEmailSenhaAlterada($nome) {
+    $nomeEsc = htmlspecialchars($nome ?: 'Usuário');
+    $dataHora = date('d/m/Y \à\s H:i:s');
+
+    return <<<HTML
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua senha foi alterada - HelpFull</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #f4f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .wrapper { width: 100%; padding: 40px 15px; box-sizing: border-box; }
+        .card { max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(43, 122, 140, 0.1); border: 1px solid #e1edf2; }
+        .header { background: linear-gradient(135deg, #1b3d45 0%, #2b7a8c 100%); padding: 35px 30px; text-align: center; }
+        .header h1 { margin: 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+        .header p { margin: 8px 0 0 0; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 14px; opacity: 0.95; }
+        .content { padding: 35px 30px; color: #2d3748; line-height: 1.6; }
+        .saudacao { font-size: 16px; color: #4a5568; margin-bottom: 12px; font-weight: 700; }
+        .box-sucesso { background: #e6f9f0; border-left: 4px solid #10b981; padding: 14px 16px; border-radius: 8px; font-size: 13px; color: #065f46; margin: 18px 0; }
+        .footer { background: #f8fafc; padding: 22px 30px; text-align: center; border-top: 1px solid #edf2f7; font-size: 12px; color: #a0aec0; }
+        .footer a { color: #2b7a8c; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="header">
+                <span style="display: inline-block; background: rgba(255, 255, 255, 0.2); color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🛡️ Notificação de Segurança</span>
+                <h1>HelpFull</h1>
+                <p>Senha Atualizada com Sucesso</p>
+            </div>
+            <div class="content">
+                <div class="saudacao">Olá, {$nomeEsc}!</div>
+                <p style="margin: 0; font-size: 15px;">Informamos que a senha da sua conta do <strong>HelpFull</strong> foi alterada com êxito em <strong>{$dataHora}</strong>.</p>
+                
+                <div class="box-sucesso">
+                    <strong>✓ Alteração Concluída:</strong> Sua nova senha já está valendo para os próximos logins.
+                </div>
+
+                <p style="font-size: 13px; color: #718096; margin-top: 16px;">Se você <strong>NÃO</strong> realizou esta alteração, recupere o acesso à sua conta ou escreva imediatamente para o nosso suporte.</p>
+            </div>
+            <div class="footer">
+                <p style="margin: 0 0 6px 0;">HelpFull — Promovendo bem-estar e conexões reais.</p>
+                <p style="margin: 0;">Dúvidas ou suporte? Escreva para <a href="mailto:contatohelpfull@gmail.com">contatohelpfull@gmail.com</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+HTML;
+}
+
+/**
  * Template de e-mail para Notificação de Novo Login
  */
 function montarHtmlEmailNovoLogin($nome, $dados = []) {
@@ -517,6 +635,45 @@ function enviarEmailBoasVindas($email, $nome) {
         $corpoHtml = montarHtmlEmailBoasVindas($nome, $email);
 
         return enviarEmailBase($email, $nome, $assunto, $corpoHtml, 'CADASTRO_NOVO');
+    } catch (Exception $e) {
+        return ['sucesso' => false, 'erro' => $e->getMessage()];
+    }
+}
+
+/**
+ * Envia o código de autorização para alteração de senha (2FA ativo)
+ */
+function enviarEmailCodigoAlterarSenha($email, $nome, $codigo) {
+    $assunto = "Código para alteração de senha: " . $codigo . " - HelpFull";
+    $corpoHtml = montarHtmlEmailCodigoAlterarSenha($nome, $codigo);
+
+    $resultado = enviarEmailBase($email, $nome, $assunto, $corpoHtml, 'RECUPERA_SENHA_2FA');
+
+    $isLocalhost = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1']) || 
+                   strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false ||
+                   php_sapi_name() === 'cli';
+
+    if (!$resultado['enviado_mail']) {
+        @file_put_contents(
+            __DIR__ . '/scratch/last_2fa_code.log',
+            date('Y-m-d H:i:s') . " | $email | $codigo | ALTERAR_SENHA\n",
+            FILE_APPEND
+        );
+    }
+
+    $resultado['debug_codigo'] = ($isLocalhost && !$resultado['enviado_mail']) ? $codigo : null;
+    return $resultado;
+}
+
+/**
+ * Envia notificação de confirmação de senha alterada com sucesso
+ */
+function enviarEmailSenhaAlterada($email, $nome) {
+    try {
+        $assunto = "🛡️ Sua senha HelpFull foi alterada com sucesso";
+        $corpoHtml = montarHtmlEmailSenhaAlterada($nome);
+
+        return enviarEmailBase($email, $nome, $assunto, $corpoHtml, 'SENHA_ALTERADA');
     } catch (Exception $e) {
         return ['sucesso' => false, 'erro' => $e->getMessage()];
     }

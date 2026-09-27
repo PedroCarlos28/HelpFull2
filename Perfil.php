@@ -1954,7 +1954,8 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             .senha-row .btn-editar,
             .senha-row .btn-sair,
             .senha-row .btn-salvar,
-            .senha-row .btn-apagar {
+            .senha-row .btn-apagar,
+            .senha-row .btn-trocar-senha {
                 height: 42px;
                 padding: 0 14px;
                 white-space: nowrap;
@@ -2003,7 +2004,8 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 width: 100% !important;
             }
 
-            body.modo-edicao .senha-row .btn-sair {
+            body.modo-edicao .senha-row .btn-sair,
+            body.modo-edicao .senha-row #btnTrocarSenha {
                 display: none !important;
             }
 
@@ -2231,6 +2233,412 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             .painel-notificacoes { right: 10px; width: calc(100vw - 40px); max-width: 320px; }
             .toast-notificacao { width: 92%; max-width: 380px; }
         }
+
+        /* ===== ESTILOS DO MODAL DE ALTERAÇÃO DE SENHA ===== */
+        .btn-trocar-senha {
+            background: #cae8f2;
+            color: #174a58;
+            border: 1px solid rgba(43, 122, 140, 0.22);
+            font-weight: 700;
+        }
+
+        .btn-trocar-senha:hover {
+            background: #b5e0ee;
+        }
+
+        body.acessibilidade-escuro .btn-trocar-senha {
+            background: #1c3642;
+            color: #7dd3fc;
+            border-color: rgba(125, 211, 252, 0.25);
+        }
+
+        body.acessibilidade-escuro .btn-trocar-senha:hover {
+            background: #254454;
+        }
+
+        body.modo-edicao .senha-row #btnTrocarSenha {
+            display: none !important;
+        }
+
+        .modal-alterar-senha-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-alterar-senha-overlay.aberto {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-alterar-senha-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 26px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(43, 122, 140, 0.15);
+            padding: 30px 28px;
+            position: relative;
+            box-sizing: border-box;
+            transform: scale(0.92);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-alterar-senha-overlay.aberto .modal-alterar-senha-card {
+            transform: scale(1);
+        }
+
+        body.acessibilidade-escuro .modal-alterar-senha-card {
+            background: #182228;
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            color: #f1f5f9;
+        }
+
+        .modal-fechar-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+
+        .modal-fechar-btn:hover {
+            background: rgba(0, 0, 0, 0.06);
+            color: #1a202c;
+            transform: rotate(90deg);
+        }
+
+        body.acessibilidade-escuro .modal-fechar-btn {
+            color: #94a3b8;
+        }
+
+        body.acessibilidade-escuro .modal-fechar-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+        }
+
+        .modal-senha-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding-right: 32px;
+        }
+
+        .modal-senha-icon-box {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            color: #0284c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        body.acessibilidade-escuro .modal-senha-icon-box {
+            background: linear-gradient(135deg, #0c4a6e, #075985);
+            color: #38bdf8;
+        }
+
+        .modal-senha-titulo {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1b3d45;
+        }
+
+        body.acessibilidade-escuro .modal-senha-titulo {
+            color: #f1f5f9;
+        }
+
+        .modal-senha-subtitulo {
+            margin: 4px 0 0 0;
+            font-size: 0.88rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        body.acessibilidade-escuro .modal-senha-subtitulo {
+            color: #94a3b8;
+        }
+
+        .modal-alerta-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-size: 0.86rem;
+            color: #0369a1;
+            line-height: 1.45;
+            margin-bottom: 18px;
+        }
+
+        .modal-alerta-info svg {
+            flex-shrink: 0;
+            margin-top: 2px;
+            stroke: #0284c7;
+        }
+
+        body.acessibilidade-escuro .modal-alerta-info {
+            background: rgba(14, 165, 233, 0.12);
+            border-color: rgba(56, 189, 248, 0.25);
+            color: #7dd3fc;
+        }
+
+        body.acessibilidade-escuro .modal-alerta-info svg {
+            stroke: #38bdf8;
+        }
+
+        .campo-grupo-modal {
+            margin-bottom: 16px;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        body.acessibilidade-escuro .modal-label {
+            color: #cbd5e1;
+        }
+
+        .btn-reenviar-codigo-modal {
+            background: none;
+            border: none;
+            color: #0284c7;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .btn-reenviar-codigo-modal:hover:not(:disabled) {
+            color: #0369a1;
+        }
+
+        .btn-reenviar-codigo-modal:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        body.acessibilidade-escuro .btn-reenviar-codigo-modal {
+            color: #38bdf8;
+        }
+
+        .input-com-icone-modal {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-input {
+            width: 100%;
+            height: 46px;
+            border-radius: 14px;
+            border: 1.5px solid #cbd5e1;
+            background: #f8fafc;
+            padding: 0 44px 0 14px;
+            font-size: 0.95rem;
+            color: #1e293b;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .modal-input:focus {
+            background: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        body.acessibilidade-escuro .modal-input {
+            background: #1e293b;
+            border-color: #334155;
+            color: #f8fafc;
+        }
+
+        body.acessibilidade-escuro .modal-input:focus {
+            background: #0f172a;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        .input-codigo-destaque {
+            letter-spacing: 6px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+            padding-right: 14px !important;
+        }
+
+        .modal-hint {
+            display: block;
+            font-size: 0.78rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        body.acessibilidade-escuro .modal-hint {
+            color: #94a3b8;
+        }
+
+        .btn-olho-toggle {
+            position: absolute;
+            right: 12px;
+            background: transparent;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-olho-toggle:hover {
+            color: #0f172a;
+        }
+
+        body.acessibilidade-escuro .btn-olho-toggle {
+            color: #94a3b8;
+        }
+
+        body.acessibilidade-escuro .btn-olho-toggle:hover {
+            color: #f8fafc;
+        }
+
+        .modal-msg-alerta {
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 0.86rem;
+            margin: 14px 0;
+            line-height: 1.4;
+            display: none;
+        }
+
+        .modal-msg-alerta.erro {
+            display: block;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+
+        body.acessibilidade-escuro .modal-msg-alerta.erro {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(248, 113, 113, 0.3);
+            color: #fca5a5;
+        }
+
+        .modal-msg-alerta.sucesso {
+            display: block;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+        }
+
+        body.acessibilidade-escuro .modal-msg-alerta.sucesso {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(74, 222, 128, 0.3);
+            color: #86efac;
+        }
+
+        .modal-senha-acoes {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .modal-btn {
+            height: 46px;
+            border-radius: 16px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            border: none;
+        }
+
+        .modal-btn-cancelar {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .modal-btn-cancelar:hover {
+            background: #cbd5e1;
+        }
+
+        body.acessibilidade-escuro .modal-btn-cancelar {
+            background: #334155;
+            color: #cbd5e1;
+        }
+
+        body.acessibilidade-escuro .modal-btn-cancelar:hover {
+            background: #475569;
+        }
+
+        .modal-btn-salvar {
+            background: linear-gradient(135deg, #1b3d45, #2b7a8c);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.35);
+        }
+
+        .modal-btn-salvar:hover:not(:disabled) {
+            opacity: 0.95;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.45);
+        }
+
+        .modal-btn-salvar:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal-btn-salvar .btn-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spinIt 0.7s linear infinite;
+        }
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
@@ -2307,6 +2715,8 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                     <label>Senha:</label>
                     <div class="senha-row">
                         <input type="password" class="conta-input" value="******" readonly disabled>
+                        <button type="button" class="btn-editar btn-trocar-senha" id="btnTrocarSenha"
+                            onclick="abrirModalAlterarSenha()" title="Alterar sua senha de acesso">Alterar Senha</button>
                         <button type="button" class="btn-editar btn-sair" id="btnSair"
                             onclick="location.href='Sair.php'">Sair da conta</button>
                         <button type="button" class="btn-editar" id="btnEditar"
@@ -2552,6 +2962,106 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
         </div>
     </div>
 
+    <!-- MODAL ALTERAR SENHA -->
+    <div class="modal-alterar-senha-overlay" id="modalAlterarSenha" role="dialog" aria-modal="true" aria-labelledby="modalSenhaTitulo" onclick="if(event.target===this) fecharModalAlterarSenha();">
+        <div class="modal-alterar-senha-card">
+            <button type="button" class="modal-fechar-btn" onclick="fecharModalAlterarSenha()" title="Fechar janela">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="modal-senha-header">
+                <div class="modal-senha-icon-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 id="modalSenhaTitulo" class="modal-senha-titulo">Alterar Senha</h3>
+                    <p id="modalSenhaSubtitulo" class="modal-senha-subtitulo">Atualize sua senha de acesso com segurança.</p>
+                </div>
+            </div>
+
+            <form id="formAlterarSenha" onsubmit="submeterAlterarSenha(event)" novalidate>
+                <!-- ÁREA QUANDO 2FA ESTÁ ATIVO (EXIGE APENAS O CÓDIGO DO E-MAIL) -->
+                <div id="blocoSenha2FA" style="display: none;">
+                    <div class="modal-alerta-info">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <div>
+                            <strong>Verificação em Duas Etapas ativa:</strong> Não é necessário digitar a senha antiga. Enviamos um código de segurança de 6 dígitos para o seu e-mail para validar a troca.
+                        </div>
+                    </div>
+
+                    <div class="campo-grupo-modal">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label class="modal-label" for="codigo2faSenha">Código de Verificação (6 dígitos):</label>
+                            <button type="button" class="btn-reenviar-codigo-modal" id="btnReenviarCodigoSenha" onclick="solicitarCodigoAlterarSenha()">
+                                Reenviar código
+                            </button>
+                        </div>
+                        <div class="input-com-icone-modal">
+                            <input type="text" id="codigo2faSenha" class="modal-input input-codigo-destaque" maxlength="6" inputmode="numeric" placeholder="000000" autocomplete="one-time-code">
+                        </div>
+                        <span class="modal-hint" id="hintEmailCodigo">Os códigos são enviados para <?= htmlspecialchars($usuarioLogado['email']) ?></span>
+                    </div>
+                </div>
+
+                <!-- ÁREA QUANDO 2FA ESTÁ DESATIVADO (EXIGE CONFIRMAÇÃO DA SENHA ANTIGA) -->
+                <div id="blocoSenhaSem2FA" style="display: none;">
+                    <div class="campo-grupo-modal">
+                        <label class="modal-label" for="senhaAntigaInput">Senha Antiga (Atual):</label>
+                        <div class="input-com-icone-modal">
+                            <input type="password" id="senhaAntigaInput" class="modal-input" placeholder="Digite sua senha atual" autocomplete="current-password">
+                            <button type="button" class="btn-olho-toggle" onclick="toggleMostrarSenha('senhaAntigaInput', this)" title="Mostrar / Ocultar">
+                                <svg class="olho-aberto" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <svg class="olho-fechado" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAMPOS DA NOVA SENHA (COMUM AOS DOIS FLUXOS) -->
+                <div class="campo-grupo-modal">
+                    <label class="modal-label" for="novaSenhaInput">Nova Senha:</label>
+                    <div class="input-com-icone-modal">
+                        <input type="password" id="novaSenhaInput" class="modal-input" placeholder="Mínimo 6 caracteres" minlength="6" autocomplete="new-password" required>
+                        <button type="button" class="btn-olho-toggle" onclick="toggleMostrarSenha('novaSenhaInput', this)" title="Mostrar / Ocultar">
+                            <svg class="olho-aberto" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <svg class="olho-fechado" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="campo-grupo-modal">
+                    <label class="modal-label" for="confirmarNovaSenhaInput">Confirmar Nova Senha:</label>
+                    <div class="input-com-icone-modal">
+                        <input type="password" id="confirmarNovaSenhaInput" class="modal-input" placeholder="Repita a nova senha" minlength="6" autocomplete="new-password" required>
+                        <button type="button" class="btn-olho-toggle" onclick="toggleMostrarSenha('confirmarNovaSenhaInput', this)" title="Mostrar / Ocultar">
+                            <svg class="olho-aberto" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <svg class="olho-fechado" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MENSAGENS DE FEEDBACK -->
+                <div id="msgAlertaSenha" class="modal-msg-alerta" style="display: none;"></div>
+
+                <div class="modal-senha-acoes">
+                    <button type="button" class="modal-btn modal-btn-cancelar" onclick="fecharModalAlterarSenha()">Cancelar</button>
+                    <button type="submit" class="modal-btn modal-btn-salvar" id="btnSalvarNovaSenha">
+                        <span class="btn-spinner" id="spinnerSalvarSenha" style="display: none;"></span>
+                        <span class="btn-texto">Salvar Senha</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- TOAST CENTRALIZADO -->
     <div id="notificacaoHelpFull" class="toast-notificacao">
         <div class="toast-barra" id="toastBarra"></div>
@@ -2719,6 +3229,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             const btnSalvar = document.getElementById('btnSalvar');
             const btnApagar = document.getElementById('btnApagar');
             const btnSair = document.getElementById('btnSair');
+            const btnTrocarSenha = document.getElementById('btnTrocarSenha');
             const inputs = document.querySelectorAll('.campo-editavel');
             const card = document.getElementById('cardSuaConta');
 
@@ -2726,6 +3237,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 window.scrollTo({ top: 0, behavior: 'instant' });
                 body.classList.add('modo-edicao');
                 btnSair.style.display = 'none';
+                if (btnTrocarSenha) btnTrocarSenha.style.display = 'none';
                 btnEditar.textContent = 'Cancelar';
                 btnEditar.style.background = '#888';
                 btnEditar.style.color = '#fff';
@@ -2758,6 +3270,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             } else {
                 body.classList.remove('modo-edicao');
                 btnSair.style.display = 'inline-flex';
+                if (btnTrocarSenha) btnTrocarSenha.style.display = 'inline-flex';
                 btnEditar.textContent = 'Editar';
                 btnEditar.style.background = '#bce0e6';
                 btnEditar.style.color = '#444';
@@ -2902,6 +3415,232 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 const tag = document.getElementById('emailDestinoTag');
                 if (tag) tag.textContent = this.value || 'seu e-mail';
             });
+        }
+
+        // === CONTROLE DO MODAL DE ALTERAÇÃO DE SENHA ===
+        let timerCooldownSenha = null;
+
+        function abrirModalAlterarSenha() {
+            const modal = document.getElementById('modalAlterarSenha');
+            const bloco2FA = document.getElementById('blocoSenha2FA');
+            const blocoSem2FA = document.getElementById('blocoSenhaSem2FA');
+            const alerta = document.getElementById('msgAlertaSenha');
+            const subtitulo = document.getElementById('modalSenhaSubtitulo');
+
+            if (alerta) {
+                alerta.style.display = 'none';
+                alerta.className = 'modal-msg-alerta';
+                alerta.textContent = '';
+            }
+            const form = document.getElementById('formAlterarSenha');
+            if (form) form.reset();
+
+            // Reseta ícones dos olhos para estado oculto
+            document.querySelectorAll('#formAlterarSenha .btn-olho-toggle').forEach(btn => {
+                const olhoAberto = btn.querySelector('.olho-aberto');
+                const olhoFechado = btn.querySelector('.olho-fechado');
+                if (olhoAberto) olhoAberto.style.display = 'block';
+                if (olhoFechado) olhoFechado.style.display = 'none';
+            });
+            ['novaSenhaInput', 'confirmarNovaSenhaInput', 'senhaAntigaInput'].forEach(id => {
+                const inp = document.getElementById(id);
+                if (inp) inp.type = 'password';
+            });
+
+            // Verifica o estado atual de 2FA
+            const tem2FA = !!estado2FAAtual;
+            if (tem2FA) {
+                bloco2FA.style.display = 'block';
+                blocoSem2FA.style.display = 'none';
+                subtitulo.textContent = 'Verificação em Duas Etapas ativa. Enviamos um código para seu e-mail.';
+                solicitarCodigoAlterarSenha();
+                setTimeout(() => {
+                    const inpCod = document.getElementById('codigo2faSenha');
+                    if (inpCod) inpCod.focus();
+                }, 180);
+            } else {
+                bloco2FA.style.display = 'none';
+                blocoSem2FA.style.display = 'block';
+                subtitulo.textContent = 'Confirme sua senha antiga para cadastrar uma nova senha.';
+                setTimeout(() => {
+                    const inpAnt = document.getElementById('senhaAntigaInput');
+                    if (inpAnt) inpAnt.focus();
+                }, 180);
+            }
+
+            modal.classList.add('aberto');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModalAlterarSenha() {
+            const modal = document.getElementById('modalAlterarSenha');
+            if (modal) modal.classList.remove('aberto');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModalAlterarSenha();
+            }
+        });
+
+        function toggleMostrarSenha(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const olhoAberto = btn.querySelector('.olho-aberto');
+            const olhoFechado = btn.querySelector('.olho-fechado');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (olhoAberto) olhoAberto.style.display = 'none';
+                if (olhoFechado) olhoFechado.style.display = 'block';
+            } else {
+                input.type = 'password';
+                if (olhoAberto) olhoAberto.style.display = 'block';
+                if (olhoFechado) olhoFechado.style.display = 'none';
+            }
+        }
+
+        async function solicitarCodigoAlterarSenha() {
+            const btnReenviar = document.getElementById('btnReenviarCodigoSenha');
+            const alerta = document.getElementById('msgAlertaSenha');
+            if (btnReenviar) btnReenviar.disabled = true;
+
+            try {
+                const resp = await fetch('alterar_senha.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'solicitar_codigo' })
+                });
+                const data = await resp.json();
+
+                if (data.sucesso) {
+                    if (alerta) {
+                        alerta.className = 'modal-msg-alerta sucesso';
+                        alerta.textContent = data.mensagem;
+                        alerta.style.display = 'block';
+                    }
+                    iniciarCooldownReenvioSenha(20);
+                } else {
+                    if (alerta) {
+                        alerta.className = 'modal-msg-alerta erro';
+                        alerta.textContent = data.mensagem || 'Erro ao enviar código.';
+                        alerta.style.display = 'block';
+                    }
+                    if (btnReenviar) btnReenviar.disabled = false;
+                }
+            } catch (err) {
+                if (btnReenviar) btnReenviar.disabled = false;
+            }
+        }
+
+        function iniciarCooldownReenvioSenha(segundos) {
+            const btnReenviar = document.getElementById('btnReenviarCodigoSenha');
+            if (!btnReenviar) return;
+            clearInterval(timerCooldownSenha);
+            let restante = segundos;
+            btnReenviar.disabled = true;
+            btnReenviar.textContent = `Reenviar (${restante}s)`;
+
+            timerCooldownSenha = setInterval(() => {
+                restante--;
+                if (restante <= 0) {
+                    clearInterval(timerCooldownSenha);
+                    btnReenviar.disabled = false;
+                    btnReenviar.textContent = 'Reenviar código';
+                } else {
+                    btnReenviar.textContent = `Reenviar (${restante}s)`;
+                }
+            }, 1000);
+        }
+
+        async function submeterAlterarSenha(e) {
+            e.preventDefault();
+            const alerta = document.getElementById('msgAlertaSenha');
+            const btnSalvar = document.getElementById('btnSalvarNovaSenha');
+            const spinner = document.getElementById('spinnerSalvarSenha');
+            const btnTexto = btnSalvar.querySelector('.btn-texto');
+
+            const novaSenha = document.getElementById('novaSenhaInput').value.trim();
+            const confirmarSenha = document.getElementById('confirmarNovaSenhaInput').value.trim();
+            const tem2FA = !!estado2FAAtual;
+            const codigo2fa = tem2FA ? document.getElementById('codigo2faSenha').value.trim() : '';
+            const senhaAntiga = !tem2FA ? document.getElementById('senhaAntigaInput').value : '';
+
+            // Validações no cliente
+            if (novaSenha.length < 6) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'A nova senha deve ter no mínimo 6 caracteres.';
+                alerta.style.display = 'block';
+                return;
+            }
+
+            if (novaSenha !== confirmarSenha) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'A confirmação de senha não confere com a nova senha.';
+                alerta.style.display = 'block';
+                return;
+            }
+
+            if (tem2FA && (!codigo2fa || codigo2fa.length !== 6)) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'Por favor, digite o código de 6 dígitos enviado ao seu e-mail.';
+                alerta.style.display = 'block';
+                return;
+            }
+
+            if (!tem2FA && !senhaAntiga) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'Por favor, informe sua senha atual para confirmação.';
+                alerta.style.display = 'block';
+                return;
+            }
+
+            // Envio para o servidor
+            alerta.style.display = 'none';
+            btnSalvar.disabled = true;
+            if (spinner) spinner.style.display = 'inline-block';
+            if (btnTexto) btnTexto.textContent = 'Salvando...';
+
+            try {
+                const resp = await fetch('alterar_senha.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        acao: 'salvar_senha',
+                        nova_senha: novaSenha,
+                        confirmar_senha: confirmarSenha,
+                        senha_antiga: senhaAntiga,
+                        codigo_2fa: codigo2fa
+                    })
+                });
+
+                const data = await resp.json();
+
+                if (data.sucesso) {
+                    alerta.className = 'modal-msg-alerta sucesso';
+                    alerta.textContent = '✓ ' + (data.mensagem || 'Senha alterada com sucesso!');
+                    alerta.style.display = 'block';
+                    if (typeof mostrarToastFeedback === 'function') {
+                        mostrarToastFeedback('Senha alterada com sucesso!', 'sucesso');
+                    }
+                    setTimeout(() => {
+                        fecharModalAlterarSenha();
+                    }, 1700);
+                } else {
+                    alerta.className = 'modal-msg-alerta erro';
+                    alerta.textContent = data.mensagem || 'Erro ao alterar senha. Tente novamente.';
+                    alerta.style.display = 'block';
+                }
+            } catch (err) {
+                alerta.className = 'modal-msg-alerta erro';
+                alerta.textContent = 'Erro de comunicação com o servidor: ' + err.message;
+                alerta.style.display = 'block';
+            } finally {
+                btnSalvar.disabled = false;
+                if (spinner) spinner.style.display = 'none';
+                if (btnTexto) btnTexto.textContent = 'Salvar Senha';
+            }
         }
 
         function confirmarApagar() { if (confirm("Tem certeza absoluta que deseja apagar sua conta? Todo o seu histórico no HelpFull será perdido para sempre.")) { document.getElementById('acaoConta').value = 'apagar_conta'; document.getElementById('formConta').submit(); } }
