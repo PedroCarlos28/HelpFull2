@@ -1268,6 +1268,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 <a href="Atividades.php">Adicionais</a>
                 <?php if ($usuarioLogado): ?>
                     <a href="Perfil.php">Perfil</a>
+                    <a href="dispositivos.php">Dispositivos Conectados</a>
                 <?php else: ?>
                     <a href="Comeco.php">Entrar</a>
                 <?php endif; ?>

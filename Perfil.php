@@ -242,6 +242,13 @@ $jsonGraficoAno = json_encode($diariosPorAnoMes);
 $maxEmocao = max(1, max($emocoesGlobaisLista));
 $coresEmocoes = ['Irritado' => '#eab8b8', 'Ansioso' => '#ffcc99', 'Feliz' => '#fff1a0', 'Calmo' => '#b5ff99', 'Triste' => '#9bd3ff', 'Amoroso' => '#ff99e6'];
 $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.', 'Calmo' => 'Calm.', 'Triste' => 'Tris.', 'Amoroso' => 'Amor.'];
+
+$totalSessoesAtivas = 1;
+try {
+    $stmtSessCount = $pdo->prepare("SELECT COUNT(*) FROM sessoes_usuario WHERE usuario_id = ? AND ativo = TRUE");
+    $stmtSessCount->execute([$id]);
+    $totalSessoesAtivas = max(1, (int)$stmtSessCount->fetchColumn());
+} catch (Exception $e) {}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -2742,6 +2749,108 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             border-radius: 50%;
             animation: spinIt 0.7s linear infinite;
         }
+
+        /* CARD DISPOSITIVOS CONECTADOS NO PERFIL */
+        .card-dispositivos-preview {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 24px 30px;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(43, 122, 140, 0.15);
+            margin-bottom: 25px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-dispositivos-preview:hover {
+            box-shadow: 0 14px 40px rgba(43, 122, 140, 0.12);
+        }
+
+        .disp-preview-info {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .disp-preview-tag {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: #e6f6f9;
+            color: #204953;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(43, 122, 140, 0.2);
+            flex-shrink: 0;
+        }
+
+        .disp-preview-desc {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin: 4px 0 0 0;
+            font-weight: 500;
+        }
+
+        .btn-gerenciar-dispositivos {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 18px;
+            background: #204953;
+            color: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 14px rgba(32, 73, 83, 0.2);
+        }
+
+        .btn-gerenciar-dispositivos:hover {
+            background: #18373e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(32, 73, 83, 0.3);
+        }
+
+        body.acessibilidade-escuro .card-dispositivos-preview {
+            background: var(--tema-superficie, #1a2227) !important;
+            border-color: var(--tema-borda, #2f383e) !important;
+            color: var(--tema-texto, #f1f5f9) !important;
+        }
+
+        body.acessibilidade-escuro .disp-preview-tag {
+            background: rgba(43, 122, 140, 0.25) !important;
+            color: #7dd3fc !important;
+            border-color: rgba(125, 211, 252, 0.2) !important;
+        }
+
+        body.acessibilidade-escuro .disp-preview-desc {
+            color: var(--tema-texto-secundario, #94a3b8) !important;
+        }
+
+        body.acessibilidade-escuro .btn-gerenciar-dispositivos {
+            background: #204953 !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(125, 211, 252, 0.25) !important;
+        }
+
+        @media (max-width: 768px) {
+            .card-dispositivos-preview {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px 18px;
+                gap: 16px;
+            }
+            .btn-gerenciar-dispositivos {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
@@ -2766,6 +2875,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php" class="ativo">Perfil</a>
+                <a href="dispositivos.php">Dispositivos Conectados</a>
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
             <a href="Perfil.php" class="nav-perfil atual" style="text-decoration: none;">
@@ -2907,6 +3017,31 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 </svg>
                 <span>Os códigos serão enviados para: <strong id="emailDestinoTag"><?= htmlspecialchars($usuarioLogado['email']) ?></strong></span>
             </div>
+        </div>
+
+        <!-- CARD DISPOSITIVOS CONECTADOS NO PERFIL -->
+        <div class="card-perfil card-dispositivos-preview" id="cardDispositivosPerfil">
+            <div class="disp-preview-info">
+                <div class="disp-preview-tag">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="titulo-secao" style="margin: 0; font-size: 1.15rem;">Dispositivos Conectados</h2>
+                    <p class="disp-preview-desc">
+                        <?= $totalSessoesAtivas ?> <?= $totalSessoesAtivas === 1 ? 'dispositivo conectado a esta conta' : 'dispositivos conectados a esta conta' ?>.
+                    </p>
+                </div>
+            </div>
+            <a href="dispositivos.php" class="btn-gerenciar-dispositivos" title="Ver e desconectar aparelhos">
+                <span>Gerenciar e Desconectar</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </a>
         </div>
 
         <div class="card-perfil card-notificacoes-bloco" id="cardNotificacoesPerfil">

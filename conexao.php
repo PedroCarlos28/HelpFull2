@@ -25,11 +25,27 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
 
 if (!function_exists('salvarSessaoUsuario')) {
     function salvarSessaoUsuario($id, $nome) {
+        global $pdo;
         $_SESSION['usuario_id']   = $id;
         $_SESSION['usuario_nome'] = $nome;
 
-        $sig = hash_hmac('sha256', (string)$id, 'HelpFullSessionSecretKey2026');
-        $payload = base64_encode(json_encode(['id' => $id, 'nome' => $nome, 'sig' => $sig]));
+        require_once __DIR__ . '/sessao_helper.php';
+        $tokenSessao = null;
+        if (isset($pdo)) {
+            $tokenSessao = registrarNovaSessao($pdo, $id);
+        }
+        if (!$tokenSessao) {
+            $tokenSessao = bin2hex(random_bytes(32));
+        }
+        $_SESSION['token_sessao'] = $tokenSessao;
+
+        $sig = hash_hmac('sha256', (string)$id . '|' . $tokenSessao, 'HelpFullSessionSecretKey2026');
+        $payload = base64_encode(json_encode([
+            'id'    => $id,
+            'nome'  => $nome,
+            'token' => $tokenSessao,
+            'sig'   => $sig
+        ]));
         
         $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
         setcookie('helpfull_session', $payload, [
@@ -44,8 +60,16 @@ if (!function_exists('salvarSessaoUsuario')) {
 
 if (!function_exists('limparSessaoUsuario')) {
     function limparSessaoUsuario() {
+        global $pdo;
+        if (!empty($_SESSION['usuario_id']) && !empty($_SESSION['token_sessao']) && isset($pdo)) {
+            try {
+                require_once __DIR__ . '/sessao_helper.php';
+                desconectarSessao($pdo, $_SESSION['usuario_id'], $_SESSION['token_sessao']);
+            } catch (Exception $e) {}
+        }
         unset($_SESSION['usuario_id']);
         unset($_SESSION['usuario_nome']);
+        unset($_SESSION['token_sessao']);
         if (session_status() === PHP_SESSION_ACTIVE) {
             @session_destroy();
         }
@@ -88,10 +112,34 @@ try {
 if (!isset($_SESSION['usuario_id']) && !empty($_COOKIE['helpfull_session'])) {
     $rawCookie = @json_decode(base64_decode($_COOKIE['helpfull_session']), true);
     if ($rawCookie && !empty($rawCookie['id']) && !empty($rawCookie['sig'])) {
-        $expected = hash_hmac('sha256', (string)$rawCookie['id'], 'HelpFullSessionSecretKey2026');
-        if (hash_equals($expected, $rawCookie['sig'])) {
+        $token = $rawCookie['token'] ?? '';
+        $expectedModern = hash_hmac('sha256', (string)$rawCookie['id'] . '|' . $token, 'HelpFullSessionSecretKey2026');
+        $expectedLegacy = hash_hmac('sha256', (string)$rawCookie['id'], 'HelpFullSessionSecretKey2026');
+
+        if (hash_equals($expectedModern, $rawCookie['sig']) || hash_equals($expectedLegacy, $rawCookie['sig'])) {
             $_SESSION['usuario_id']   = $rawCookie['id'];
             $_SESSION['usuario_nome'] = $rawCookie['nome'] ?? '';
+            if (!empty($token)) {
+                $_SESSION['token_sessao'] = $token;
+            }
+        }
+    }
+}
+
+// Verificação de sessão ativa no banco (garante que dispositivo revogado seja imediatamente desconectado)
+if (isset($_SESSION['usuario_id']) && isset($pdo)) {
+    require_once __DIR__ . '/sessao_helper.php';
+    if (!empty($_SESSION['token_sessao'])) {
+        $ativa = validarSessaoAtiva($pdo, $_SESSION['usuario_id'], $_SESSION['token_sessao']);
+        if (!$ativa) {
+            limparSessaoUsuario();
+        }
+    } else {
+        // Usuário em sessão ativa sem token de sessão registrado:
+        // Registra uma sessão automaticamente para que apareça no painel de dispositivos
+        $novoToken = registrarNovaSessao($pdo, $_SESSION['usuario_id']);
+        if ($novoToken) {
+            $_SESSION['token_sessao'] = $novoToken;
         }
     }
 }
