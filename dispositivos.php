@@ -6,6 +6,7 @@
 
 require_once __DIR__ . '/conexao.php';
 require_once __DIR__ . '/sessao_helper.php';
+require_once __DIR__ . '/email_helper.php';
 
 // Redireciona se não estiver logado
 if (!isset($_SESSION['usuario_id'])) {
@@ -19,7 +20,7 @@ $tokenAtual = $_SESSION['token_sessao'] ?? null;
 // Busca informações do usuário
 $usuarioLogado = null;
 try {
-    $stmtUser = $pdo->prepare("SELECT id, nome, email, foto_perfil FROM usuarios WHERE id = ?");
+    $stmtUser = $pdo->prepare("SELECT id, nome, email, foto_perfil, dois_fatores_ativo FROM usuarios WHERE id = ?");
     $stmtUser->execute([$usuarioId]);
     $usuarioLogado = $stmtUser->fetch();
 } catch (Exception $e) {
@@ -30,6 +31,8 @@ if (!$usuarioLogado) {
     exit;
 }
 
+$doisFatoresAtivo = !empty($usuarioLogado['dois_fatores_ativo']);
+$emailMascarado = function_exists('mascararEmail') ? mascararEmail($usuarioLogado['email']) : $usuarioLogado['email'];
 $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : '';
 
 // Carrega as sessões ativas
@@ -848,6 +851,157 @@ $totalOutros = count($outrasSessoes);
             color: #1a1a1a;
         }
 
+        .modal-alerta-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(43, 122, 140, 0.1);
+            border: 1px solid rgba(43, 122, 140, 0.22);
+            border-radius: 18px;
+            padding: 12px 16px;
+            font-size: 0.84rem;
+            color: #2b7a8c;
+            line-height: 1.45;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .modal-alerta-info svg {
+            flex-shrink: 0;
+            margin-top: 2px;
+            stroke: #2b7a8c;
+        }
+
+        .campo-grupo-modal {
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 0.86rem;
+            font-weight: 800;
+            color: #444;
+            margin-bottom: 7px;
+            margin-left: 2px;
+        }
+
+        .btn-reenviar-codigo-modal {
+            background: none;
+            border: none;
+            color: #2b7a8c;
+            font-size: 0.82rem;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif !important;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .btn-reenviar-codigo-modal:hover:not(:disabled) {
+            color: #1e5a67;
+        }
+
+        .btn-reenviar-codigo-modal:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .input-com-icone-modal {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .modal-input {
+            width: 100%;
+            height: 48px;
+            border-radius: 20px;
+            border: 1.5px solid rgba(255, 255, 255, 0.6);
+            background: #d6d6d6;
+            padding: 0 46px 0 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif !important;
+            color: #333;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .modal-input:focus {
+            background: #ffffff;
+            border-color: #8ed6e4;
+            box-shadow: 0 0 0 3px rgba(142, 214, 228, 0.35);
+        }
+
+        .input-codigo-destaque {
+            letter-spacing: 6px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-align: center;
+            font-family: 'Montserrat', monospace !important;
+            padding-right: 18px !important;
+        }
+
+        .modal-hint {
+            display: block;
+            font-size: 0.76rem;
+            color: #64748b;
+            margin-top: 6px;
+            margin-left: 4px;
+        }
+
+        .btn-olho-toggle {
+            position: absolute;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .btn-olho-toggle:hover {
+            color: #2b7a8c;
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .modal-msg-alerta {
+            border-radius: 16px;
+            padding: 11px 15px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            display: none;
+            text-align: left;
+        }
+
+        .modal-msg-alerta.erro {
+            display: block;
+            background: #ffe6e6;
+            border: 1px solid #ffb3b3;
+            color: #cc0000;
+        }
+
+        .modal-msg-alerta.sucesso {
+            display: block;
+            background: #e6f6f9;
+            border: 1px solid rgba(43, 122, 140, 0.25);
+            color: #2b7a8c;
+        }
+
         .modal-acoes {
             display: flex;
             align-items: center;
@@ -1115,6 +1269,61 @@ $totalOutros = count($outrasSessoes);
             transform: none !important;
             transition: none !important;
             animation: none !important;
+        }
+
+        body.acessibilidade-escuro .modal-alerta-info {
+            background: rgba(125, 211, 252, 0.08) !important;
+            border-color: rgba(125, 211, 252, 0.2) !important;
+            color: #7dd3fc !important;
+        }
+
+        body.acessibilidade-escuro .modal-alerta-info svg {
+            stroke: #7dd3fc !important;
+        }
+
+        body.acessibilidade-escuro .modal-label {
+            color: var(--tema-texto, #f1f5f9) !important;
+        }
+
+        body.acessibilidade-escuro .modal-input {
+            background: #252d32 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            color: #f1f5f9 !important;
+        }
+
+        body.acessibilidade-escuro .modal-input:focus {
+            background: #182228 !important;
+            border-color: #7dd3fc !important;
+            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.25) !important;
+        }
+
+        body.acessibilidade-escuro .btn-reenviar-codigo-modal {
+            color: #7dd3fc !important;
+        }
+
+        body.acessibilidade-escuro .modal-hint {
+            color: var(--tema-texto-secundario, #94a3b8) !important;
+        }
+
+        body.acessibilidade-escuro .btn-olho-toggle {
+            color: #94a3b8 !important;
+        }
+
+        body.acessibilidade-escuro .btn-olho-toggle:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        body.acessibilidade-escuro .modal-msg-alerta.erro {
+            background: rgba(239, 68, 68, 0.15) !important;
+            border-color: rgba(248, 113, 113, 0.3) !important;
+            color: #fca5a5 !important;
+        }
+
+        body.acessibilidade-escuro .modal-msg-alerta.sucesso {
+            background: rgba(34, 197, 94, 0.15) !important;
+            border-color: rgba(74, 222, 128, 0.3) !important;
+            color: #86efac !important;
         }
 
         /* =======================================================
@@ -1586,6 +1795,49 @@ $totalOutros = count($outrasSessoes);
                 <span id="modalDispNome">Dispositivo selecionado</span>
             </div>
 
+            <!-- MENSAGEM DE ALERTA DO MODAL -->
+            <div class="modal-msg-alerta" id="msgAlertaModalDisp"></div>
+
+            <?php if ($doisFatoresAtivo): ?>
+            <!-- AUTENTICAÇÃO COM 2FA ATIVO (EXIGE CÓDIGO DO E-MAIL) -->
+            <div id="blocoDisp2FA" class="campo-grupo-modal">
+                <div class="modal-alerta-info">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <div>
+                        Código de segurança enviado para <strong id="emailMascaradoDisp"><?= htmlspecialchars($emailMascarado) ?></strong>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                    <label class="modal-label" for="codigo2faDisp" style="margin-bottom: 0;">Código de Verificação (6 dígitos):</label>
+                    <button type="button" class="btn-reenviar-codigo-modal" id="btnReenviarCodigoDisp" onclick="solicitarCodigo2faDisp()">Reenviar código</button>
+                </div>
+                <input type="text" id="codigo2faDisp" class="modal-input input-codigo-destaque" maxlength="6" inputmode="numeric" placeholder="000000" autocomplete="one-time-code">
+                <span class="modal-hint">Digite o código de 6 dígitos enviado ao seu e-mail para validar.</span>
+            </div>
+            <?php else: ?>
+            <!-- AUTENTICAÇÃO SEM 2FA (EXIGE SENHA DA CONTA) -->
+            <div id="blocoDispSenha" class="campo-grupo-modal">
+                <label class="modal-label" for="senhaConfirmacaoDisp">Confirme sua senha para continuar:</label>
+                <div class="input-com-icone-modal">
+                    <input type="password" id="senhaConfirmacaoDisp" class="modal-input" placeholder="Digite sua senha" autocomplete="current-password">
+                    <button type="button" class="btn-olho-toggle" onclick="toggleMostrarSenhaDisp('senhaConfirmacaoDisp', this)" aria-label="Mostrar ou ocultar senha" title="Mostrar senha">
+                        <svg class="olho-aberto" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="olho-fechado" style="display: none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+                <span class="modal-hint">A confirmação da senha é necessária para validar esta ação.</span>
+            </div>
+            <?php endif; ?>
+
             <div class="modal-acoes">
                 <button type="button" class="modal-btn-cancelar" onclick="fecharModalConfirmacao()">Cancelar</button>
                 <button type="button" class="modal-btn-confirmar" id="btnConfirmarAcaoModal" onclick="executarAcaoConfirmada()">
@@ -1607,6 +1859,8 @@ $totalOutros = count($outrasSessoes);
         // Estado da ação pendente no modal
         let acaoPendente = null; // { tipo: 'item'|'outros', id: null, nome: '', isAtual: false }
         let toastTimeout = null;
+        let timerCooldownDisp = null;
+        const tem2FA = <?= $doisFatoresAtivo ? 'true' : 'false' ?>;
 
         // Toggle do menu mobile
         const navLogoBtn = document.getElementById('navLogoBtn');
@@ -1656,9 +1910,106 @@ $totalOutros = count($outrasSessoes);
             }, 4500);
         }
 
+        // Alterna visualização de senha
+        function toggleMostrarSenhaDisp(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const olhoAberto = btn.querySelector('.olho-aberto');
+            const olhoFechado = btn.querySelector('.olho-fechado');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (olhoAberto) olhoAberto.style.display = 'none';
+                if (olhoFechado) olhoFechado.style.display = 'block';
+            } else {
+                input.type = 'password';
+                if (olhoAberto) olhoAberto.style.display = 'block';
+                if (olhoFechado) olhoFechado.style.display = 'none';
+            }
+        }
+
+        // Solicita envio de novo código de verificação para o e-mail (quando 2FA está ativo)
+        async function solicitarCodigo2faDisp() {
+            const btnReenviar = document.getElementById('btnReenviarCodigoDisp');
+            const alerta = document.getElementById('msgAlertaModalDisp');
+            if (btnReenviar) btnReenviar.disabled = true;
+
+            try {
+                const resp = await fetch('dispositivos_proc.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'solicitar_codigo' })
+                });
+                const data = await resp.json();
+
+                if (data.sucesso) {
+                    if (alerta) {
+                        alerta.className = 'modal-msg-alerta sucesso';
+                        alerta.textContent = data.mensagem || 'Código de verificação enviado para seu e-mail.';
+                        alerta.style.display = 'block';
+                    }
+                    if (data.email_mascarado) {
+                        const elEmail = document.getElementById('emailMascaradoDisp');
+                        if (elEmail) elEmail.textContent = data.email_mascarado;
+                    }
+                    iniciarCooldownDisp(20);
+                } else {
+                    if (alerta) {
+                        alerta.className = 'modal-msg-alerta erro';
+                        alerta.textContent = data.mensagem || 'Erro ao enviar código de segurança.';
+                        alerta.style.display = 'block';
+                    }
+                    if (btnReenviar) btnReenviar.disabled = false;
+                }
+            } catch (err) {
+                if (btnReenviar) btnReenviar.disabled = false;
+            }
+        }
+
+        function iniciarCooldownDisp(segundos) {
+            const btnReenviar = document.getElementById('btnReenviarCodigoDisp');
+            if (!btnReenviar) return;
+            clearInterval(timerCooldownDisp);
+            let restante = segundos;
+            btnReenviar.disabled = true;
+            btnReenviar.textContent = `Reenviar (${restante}s)`;
+
+            timerCooldownDisp = setInterval(() => {
+                restante--;
+                if (restante <= 0) {
+                    clearInterval(timerCooldownDisp);
+                    btnReenviar.disabled = false;
+                    btnReenviar.textContent = 'Reenviar código';
+                } else {
+                    btnReenviar.textContent = `Reenviar (${restante}s)`;
+                }
+            }, 1000);
+        }
+
+        function limparCamposModalDisp() {
+            const alerta = document.getElementById('msgAlertaModalDisp');
+            if (alerta) {
+                alerta.style.display = 'none';
+                alerta.textContent = '';
+            }
+
+            const inpCod = document.getElementById('codigo2faDisp');
+            if (inpCod) inpCod.value = '';
+
+            const inpSenha = document.getElementById('senhaConfirmacaoDisp');
+            if (inpSenha) {
+                inpSenha.value = '';
+                inpSenha.type = 'password';
+            }
+
+            const btnConfirmar = document.getElementById('btnConfirmarAcaoModal');
+            if (btnConfirmar) btnConfirmar.disabled = false;
+        }
+
         // Abre modal para desconectar item individual
         function abrirModalDesconectarItem(id, nome, isAtual = false) {
             acaoPendente = { tipo: 'item', id: id, nome: nome, isAtual: isAtual };
+            limparCamposModalDisp();
 
             const modal = document.getElementById('modalConfirmacaoDesconectar');
             const titulo = document.getElementById('modalTitulo');
@@ -1679,11 +2030,25 @@ $totalOutros = count($outrasSessoes);
             dispNome.textContent = nome;
             modal.classList.add('aberto');
             travarScrollFundo();
+
+            if (tem2FA) {
+                solicitarCodigo2faDisp();
+                setTimeout(() => {
+                    const inp = document.getElementById('codigo2faDisp');
+                    if (inp) inp.focus();
+                }, 300);
+            } else {
+                setTimeout(() => {
+                    const inp = document.getElementById('senhaConfirmacaoDisp');
+                    if (inp) inp.focus();
+                }, 300);
+            }
         }
 
         // Abre modal para desconectar todas as outras sessões
         function abrirModalDesconectarOutros() {
             acaoPendente = { tipo: 'outros' };
+            limparCamposModalDisp();
 
             const modal = document.getElementById('modalConfirmacaoDesconectar');
             const titulo = document.getElementById('modalTitulo');
@@ -1698,6 +2063,19 @@ $totalOutros = count($outrasSessoes);
 
             modal.classList.add('aberto');
             travarScrollFundo();
+
+            if (tem2FA) {
+                solicitarCodigo2faDisp();
+                setTimeout(() => {
+                    const inp = document.getElementById('codigo2faDisp');
+                    if (inp) inp.focus();
+                }, 300);
+            } else {
+                setTimeout(() => {
+                    const inp = document.getElementById('senhaConfirmacaoDisp');
+                    if (inp) inp.focus();
+                }, 300);
+            }
         }
 
         let scrollPosBloqueioModal = 0;
@@ -1725,6 +2103,7 @@ $totalOutros = count($outrasSessoes);
                 modal.classList.remove('aberto');
             }
             destravarScrollFundo();
+            limparCamposModalDisp();
             acaoPendente = null;
         }
 
@@ -1732,9 +2111,44 @@ $totalOutros = count($outrasSessoes);
         async function executarAcaoConfirmada() {
             if (!acaoPendente) return;
 
+            const alerta = document.getElementById('msgAlertaModalDisp');
+            let codigo2fa = '';
+            let senha = '';
+
+            // Validação de segurança no cliente
+            if (tem2FA) {
+                const inpCod = document.getElementById('codigo2faDisp');
+                codigo2fa = inpCod ? inpCod.value.trim() : '';
+                if (!codigo2fa || codigo2fa.length !== 6) {
+                    if (alerta) {
+                        alerta.className = 'modal-msg-alerta erro';
+                        alerta.textContent = 'Por favor, digite o código de 6 dígitos enviado ao seu e-mail.';
+                        alerta.style.display = 'block';
+                    }
+                    if (inpCod) inpCod.focus();
+                    return;
+                }
+            } else {
+                const inpSenha = document.getElementById('senhaConfirmacaoDisp');
+                senha = inpSenha ? inpSenha.value : '';
+                if (!senha) {
+                    if (alerta) {
+                        alerta.className = 'modal-msg-alerta erro';
+                        alerta.textContent = 'Por favor, digite sua senha para confirmar a desconexão.';
+                        alerta.style.display = 'block';
+                    }
+                    if (inpSenha) inpSenha.focus();
+                    return;
+                }
+            }
+
+            if (alerta) alerta.style.display = 'none';
+
             const acaoExecutada = { ...acaoPendente };
             const btnConfirmar = document.getElementById('btnConfirmarAcaoModal');
             const textoBtn = document.getElementById('textoBtnConfirmarModal');
+            const textoOriginal = textoBtn.textContent;
+
             btnConfirmar.disabled = true;
             textoBtn.innerHTML = '<span class="modal-btn-spinner"></span> Aguarde...';
 
@@ -1744,6 +2158,12 @@ $totalOutros = count($outrasSessoes);
                     payload = { acao: 'desconectar', id: acaoExecutada.id };
                 } else if (acaoExecutada.tipo === 'outros') {
                     payload = { acao: 'desconectar_outros' };
+                }
+
+                if (tem2FA) {
+                    payload.codigo_2fa = codigo2fa;
+                } else {
+                    payload.senha = senha;
                 }
 
                 const resposta = await fetch('dispositivos_proc.php', {
@@ -1760,7 +2180,14 @@ $totalOutros = count($outrasSessoes);
                 }
 
                 if (!dados.sucesso) {
+                    if (alerta) {
+                        alerta.className = 'modal-msg-alerta erro';
+                        alerta.textContent = dados.mensagem || 'Não foi possível concluir a ação.';
+                        alerta.style.display = 'block';
+                    }
                     mostrarToast(dados.mensagem || 'Não foi possível concluir a ação.', 'erro');
+                    btnConfirmar.disabled = false;
+                    textoBtn.textContent = textoOriginal;
                     return;
                 }
 
@@ -1811,10 +2238,14 @@ $totalOutros = count($outrasSessoes);
                 }
             } catch (err) {
                 console.error('Erro na ação de desconexão:', err);
+                if (alerta) {
+                    alerta.className = 'modal-msg-alerta erro';
+                    alerta.textContent = 'Falha na comunicação com o servidor. Tente novamente.';
+                    alerta.style.display = 'block';
+                }
                 mostrarToast('Falha na comunicação com o servidor. Tente novamente.', 'erro');
-            } finally {
                 btnConfirmar.disabled = false;
-                textoBtn.textContent = 'Sim, desconectar';
+                textoBtn.textContent = textoOriginal;
             }
         }
 
