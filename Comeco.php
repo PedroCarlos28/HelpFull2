@@ -474,7 +474,7 @@ if (isset($_SESSION['usuario_id'])) {
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v1">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260926-v2">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
