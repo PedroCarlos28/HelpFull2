@@ -128,6 +128,10 @@ try {
         // Envia e-mail de notificação de segurança informando que a senha foi alterada
         enviarEmailSenhaAlterada($usuario['email'], $usuario['nome']);
 
+        // Registra também na central de notificações do site
+        require_once __DIR__ . '/notificacao_helper.php';
+        registrarNotificacaoSenhaAlterada($pdo, $usuarioId);
+
         responderJson([
             'sucesso' => true,
             'mensagem' => 'Senha alterada com sucesso!'

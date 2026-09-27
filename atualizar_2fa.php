@@ -34,6 +34,9 @@ try {
     $stmt->bindValue(':id', $usuarioId);
     $stmt->execute();
 
+    require_once __DIR__ . '/notificacao_helper.php';
+    registrarNotificacao2FA($pdo, $usuarioId, $ativo);
+
     $msg = $ativo 
         ? 'Verificação em duas etapas ativada com sucesso! Um código será exigido no próximo login.' 
         : 'Verificação em duas etapas desativada.';

@@ -57,6 +57,11 @@ try {
     require_once __DIR__ . '/email_helper.php';
     enviarEmailBoasVindas($email, $nome);
 
+    // Registra também na central de notificações do site
+    require_once __DIR__ . '/notificacao_helper.php';
+    registrarNotificacaoBoasVindas($pdo, $novoId);
+    registrarNotificacaoNovoLogin($pdo, $novoId);
+
     responderJson(['sucesso' => true, 'mensagem' => 'Cadastro realizado com sucesso!']);
 } catch (PDOException $e) {
     responderJson(['sucesso' => false, 'mensagem' => 'Erro ao cadastrar: ' . $e->getMessage()]);

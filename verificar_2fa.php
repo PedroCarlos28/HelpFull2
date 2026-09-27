@@ -110,6 +110,10 @@ try {
         'metodo' => 'Autenticação em Duas Etapas (2FA)'
     ]);
 
+    // Registra também na central de notificações do site
+    require_once __DIR__ . '/notificacao_helper.php';
+    registrarNotificacaoNovoLogin($pdo, $usuario['id']);
+
     responderJson([
         'sucesso' => true,
         'mensagem' => 'Autenticação confirmada com sucesso!'

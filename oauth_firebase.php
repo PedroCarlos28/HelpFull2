@@ -149,6 +149,10 @@ try {
             'metodo' => 'Conta Google (OAuth)'
         ]);
 
+        // Registra também na central de notificações do site
+        require_once __DIR__ . '/notificacao_helper.php';
+        registrarNotificacaoNovoLogin($pdo, $usuario['id']);
+
         responderJson(['sucesso' => true, 'novo' => false]);
     }
 
@@ -203,6 +207,11 @@ try {
     // Envia e-mail de boas-vindas para a nova conta criada via Google
     require_once __DIR__ . '/email_helper.php';
     enviarEmailBoasVindas($email, $nome);
+
+    // Registra também na central de notificações do site
+    require_once __DIR__ . '/notificacao_helper.php';
+    registrarNotificacaoBoasVindas($pdo, $novoId);
+    registrarNotificacaoNovoLogin($pdo, $novoId);
 
     responderJson(['sucesso' => true, 'novo' => true]);
 } catch (PDOException $e) {

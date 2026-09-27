@@ -23,6 +23,9 @@ function garantirTabelaNotificacoesSistema(PDO $pdo): void
             created_at TIMESTAMPTZ DEFAULT NOW(),
             UNIQUE (usuario_id, chave)
         )");
+        try {
+            $pdo->exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_notificacoes_sistema_usr_chave ON notificacoes_sistema (usuario_id, chave)");
+        } catch (PDOException $eIndex) {}
         $garantida = true;
     } catch (PDOException $e) {}
 }
@@ -260,6 +263,194 @@ function verificarOuGerarNotificacaoStreak(PDO $pdo, $usuarioId): ?array
 }
 
 /**
+ * Identifica o dispositivo de forma simples e direta para o texto da notificação
+ */
+function identificarDispositivoSimples(): string
+{
+    $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    if (preg_match('/iphone/i', $ua)) return 'iPhone';
+    if (preg_match('/ipad/i', $ua)) return 'iPad';
+    if (preg_match('/android/i', $ua)) return 'Android';
+    if (preg_match('/macintosh|mac os x/i', $ua)) return 'Mac';
+    if (preg_match('/windows nt 10/i', $ua)) return 'Windows';
+    if (preg_match('/windows/i', $ua)) return 'Windows';
+    if (preg_match('/linux/i', $ua)) return 'Linux';
+    return '';
+}
+
+/**
+ * Registra ou atualiza uma notificação simples no sistema (ex: eventos de conta e segurança)
+ */
+function registrarNotificacaoSistema(
+    PDO $pdo,
+    $usuarioId,
+    string $chave,
+    string $tipo,
+    string $titulo,
+    string $mensagem,
+    string $intensidade = 'baixa',
+    string $link = 'Perfil.php',
+    string $textoBotao = 'Ver'
+): bool {
+    if (empty($usuarioId)) {
+        return false;
+    }
+
+    garantirTabelaNotificacoesSistema($pdo);
+
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO notificacoes_sistema 
+                (usuario_id, chave, tipo, titulo, mensagem, intensidade, link, texto_botao, lida, created_at)
+            VALUES 
+                (:usuario_id, :chave, :tipo, :titulo, :mensagem, :intensidade, :link, :texto_botao, 0, NOW())
+            ON CONFLICT (usuario_id, chave) DO UPDATE SET
+                tipo = EXCLUDED.tipo,
+                titulo = EXCLUDED.titulo,
+                mensagem = EXCLUDED.mensagem,
+                intensidade = EXCLUDED.intensidade,
+                link = EXCLUDED.link,
+                texto_botao = EXCLUDED.texto_botao,
+                lida = 0,
+                created_at = NOW()
+        ");
+
+        return $stmt->execute([
+            ':usuario_id'   => $usuarioId,
+            ':chave'        => $chave,
+            ':tipo'         => $tipo,
+            ':titulo'       => $titulo,
+            ':mensagem'     => $mensagem,
+            ':intensidade'  => $intensidade,
+            ':link'         => $link,
+            ':texto_botao'  => $textoBotao
+        ]);
+    } catch (Exception $e) {
+        // Fallback para bancos que não tenham a restrição nomeada direta no ON CONFLICT
+        try {
+            $stmtUpd = $pdo->prepare("
+                UPDATE notificacoes_sistema 
+                SET tipo = :tipo, titulo = :titulo, mensagem = :mensagem, intensidade = :intensidade,
+                    link = :link, texto_botao = :texto_botao, lida = 0, created_at = NOW()
+                WHERE usuario_id = :usuario_id AND chave = :chave
+            ");
+            $stmtUpd->execute([
+                ':tipo'         => $tipo,
+                ':titulo'       => $titulo,
+                ':mensagem'     => $mensagem,
+                ':intensidade'  => $intensidade,
+                ':link'         => $link,
+                ':texto_botao'  => $textoBotao,
+                ':usuario_id'   => $usuarioId,
+                ':chave'        => $chave
+            ]);
+
+            if ($stmtUpd->rowCount() === 0) {
+                $stmtIns = $pdo->prepare("
+                    INSERT INTO notificacoes_sistema 
+                        (usuario_id, chave, tipo, titulo, mensagem, intensidade, link, texto_botao, lida, created_at)
+                    VALUES 
+                        (:usuario_id, :chave, :tipo, :titulo, :mensagem, :intensidade, :link, :texto_botao, 0, NOW())
+                ");
+                return $stmtIns->execute([
+                    ':usuario_id'   => $usuarioId,
+                    ':chave'        => $chave,
+                    ':tipo'         => $tipo,
+                    ':titulo'       => $titulo,
+                    ':mensagem'     => $mensagem,
+                    ':intensidade'  => $intensidade,
+                    ':link'         => $link,
+                    ':texto_botao'  => $textoBotao
+                ]);
+            }
+            return true;
+        } catch (Exception $ex2) {
+            error_log("Erro ao salvar notificacao sistema: " . $ex2->getMessage());
+            return false;
+        }
+    }
+}
+
+/**
+ * Notificação simples de novo login na conta (espelho do e-mail)
+ */
+function registrarNotificacaoNovoLogin(PDO $pdo, $usuarioId, $dispositivo = null): bool
+{
+    $disp = $dispositivo ?: identificarDispositivoSimples();
+    $sufixo = !empty($disp) ? " via {$disp}" : "";
+
+    return registrarNotificacaoSistema(
+        $pdo,
+        $usuarioId,
+        'login_' . date('Y-m-d'),
+        'seguranca_login',
+        'Novo acesso à conta',
+        'Identificamos um novo login recente na sua conta' . $sufixo . '.',
+        'baixa',
+        'Perfil.php',
+        'Ver'
+    );
+}
+
+/**
+ * Notificação simples de senha alterada (espelho do e-mail)
+ */
+function registrarNotificacaoSenhaAlterada(PDO $pdo, $usuarioId): bool
+{
+    return registrarNotificacaoSistema(
+        $pdo,
+        $usuarioId,
+        'senha_alterada_' . date('Y-m-d'),
+        'seguranca_senha',
+        'Senha alterada',
+        'Sua senha de acesso foi atualizada com sucesso.',
+        'media',
+        'Perfil.php',
+        'Segurança'
+    );
+}
+
+/**
+ * Notificação simples de boas-vindas / conta criada (espelho do e-mail)
+ */
+function registrarNotificacaoBoasVindas(PDO $pdo, $usuarioId): bool
+{
+    return registrarNotificacaoSistema(
+        $pdo,
+        $usuarioId,
+        'boas_vindas',
+        'conta_boas_vindas',
+        'Bem-vindo(a) ao HelpFull! 🌿',
+        'Sua conta foi criada. Comece explorando seu diário e atividades.',
+        'baixa',
+        'inicio.php',
+        'Explorar'
+    );
+}
+
+/**
+ * Notificação simples de 2FA alterado
+ */
+function registrarNotificacao2FA(PDO $pdo, $usuarioId, bool $ativo): bool
+{
+    $msg = $ativo 
+        ? 'A verificação em duas etapas foi ativada na sua conta.' 
+        : 'A verificação em duas etapas foi desativada no seu perfil.';
+
+    return registrarNotificacaoSistema(
+        $pdo,
+        $usuarioId,
+        '2fa_status_' . date('Y-m-d'),
+        'seguranca_2fa',
+        'Segurança da conta',
+        $msg,
+        'baixa',
+        'Perfil.php',
+        'Configurar'
+    );
+}
+
+/**
  * Retorna a lista de notificações ativas para o painel
  */
 function obterNotificacoesAtivasUsuario(PDO $pdo, $usuarioId): array
@@ -268,6 +459,18 @@ function obterNotificacoesAtivasUsuario(PDO $pdo, $usuarioId): array
 
     // Garante que o streak atual seja avaliado
     verificarOuGerarNotificacaoStreak($pdo, $usuarioId);
+
+    // Se o usuário logado ainda não possui nenhuma notificação de login ou conta registrada hoje,
+    // registra a notificação simples de acesso para a sessão atual
+    try {
+        $stmtChk = $pdo->prepare("SELECT id FROM notificacoes_sistema 
+                                  WHERE usuario_id = ? AND tipo = 'seguranca_login' 
+                                  LIMIT 1");
+        $stmtChk->execute([$usuarioId]);
+        if (!$stmtChk->fetch()) {
+            registrarNotificacaoNovoLogin($pdo, $usuarioId);
+        }
+    } catch (Exception $e) {}
 
     try {
         $stmt = $pdo->prepare("SELECT * FROM notificacoes_sistema 

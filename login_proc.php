@@ -61,6 +61,10 @@ try {
             'metodo' => 'Senha e E-mail'
         ]);
 
+        // Registra também na central de notificações do site
+        require_once __DIR__ . '/notificacao_helper.php';
+        registrarNotificacaoNovoLogin($pdo, $usuario['id']);
+
         responderJson(['sucesso' => true]);
     } else {
         responderJson(['sucesso' => false, 'mensagem' => 'Email ou senha incorretos.']);
