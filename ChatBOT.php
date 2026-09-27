@@ -11,7 +11,6 @@ $stmt->execute([$_SESSION['usuario_id']]);
 $usuarioLogado = $stmt->fetch();
 
 if (!$usuarioLogado) {
-    session_destroy();
     header("Location: Comeco.php");
     exit;
 }

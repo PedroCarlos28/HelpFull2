@@ -128,12 +128,11 @@ if (isset($_POST['acao']) && $_POST['acao'] === 'marcar_video_visto') {
 
 $usuarioLogado = null;
 if (isset($_SESSION['usuario_id'])) {
-    $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
-    $stmt->execute([$_SESSION['usuario_id']]);
-    $usuarioLogado = $stmt->fetch();
-    if (!$usuarioLogado) {
-        session_destroy();
-        $usuarioLogado = null;
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
+        $stmt->execute([$_SESSION['usuario_id']]);
+        $usuarioLogado = $stmt->fetch();
+    } catch (Exception $e) {
     }
 }
 ?>

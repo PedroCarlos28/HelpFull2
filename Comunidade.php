@@ -4,14 +4,14 @@ require_once 'conexao.php';
 $usuarioLogado = null;
 $isAdmin = false;
 if (isset($_SESSION['usuario_id'])) {
-    $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, COALESCE(is_admin, false) as is_admin FROM usuarios WHERE id = ?");
-    $stmt->execute([$_SESSION['usuario_id']]);
-    $usuarioLogado = $stmt->fetch();
-    if (!$usuarioLogado) {
-        session_destroy();
-        $usuarioLogado = null;
-    } else {
-        $isAdmin = (bool)($usuarioLogado['is_admin'] ?? false);
+    try {
+        $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, COALESCE(is_admin, false) as is_admin FROM usuarios WHERE id = ?");
+        $stmt->execute([$_SESSION['usuario_id']]);
+        $usuarioLogado = $stmt->fetch();
+        if ($usuarioLogado) {
+            $isAdmin = (bool)($usuarioLogado['is_admin'] ?? false);
+        }
+    } catch (Exception $e) {
     }
 }
 

@@ -70,60 +70,25 @@ $password = 'HelpFull-2026';
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
 
 try {
-    // Conexão otimizada com persistência para evitar novo handshake SSL/TCP a cada navegação
     $pdoOptions = [
-        PDO::ATTR_PERSISTENT => true,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_TIMEOUT => 5
+        PDO::ATTR_TIMEOUT => 6
     ];
     $pdo = new PDO($dsn, $user, $password, $pdoOptions);
 } catch (PDOException $e) {
-    // Fallback sem conexao persistente caso o servidor limite conexoes persistentes
-    try {
-        $pdo = new PDO($dsn, $user, $password, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_TIMEOUT => 5
-        ]);
-    } catch (PDOException $e2) {
-        die("Erro ao conectar com o banco de dados: " . $e2->getMessage());
-    }
+    die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
 
-// Validação e restauração de sessão persistente via cookie
+// Validação e restauração de sessão persistente via cookie assinado (HMAC SHA-256)
 if (!isset($_SESSION['usuario_id']) && !empty($_COOKIE['helpfull_session'])) {
     $rawCookie = @json_decode(base64_decode($_COOKIE['helpfull_session']), true);
     if ($rawCookie && !empty($rawCookie['id']) && !empty($rawCookie['sig'])) {
         $expected = hash_hmac('sha256', (string)$rawCookie['id'], 'HelpFullSessionSecretKey2026');
         if (hash_equals($expected, $rawCookie['sig'])) {
-            try {
-                $stmtVal = $pdo->prepare("SELECT id, nome FROM usuarios WHERE id = ?");
-                $stmtVal->execute([$rawCookie['id']]);
-                $uExist = $stmtVal->fetch();
-                if ($uExist) {
-                    $_SESSION['usuario_id']   = $uExist['id'];
-                    $_SESSION['usuario_nome'] = $uExist['nome'];
-                } else {
-                    // Usuário não existe mais no banco: limpa cookie órfão
-                    limparSessaoUsuario();
-                }
-            } catch (Exception $e) {
-            }
-        } else {
-            limparSessaoUsuario();
+            $_SESSION['usuario_id']   = $rawCookie['id'];
+            $_SESSION['usuario_nome'] = $rawCookie['nome'] ?? '';
         }
-    }
-} elseif (isset($_SESSION['usuario_id'])) {
-    // Se a sessão está ativa, valida se o usuário ainda existe no banco
-    try {
-        $stmtVal = $pdo->prepare("SELECT id, nome FROM usuarios WHERE id = ?");
-        $stmtVal->execute([$_SESSION['usuario_id']]);
-        $uExist = $stmtVal->fetch();
-        if (!$uExist) {
-            limparSessaoUsuario();
-        }
-    } catch (Exception $e) {
     }
 }
 ?>

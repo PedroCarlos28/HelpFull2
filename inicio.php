@@ -4,14 +4,11 @@ require_once 'conexao.php';
 // 1. VERIFICA SE ESTÁ LOGADO (Para carregar dados do usuário)
 $usuarioLogado = null;
 if (isset($_SESSION['usuario_id'])) {
-    // BUSCA O USUÁRIO REAL NO BANCO
-    $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
-    $stmt->execute([$_SESSION['usuario_id']]);
-    $usuarioLogado = $stmt->fetch();
-
-    if (!$usuarioLogado) {
-        limparSessaoUsuario();
-        $usuarioLogado = null;
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
+        $stmt->execute([$_SESSION['usuario_id']]);
+        $usuarioLogado = $stmt->fetch();
+    } catch (Exception $e) {
     }
 }
 $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_concluido']);

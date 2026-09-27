@@ -24,8 +24,7 @@
                                 'Diario.php',
                                 'ChatBOT.php',
                                 'Atividades.php',
-                                'Perfil.php',
-                                'Comeco.php'
+                                'Perfil.php'
                             ],
                             eagerness: 'moderate'
                         }
@@ -39,8 +38,7 @@
                                 'Diario.php',
                                 'ChatBOT.php',
                                 'Atividades.php',
-                                'Perfil.php',
-                                'Comeco.php'
+                                'Perfil.php'
                             ],
                             eagerness: 'moderate'
                         }
@@ -61,7 +59,8 @@
             // Somente mesma origem e páginas PHP/internas
             if (parsed.origin !== window.location.origin) return;
             if (parsed.pathname === window.location.pathname && parsed.search === window.location.search) return;
-            if (parsed.pathname.toLowerCase().includes('logout') || parsed.pathname.toLowerCase().includes('sair')) return;
+            const pathLower = parsed.pathname.toLowerCase();
+            if (pathLower.includes('logout') || pathLower.includes('sair') || pathLower.includes('comeco') || pathLower.includes('login') || pathLower.includes('cadastro')) return;
 
             linksPreCarregados.add(url);
 

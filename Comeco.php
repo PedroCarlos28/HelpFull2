@@ -11,11 +11,8 @@ if (isset($_SESSION['usuario_id'])) {
             if ($stmtVal->fetch()) {
                 header("Location: inicio.php");
                 exit();
-            } else {
-                limparSessaoUsuario();
             }
         } catch (Exception $e) {
-            limparSessaoUsuario();
         }
     }
 }

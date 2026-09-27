@@ -3,12 +3,11 @@ require_once 'conexao.php';
 
 $usuarioLogado = null;
 if (isset($_SESSION['usuario_id'])) {
-    $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, videos_assistidos, ultimo_video_data FROM usuarios WHERE id = ?");
-    $stmt->execute([$_SESSION['usuario_id']]);
-    $usuarioLogado = $stmt->fetch();
-    if (!$usuarioLogado) {
-        session_destroy();
-        $usuarioLogado = null;
+    try {
+        $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, videos_assistidos, ultimo_video_data FROM usuarios WHERE id = ?");
+        $stmt->execute([$_SESSION['usuario_id']]);
+        $usuarioLogado = $stmt->fetch();
+    } catch (Exception $e) {
     }
 }
 
