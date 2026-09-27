@@ -1083,8 +1083,85 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             align-items: center;
         }
 
-        .senha-row .conta-input {
+        .senha-campo-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
             max-width: 180px;
+            width: 100%;
+        }
+
+        .senha-campo-container .conta-input {
+            width: 100%;
+            max-width: 100%;
+            padding-right: 15px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-lapis-senha {
+            display: none;
+            position: absolute;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            padding: 0;
+            z-index: 5;
+        }
+
+        .btn-lapis-senha svg {
+            width: 16px;
+            height: 16px;
+            color: #444;
+            display: block;
+        }
+
+        .btn-lapis-senha:hover {
+            transform: scale(1.12);
+            background: #f0fdf4;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-lapis-senha:active {
+            transform: scale(0.95);
+        }
+
+        body.modo-edicao .btn-lapis-senha {
+            display: flex;
+        }
+
+        body.modo-edicao .senha-campo-container {
+            cursor: pointer;
+        }
+
+        body.modo-edicao .senha-campo-container .conta-input {
+            padding-right: 46px;
+            cursor: pointer;
+        }
+
+        body.modo-edicao .senha-campo-container:hover .conta-input {
+            border-color: #7dd3fc;
+            box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.25);
+        }
+
+        body.acessibilidade-escuro .btn-lapis-senha {
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        body.acessibilidade-escuro .btn-lapis-senha svg {
+            color: #222;
+        }
+
+        body.acessibilidade-escuro .btn-lapis-senha:hover {
+            background: #e2f1f5;
         }
 
         .btn-apagar,
@@ -1942,7 +2019,14 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 box-sizing: border-box;
             }
 
-            .senha-row .conta-input {
+            .senha-row .senha-campo-container {
+                flex: 1 1 100%;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            .senha-row .senha-campo-container .conta-input {
                 flex: 1 1 100%;
                 width: 100%;
                 max-width: 100%;
@@ -1954,8 +2038,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             .senha-row .btn-editar,
             .senha-row .btn-sair,
             .senha-row .btn-salvar,
-            .senha-row .btn-apagar,
-            .senha-row .btn-trocar-senha {
+            .senha-row .btn-apagar {
                 height: 42px;
                 padding: 0 14px;
                 white-space: nowrap;
@@ -1999,13 +2082,17 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 margin-top: 8px !important;
             }
 
-            body.modo-edicao .senha-row .conta-input {
+            body.modo-edicao .senha-row .senha-campo-container {
                 grid-column: span 2 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            body.modo-edicao .senha-row .conta-input {
                 width: 100% !important;
             }
 
-            body.modo-edicao .senha-row .btn-sair,
-            body.modo-edicao .senha-row #btnTrocarSenha {
+            body.modo-edicao .senha-row .btn-sair {
                 display: none !important;
             }
 
@@ -2254,10 +2341,6 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
         body.acessibilidade-escuro .btn-trocar-senha:hover {
             background: #254454;
-        }
-
-        body.modo-edicao .senha-row #btnTrocarSenha {
-            display: none !important;
         }
 
         .modal-alterar-senha-overlay {
@@ -2714,9 +2797,16 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
 
                     <label>Senha:</label>
                     <div class="senha-row">
-                        <input type="password" class="conta-input" value="******" readonly disabled>
-                        <button type="button" class="btn-editar btn-trocar-senha" id="btnTrocarSenha"
-                            onclick="abrirModalAlterarSenha()" title="Alterar sua senha de acesso">Alterar Senha</button>
+                        <div class="senha-campo-container" id="senhaCampoContainer"
+                            onclick="if(document.body.classList.contains('modo-edicao')) abrirModalAlterarSenha();">
+                            <input type="password" class="conta-input senha-campo-input" id="campoSenhaPerfil" value="******" readonly disabled>
+                            <button type="button" class="btn-lapis-senha" id="btnLapisSenha"
+                                onclick="abrirModalAlterarSenha(); event.stopPropagation();" title="Alterar senha" aria-label="Alterar senha">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                </svg>
+                            </button>
+                        </div>
                         <button type="button" class="btn-editar btn-sair" id="btnSair"
                             onclick="location.href='Sair.php'">Sair da conta</button>
                         <button type="button" class="btn-editar" id="btnEditar"
@@ -3229,7 +3319,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             const btnSalvar = document.getElementById('btnSalvar');
             const btnApagar = document.getElementById('btnApagar');
             const btnSair = document.getElementById('btnSair');
-            const btnTrocarSenha = document.getElementById('btnTrocarSenha');
+            const btnLapisSenha = document.getElementById('btnLapisSenha');
             const inputs = document.querySelectorAll('.campo-editavel');
             const card = document.getElementById('cardSuaConta');
 
@@ -3237,7 +3327,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
                 window.scrollTo({ top: 0, behavior: 'instant' });
                 body.classList.add('modo-edicao');
                 btnSair.style.display = 'none';
-                if (btnTrocarSenha) btnTrocarSenha.style.display = 'none';
+                if (btnLapisSenha) btnLapisSenha.style.display = 'flex';
                 btnEditar.textContent = 'Cancelar';
                 btnEditar.style.background = '#888';
                 btnEditar.style.color = '#fff';
@@ -3270,7 +3360,7 @@ $abrevEmocoes = ['Irritado' => 'Irri.', 'Ansioso' => 'Ansi.', 'Feliz' => 'Feli.'
             } else {
                 body.classList.remove('modo-edicao');
                 btnSair.style.display = 'inline-flex';
-                if (btnTrocarSenha) btnTrocarSenha.style.display = 'inline-flex';
+                if (btnLapisSenha) btnLapisSenha.style.display = 'none';
                 btnEditar.textContent = 'Editar';
                 btnEditar.style.background = '#bce0e6';
                 btnEditar.style.color = '#444';
