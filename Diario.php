@@ -65,19 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
 $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
 $stmt->execute([$_SESSION['usuario_id']]);
 $usuarioLogado = $stmt->fetch();
-
-$usuarioNovoSemDiario = false;
-if (!empty($usuarioLogado['id'])) {
-    try {
-        $stmtCheckDiario = $pdo->prepare("SELECT COUNT(*) FROM diario WHERE usuario_id = ?");
-        $stmtCheckDiario->execute([$usuarioLogado['id']]);
-        $usuarioNovoSemDiario = ((int)$stmtCheckDiario->fetchColumn() === 0);
-    } catch (PDOException $e) {
-        $usuarioNovoSemDiario = false;
-    }
-} else {
-    $usuarioNovoSemDiario = true;
-}
 ?>
 
 <!DOCTYPE html>
@@ -495,89 +482,17 @@ if (!empty($usuarioLogado['id'])) {
             transform: scale(1.05);
         }
 
-        /* BANNER DE BOAS-VINDAS DIÁRIO (PRIMEIRA VEZ - ESTILO COMUNIDADE) */
-        .banner-boas-vindas-diario {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(43, 122, 140, 0.28);
-            border-radius: 22px;
-            padding: 16px 20px;
-            margin: 0 0 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 30px rgba(43, 122, 140, 0.08);
-            position: relative;
-            animation: fadeInDropdown 0.35s ease;
-        }
-
-        .bv-diario-icone {
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
-            background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .bv-diario-info {
-            flex: 1;
-        }
-
-        .bv-diario-info h4 {
-            font-size: 0.95rem;
-            font-weight: 800;
-            color: #2b7a8c;
-            margin-bottom: 3px;
-        }
-
-        .bv-diario-info p {
-            font-size: 0.82rem;
-            line-height: 1.45;
-            color: #444;
-            font-weight: 500;
-        }
-
-        .btn-fechar-bv {
-            background: rgba(0, 0, 0, 0.05);
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.15rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            margin-left: auto;
-            flex-shrink: 0;
-            transition: all 0.2s ease;
-        }
-
-        .btn-fechar-bv:hover {
-            background: rgba(0, 0, 0, 0.1);
+        /* TEXTO INTRODUTÓRIO / EXPLICAÇÃO DO DIÁRIO */
+        .texto-intro-diario {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            font-weight: 700;
             color: #1a1a1a;
-            transform: scale(1.08);
         }
 
-        body.acessibilidade-escuro .banner-boas-vindas-diario {
-            background: rgba(24, 24, 27, 0.9);
-            border-color: rgba(43, 122, 140, 0.4);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        body.acessibilidade-escuro .bv-diario-info p {
-            color: #d4d4d8;
-        }
-
-        body.acessibilidade-escuro .btn-fechar-bv {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+        body.acessibilidade-escuro .texto-intro-diario {
+            color: #f1f5f9 !important;
         }
 
         /* CAIXA AGRUPADORA PRINCIPAL */
@@ -845,11 +760,7 @@ if (!empty($usuarioLogado['id'])) {
             .navbar-topo { width: calc(100% - 30px); padding: 12px 20px; }
             .conteudo-site { padding: 100px 15px 0 15px; }
 
-            .banner-boas-vindas-diario { padding: 14px 16px; gap: 12px; border-radius: 18px; margin-bottom: 15px; }
-            .bv-diario-icone { width: 36px; height: 36px; border-radius: 12px; }
-            .bv-diario-icone svg { width: 18px; height: 18px; }
-            .bv-diario-info h4 { font-size: 0.9rem; }
-            .bv-diario-info p { font-size: 0.78rem; line-height: 1.4; }
+            .texto-intro-diario { font-size: 0.95rem; text-align: left; margin-bottom: 25px; }
             
             .caixa-agrupadora { padding: 20px; border-radius: 20px; }
             .textarea-container { padding: 15px; margin-bottom: 25px; }
@@ -926,23 +837,14 @@ if (!empty($usuarioLogado['id'])) {
     </div>
 
     <div class="conteudo-site">
-        <?php if ($usuarioNovoSemDiario): ?>
-            <div class="banner-boas-vindas-diario" id="bannerBoasVindasDiario">
-                <div class="bv-diario-icone">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                    </svg>
-                </div>
-                <div class="bv-diario-info">
-                    <h4>Bem-vindo(a) ao seu Diário! ✦</h4>
-                    <p>Escrever um diário ajuda a entender melhor seus pensamentos e sentimentos. Reserve alguns minutos para expressar como foi o seu dia e selecione as emoções que melhor descrevem seu humor!</p>
-                </div>
-                <button type="button" class="btn-fechar-bv" onclick="fecharBannerDiario()" aria-label="Fechar dica">×</button>
-            </div>
-        <?php endif; ?>
-
         <div class="caixa-agrupadora">
+            <p class="texto-intro-diario">
+                Escrever um diário pode ajudar você a entender melhor seus pensamentos e sentimentos.
+                Reserve alguns minutos para escrever sobre o seu dia, concentrando-se no que correu bem, no
+                que o desafiou e como você se sentiu ao longo do dia. Você também pode selecionar as
+                emoções que melhor descrevem seu humor hoje.
+            </p>
+
             <div class="textarea-container">
                 <textarea class="textarea-diario" id="campoTexto"
                     placeholder="Comece seu diario digitando aqui..."></textarea>
@@ -981,20 +883,6 @@ if (!empty($usuarioLogado['id'])) {
     </div>
 
     <script>
-        // Fechar banner de boas-vindas e persistir preferência
-        function fecharBannerDiario() {
-            const banner = document.getElementById('bannerBoasVindasDiario');
-            if (banner) banner.style.display = 'none';
-            try {
-                localStorage.setItem('helpfull_fechou_bv_diario', 'true');
-            } catch (e) {}
-        }
-
-        if (localStorage.getItem('helpfull_fechou_bv_diario') === 'true') {
-            const banner = document.getElementById('bannerBoasVindasDiario');
-            if (banner) banner.style.display = 'none';
-        }
-
         // === TEMPLATES DE NOTIFICAÇÕES ===
         const NOTIF_TEMPLATES = {
             diario_salvo: {
@@ -1056,13 +944,6 @@ if (!empty($usuarioLogado['id'])) {
 
                 if (result.sucesso) {
                     apagarTudo();
-
-                    // Oculta o banner de boas-vindas após o primeiro registro concluído
-                    const banner = document.getElementById('bannerBoasVindasDiario');
-                    if (banner) banner.style.display = 'none';
-                    try {
-                        localStorage.setItem('helpfull_fechou_bv_diario', 'true');
-                    } catch (e) {}
 
                     // Dispara a notificação sem deixar quebrar o salvamento caso o toast falhe
                     try {
