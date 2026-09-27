@@ -126,13 +126,43 @@ if (!isset($_SESSION['usuario_id']) && !empty($_COOKIE['helpfull_session'])) {
     }
 }
 
+if (!function_exists('atualizarCookieSessaoHelper')) {
+    function atualizarCookieSessaoHelper($id, $nome, $token) {
+        $sig = hash_hmac('sha256', (string)$id . '|' . $token, 'HelpFullSessionSecretKey2026');
+        $payload = base64_encode(json_encode([
+            'id'    => $id,
+            'nome'  => $nome,
+            'token' => $token,
+            'sig'   => $sig
+        ]));
+        $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+        if (!headers_sent()) {
+            setcookie('helpfull_session', $payload, [
+                'expires'  => time() + (30 * 24 * 60 * 60),
+                'path'     => '/',
+                'httponly' => true,
+                'secure'   => $secure,
+                'samesite' => 'Lax'
+            ]);
+        }
+    }
+}
+
 // Verificação de sessão ativa no banco (garante que dispositivo revogado seja imediatamente desconectado)
 if (isset($_SESSION['usuario_id']) && isset($pdo)) {
     require_once __DIR__ . '/sessao_helper.php';
     if (!empty($_SESSION['token_sessao'])) {
-        $ativa = validarSessaoAtiva($pdo, $_SESSION['usuario_id'], $_SESSION['token_sessao']);
-        if (!$ativa) {
+        $statusSessao = verificarStatusSessao($pdo, $_SESSION['usuario_id'], $_SESSION['token_sessao']);
+        if ($statusSessao === 'revogada') {
             limparSessaoUsuario();
+        } elseif ($statusSessao === 'inexistente') {
+            // Sessão válida em memória mas não cadastrada no banco:
+            // Registra ou vincula ao banco sem deslogar o usuário
+            $novoToken = registrarNovaSessao($pdo, $_SESSION['usuario_id']);
+            if ($novoToken) {
+                $_SESSION['token_sessao'] = $novoToken;
+                atualizarCookieSessaoHelper($_SESSION['usuario_id'], $_SESSION['usuario_nome'] ?? '', $novoToken);
+            }
         }
     } else {
         // Usuário em sessão ativa sem token de sessão registrado:
@@ -140,25 +170,7 @@ if (isset($_SESSION['usuario_id']) && isset($pdo)) {
         $novoToken = registrarNovaSessao($pdo, $_SESSION['usuario_id']);
         if ($novoToken) {
             $_SESSION['token_sessao'] = $novoToken;
-
-            // Sincroniza o token no cookie persistente para que todas as navegações preservem o mesmo token
-            $sig = hash_hmac('sha256', (string)$_SESSION['usuario_id'] . '|' . $novoToken, 'HelpFullSessionSecretKey2026');
-            $payload = base64_encode(json_encode([
-                'id'    => $_SESSION['usuario_id'],
-                'nome'  => $_SESSION['usuario_nome'] ?? '',
-                'token' => $novoToken,
-                'sig'   => $sig
-            ]));
-            $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
-            if (!headers_sent()) {
-                setcookie('helpfull_session', $payload, [
-                    'expires'  => time() + (30 * 24 * 60 * 60),
-                    'path'     => '/',
-                    'httponly' => true,
-                    'secure'   => $secure,
-                    'samesite' => 'Lax'
-                ]);
-            }
+            atualizarCookieSessaoHelper($_SESSION['usuario_id'], $_SESSION['usuario_nome'] ?? '', $novoToken);
         }
     }
 }

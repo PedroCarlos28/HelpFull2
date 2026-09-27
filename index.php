@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/conexao.php';
 
 // Se já estiver logado, vai direto para a página inicial do sistema
 if (isset($_SESSION['usuario_id'])) {

@@ -230,12 +230,15 @@ if (!function_exists('registrarNovaSessao')) {
 }
 
 /**
- * Valida se a sessão atual ainda está ativa no banco de dados.
- * Atualiza o último acesso periodicamente (throttled a cada 2 minutos).
+ * Valida o status da sessão do usuário no banco de dados:
+ * Retorna:
+ *  'ativa'       -> sessão existe e está ativa (ativo = true)
+ *  'revogada'    -> sessão existe no banco mas foi explicitamente desconectada (ativo = false)
+ *  'inexistente' -> sessão não consta no banco (não desloga; deve ser registrada para paridade)
  */
-function validarSessaoAtiva($pdo, $usuarioId, $tokenSessao) {
+function verificarStatusSessao($pdo, $usuarioId, $tokenSessao) {
     if (!$pdo || empty($usuarioId) || empty($tokenSessao)) {
-        return false;
+        return 'inexistente';
     }
 
     try {
@@ -251,8 +254,14 @@ function validarSessaoAtiva($pdo, $usuarioId, $tokenSessao) {
         ]);
 
         $sessao = $stmt->fetch();
-        if (!$sessao || empty($sessao['ativo'])) {
-            return false;
+        if (!$sessao) {
+            return 'inexistente';
+        }
+
+        $ativo = $sessao['ativo'];
+        $isRevogada = ($ativo === false || $ativo === 'f' || $ativo === 0 || $ativo === '0');
+        if ($isRevogada) {
+            return 'revogada';
         }
 
         // Atualiza ultimo_acesso caso tenha passado mais de 120 segundos
@@ -261,12 +270,20 @@ function validarSessaoAtiva($pdo, $usuarioId, $tokenSessao) {
             $stmtUp->execute([':id' => $sessao['id']]);
         }
 
-        return true;
-    } catch (Exception $e) {
-        error_log("Erro ao validar sessao: " . $e->getMessage());
-        // Se houver falha transitória de conexão, não desloga imediatamente
-        return true;
+        return 'ativa';
+    } catch (Throwable $e) {
+        error_log("Erro ao verificar status da sessao: " . $e->getMessage());
+        return 'ativa'; // Em caso de erro temporário de banco/rede, preserva a sessão do usuário
     }
+}
+
+/**
+ * Valida se a sessão atual ainda é válida.
+ * Retorna FALSE unicamente se a sessão foi explicitamente revogada pelo usuário em outro dispositivo.
+ */
+function validarSessaoAtiva($pdo, $usuarioId, $tokenSessao) {
+    $status = verificarStatusSessao($pdo, $usuarioId, $tokenSessao);
+    return ($status !== 'revogada');
 }
 
 /**

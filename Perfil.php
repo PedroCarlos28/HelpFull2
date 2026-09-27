@@ -287,6 +287,7 @@ try {
             -webkit-backdrop-filter: blur(15px);
             z-index: 1500;
             animation: fadeInBlur 0.5s ease forwards;
+            pointer-events: none;
         }
 
         #cardSuaConta {
@@ -1199,6 +1200,47 @@ try {
             color: #444;
         }
 
+        body.acessibilidade-escuro .btn-editar {
+            background: #1c3642 !important;
+            color: #7dd3fc !important;
+            border: 1px solid rgba(125, 211, 252, 0.25) !important;
+        }
+
+        body.acessibilidade-escuro .btn-editar:hover {
+            background: #254454 !important;
+        }
+
+        body.acessibilidade-escuro .btn-sair {
+            background: #252d32 !important;
+            color: #cbd5e1 !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        body.acessibilidade-escuro .btn-sair:hover {
+            background: #2f383e !important;
+            color: #f1f5f9 !important;
+        }
+
+        body.acessibilidade-escuro .btn-salvar {
+            background: #2b7a8c !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(125, 211, 252, 0.4) !important;
+        }
+
+        body.acessibilidade-escuro .btn-salvar:hover {
+            background: #226473 !important;
+        }
+
+        body.acessibilidade-escuro .btn-apagar {
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: #fca5a5 !important;
+            border: 1px solid rgba(239, 68, 68, 0.35) !important;
+        }
+
+        body.acessibilidade-escuro .btn-apagar:hover {
+            background: rgba(239, 68, 68, 0.3) !important;
+        }
+
         .conta-imagem-placeholder {
             width: 200px;
             height: 200px;
@@ -1843,21 +1885,24 @@ try {
         }
 
         body.modo-edicao {
-            overflow: hidden;
+            overflow-y: auto !important;
         }
 
-        body.modo-edicao .navbar-topo,
+        body.modo-edicao .navbar-topo {
+            z-index: 2110;
+            position: relative;
+        }
+
         body.modo-edicao .conteudo-site {
-            z-index: 1600;
+            z-index: 2100;
             position: relative;
         }
 
         body.modo-edicao #cardSuaConta {
-            z-index: 1600;
+            z-index: 2105;
             position: relative;
             transform: scale(1.02);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            background: #ffffff;
         }
 
         #cardSuaConta {
@@ -3557,8 +3602,8 @@ try {
     </div>
 
     <script>
-        const detalhesDoBanco = <?= $jsonDiariosData ?>;
-        const graficoAnoBanco = <?= $jsonGraficoAno ?>;
+        const detalhesDoBanco = <?= $jsonDiariosData ?: '{}' ?>;
+        const graficoAnoBanco = <?= $jsonGraficoAno ?: '{}' ?>;
         const anosDisponiveisBanco = <?= json_encode($anosDisponiveis) ?>;
         let anoGraficoAtual = new Date().getFullYear();
 
@@ -3721,30 +3766,37 @@ try {
             if (ativar) {
                 window.scrollTo({ top: 0, behavior: 'instant' });
                 body.classList.add('modo-edicao');
-                btnSair.style.display = 'none';
+                if (btnSair) btnSair.style.display = 'none';
                 if (btnLapisSenha) btnLapisSenha.style.display = 'flex';
-                btnEditar.textContent = 'Cancelar';
-                btnEditar.style.background = '#888';
-                btnEditar.style.color = '#fff';
-                btnEditar.onclick = () => {
-                    const placeholder = document.getElementById('placeholderFoto');
-                    const initialFoto = "<?= $fotoPerfilDb ?>";
-                    placeholder.style.backgroundImage = initialFoto !== "" ? `url(${initialFoto})` : 'none';
-                    document.getElementById('fotoBase64Input').value = initialFoto;
-                    if (initialFoto !== "") {
-                        placeholder.classList.add('tem-foto');
-                        document.getElementById('placeholderIcon').style.display = 'none';
-                    } else {
-                        placeholder.classList.remove('tem-foto');
-                        document.getElementById('placeholderIcon').style.display = 'block';
-                    }
+                if (btnEditar) {
+                    btnEditar.textContent = 'Cancelar';
+                    btnEditar.style.background = '#64748b';
+                    btnEditar.style.color = '#fff';
+                    btnEditar.onclick = () => {
+                        const placeholder = document.getElementById('placeholderFoto');
+                        const initialFoto = <?= json_encode($fotoPerfilDb) ?>;
+                        if (placeholder) {
+                            placeholder.style.backgroundImage = initialFoto ? `url(${initialFoto})` : 'none';
+                            if (initialFoto) {
+                                placeholder.classList.add('tem-foto');
+                                const pIcon = document.getElementById('placeholderIcon');
+                                if (pIcon) pIcon.style.display = 'none';
+                            } else {
+                                placeholder.classList.remove('tem-foto');
+                                const pIcon = document.getElementById('placeholderIcon');
+                                if (pIcon) pIcon.style.display = 'block';
+                            }
+                        }
+                        const fotoInput = document.getElementById('fotoBase64Input');
+                        if (fotoInput) fotoInput.value = initialFoto || '';
 
-                    // Reverte estado visual de 2FA para o inicial caso tenha cancelado sem salvar
-                    reverterEstado2FA();
-                    toggleEdicao(false);
-                };
-                btnSalvar.style.display = 'inline-flex';
-                btnApagar.style.display = 'inline-flex';
+                        // Reverte estado visual de 2FA para o inicial caso tenha cancelado sem salvar
+                        if (typeof reverterEstado2FA === 'function') reverterEstado2FA();
+                        toggleEdicao(false);
+                    };
+                }
+                if (btnSalvar) btnSalvar.style.display = 'inline-flex';
+                if (btnApagar) btnApagar.style.display = 'inline-flex';
                 const isDark = body.classList.contains('acessibilidade-escuro');
                 inputs.forEach(input => {
                     input.removeAttribute('readonly');
@@ -3754,14 +3806,16 @@ try {
                 });
             } else {
                 body.classList.remove('modo-edicao');
-                btnSair.style.display = 'inline-flex';
+                if (btnSair) btnSair.style.display = 'inline-flex';
                 if (btnLapisSenha) btnLapisSenha.style.display = 'none';
-                btnEditar.textContent = 'Editar';
-                btnEditar.style.background = '#bce0e6';
-                btnEditar.style.color = '#444';
-                btnEditar.onclick = () => toggleEdicao(true);
-                btnSalvar.style.display = 'none';
-                btnApagar.style.display = 'none';
+                if (btnEditar) {
+                    btnEditar.textContent = 'Editar';
+                    btnEditar.style.background = '';
+                    btnEditar.style.color = '';
+                    btnEditar.onclick = () => toggleEdicao(true);
+                }
+                if (btnSalvar) btnSalvar.style.display = 'none';
+                if (btnApagar) btnApagar.style.display = 'none';
                 inputs.forEach(input => {
                     input.setAttribute('readonly', true);
                     input.style.background = '';
@@ -3770,6 +3824,7 @@ try {
                 });
             }
         }
+        window.toggleEdicao = toggleEdicao;
 
         // === CONTROLE DE 2FA (VERIFICAÇÃO EM DUAS ETAPAS) ===
         let initial2FA = <?= $ativo2fa ? 'true' : 'false' ?>;
