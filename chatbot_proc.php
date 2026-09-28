@@ -27,10 +27,13 @@ $apiKeys = [];
 if (defined('GEMINI_API_KEYS') && is_array(GEMINI_API_KEYS)) {
     $apiKeys = GEMINI_API_KEYS;
 } else {
-    if (defined('GEMINI_API_KEY') && !empty(GEMINI_API_KEY)) $apiKeys[] = GEMINI_API_KEY;
-    if (defined('GEMINI_API_KEY_BACKUP') && !empty(GEMINI_API_KEY_BACKUP)) $apiKeys[] = GEMINI_API_KEY_BACKUP;
-    $envKey = getenv('GEMINI_API_KEY');
-    if (!empty($envKey) && !in_array($envKey, $apiKeys)) $apiKeys[] = $envKey;
+    // Chave principal
+    $key1 = defined('GEMINI_API_KEY') ? GEMINI_API_KEY : (getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? ($_SERVER['GEMINI_API_KEY'] ?? '')));
+    if (!empty($key1) && !in_array($key1, $apiKeys)) $apiKeys[] = $key1;
+
+    // Chave reserva / backup (para Vercel e local)
+    $key2 = defined('GEMINI_API_KEY_BACKUP') ? GEMINI_API_KEY_BACKUP : (getenv('GEMINI_API_KEY_BACKUP') ?: ($_ENV['GEMINI_API_KEY_BACKUP'] ?? ($_SERVER['GEMINI_API_KEY_BACKUP'] ?? '')));
+    if (!empty($key2) && !in_array($key2, $apiKeys)) $apiKeys[] = $key2;
 }
 
 if (empty($apiKeys)) {
