@@ -56,6 +56,31 @@ curl_close($ch);
 if ($httpCode !== 200) {
     $errorData = json_decode($response, true);
     $detalheErro = isset($errorData['error']['message']) ? $errorData['error']['message'] : "Motivo desconhecido";
+    $errorCode = isset($errorData['error']['code']) ? (int)$errorData['error']['code'] : $httpCode;
+    $errorStatus = isset($errorData['error']['status']) ? $errorData['error']['status'] : '';
+
+    // Verifica se é erro 429 ou cota de tokens excedida
+    $isQuota = ($httpCode === 429)
+        || ($errorCode === 429)
+        || ($errorStatus === 'RESOURCE_EXHAUSTED')
+        || (stripos($detalheErro, 'quota') !== false)
+        || (stripos($detalheErro, 'exhausted') !== false)
+        || (stripos($detalheErro, 'rate limit') !== false);
+
+    if ($isQuota) {
+        $msgQuota = "Olá! Peço desculpas pelo transtorno. 💙\n\n"
+                  . "Por se tratar de um **projeto da faculdade sem apoio financeiro**, nossos tokens de inteligência artificial são limitados e infelizmente se esgotaram no momento.\n\n"
+                  . "⏳ As cotas de mensagens são renovadas periodicamente pelo provedor. Por favor, tente conversar comigo novamente mais tarde ou amanhã!\n\n"
+                  . "Se você estiver precisando de apoio e acolhimento agora, lembre-se de que você não está sozinho(a):\n"
+                  . "• Você pode ligar gratuitamente para o **CVV no número 188** (apoio emocional 24 horas por dia);\n"
+                  . "• Sinta-se à vontade para registrar suas emoções no nosso **Diário** ou praticar os exercícios na aba de **Atividades**. 🌿✨";
+
+        echo json_encode([
+            'reply' => $msgQuota,
+            'quota_error' => true
+        ]);
+        exit;
+    }
 
     echo json_encode(['reply' => "Erro do Google ($httpCode): $detalheErro"]);
     exit;

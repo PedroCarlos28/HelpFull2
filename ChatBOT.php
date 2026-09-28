@@ -677,6 +677,12 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
         }
 
+        .msg-bot.msg-quota {
+            border: 1.5px solid #62b5d4;
+            background: linear-gradient(180deg, #ffffff 0%, #f4fafd 100%);
+            box-shadow: 0 4px 14px rgba(98, 181, 212, 0.15);
+        }
+
         .msg-bot-digitando {
             align-self: flex-start;
             background-color: #d1d1d1;
@@ -1356,7 +1362,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                     if (indicator) indicator.remove();
 
                     const botMensagemHTML = `
-                        <div class="mensagem msg-bot">
+                        <div class="mensagem msg-bot ${data.quota_error ? 'msg-quota' : ''}">
                             ${formatarTexto(data.reply || "Ops, não rolou nenhuma resposta.")}
                         </div>
                     `;
