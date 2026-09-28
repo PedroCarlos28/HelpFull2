@@ -21,12 +21,31 @@ if (empty($userMessage)) {
 if (file_exists(__DIR__ . '/config_keys.php')) {
     require_once __DIR__ . '/config_keys.php';
 }
-$apiKey = defined('GEMINI_API_KEY') ? GEMINI_API_KEY : (getenv('GEMINI_API_KEY') ?: '');
 
-// URL do modelo estável (gemini-2.5-flash)
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
+// Lista de chaves disponíveis (permite chave principal e backup)
+$apiKeys = [];
+if (defined('GEMINI_API_KEYS') && is_array(GEMINI_API_KEYS)) {
+    $apiKeys = GEMINI_API_KEYS;
+} else {
+    if (defined('GEMINI_API_KEY') && !empty(GEMINI_API_KEY)) $apiKeys[] = GEMINI_API_KEY;
+    if (defined('GEMINI_API_KEY_BACKUP') && !empty(GEMINI_API_KEY_BACKUP)) $apiKeys[] = GEMINI_API_KEY_BACKUP;
+    $envKey = getenv('GEMINI_API_KEY');
+    if (!empty($envKey) && !in_array($envKey, $apiKeys)) $apiKeys[] = $envKey;
+}
 
-// Estrutura simplificada e direta
+if (empty($apiKeys)) {
+    echo json_encode(['reply' => 'Nenhuma chave de API configurada para o chatbot.']);
+    exit;
+}
+
+// Lista de modelos ordenados por prioridade (fallback inteligente)
+$modelos = [
+    'gemini-3.5-flash',       // Modelo 3.5 mais recente da Google
+    'gemini-2.5-flash',       // Modelo estável e de alta performance
+    'gemini-3.5-flash-lite',  // Variante leve e rápida do 3.5
+    'gemini-3-flash-preview'  // Linha 3.0 preview
+];
+
 $data = [
     "contents" => [
         [
@@ -37,37 +56,65 @@ $data = [
     ]
 ];
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+$botReply = null;
+$houveErroQuota = false;
+$ultimoErroHttp = 0;
+$ultimoDetalheErro = 'Não foi possível obter resposta.';
 
-// Ignorar erros de SSL (comum em localhost/XAMPP)
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+// Tenta as chaves e modelos em cascata (fallback inteligente)
+foreach ($apiKeys as $chaveAtual) {
+    foreach ($modelos as $modeloAtual) {
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$modeloAtual}:generateContent?key=" . $chaveAtual;
 
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 8);
 
-// VERIFICAÇÃO DE ERRO CIRÚRGICA
-if ($httpCode !== 200) {
-    $errorData = json_decode($response, true);
-    $detalheErro = isset($errorData['error']['message']) ? $errorData['error']['message'] : "Motivo desconhecido";
-    $errorCode = isset($errorData['error']['code']) ? (int)$errorData['error']['code'] : $httpCode;
-    $errorStatus = isset($errorData['error']['status']) ? $errorData['error']['status'] : '';
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
 
-    // Verifica se é erro 429 ou cota de tokens excedida
-    $isQuota = ($httpCode === 429)
-        || ($errorCode === 429)
-        || ($errorStatus === 'RESOURCE_EXHAUSTED')
-        || (stripos($detalheErro, 'quota') !== false)
-        || (stripos($detalheErro, 'exhausted') !== false)
-        || (stripos($detalheErro, 'rate limit') !== false);
+        if ($httpCode === 200) {
+            $result = json_decode($response, true);
+            if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+                $botReply = $result['candidates'][0]['content']['parts'][0]['text'];
+                break 2; // Resposta obtida com sucesso! Encerra as tentativas.
+            }
+        }
 
-    if ($isQuota) {
+        // Analisa o motivo da falha para decidir fallback
+        $errorData = json_decode($response, true);
+        $detalheErro = $errorData['error']['message'] ?? "Código HTTP $httpCode";
+        $errorCode = (int)($errorData['error']['code'] ?? $httpCode);
+        $errorStatus = $errorData['error']['status'] ?? '';
+
+        $isQuota = ($httpCode === 429)
+            || ($errorCode === 429)
+            || ($errorStatus === 'RESOURCE_EXHAUSTED')
+            || (stripos($detalheErro, 'quota') !== false)
+            || (stripos($detalheErro, 'exhausted') !== false)
+            || (stripos($detalheErro, 'rate limit') !== false);
+
+        if ($isQuota) {
+            $houveErroQuota = true;
+        }
+
+        $ultimoErroHttp = $httpCode;
+        $ultimoDetalheErro = $detalheErro;
+
+        // Se falhou (429, 503, 404, etc.), segue automaticamente para o próximo modelo/chave
+    }
+}
+
+// Se todos os modelos e chaves falharam:
+if (empty($botReply)) {
+    if ($houveErroQuota) {
         $msgQuota = "Olá! Peço desculpas pelo transtorno. 💙\n\n"
                   . "Por se tratar de um **projeto da faculdade sem apoio financeiro**, nossos tokens de inteligência artificial são limitados e infelizmente se esgotaram no momento.\n\n"
                   . "⏳ As cotas de mensagens são renovadas periodicamente pelo provedor. Por favor, tente conversar comigo novamente mais tarde ou amanhã!\n\n"
@@ -82,17 +129,8 @@ if ($httpCode !== 200) {
         exit;
     }
 
-    echo json_encode(['reply' => "Erro do Google ($httpCode): $detalheErro"]);
+    echo json_encode(['reply' => "Erro do Google ($ultimoErroHttp): $ultimoDetalheErro"]);
     exit;
-}
-
-$result = json_decode($response, true);
-
-// Pega a resposta de forma segura
-if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
-    $botReply = $result['candidates'][0]['content']['parts'][0]['text'];
-} else {
-    $botReply = 'Não consegui processar sua mensagem corretamente. O retorno da IA veio vazio.';
 }
 
 // Salvar no histórico do banco de dados e verificar meta
