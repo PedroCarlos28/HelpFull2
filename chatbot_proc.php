@@ -34,6 +34,10 @@ if (defined('GEMINI_API_KEYS') && is_array(GEMINI_API_KEYS)) {
     // Chave reserva / backup (para Vercel e local)
     $key2 = defined('GEMINI_API_KEY_BACKUP') ? GEMINI_API_KEY_BACKUP : (getenv('GEMINI_API_KEY_BACKUP') ?: ($_ENV['GEMINI_API_KEY_BACKUP'] ?? ($_SERVER['GEMINI_API_KEY_BACKUP'] ?? '')));
     if (!empty($key2) && !in_array($key2, $apiKeys)) $apiKeys[] = $key2;
+
+    // Terceira chave opcional
+    $key3 = defined('GEMINI_API_KEY_3') ? GEMINI_API_KEY_3 : (getenv('GEMINI_API_KEY_3') ?: ($_ENV['GEMINI_API_KEY_3'] ?? ($_SERVER['GEMINI_API_KEY_3'] ?? '')));
+    if (!empty($key3) && !in_array($key3, $apiKeys)) $apiKeys[] = $key3;
 }
 
 if (empty($apiKeys)) {
@@ -41,11 +45,12 @@ if (empty($apiKeys)) {
     exit;
 }
 
-// Lista de modelos ordenados por prioridade (fallback inteligente)
+// Lista de modelos ordenados por prioridade (resposta rápida e fallback inteligente)
 $modelos = [
-    'gemini-3.5-flash',       // Modelo 3.5 mais recente da Google
-    'gemini-2.5-flash',       // Modelo estável e de alta performance
-    'gemini-3.5-flash-lite',  // Variante leve e rápida do 3.5
+    'gemini-2.5-flash',       // Resposta instantânea e alta estabilidade
+    'gemini-3.5-flash',       // Modelo mais avançado da linha 3.5
+    'gemini-flash-latest',    // Alias oficial Google
+    'gemini-3.5-flash-lite',  // Variante leve e rápida
     'gemini-3-flash-preview'  // Linha 3.0 preview
 ];
 
