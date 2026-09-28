@@ -120,6 +120,57 @@ foreach ($apiKeys as $chaveAtual) {
     }
 }
 
+// Se o Gemini falhou ou esgotou a cota, tenta a Groq como contingência gratuita e ultrarrápida
+if (empty($botReply)) {
+    $groqKey = defined('GROQ_API_KEY') ? GROQ_API_KEY : (getenv('GROQ_API_KEY') ?: ($_ENV['GROQ_API_KEY'] ?? ($_SERVER['GROQ_API_KEY'] ?? '')));
+    if (!empty($groqKey)) {
+        $groqModels = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b'];
+        $groqUrl = 'https://api.groq.com/openai/v1/chat/completions';
+
+        foreach ($groqModels as $gModel) {
+            $groqPayload = [
+                'model' => $gModel,
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => 'Aja como o assistente Helpy do HelpFull. Sua missão é apoiar a saúde mental do usuário, sendo gentil, empático e oferecendo conselhos práticos de bem-estar. Se o usuário estiver em crise grave, sugira procurar ajuda profissional (CVV 188). Responda sempre em Português do Brasil de forma concisa.'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $userMessage
+                    ]
+                ],
+                'max_tokens' => 350,
+                'temperature' => 0.7
+            ];
+
+            $chGroq = curl_init($groqUrl);
+            curl_setopt($chGroq, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($chGroq, CURLOPT_POST, true);
+            curl_setopt($chGroq, CURLOPT_POSTFIELDS, json_encode($groqPayload));
+            curl_setopt($chGroq, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $groqKey
+            ]);
+            curl_setopt($chGroq, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($chGroq, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($chGroq, CURLOPT_TIMEOUT, 8);
+
+            $groqResp = curl_exec($chGroq);
+            $groqCode = curl_getinfo($chGroq, CURLINFO_HTTP_CODE);
+            curl_close($chGroq);
+
+            if ($groqCode === 200) {
+                $groqData = json_decode($groqResp, true);
+                if (!empty($groqData['choices'][0]['message']['content'])) {
+                    $botReply = trim($groqData['choices'][0]['message']['content']);
+                    break;
+                }
+            }
+        }
+    }
+}
+
 // Se todos os modelos e chaves falharam:
 if (empty($botReply)) {
     if ($houveErroQuota) {
