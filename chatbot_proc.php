@@ -171,6 +171,62 @@ if (empty($botReply)) {
     }
 }
 
+// Se o Gemini e a Groq falharem, tenta o OpenRouter como terceira camada de contingência gratuita
+if (empty($botReply)) {
+    $orKey = defined('OPENROUTER_API_KEY') ? OPENROUTER_API_KEY : (getenv('OPENROUTER_API_KEY') ?: ($_ENV['OPENROUTER_API_KEY'] ?? ($_SERVER['OPENROUTER_API_KEY'] ?? '')));
+    if (!empty($orKey)) {
+        $orModels = ['liquid/lfm-2.5-2.6b:free', 'openrouter/free'];
+        $orUrl = 'https://openrouter.ai/api/v1/chat/completions';
+
+        foreach ($orModels as $oModel) {
+            $orPayload = [
+                'model' => $oModel,
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => 'Aja como o assistente Helpy do HelpFull. Sua missão é apoiar a saúde mental do usuário, sendo gentil, empático e oferecendo conselhos práticos de bem-estar. Se o usuário estiver em crise grave, sugira procurar ajuda profissional (CVV 188). Responda sempre em Português do Brasil de forma concisa.'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $userMessage
+                    ]
+                ],
+                'max_tokens' => 350
+            ];
+
+            $chOr = curl_init($orUrl);
+            curl_setopt($chOr, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($chOr, CURLOPT_POST, true);
+            curl_setopt($chOr, CURLOPT_POSTFIELDS, json_encode($orPayload));
+            curl_setopt($chOr, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $orKey,
+                'HTTP-Referer: http://localhost/HelpFull2',
+                'X-Title: HelpFull'
+            ]);
+            curl_setopt($chOr, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($chOr, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($chOr, CURLOPT_TIMEOUT, 10);
+
+            $orResp = curl_exec($chOr);
+            $orCode = curl_getinfo($chOr, CURLINFO_HTTP_CODE);
+            curl_close($chOr);
+
+            if ($orCode === 200) {
+                $orData = json_decode($orResp, true);
+                $respContent = $orData['choices'][0]['message']['content'] ?? '';
+                if (empty($respContent)) {
+                    $respContent = $orData['choices'][0]['message']['reasoning'] ?? '';
+                }
+                if (!empty($respContent)) {
+                    $botReply = trim($respContent);
+                    break;
+                }
+            }
+        }
+    }
+}
+
 // Se todos os modelos e chaves falharam:
 if (empty($botReply)) {
     if ($houveErroQuota) {
