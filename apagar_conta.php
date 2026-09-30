@@ -44,12 +44,15 @@ $acao = $input['acao'] ?? $_GET['acao'] ?? '';
 try {
     switch ($acao) {
         case 'solicitar_codigo':
-            $stmtUser = $pdo->prepare("SELECT id, nome, email, dois_fatores_ativo FROM usuarios WHERE id = :id");
+            $stmtUser = $pdo->prepare("SELECT id, nome, email, dois_fatores_ativo, oauth_provider FROM usuarios WHERE id = :id");
             $stmtUser->execute([':id' => $usuarioId]);
             $usuario = $stmtUser->fetch();
 
-            if (!$usuario || empty($usuario['dois_fatores_ativo'])) {
-                responderJson(['sucesso' => false, 'mensagem' => 'A verificação em duas etapas não está ativa nesta conta.']);
+            $doisFatoresAtivo = !empty($usuario['dois_fatores_ativo']);
+            $isContaGoogle = (!empty($usuario['oauth_provider']) && $usuario['oauth_provider'] === 'google');
+
+            if (!$usuario || (!$doisFatoresAtivo && !$isContaGoogle)) {
+                responderJson(['sucesso' => false, 'mensagem' => 'A verificação por código de segurança não está ativa nesta conta.']);
             }
 
             $ultimoEnvio = $_SESSION['del_conta_ultimo_envio'] ?? 0;
@@ -81,7 +84,7 @@ try {
             break;
 
         case 'confirmar_apagar':
-            $stmtUser = $pdo->prepare("SELECT id, nome, email, senha, dois_fatores_ativo, codigo_2fa, codigo_2fa_expira FROM usuarios WHERE id = :id");
+            $stmtUser = $pdo->prepare("SELECT id, nome, email, senha, dois_fatores_ativo, codigo_2fa, codigo_2fa_expira, oauth_provider FROM usuarios WHERE id = :id");
             $stmtUser->execute([':id' => $usuarioId]);
             $usuario = $stmtUser->fetch();
 
@@ -90,8 +93,9 @@ try {
             }
 
             $doisFatoresAtivo = !empty($usuario['dois_fatores_ativo']);
+            $isContaGoogle = (!empty($usuario['oauth_provider']) && $usuario['oauth_provider'] === 'google');
 
-            if ($doisFatoresAtivo) {
+            if ($doisFatoresAtivo || $isContaGoogle) {
                 $codigoDigitado = preg_replace('/\D/', '', (string)($input['codigo_2fa'] ?? ''));
 
                 if (empty($codigoDigitado) || strlen($codigoDigitado) !== 6) {

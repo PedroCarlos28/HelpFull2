@@ -5,7 +5,7 @@ require_once 'email_helper.php';
 $usuarioLogado = null;
 if (isset($_SESSION['usuario_id'])) {
     try {
-        $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, videos_assistidos, ultimo_video_data, COALESCE(dois_fatores_ativo, false) as dois_fatores_ativo FROM usuarios WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, videos_assistidos, ultimo_video_data, COALESCE(dois_fatores_ativo, false) as dois_fatores_ativo, oauth_provider FROM usuarios WHERE id = ?");
         $stmt->execute([$_SESSION['usuario_id']]);
         $usuarioLogado = $stmt->fetch();
     } catch (Exception $e) {
@@ -2607,6 +2607,36 @@ try {
             stroke: #7dd3fc !important;
         }
 
+        .senha-google-aviso {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            margin-bottom: 6px;
+            font-size: 0.83rem;
+            color: #204953;
+            background: rgba(43, 122, 140, 0.08);
+            border: 1px solid rgba(43, 122, 140, 0.2);
+            border-radius: 12px;
+            padding: 8px 12px;
+            line-height: 1.4;
+        }
+
+        .senha-google-aviso svg {
+            flex-shrink: 0;
+            stroke: #204953;
+        }
+
+        body.acessibilidade-escuro .senha-google-aviso {
+            background: rgba(125, 211, 252, 0.08) !important;
+            border-color: rgba(125, 211, 252, 0.2) !important;
+            color: #7dd3fc !important;
+        }
+
+        body.acessibilidade-escuro .senha-google-aviso svg {
+            stroke: #7dd3fc !important;
+        }
+
         .campo-grupo-modal {
             margin-bottom: 18px;
         }
@@ -3139,6 +3169,17 @@ try {
                         <button type="button" class="btn-apagar" id="btnApagar" style="display: none;"
                             onclick="confirmarApagar()">Apagar Conta</button>
                     </div>
+
+                    <?php if ($isContaGoogle): ?>
+                        <div class="senha-google-aviso" id="avisoSenhaGooglePerfil">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span>Conta conectada pelo Google: a sua senha é a mesma da sua própria conta Google.</span>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="conta-imagem-placeholder <?= !empty($fotoPerfilDb) ? 'tem-foto' : '' ?>"
@@ -3175,7 +3216,10 @@ try {
         </div>
 
         <!-- BALÃO FLUTUANTE DE CONFIGURAÇÃO DE 2FA (ESTILO PAINEL DE CONFIGURAÇÃO) -->
-        <?php $ativo2fa = !empty($usuarioLogado['dois_fatores_ativo']); ?>
+        <?php 
+        $ativo2fa = !empty($usuarioLogado['dois_fatores_ativo']); 
+        $isContaGoogle = (!empty($usuarioLogado['oauth_provider']) && $usuarioLogado['oauth_provider'] === 'google');
+        ?>
         <div class="card-perfil balao-2fa-container" id="balao2faContainer" role="region" aria-label="Configuração de Verificação em Duas Etapas">
             <div class="balao-2fa-pointer" aria-hidden="true"></div>
             <div class="balao-2fa-header">
@@ -3451,6 +3495,20 @@ try {
                     </div>
                 </div>
 
+                <!-- ÁREA QUANDO É CONTA GOOGLE SEM 2FA (NÃO PRECISA DE SENHA ANTIGA) -->
+                <div id="blocoSenhaGoogle" style="display: none;">
+                    <div class="modal-alerta-info" style="margin-bottom: 16px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <div>
+                            <strong>Conta logada pelo Google:</strong> A sua senha de acesso é a mesma da sua própria conta Google. Caso queira, você pode cadastrar uma senha exclusiva para o HelpFull abaixo para poder entrar também digitando seu e-mail e senha diretamente.
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ÁREA QUANDO 2FA ESTÁ DESATIVADO (EXIGE CONFIRMAÇÃO DA SENHA ANTIGA) -->
                 <div id="blocoSenhaSem2FA" style="display: none;">
                     <div class="campo-grupo-modal">
@@ -3495,7 +3553,7 @@ try {
                     <button type="button" class="modal-btn modal-btn-cancelar" onclick="fecharModalAlterarSenha()">Cancelar</button>
                     <button type="submit" class="modal-btn modal-btn-salvar" id="btnSalvarNovaSenha">
                         <span class="btn-spinner" id="spinnerSalvarSenha" style="display: none;"></span>
-                        <span class="btn-texto">Salvar Senha</span>
+                        <span class="btn-texto" id="btnTextoSalvarSenha">Salvar Senha</span>
                     </button>
                 </div>
             </form>
@@ -3830,6 +3888,7 @@ try {
         // === CONTROLE DE 2FA (VERIFICAÇÃO EM DUAS ETAPAS) ===
         let initial2FA = <?= $ativo2fa ? 'true' : 'false' ?>;
         let estado2FAAtual = initial2FA;
+        const contaGoogle = <?= $isContaGoogle ? 'true' : 'false' ?>;
 
         function reverterEstado2FA() {
             estado2FAAtual = initial2FA;
@@ -3965,8 +4024,11 @@ try {
             const modal = document.getElementById('modalAlterarSenha');
             const bloco2FA = document.getElementById('blocoSenha2FA');
             const blocoSem2FA = document.getElementById('blocoSenhaSem2FA');
+            const blocoGoogle = document.getElementById('blocoSenhaGoogle');
             const alerta = document.getElementById('msgAlertaSenha');
+            const titulo = document.getElementById('modalSenhaTitulo');
             const subtitulo = document.getElementById('modalSenhaSubtitulo');
+            const btnTexto = document.getElementById('btnTextoSalvarSenha');
 
             if (alerta) {
                 alerta.style.display = 'none';
@@ -3991,18 +4053,35 @@ try {
             // Verifica o estado atual de 2FA
             const tem2FA = !!estado2FAAtual;
             if (tem2FA) {
-                bloco2FA.style.display = 'block';
-                blocoSem2FA.style.display = 'none';
-                subtitulo.textContent = 'Verificação em Duas Etapas ativa. Enviamos um código para seu e-mail.';
+                if (bloco2FA) bloco2FA.style.display = 'block';
+                if (blocoSem2FA) blocoSem2FA.style.display = 'none';
+                if (blocoGoogle) blocoGoogle.style.display = 'none';
+                if (titulo) titulo.textContent = contaGoogle ? 'Definir Senha de Acesso' : 'Alterar Senha';
+                if (subtitulo) subtitulo.textContent = 'Verificação em Duas Etapas ativa. Enviamos um código para seu e-mail.';
+                if (btnTexto) btnTexto.textContent = 'Salvar Senha';
                 solicitarCodigoAlterarSenha();
                 setTimeout(() => {
                     const inpCod = document.getElementById('codigo2faSenha');
                     if (inpCod) inpCod.focus();
                 }, 180);
+            } else if (contaGoogle) {
+                if (bloco2FA) bloco2FA.style.display = 'none';
+                if (blocoSem2FA) blocoSem2FA.style.display = 'none';
+                if (blocoGoogle) blocoGoogle.style.display = 'block';
+                if (titulo) titulo.textContent = 'Senha da Conta (Google)';
+                if (subtitulo) subtitulo.textContent = 'Conta logada pelo Google: a sua senha é a mesma da sua própria conta Google.';
+                if (btnTexto) btnTexto.textContent = 'Cadastrar Senha';
+                setTimeout(() => {
+                    const inpNova = document.getElementById('novaSenhaInput');
+                    if (inpNova) inpNova.focus();
+                }, 180);
             } else {
-                bloco2FA.style.display = 'none';
-                blocoSem2FA.style.display = 'block';
-                subtitulo.textContent = 'Confirme sua senha antiga para cadastrar uma nova senha.';
+                if (bloco2FA) bloco2FA.style.display = 'none';
+                if (blocoSem2FA) blocoSem2FA.style.display = 'block';
+                if (blocoGoogle) blocoGoogle.style.display = 'none';
+                if (titulo) titulo.textContent = 'Alterar Senha';
+                if (subtitulo) subtitulo.textContent = 'Confirme sua senha antiga para cadastrar uma nova senha.';
+                if (btnTexto) btnTexto.textContent = 'Salvar Senha';
                 setTimeout(() => {
                     const inpAnt = document.getElementById('senhaAntigaInput');
                     if (inpAnt) inpAnt.focus();
@@ -4117,13 +4196,13 @@ try {
             const alerta = document.getElementById('msgAlertaSenha');
             const btnSalvar = document.getElementById('btnSalvarNovaSenha');
             const spinner = document.getElementById('spinnerSalvarSenha');
-            const btnTexto = btnSalvar.querySelector('.btn-texto');
+            const btnTexto = document.getElementById('btnTextoSalvarSenha') || (btnSalvar ? btnSalvar.querySelector('.btn-texto') : null);
 
             const novaSenha = document.getElementById('novaSenhaInput').value.trim();
             const confirmarSenha = document.getElementById('confirmarNovaSenhaInput').value.trim();
             const tem2FA = !!estado2FAAtual;
             const codigo2fa = tem2FA ? document.getElementById('codigo2faSenha').value.trim() : '';
-            const senhaAntiga = !tem2FA ? document.getElementById('senhaAntigaInput').value : '';
+            const senhaAntiga = (!tem2FA && !contaGoogle) ? document.getElementById('senhaAntigaInput').value : '';
 
             // Validações no cliente
             if (novaSenha.length < 6) {
@@ -4147,7 +4226,7 @@ try {
                 return;
             }
 
-            if (!tem2FA && !senhaAntiga) {
+            if (!tem2FA && !contaGoogle && !senhaAntiga) {
                 alerta.className = 'modal-msg-alerta erro';
                 alerta.textContent = 'Por favor, informe sua senha atual para confirmação.';
                 alerta.style.display = 'block';
@@ -4177,17 +4256,17 @@ try {
 
                 if (data.sucesso) {
                     alerta.className = 'modal-msg-alerta sucesso';
-                    alerta.textContent = '✓ ' + (data.mensagem || 'Senha alterada com sucesso!');
+                    alerta.textContent = '✓ ' + (data.mensagem || 'Senha salva com sucesso!');
                     alerta.style.display = 'block';
                     if (typeof mostrarToastFeedback === 'function') {
-                        mostrarToastFeedback('Senha alterada com sucesso!', 'sucesso');
+                        mostrarToastFeedback(data.mensagem || 'Senha salva com sucesso!', 'sucesso');
                     }
                     setTimeout(() => {
                         fecharModalAlterarSenha();
                     }, 1700);
                 } else {
                     alerta.className = 'modal-msg-alerta erro';
-                    alerta.textContent = data.mensagem || 'Erro ao alterar senha. Tente novamente.';
+                    alerta.textContent = data.mensagem || 'Erro ao salvar senha. Tente novamente.';
                     alerta.style.display = 'block';
                 }
             } catch (err) {
@@ -4197,7 +4276,7 @@ try {
             } finally {
                 btnSalvar.disabled = false;
                 if (spinner) spinner.style.display = 'none';
-                if (btnTexto) btnTexto.textContent = 'Salvar Senha';
+                if (btnTexto) btnTexto.textContent = (contaGoogle && !estado2FAAtual) ? 'Cadastrar Senha' : 'Salvar Senha';
             }
         }
 
@@ -4234,10 +4313,13 @@ try {
             if (inpSenha) inpSenha.type = 'password';
 
             const tem2FA = !!estado2FAAtual;
-            if (tem2FA) {
+            const requerCodigo = tem2FA || contaGoogle;
+            if (requerCodigo) {
                 bloco2FA.style.display = 'block';
                 blocoSem2FA.style.display = 'none';
-                subtitulo.textContent = 'Verificação em Duas Etapas ativa. Enviamos um código para seu e-mail.';
+                subtitulo.textContent = (contaGoogle && !tem2FA)
+                    ? 'Conta vinculada ao Google: Enviamos um código de segurança para seu e-mail para validar a exclusão.'
+                    : 'Verificação em Duas Etapas ativa. Enviamos um código para seu e-mail.';
                 solicitarCodigoApagarConta();
                 setTimeout(() => {
                     const inpCod = document.getElementById('codigo2faApagar');
@@ -4331,17 +4413,18 @@ try {
             const btnTexto = btnConfirmar ? btnConfirmar.querySelector('.btn-texto') : null;
 
             const tem2FA = !!estado2FAAtual;
-            const codigo2fa = tem2FA ? document.getElementById('codigo2faApagar').value.trim() : '';
-            const senha = !tem2FA ? document.getElementById('senhaApagarInput').value : '';
+            const requerCodigo = tem2FA || contaGoogle;
+            const codigo2fa = requerCodigo ? document.getElementById('codigo2faApagar').value.trim() : '';
+            const senha = !requerCodigo ? document.getElementById('senhaApagarInput').value : '';
 
-            if (tem2FA && (!codigo2fa || codigo2fa.length !== 6)) {
+            if (requerCodigo && (!codigo2fa || codigo2fa.length !== 6)) {
                 alerta.className = 'modal-msg-alerta erro';
                 alerta.textContent = 'Por favor, digite o código de 6 dígitos enviado ao seu e-mail.';
                 alerta.style.display = 'block';
                 return;
             }
 
-            if (!tem2FA && !senha) {
+            if (!requerCodigo && !senha) {
                 alerta.className = 'modal-msg-alerta erro';
                 alerta.textContent = 'Por favor, digite sua senha para confirmar a exclusão da conta.';
                 alerta.style.display = 'block';

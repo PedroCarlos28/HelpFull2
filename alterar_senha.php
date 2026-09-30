@@ -23,7 +23,7 @@ if (!isset($_SESSION['usuario_id'])) {
 $usuarioId = $_SESSION['usuario_id'];
 
 try {
-    $stmt = $pdo->prepare("SELECT id, nome, email, senha, dois_fatores_ativo, codigo_2fa, codigo_2fa_expira FROM usuarios WHERE id = :id");
+    $stmt = $pdo->prepare("SELECT id, nome, email, senha, dois_fatores_ativo, codigo_2fa, codigo_2fa_expira, oauth_provider FROM usuarios WHERE id = :id");
     $stmt->execute(['id' => $usuarioId]);
     $usuario = $stmt->fetch();
 
@@ -34,6 +34,7 @@ try {
     $input = json_decode(file_get_contents('php://input'), true) ?? [];
     $acao = $input['acao'] ?? 'salvar_senha';
     $doisFatoresAtivo = !empty($usuario['dois_fatores_ativo']);
+    $isContaGoogle = (!empty($usuario['oauth_provider']) && $usuario['oauth_provider'] === 'google');
 
     // AÇÃO: SOLICITAR CÓDIGO POR E-MAIL (quando 2FA está ativo)
     if ($acao === 'solicitar_codigo') {
@@ -102,6 +103,9 @@ try {
             if ($usuario['codigo_2fa'] !== $codigoDigitado) {
                 responderJson(['sucesso' => false, 'mensagem' => 'Código de verificação incorreto. Verifique seu e-mail.']);
             }
+        } elseif ($isContaGoogle) {
+            // Usuário com conta vinculada ao Google: não possui senha antiga local conhecida.
+            // Permite cadastrar ou definir sua senha de acesso para que possa também entrar por e-mail e senha.
         } else {
             // Sem 2FA: exige obrigatoriamente a senha antiga
             $senhaAntiga = (string)($input['senha_antiga'] ?? '');
@@ -132,9 +136,13 @@ try {
         require_once __DIR__ . '/notificacao_helper.php';
         registrarNotificacaoSenhaAlterada($pdo, $usuarioId);
 
+        $msgSucesso = $isContaGoogle
+            ? 'Senha cadastrada com sucesso! Agora você também pode acessar sua conta utilizando seu e-mail e sua nova senha.'
+            : 'Senha alterada com sucesso!';
+
         responderJson([
             'sucesso' => true,
-            'mensagem' => 'Senha alterada com sucesso!'
+            'mensagem' => $msgSucesso
         ]);
     }
 
