@@ -1362,7 +1362,7 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                     if (indicator) indicator.remove();
 
                     const botMensagemHTML = `
-                        <div class="mensagem msg-bot ${data.quota_error ? 'msg-quota' : ''}">
+                        <div class="mensagem msg-bot ${data.quota_error || data.aviso_sistema ? 'msg-quota' : ''}">
                             ${formatarTexto(data.reply || "Ops, não rolou nenhuma resposta.")}
                         </div>
                     `;
@@ -1383,8 +1383,9 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                     if (indicator) indicator.remove();
 
                     const erroHTML = `
-                        <div class="mensagem msg-bot" style="color: #a12b2b;">
-                            Erro de conexão com o servidor.
+                        <div class="mensagem msg-bot msg-quota">
+                            Ops! Tivemos uma oscilação na conexão com a internet. 🌐💙<br><br>
+                            Por favor, verifique sua conexão e tente me enviar a mensagem novamente em instantes!
                         </div>
                     `;
                     areaMensagens.insertAdjacentHTML('beforeend', erroHTML);

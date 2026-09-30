@@ -2683,21 +2683,35 @@ body:not(.acessibilidade-libras) [vw],
     pointer-events: none !important;
 }
 
+/* O wrapper e o appRoot do VLibras não podem ter transform, filter, perspective ou contain,
+   pois qualquer uma dessas propriedades cria um novo containing block e desloca o botão com position:fixed
+   (no Shadow DOM) para o final da página. */
 #vlibras-access-wrapper,
-[vw] [vw-access-button] {
-    transition: filter 0.2s ease, opacity 0.2s ease !important;
-    z-index: 99990 !important;
+#vlibras-app-root {
+    position: static !important;
+    transform: none !important;
+    filter: none !important;
+    perspective: none !important;
+    contain: none !important;
+    backdrop-filter: none !important;
+    will-change: auto !important;
+    z-index: 2147483640 !important;
 }
 
-#vlibras-access-wrapper:hover,
-[vw] [vw-access-button]:hover {
-    filter: brightness(1.15) !important;
-    transform: translateY(-50%) !important;
+/* Oculta qualquer container legado [vw] para não criar nós vazios na página */
+[vw] {
+    display: none !important;
 }
 
-body.acessibilidade-escuro #vlibras-access-wrapper,
-body.acessibilidade-escuro [vw] [vw-access-button] {
-    filter: brightness(0.92) contrast(1.1) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5)) !important;
+/* Suporte de estilização com variáveis CSS que penetram o Shadow DOM nativamente */
+:root {
+    --vlibras-btn-hover-filter: brightness(1.15);
+}
+
+body.acessibilidade-escuro {
+    --vlibras-btn-outline: 1px solid rgba(255, 255, 255, 0.2);
+    --vlibras-btn-focus-visible-outline: 2px solid #38bdf8;
+    --vlibras-btn-focus-visible-shadow: 0 0 14px 4px rgba(56, 189, 248, 0.6);
 }
 
 /* ========================================================
@@ -3093,6 +3107,37 @@ body.acessibilidade-escuro [vw] [vw-access-button] {
 
 .btn-onboarding-concluir:active {
     transform: scale(0.98);
+}
+
+.btn-onboarding-pular {
+    padding: 11px 22px;
+    border-radius: 24px;
+    border: 1px solid rgba(43, 122, 140, 0.25);
+    background: transparent;
+    color: #2b7a8c;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-onboarding-pular:hover {
+    background: rgba(43, 122, 140, 0.08);
+    border-color: rgba(43, 122, 140, 0.5);
+    transform: translateY(-1px);
+}
+
+body.acessibilidade-escuro .btn-onboarding-pular {
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #94a3b8;
+}
+
+body.acessibilidade-escuro .btn-onboarding-pular:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 /* Modo Escuro do Onboarding e Painel de Configurações */

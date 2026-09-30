@@ -1218,6 +1218,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
+    <link rel="stylesheet" href="assets/tutorial.css?v=20260930-v1">
 </head>
 
 <body>
@@ -1272,6 +1273,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 <?php else: ?>
                     <a href="Comeco.php">Entrar</a>
                 <?php endif; ?>
+                <a href="javascript:void(0)" onclick="var d=document.getElementById('navDropdownMobile'), l=document.querySelector('.nav-logo-capsula'); if(d)d.classList.remove('aberto'); if(l)l.classList.remove('aberto'); window.iniciarTutorial(true);">✦ Tour pelo Site</a>
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
         </nav>
@@ -1410,7 +1412,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             </div>
 
             <section class="secao-cartoes" style="margin-bottom: 0;">
-                <a href="Diario.php" style="text-decoration: none; color: inherit;">
+                <a href="Diario.php" id="cardTutorialDiario" style="text-decoration: none; color: inherit;">
                     <div class="cartao">
                         <h3>Diário Pessoal</h3>
                         <p>Registre seus pensamentos diariamente. Escrever alivia a mente e ajuda a entender melhor suas
@@ -1418,14 +1420,14 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                     </div>
                 </a>
 
-                <a href="Comunidade.php" style="text-decoration: none; color: inherit;">
+                <a href="Comunidade.php" id="cardTutorialComunidade" style="text-decoration: none; color: inherit;">
                     <div class="cartao">
                         <h3>Comunidade</h3>
                         <p>Compartilhe suas experiências, desabafe e encontre apoio mútuo em um espaço seguro e acolhedor.</p>
                     </div>
                 </a>
 
-                <a href="Atividades.php" style="text-decoration: none; color: inherit;">
+                <a href="Atividades.php" id="cardTutorialAtividades" style="text-decoration: none; color: inherit;">
                     <div class="cartao">
                         <h3>Atividades</h3>
                         <p>Acesse exercícios de respiração e relaxamento para reduzir o estresse e melhorar seu foco no
@@ -1449,7 +1451,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
 
     <div class="secao-branca">
         <div class="secao-branca-conteudo">
-            <div class="texto-extra-container">
+            <div class="texto-extra-container" id="secaoTutorialHelpy">
                 <p class="texto-extra-scrolled">
                     Precisa conversar agora? O Helpy foi treinado para te ouvir com empatia e total privacidade,
                     sem nenhum julgamento. Um espaço seguro para desabafar, organizar as ideias ou simplesmente
@@ -1462,6 +1464,12 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 <div class="contato-info">
                     Entre em contato:<br><br>
                     Email: <a href="mailto:contatohelpfull@gmail.com" style="color: inherit; text-decoration: none;">contatohelpfull@gmail.com</a>
+                </div>
+                <div class="tutorial-reiniciar-container" style="margin-top: 16px;">
+                    <button type="button" class="btn-reiniciar-tutorial" onclick="window.iniciarTutorial(true)">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+                        <span>Fazer Tour Guiado pelo Site</span>
+                    </button>
                 </div>
             </footer>
         </div>
@@ -1830,10 +1838,15 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 </div>
             </div>
 
-            <button type="button" class="btn-onboarding-concluir" onclick="concluirOnboarding()">
-                <span>Tudo pronto! Entrar no site</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-            </button>
+            <div class="onboarding-acoes-grupo" style="display: flex; gap: 12px; width: 100%; flex-wrap: wrap; align-items: center; margin-top: 8px;">
+                <button type="button" class="btn-onboarding-concluir" style="flex: 1; min-width: 220px;" onclick="concluirOnboardingEIniciarTour()">
+                    <span>✦ Fazer Tour pelo Site</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </button>
+                <button type="button" class="btn-onboarding-pular" onclick="concluirOnboarding()">
+                    <span>Explorar Sozinho</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1998,6 +2011,18 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             fetch('concluir_onboarding.php', { method: 'POST' }).catch(() => {});
         };
 
+        window.concluirOnboardingEIniciarTour = function () {
+            concluirOnboarding();
+            setTimeout(function () {
+                if (window.iniciarTutorial) {
+                    window.iniciarTutorial(true);
+                }
+            }, 300);
+        };
+
+        window._helpfullUsuarioId = "<?php echo $usuarioLogado ? $usuarioLogado['id'] : ''; ?>";
+        window._helpfullPrimeiraVez = <?php echo $primeiraVezOnboarding ? 'true' : 'false'; ?>;
+
         document.addEventListener('DOMContentLoaded', function () {
             const modal = document.getElementById('modal-onboarding');
             if (!modal) return;
@@ -2022,6 +2047,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
     </script>
     <?php endif; ?>
 
+    <script src="assets/tutorial.js?v=20260930-v1"></script>
 </body>
 
 </html>

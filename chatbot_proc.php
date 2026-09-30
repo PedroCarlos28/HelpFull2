@@ -256,24 +256,48 @@ if (empty($botReply)) {
     }
 }
 
-// Se todos os modelos e chaves falharam:
+// Se todos os modelos e chaves falharam, analisa o motivo para exibir a mensagem mais adequada e acolhedora:
 if (empty($botReply)) {
+    // 1. Erro de Quota / Limite de Requisições (429 / RESOURCE_EXHAUSTED / Rate Limit)
     if ($houveErroQuota) {
-        $msgQuota = "Olá! Peço desculpas pelo transtorno. 💙\n\n"
-                  . "Por se tratar de um **projeto da faculdade sem apoio financeiro**, nossos tokens de inteligência artificial são limitados e infelizmente se esgotaram no momento.\n\n"
-                  . "⏳ As cotas de mensagens são renovadas periodicamente pelo provedor. Por favor, tente conversar comigo novamente mais tarde ou amanhã!\n\n"
-                  . "Se você estiver precisando de apoio e acolhimento agora, lembre-se de que você não está sozinho(a):\n"
-                  . "• Você pode ligar gratuitamente para o **CVV no número 188** (apoio emocional 24 horas por dia);\n"
-                  . "• Sinta-se à vontade para registrar suas emoções no nosso **Diário** ou praticar os exercícios na aba de **Atividades**. 🌿✨";
-
-        echo json_encode([
-            'reply' => $msgQuota,
-            'quota_error' => true
-        ]);
-        exit;
+        $msgResposta = "Olá! Peço desculpas pelo transtorno. 💙\n\n"
+                     . "Por se tratar de um **projeto da faculdade sem apoio financeiro**, nossos tokens de inteligência artificial são limitados e infelizmente se esgotaram no momento.\n\n"
+                     . "⏳ As cotas de mensagens são renovadas periodicamente pelos provedores. Por favor, tente conversar comigo novamente mais tarde ou amanhã!\n\n"
+                     . "Se você estiver precisando de apoio e acolhimento agora, lembre-se de que você não está sozinho(a):\n"
+                     . "• Você pode ligar gratuitamente para o **CVV no número 188** (apoio emocional 24 horas por dia);\n"
+                     . "• Sinta-se à vontade para registrar suas emoções no nosso **Diário** ou praticar os exercícios na aba de **Atividades**. 🌿✨";
+    }
+    // 2. Erro de Servidores Ocupados / Alta Demanda / Sobrecarga (503 / 502 / 504 / 500 / UNAVAILABLE / High Demand)
+    elseif ($ultimoErroHttp === 503 || $ultimoErroHttp === 502 || $ultimoErroHttp === 504 || stripos($ultimoDetalheErro, 'demand') !== false || stripos($ultimoDetalheErro, 'unavailable') !== false || stripos($ultimoDetalheErro, 'overloaded') !== false) {
+        $msgResposta = "Puxa, peço um pouquinho de paciência! ☁️💙\n\n"
+                     . "Os servidores de Inteligência Artificial estão com uma **alta demanda de acessos simultâneos** ou passando por instabilidade técnica no momento.\n\n"
+                     . "Por favor, aguarde de 1 a 2 minutinhos e tente me enviar sua mensagem novamente!\n\n"
+                     . "Enquanto isso, você pode fazer uma pausa com os exercícios de respiração na aba de **Atividades** ou desabafar no seu **Diário**. Se for algo urgente, o **CVV atende 24h no 188**. 🌿";
+    }
+    // 3. Erro de Filtro de Segurança / Moderação (SAFETY / BLOCKED / HARM)
+    elseif (stripos($ultimoDetalheErro, 'safety') !== false || stripos($ultimoDetalheErro, 'block') !== false || stripos($ultimoDetalheErro, 'harm') !== false) {
+        $msgResposta = "Olá! Compreendo o que você está sentindo, mas os filtros automáticos de segurança não conseguiram processar a forma como a mensagem foi escrita. 🛡️💙\n\n"
+                     . "Como o HelpFull é um espaço focado no seu **cuidado emocional e acolhimento**, tente reescrever com outras palavras focando em como você se sente no momento.\n\n"
+                     . "Se você estiver em sofrimento agudo ou desespero, por favor, busque ajuda humana imediata: ligue gratuitamente para o **CVV no 188** (24 horas) ou **SAMU 192**. Você não está sozinho(a)! 🫂";
+    }
+    // 4. Erro de Conexão / Rede / Timeout (Código 0 / timeout / cURL error)
+    elseif ($ultimoErroHttp === 0 || stripos($ultimoDetalheErro, 'timeout') !== false || stripos($ultimoDetalheErro, 'timed out') !== false || stripos($ultimoDetalheErro, 'could not resolve') !== false) {
+        $msgResposta = "Ops! Tivemos uma oscilação na conexão com a internet e não consegui receber sua mensagem a tempo. 🌐💙\n\n"
+                     . "Dê uma olhadinha na sua conexão e **tente me enviar novamente em instantes**!\n\n"
+                     . "Estou aqui pronto para te ouvir e acolher seus sentimentos. ✨";
+    }
+    // 5. Erro Geral Inesperado
+    else {
+        $msgResposta = "Olá! Tive uma pequena dificuldade técnica para processar essa resposta agora. 🤖💙\n\n"
+                     . "Como o HelpFull é um **projeto acadêmico independente desenvolvido para a faculdade**, nossos serviços às vezes passam por pequenas manutenções.\n\n"
+                     . "Por favor, tente me mandar a mensagem novamente daqui a alguns instantes! Se estiver precisando de acolhimento urgente, o **CVV está disponível 24h pelo número 188**. 🌿✨";
     }
 
-    echo json_encode(['reply' => "Erro do Google ($ultimoErroHttp): $ultimoDetalheErro"]);
+    echo json_encode([
+        'reply' => $msgResposta,
+        'quota_error' => $houveErroQuota,
+        'aviso_sistema' => true
+    ]);
     exit;
 }
 

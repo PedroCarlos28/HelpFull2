@@ -904,20 +904,12 @@
     function gerenciarVLibras(ativo) {
         var wrapper = document.getElementById('vlibras-access-wrapper');
         var appRoot = document.getElementById('vlibras-app-root');
-        var vwContainer = document.querySelector('[vw]');
+        var legacyVw = document.querySelector('[vw]');
+        if (legacyVw) {
+            try { legacyVw.remove(); } catch (e) { legacyVw.style.display = 'none'; }
+        }
 
         if (ativo) {
-            if (!vwContainer) {
-                vwContainer = document.createElement('div');
-                vwContainer.setAttribute('vw', '');
-                vwContainer.className = 'enabled';
-                vwContainer.innerHTML = '<div vw-access-button class="active"></div><div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>';
-                document.body.appendChild(vwContainer);
-            }
-
-            vwContainer.classList.remove('vlibras-oculto');
-            vwContainer.style.removeProperty('display');
-
             if (wrapper) {
                 wrapper.classList.remove('vlibras-oculto');
                 wrapper.style.removeProperty('display');
@@ -932,6 +924,11 @@
                     if (window.VLibras && !window._vlibrasIniciado) {
                         window._vlibrasInstance = new window.VLibras.Widget('https://vlibras.gov.br/app');
                         window._vlibrasIniciado = true;
+                    }
+                    var w = document.getElementById('vlibras-access-wrapper');
+                    if (w) {
+                        w.classList.remove('vlibras-oculto');
+                        w.style.removeProperty('display');
                     }
                 } catch (e) {
                     console.warn('Erro ao inicializar VLibras:', e);
@@ -1617,6 +1614,8 @@
         localStorage.setItem('helpfull_' + k, (!ativo).toString());
         aplicarAcessibilidade();
     };
+
+    window.aplicarAcessibilidade = aplicarAcessibilidade;
 
     /* ── Inicialização ────────────────────────────────────── */
     aplicarAcessibilidade();
