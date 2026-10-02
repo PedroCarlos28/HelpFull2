@@ -2043,6 +2043,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
+    <link rel="stylesheet" href="assets/tutorial.css?v=20261001-v2">
 </head>
 
 <body>
@@ -2092,6 +2093,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
+                <a href="javascript:void(0)" onclick="var d=document.getElementById('navDropdownMobile'), l=document.querySelector('.nav-logo'); if(d)d.classList.remove('aberto'); if(l)l.classList.remove('aberto'); if(window.iniciarTutorial)window.iniciarTutorial(true);">✦ Tour da Página</a>
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
 
@@ -2997,6 +2999,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
     <script src="notificacoes.js?v=20260927-v2" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260927-v2';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
+    <script src="assets/tutorial.js?v=20261001-v2"></script>
 </body>
 
 </html>

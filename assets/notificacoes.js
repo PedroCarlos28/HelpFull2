@@ -1355,8 +1355,9 @@
                         </div>
                     </div>
 
-                    <!-- Rodapé do painel sem tutorial -->
+                    <!-- Rodapé do painel com botão de tutorial/tour -->
                     <div class="acessibilidade-rodape">
+                        <button type="button" class="acessibilidade-btn-tour" onclick="if(window.iniciarTutorial){window.fecharPainelAcessibilidade();window.iniciarTutorial(true);}" title="Iniciar tour interativo guiado desta tela">✦ Tour da Página</button>
                         <button type="button" class="acessibilidade-resetar">Restaurar padrão</button>
                         <button type="button" class="btn-painel-fechar">Concluir</button>
                     </div>

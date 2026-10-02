@@ -1473,6 +1473,7 @@ $totalOutros = count($outrasSessoes);
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
+    <link rel="stylesheet" href="assets/tutorial.css?v=20261001-v2">
     <script>
         (function() {
             try {
@@ -1516,6 +1517,7 @@ $totalOutros = count($outrasSessoes);
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
                 <a href="dispositivos.php" class="ativo">Dispositivos Conectados</a>
+                <a href="javascript:void(0)" onclick="if(window.iniciarTutorial){window.iniciarTutorial(true);}">✦ Tour da Página</a>
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
 
@@ -2341,6 +2343,7 @@ $totalOutros = count($outrasSessoes);
     </script>
     <script src="notificacoes.js?v=20260927-v4" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260927-v4';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
+    <script src="assets/tutorial.js?v=20261001-v2"></script>
 </body>
 
 </html>

@@ -1218,7 +1218,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
-    <link rel="stylesheet" href="assets/tutorial.css?v=20260930-v1">
+    <link rel="stylesheet" href="assets/tutorial.css?v=20261001-v2">
 </head>
 
 <body>
@@ -2047,7 +2047,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
     </script>
     <?php endif; ?>
 
-    <script src="assets/tutorial.js?v=20260930-v1"></script>
+    <script src="assets/tutorial.js?v=20261001-v2"></script>
 </body>
 
 </html>
