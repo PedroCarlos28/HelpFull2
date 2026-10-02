@@ -30,6 +30,11 @@ if (strlen($senhaRaw) < 6) {
     responderJson(['sucesso' => false, 'mensagem' => 'A senha deve ter pelo menos 6 caracteres.']);
 }
 
+// Validação dos termos de consentimento
+if (empty($input['termos'])) {
+    responderJson(['sucesso' => false, 'mensagem' => 'Você precisa ler e aceitar os Termos de Uso e Política de Privacidade.']);
+}
+
 $senha = password_hash($senhaRaw, PASSWORD_DEFAULT);
 
 try {
@@ -41,12 +46,21 @@ try {
     }
 
     // Inserir novo usuário usando RETURNING id (padrão estável para PostgreSQL/Supabase)
-    $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha) RETURNING id");
-    $stmt->execute([
-        'nome'  => $nome,
-        'email' => $email,
-        'senha' => $senha
-    ]);
+    try {
+        $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha, termos_aceitos, termos_aceitos_em) VALUES (:nome, :email, :senha, true, NOW()) RETURNING id");
+        $stmt->execute([
+            'nome'  => $nome,
+            'email' => $email,
+            'senha' => $senha
+        ]);
+    } catch (PDOException $eCol) {
+        $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha) RETURNING id");
+        $stmt->execute([
+            'nome'  => $nome,
+            'email' => $email,
+            'senha' => $senha
+        ]);
+    }
 
     $usuario = $stmt->fetch();
     $novoId  = $usuario['id'];

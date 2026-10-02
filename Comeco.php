@@ -813,6 +813,511 @@ if (isset($_SESSION['usuario_id'])) {
             background: #23313a !important;
             border-color: #354752 !important;
         }
+
+        /* === TERMOS DE CONSENTIMENTO (CHECKBOX MODERNO) === */
+        .termo-consentimento-box {
+            display: flex;
+            flex-direction: column;
+            margin-top: 4px;
+            margin-bottom: 2px;
+            transition: transform 0.2s ease;
+        }
+
+        .termo-consentimento-box.shake-box {
+            animation: shakeCheckbox 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        @keyframes shakeCheckbox {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        .custom-checkbox-label {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .termo-real-checkbox {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        .custom-checkbox-ui {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 6px;
+            border: 2px solid #b3d1db;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+            box-shadow: inset 0 1px 2px rgba(27, 61, 69, 0.06);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .custom-checkbox-ui svg {
+            width: 13px;
+            height: 13px;
+            stroke: #ffffff;
+            stroke-dasharray: 24;
+            stroke-dashoffset: 24;
+            transition: stroke-dashoffset 0.22s ease-in-out;
+        }
+
+        .custom-checkbox-label:hover .custom-checkbox-ui {
+            border-color: #2b7a8c;
+            background: #f8fcfe;
+            transform: scale(1.05);
+        }
+
+        .termo-real-checkbox:focus-visible + .custom-checkbox-ui {
+            outline: 3px solid rgba(43, 122, 140, 0.25);
+            outline-offset: 2px;
+        }
+
+        .termo-real-checkbox:checked + .custom-checkbox-ui {
+            background: #2b7a8c;
+            border-color: #2b7a8c;
+            box-shadow: 0 3px 8px rgba(43, 122, 140, 0.35);
+        }
+
+        .termo-real-checkbox:checked + .custom-checkbox-ui svg {
+            stroke-dashoffset: 0;
+        }
+
+        .termo-label-texto {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #4b626b;
+            line-height: 1.45;
+        }
+
+        .link-termos-inline {
+            color: #2b7a8c;
+            font-weight: 800;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.15s ease, opacity 0.15s ease;
+        }
+
+        .link-termos-inline:hover {
+            color: #1a4f5b;
+            opacity: 0.9;
+        }
+
+        /* === MODAL OVERLAY PADRÃO COM VIDRO FOSCO === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 35, 45, 0.55);
+            -webkit-backdrop-filter: blur(12px) saturate(160%);
+            backdrop-filter: blur(12px) saturate(160%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.ativo {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 36px;
+            box-shadow: 0 24px 70px rgba(10, 30, 40, 0.28), 0 4px 18px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(43, 122, 140, 0.18);
+            width: 100%;
+            max-width: 580px;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.ativo .modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .btn-fechar-modal {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #f1f7f9;
+            border: 1.5px solid #d4e7ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #2b7a8c;
+            z-index: 10;
+            transition: all 0.2s ease;
+        }
+
+        .btn-fechar-modal:hover {
+            background: #e1eff3;
+            transform: rotate(90deg) scale(1.06);
+            color: #1a4f5b;
+        }
+
+        /* === MODAL TERMOS === */
+        .modal-termos-card {
+            max-width: 660px;
+        }
+
+        .modal-termos-header {
+            padding: 30px 35px 20px 35px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(43, 122, 140, 0.1);
+        }
+
+        .modal-termos-icone {
+            width: 50px;
+            height: 50px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(43, 122, 140, 0.15), rgba(76, 175, 125, 0.2));
+            color: #2b7a8c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .modal-termos-icone svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .modal-termos-titulo {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #133842;
+            margin: 0 0 4px 0;
+        }
+
+        .modal-termos-subtitulo {
+            font-size: 0.88rem;
+            color: #5d7883;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .modal-termos-corpo {
+            padding: 24px 35px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            line-height: 1.55;
+            color: #3b5059;
+            font-size: 0.94rem;
+        }
+
+        .secao-termo h4 {
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #1a2f38;
+            margin: 0 0 6px 0;
+        }
+
+        .secao-termo p {
+            margin: 0;
+        }
+
+        .secao-termo.alerta-saude {
+            background: #fff8eb;
+            border: 1.5px solid #fed7aa;
+            border-radius: 18px;
+            padding: 14px 18px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .secao-termo.alerta-saude h4 {
+            color: #9a3412;
+        }
+
+        .secao-termo.alerta-saude p {
+            color: #7c2d12;
+            font-size: 0.9rem;
+        }
+
+        .alerta-saude-icone {
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        .modal-footer-botoes {
+            padding: 18px 35px 25px 35px;
+            border-top: 1px solid rgba(43, 122, 140, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            background: #fafcfd;
+        }
+
+        /* === MODAL GOOGLE CONSENTIMENTO === */
+        .modal-google-card {
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .google-modal-header {
+            padding: 35px 30px 15px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .google-user-avatar-wrap {
+            position: relative;
+            width: 74px;
+            height: 74px;
+            margin-bottom: 14px;
+        }
+
+        .google-avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffffff;
+            box-shadow: 0 6px 20px rgba(43, 122, 140, 0.25);
+            background: #f1f7f9;
+        }
+
+        .google-avatar-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .google-avatar-badge svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .google-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(66, 133, 244, 0.12);
+            color: #1a73e8;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 10px;
+        }
+
+        .google-modal-titulo {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #133842;
+            margin: 0 0 4px 0;
+        }
+
+        .google-modal-email {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #2b7a8c;
+            margin: 0;
+            word-break: break-all;
+        }
+
+        .google-modal-corpo {
+            padding: 10px 30px 20px 30px;
+            text-align: left;
+        }
+
+        .google-modal-desc {
+            font-size: 0.93rem;
+            color: #4b626b;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .google-destaques-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .destaque-item {
+            background: #f3f8fa;
+            border: 1px solid #dcecf1;
+            border-radius: 16px;
+            padding: 10px 12px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .destaque-icone {
+            font-size: 1.35rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .destaque-item strong {
+            display: block;
+            font-size: 0.84rem;
+            color: #1a3740;
+            font-weight: 800;
+        }
+
+        .destaque-item p {
+            margin: 0;
+            font-size: 0.76rem;
+            color: #5d7580;
+            line-height: 1.3;
+        }
+
+        .box-google-check {
+            background: #fafcfd;
+            border: 1.5px dashed #bedbe3;
+            border-radius: 18px;
+            padding: 14px 16px;
+        }
+
+        /* === MODO ESCURO PARA TERMOS E MODAIS === */
+        body.acessibilidade-escuro .termo-label-texto {
+            color: #94a3b8 !important;
+        }
+
+        body.acessibilidade-escuro .link-termos-inline {
+            color: #38bdf8 !important;
+        }
+
+        body.acessibilidade-escuro .link-termos-inline:hover {
+            color: #7dd3fc !important;
+        }
+
+        body.acessibilidade-escuro .custom-checkbox-ui {
+            background: #1c272e !important;
+            border-color: #354752 !important;
+        }
+
+        body.acessibilidade-escuro .custom-checkbox-label:hover .custom-checkbox-ui {
+            border-color: #38bdf8 !important;
+            background: #23313a !important;
+        }
+
+        body.acessibilidade-escuro .termo-real-checkbox:checked + .custom-checkbox-ui {
+            background: #2b7a8c !important;
+            border-color: #2b7a8c !important;
+        }
+
+        body.acessibilidade-escuro .modal-card {
+            background: #182228 !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7) !important;
+        }
+
+        body.acessibilidade-escuro .modal-termos-header,
+        body.acessibilidade-escuro .modal-footer-botoes {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            background: #151e23 !important;
+        }
+
+        body.acessibilidade-escuro .modal-termos-titulo,
+        body.acessibilidade-escuro .google-modal-titulo,
+        body.acessibilidade-escuro .secao-termo h4 {
+            color: #f1f5f9 !important;
+        }
+
+        body.acessibilidade-escuro .modal-termos-subtitulo,
+        body.acessibilidade-escuro .modal-termos-corpo,
+        body.acessibilidade-escuro .google-modal-desc {
+            color: #cbd5e1 !important;
+        }
+
+        body.acessibilidade-escuro .btn-fechar-modal {
+            background: #23313a !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+            color: #94a3b8 !important;
+        }
+
+        body.acessibilidade-escuro .btn-fechar-modal:hover {
+            background: #2a3b46 !important;
+            color: #f1f5f9 !important;
+        }
+
+        body.acessibilidade-escuro .destaque-item {
+            background: #202b33 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        body.acessibilidade-escuro .destaque-item strong {
+            color: #f1f5f9 !important;
+        }
+
+        body.acessibilidade-escuro .destaque-item p {
+            color: #94a3b8 !important;
+        }
+
+        body.acessibilidade-escuro .box-google-check {
+            background: #1c272e !important;
+            border-color: rgba(56, 189, 248, 0.3) !important;
+        }
+
+        body.acessibilidade-escuro .secao-termo.alerta-saude {
+            background: rgba(154, 52, 18, 0.15) !important;
+            border-color: rgba(251, 146, 60, 0.3) !important;
+        }
+
+        body.acessibilidade-escuro .secao-termo.alerta-saude h4 {
+            color: #fdba74 !important;
+        }
+
+        body.acessibilidade-escuro .secao-termo.alerta-saude p {
+            color: #fed7aa !important;
+        }
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
@@ -905,6 +1410,19 @@ if (isset($_SESSION['usuario_id'])) {
                                 <span class="senha-hint" id="senhaHint"></span>
                             </div>
                         </div>
+                        <div class="termo-consentimento-box" id="boxTermosCadastro">
+                            <label class="custom-checkbox-label" for="cadTermos">
+                                <input type="checkbox" id="cadTermos" class="termo-real-checkbox" required>
+                                <span class="custom-checkbox-ui">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="termo-label-texto">
+                                    Li e concordo com os <a href="javascript:void(0)" class="link-termos-inline" onclick="abrirModalTermos(event)">Termos de Uso</a> e a <a href="javascript:void(0)" class="link-termos-inline" onclick="abrirModalTermos(event)">Política de Privacidade</a>
+                                </span>
+                            </label>
+                        </div>
                         <span id="erroCadastro" class="msg-erro-inline"></span>
                     </div>
                     <div class="footer-botoes">
@@ -972,6 +1490,152 @@ if (isset($_SESSION['usuario_id'])) {
 
     </div><!-- /caixa-acesso -->
 
+    <!-- MODAL DE TERMOS DE USO E POLÍTICA DE PRIVACIDADE -->
+    <div class="modal-overlay" id="modalTermos" style="display: none;" onclick="if(event.target === this) fecharModalTermos()">
+        <div class="modal-card modal-termos-card">
+            <button type="button" class="btn-fechar-modal" onclick="fecharModalTermos()" title="Fechar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="modal-termos-header">
+                <div class="modal-termos-icone">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="modal-termos-titulo">Termos de Uso e Consentimento</h3>
+                    <p class="modal-termos-subtitulo">HelpFull • Diretrizes de Convivência, Privacidade e Cuidado</p>
+                </div>
+            </div>
+
+            <div class="modal-termos-corpo">
+                <div class="secao-termo">
+                    <h4>1. Propósito e Acolhimento</h4>
+                    <p>O <strong>HelpFull</strong> é um espaço digital voltado para acolhimento, desenvolvimento pessoal, reflexão diária através do diário íntimo e apoio mútuo em comunidade. Ao ingressar, você se compromete com uma convivência empática e solidária.</p>
+                </div>
+
+                <div class="secao-termo">
+                    <h4>2. Privacidade e Proteção de Dados (LGPD)</h4>
+                    <p>Levamos sua privacidade a sério. Suas anotações pessoais, registros emocionais e dados de perfil são protegidos com segurança. Não vendemos nem compartilhamos seus dados com terceiros para fins comerciais ou publicitários.</p>
+                </div>
+
+                <div class="secao-termo">
+                    <h4>3. Diretrizes de Convivência na Comunidade</h4>
+                    <p>É estritamente proibido qualquer tipo de ofensa, discriminação, assédio, discurso de ódio ou incitação ao preconceito e à violência. Postagens devem zelar pelo respeito e segurança emocional de todos.</p>
+                </div>
+
+                <div class="secao-termo alerta-saude">
+                    <div class="alerta-saude-icone">⚠️</div>
+                    <div>
+                        <h4>4. Apoio Emocional e Limites do Serviço</h4>
+                        <p>O HelpFull é uma plataforma colaborativa de apoio e <strong>não substitui consultas psicológicas, médicas ou psiquiátricas</strong>. Em casos de sofrimento extremo ou crise, busque atendimento de emergência ou ligue gratuitamente para o <strong>CVV pelo 188</strong> (disponível 24h).</p>
+                    </div>
+                </div>
+
+                <div class="secao-termo">
+                    <h4>5. Consentimento Informado</h4>
+                    <p>Ao realizar o cadastro ou acessar via Conta Google, você confirma ter lido, compreendido e concordado integralmente com estes termos.</p>
+                </div>
+            </div>
+
+            <div class="modal-footer-botoes">
+                <button type="button" class="btn-form btn-secundario" onclick="fecharModalTermos()">Fechar</button>
+                <button type="button" class="btn-form btn-primario" onclick="concordarPeloModalTermos()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Li e Concordo</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONSENTIMENTO PARA PRIMEIRO ACESSO COM CONTA GOOGLE -->
+    <div class="modal-overlay" id="modalGoogleConsentimento" style="display: none;" onclick="if(event.target === this) fecharModalConsentimentoGoogle()">
+        <div class="modal-card modal-google-card">
+            <button type="button" class="btn-fechar-modal" onclick="fecharModalConsentimentoGoogle()" title="Fechar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="google-modal-header">
+                <div class="google-user-avatar-wrap">
+                    <img id="googleConsentimentoFoto" src="assets/perfil-padrao.png" alt="Foto Google" class="google-avatar-img">
+                    <span class="google-avatar-badge" title="Conta Google">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="google-badge-pill">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Primeiro Acesso com Google</span>
+                </div>
+                <h3 class="google-modal-titulo">Bem-vindo(a), <span id="googleConsentimentoNome">Usuário</span>!</h3>
+                <p class="google-modal-email" id="googleConsentimentoEmail">usuario@gmail.com</p>
+            </div>
+
+            <div class="google-modal-corpo">
+                <p class="google-modal-desc">
+                    Identificamos que esta é a sua primeira vez no HelpFull. Para ativar sua conta e liberar o acesso completo, confirme a concordância com nossas diretrizes:
+                </p>
+
+                <div class="google-destaques-grid">
+                    <div class="destaque-item">
+                        <span class="destaque-icone">🔒</span>
+                        <div>
+                            <strong>Privacidade</strong>
+                            <p>Seus diários e dados são confidenciais.</p>
+                        </div>
+                    </div>
+                    <div class="destaque-item">
+                        <span class="destaque-icone">🤝</span>
+                        <div>
+                            <strong>Acolhimento</strong>
+                            <p>Ambiente seguro e respeitoso para todos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="termo-consentimento-box box-google-check" id="boxGoogleCheck">
+                    <label class="custom-checkbox-label" for="checkConsentimentoGoogle">
+                        <input type="checkbox" id="checkConsentimentoGoogle" class="termo-real-checkbox">
+                        <span class="custom-checkbox-ui">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span class="termo-label-texto">
+                            Li e concordo com os <a href="javascript:void(0)" class="link-termos-inline" onclick="abrirModalTermos(event)">Termos de Uso</a> e a <a href="javascript:void(0)" class="link-termos-inline" onclick="abrirModalTermos(event)">Política de Privacidade</a> do HelpFull.
+                        </span>
+                    </label>
+                </div>
+                <span id="erroConsentimentoGoogle" class="msg-erro-inline" style="text-align: center; margin-top: 8px;"></span>
+            </div>
+
+            <div class="modal-footer-botoes">
+                <button type="button" class="btn-form btn-secundario" onclick="fecharModalConsentimentoGoogle()">Cancelar</button>
+                <button type="button" class="btn-form btn-primario" id="btnConfirmarGoogleTermos" onclick="confirmarConsentimentoGoogle()">
+                    <span>Concluir Cadastro</span>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px;"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
@@ -1038,8 +1702,11 @@ if (isset($_SESSION['usuario_id'])) {
             }, 2600);
         }
 
+        // Variável para armazenar temporariamente o usuário do Google pendente de consentimento
+        let usuarioGooglePendente = null;
+
         // Função compartilhada para enviar dados ao PHP e autenticar no sistema
-        async function finalizarLoginOAuth(user) {
+        async function finalizarLoginOAuth(user, aceitouTermos = false) {
             const btnLogin = document.getElementById('btnGoogleLogin');
             const btnCad   = document.getElementById('btnGoogleCad');
             if (btnLogin) { btnLogin.classList.add('carregando'); btnLogin.disabled = true; }
@@ -1051,10 +1718,11 @@ if (isset($_SESSION['usuario_id'])) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        idToken: idToken,
-                        email:   user.email,
-                        nome:    user.displayName,
-                        foto:    user.photoURL
+                        idToken:        idToken,
+                        email:          user.email,
+                        nome:           user.displayName,
+                        foto:           user.photoURL,
+                        aceitou_termos: aceitouTermos
                     })
                 });
 
@@ -1071,7 +1739,13 @@ if (isset($_SESSION['usuario_id'])) {
                 }
 
                 if (data && data.sucesso) {
-                    if (data.requer_2fa) {
+                    // Se for o primeiro acesso desta conta Google, exibe o termo de consentimento
+                    if (data.requer_termos) {
+                        if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
+                        if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
+                        usuarioGooglePendente = user;
+                        window.abrirModalConsentimentoGoogle(user, data);
+                    } else if (data.requer_2fa) {
                         if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
                         if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
                         emailPendente2FA = data.email || user.email;
@@ -1090,6 +1764,11 @@ if (isset($_SESSION['usuario_id'])) {
                 animarErroBotaoGoogle('Erro de comunicação com o servidor: ' + (err.message || err));
             }
         }
+
+        // Expõe para ser chamado também pelo modal de consentimento do Google
+        window.finalizarLoginOAuth = finalizarLoginOAuth;
+        window.getUsuarioGooglePendente = () => usuarioGooglePendente;
+        window.setUsuarioGooglePendente = (u) => { usuarioGooglePendente = u; };
 
         if (FIREBASE_CONFIGURADO) {
             app  = initializeApp(firebaseConfig);
@@ -1468,6 +2147,160 @@ if (isset($_SESSION['usuario_id'])) {
             }, 4000);
         }
 
+        // === MODAIS DE TERMOS E CONSENTIMENTO GOOGLE ===
+        function abrirModalTermos(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            const modal = document.getElementById('modalTermos');
+            if (modal) {
+                modal.style.display = 'flex';
+                void modal.offsetWidth;
+                modal.classList.add('ativo');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function fecharModalTermos() {
+            const modal = document.getElementById('modalTermos');
+            if (modal) {
+                modal.classList.remove('ativo');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    const modalG = document.getElementById('modalGoogleConsentimento');
+                    if (!modalG || !modalG.classList.contains('ativo')) {
+                        document.body.style.overflow = '';
+                    }
+                }, 300);
+            }
+        }
+
+        function concordarPeloModalTermos() {
+            // Marca o checkbox no formulário normal
+            const chkCad = document.getElementById('cadTermos');
+            if (chkCad) {
+                chkCad.checked = true;
+                limparErro('erroCadastro');
+            }
+            // Marca também no modal do Google caso esteja aberto
+            const chkGoogle = document.getElementById('checkConsentimentoGoogle');
+            if (chkGoogle) {
+                chkGoogle.checked = true;
+                const errG = document.getElementById('erroConsentimentoGoogle');
+                if (errG) errG.classList.remove('visivel');
+            }
+            fecharModalTermos();
+        }
+
+        function abrirModalConsentimentoGoogle(user, data) {
+            const modal = document.getElementById('modalGoogleConsentimento');
+            if (!modal) return;
+
+            const nomeEl = document.getElementById('googleConsentimentoNome');
+            const emailEl = document.getElementById('googleConsentimentoEmail');
+            const fotoEl = document.getElementById('googleConsentimentoFoto');
+            const chk = document.getElementById('checkConsentimentoGoogle');
+            const err = document.getElementById('erroConsentimentoGoogle');
+            const btn = document.getElementById('btnConfirmarGoogleTermos');
+
+            if (nomeEl) nomeEl.textContent = (data && data.nome) ? data.nome : (user.displayName || 'Usuário');
+            if (emailEl) emailEl.textContent = (data && data.email) ? data.email : (user.email || '');
+            if (fotoEl) {
+                fotoEl.src = (data && data.foto) ? data.foto : (user.photoURL || 'assets/perfil-padrao.png');
+            }
+            if (chk) chk.checked = false;
+            if (err) {
+                err.textContent = '';
+                err.classList.remove('visivel');
+            }
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Concluir Cadastro</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px;"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>`;
+            }
+
+            modal.style.display = 'flex';
+            void modal.offsetWidth;
+            modal.classList.add('ativo');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModalConsentimentoGoogle() {
+            const modal = document.getElementById('modalGoogleConsentimento');
+            if (modal) {
+                modal.classList.remove('ativo');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+            if (typeof window.setUsuarioGooglePendente === 'function') {
+                window.setUsuarioGooglePendente(null);
+            }
+            const btnLogin = document.getElementById('btnGoogleLogin');
+            const btnCad   = document.getElementById('btnGoogleCad');
+            if (btnLogin) { btnLogin.classList.remove('carregando'); btnLogin.disabled = false; }
+            if (btnCad)   { btnCad.classList.remove('carregando');   btnCad.disabled   = false; }
+        }
+
+        async function confirmarConsentimentoGoogle() {
+            const chk = document.getElementById('checkConsentimentoGoogle');
+            const err = document.getElementById('erroConsentimentoGoogle');
+            const btn = document.getElementById('btnConfirmarGoogleTermos');
+
+            if (!chk || !chk.checked) {
+                if (err) {
+                    err.textContent = 'Você precisa marcar a caixa aceitando os termos para criar sua conta.';
+                    err.classList.add('visivel');
+                }
+                const box = document.getElementById('boxGoogleCheck');
+                if (box) {
+                    box.classList.add('shake-box');
+                    setTimeout(() => box.classList.remove('shake-box'), 500);
+                }
+                if (chk) chk.focus();
+                return;
+            }
+
+            if (err) err.classList.remove('visivel');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<span class="social-spinner" style="display:inline-block;width:18px;height:18px;border-width:2.5px;margin-right:8px;vertical-align:middle;"></span> Concluindo...`;
+            }
+
+            const userPendente = typeof window.getUsuarioGooglePendente === 'function' ? window.getUsuarioGooglePendente() : null;
+            if (!userPendente) {
+                if (err) {
+                    err.textContent = 'Sessão do Google expirada. Por favor, tente clicar novamente no botão do Google.';
+                    err.classList.add('visivel');
+                }
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>Concluir Cadastro</span>`;
+                }
+                return;
+            }
+
+            try {
+                if (typeof window.finalizarLoginOAuth === 'function') {
+                    await window.finalizarLoginOAuth(userPendente, true);
+                }
+            } catch (e) {
+                if (err) {
+                    err.textContent = 'Erro ao processar: ' + (e.message || e);
+                    err.classList.add('visivel');
+                }
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>Tentar Novamente</span>`;
+                }
+            }
+        }
+
+        window.abrirModalTermos = abrirModalTermos;
+        window.fecharModalTermos = fecharModalTermos;
+        window.concordarPeloModalTermos = concordarPeloModalTermos;
+        window.abrirModalConsentimentoGoogle = abrirModalConsentimentoGoogle;
+        window.fecharModalConsentimentoGoogle = fecharModalConsentimentoGoogle;
+        window.confirmarConsentimentoGoogle = confirmarConsentimentoGoogle;
+
         // === CADASTRO ===
         document.getElementById('formCadastro').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1479,6 +2312,19 @@ if (isset($_SESSION['usuario_id'])) {
             if (senha.length < 6) {
                 mostrarErro('erroCadastro', 'A senha deve ter pelo menos 6 caracteres.');
                 document.getElementById('cadSenha').classList.add('input-erro');
+                return;
+            }
+
+            // Validação do termo de consentimento
+            const chkTermos = document.getElementById('cadTermos');
+            if (!chkTermos || !chkTermos.checked) {
+                mostrarErro('erroCadastro', 'Você precisa aceitar os termos de consentimento para prosseguir.');
+                const box = document.getElementById('boxTermosCadastro');
+                if (box) {
+                    box.classList.add('shake-box');
+                    setTimeout(() => box.classList.remove('shake-box'), 500);
+                }
+                if (chkTermos) chkTermos.focus();
                 return;
             }
 
@@ -1494,7 +2340,7 @@ if (isset($_SESSION['usuario_id'])) {
                 const response = await fetch('cadastro_proc.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome, email, senha })
+                    body: JSON.stringify({ nome, email, senha, termos: true })
                 });
                 const data = await response.json();
                 if (data.sucesso) {

@@ -156,14 +156,27 @@ try {
         responderJson(['sucesso' => true, 'novo' => false]);
     }
 
-    // 4. Usuário novo: cria senha aleatória segura para respeitar NOT NULL caso o banco ainda exija
+    // 4. Se for primeiro acesso (novo usuário), exige consentimento com os Termos de Uso
+    $concordouTermos = !empty($input['aceitou_termos']) || !empty($input['concordou_termos']);
+
+    if (!$concordouTermos) {
+        responderJson([
+            'sucesso'        => true,
+            'requer_termos'  => true,
+            'nome'           => $nome,
+            'email'          => $email,
+            'foto'           => $foto
+        ]);
+    }
+
+    // Cria senha aleatória segura para respeitar NOT NULL caso o banco ainda exija
     $senhaHashAleatoria = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);
 
     try {
-        // Tenta inserir incluindo foto_perfil, oauth_provider e firebase_uid
+        // Tenta inserir incluindo foto_perfil, oauth_provider, firebase_uid e termos_aceitos
         $insert = $pdo->prepare(
-            "INSERT INTO usuarios (nome, email, senha, foto_perfil, oauth_provider, firebase_uid) 
-             VALUES (:nome, :email, :senha, :foto, 'google', :uid) RETURNING id"
+            "INSERT INTO usuarios (nome, email, senha, foto_perfil, oauth_provider, firebase_uid, termos_aceitos, termos_aceitos_em) 
+             VALUES (:nome, :email, :senha, :foto, 'google', :uid, true, NOW()) RETURNING id"
         );
         $insert->execute([
             'nome'  => $nome,
@@ -173,6 +186,20 @@ try {
             'uid'   => $firebaseUid
         ]);
     } catch (PDOException $ex) {
+        // Fallback 1: tenta sem colunas de termos
+        try {
+            $insert = $pdo->prepare(
+                "INSERT INTO usuarios (nome, email, senha, foto_perfil, oauth_provider, firebase_uid) 
+                 VALUES (:nome, :email, :senha, :foto, 'google', :uid) RETURNING id"
+            );
+            $insert->execute([
+                'nome'  => $nome,
+                'email' => $email,
+                'senha' => $senhaHashAleatoria,
+                'foto'  => $foto,
+                'uid'   => $firebaseUid
+            ]);
+        } catch (PDOException $ex1) {
         // Fallback 1: tenta com foto_perfil caso as colunas de provider ainda não existam
         try {
             $insert = $pdo->prepare(
@@ -198,6 +225,7 @@ try {
             ]);
         }
     }
+}
 
     $novoUsuario = $insert->fetch();
     $novoId = $novoUsuario['id'];
