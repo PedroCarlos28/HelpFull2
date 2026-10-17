@@ -415,6 +415,141 @@ body.acessibilidade-escuro .btn-reiniciar-tutorial:hover {
     border-color: rgba(56, 189, 248, 0.6);
 }
 
+/* ========================================================
+   TOUR COMPLETO: TRILHA DE ETAPAS (PÁGINAS)
+   ======================================================== */
+.tutorial-etapas[hidden] {
+    display: none !important;
+}
+
+.tutorial-etapas-trilha {
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+}
+
+.tutorial-etapa {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--tut-text-muted);
+}
+
+.tutorial-etapa::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.acessibilidade-escuro .tutorial-etapa::before {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.tutorial-etapa.feito::before {
+    background: rgba(43, 122, 140, 0.55);
+}
+
+.tutorial-etapa.atual::before {
+    background: linear-gradient(90deg, #2b7a8c, #38bdf8);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+}
+
+.tutorial-etapa-nome {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    opacity: 0.75;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.tutorial-etapa.atual .tutorial-etapa-nome {
+    color: var(--tut-primary);
+    opacity: 1;
+    font-weight: 800;
+}
+
+body.acessibilidade-escuro .tutorial-etapa.atual .tutorial-etapa-nome {
+    color: #38bdf8;
+}
+
+.tutorial-etapa:hover .tutorial-etapa-nome {
+    opacity: 1;
+}
+
+.tutorial-etapa:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+/* Botão "Ir para [página] →" */
+.tutorial-btn-proximo.tutorial-btn-ir {
+    background: linear-gradient(135deg, #0ea5e9, #2b7a8c);
+    animation: tutorialBtnIrPulse 2s infinite ease-in-out;
+}
+
+@keyframes tutorialBtnIrPulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35); }
+    50% { box-shadow: 0 4px 22px rgba(14, 165, 233, 0.65); }
+}
+
+/* Botão "Concluir tour" */
+.tutorial-btn-proximo.tutorial-btn-concluir,
+body.acessibilidade-escuro .tutorial-btn-proximo.tutorial-btn-concluir {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
+
+.tutorial-btn-proximo:disabled {
+    cursor: wait;
+    filter: saturate(0.8);
+    transform: none;
+    animation: none;
+}
+
+/* Spinner exibido enquanto troca de página */
+.tutorial-spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    display: inline-block;
+    animation: tutorialSpin 0.7s linear infinite;
+}
+
+@keyframes tutorialSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* Card de introdução / conclusão (sem elemento destacado) */
+#tutorial-card.tutorial-card-centro .tutorial-step-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+}
+
+#tutorial-card.tutorial-card-saindo {
+    opacity: 0.6;
+    transform: scale(0.97);
+}
+
 /* ADAPTAÇÃO MOBILE */
 @media (max-width: 768px) {
     #tutorial-card {
