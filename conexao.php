@@ -91,11 +91,11 @@ if (!function_exists('limparSessaoUsuario')) {
     }
 }
 
-// Configurações usando o Agrupador de Sessões (Session Pooler) para funcionar no IPv4
-$host = 'aws-1-us-west-2.pooler.supabase.com';
+// Configurações usando o Agrupador de Sessões (Session Pooler) - São Paulo (sa-east-1)
+$host = 'aws-1-sa-east-1.pooler.supabase.com';
 $port = '5432';
 $dbname = 'postgres';
-$user = 'postgres.mxqhpyzdgthzrzchhjqb';
+$user = 'postgres.vkcajjuoowulykbzjnqg';
 
 // Senha do banco de dados Supabase
 $password = 'HelpFull-2026';
