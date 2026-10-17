@@ -1319,7 +1319,7 @@ if (isset($_SESSION['usuario_id'])) {
             color: #fed7aa !important;
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261017-notif-scroll">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 

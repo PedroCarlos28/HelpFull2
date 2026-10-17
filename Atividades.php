@@ -467,6 +467,12 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             display: flex;
             flex-direction: column;
             gap: 12px;
+            max-height: min(400px, calc(100vh - 190px));
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 6px;
+            padding-left: 2px;
+            scrollbar-width: thin;
         }
 
         .item-notificacao {
@@ -1475,7 +1481,7 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             .video-busca-grid { grid-template-columns: 1fr; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20260927-v3">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261017-notif-scroll">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <link rel="stylesheet" href="assets/tutorial.css?v=20261017-tour">
 </head>

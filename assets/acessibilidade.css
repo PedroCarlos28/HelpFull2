@@ -4339,3 +4339,68 @@ body.acessibilidade-escuro .modal-alterar-senha-card .modal-btn-salvar {
     color: #ffffff !important;
     border: 1px solid rgba(125, 211, 252, 0.25) !important;
 }
+
+/* =============================================================
+   ROLAGEM SUAVE NA LISTA DE NOTIFICAÇÕES (SCROLLBAR MODERNA)
+   Quando houver muitas notificações, o painel limita a altura e 
+   permite rolar suavemente para ver o restante.
+   ============================================================= */
+.painel-notificacoes {
+    max-height: min(540px, calc(100vh - 100px)) !important;
+}
+
+.painel-notificacoes .lista-notificacoes,
+.lista-notificacoes {
+    max-height: min(400px, calc(100vh - 190px)) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-right: 6px !important;
+    padding-left: 2px !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(43, 122, 140, 0.45) transparent !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.painel-notificacoes .lista-notificacoes::-webkit-scrollbar,
+.lista-notificacoes::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.painel-notificacoes .lista-notificacoes::-webkit-scrollbar-track,
+.lista-notificacoes::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.04) !important;
+    border-radius: 10px !important;
+}
+
+.painel-notificacoes .lista-notificacoes::-webkit-scrollbar-thumb,
+.lista-notificacoes::-webkit-scrollbar-thumb {
+    background: rgba(43, 122, 140, 0.4) !important;
+    border-radius: 10px !important;
+    transition: background 0.2s ease !important;
+}
+
+.painel-notificacoes .lista-notificacoes::-webkit-scrollbar-thumb:hover,
+.lista-notificacoes::-webkit-scrollbar-thumb:hover {
+    background: rgba(43, 122, 140, 0.7) !important;
+}
+
+body.acessibilidade-escuro .painel-notificacoes .lista-notificacoes,
+body.acessibilidade-escuro .lista-notificacoes {
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent !important;
+}
+
+body.acessibilidade-escuro .painel-notificacoes .lista-notificacoes::-webkit-scrollbar-track,
+body.acessibilidade-escuro .lista-notificacoes::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.acessibilidade-escuro .painel-notificacoes .lista-notificacoes::-webkit-scrollbar-thumb,
+body.acessibilidade-escuro .lista-notificacoes::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.28) !important;
+}
+
+body.acessibilidade-escuro .painel-notificacoes .lista-notificacoes::-webkit-scrollbar-thumb:hover,
+body.acessibilidade-escuro .lista-notificacoes::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+
