@@ -145,10 +145,6 @@ $usuarioLogado = obterUsuarioLogado($pdo);
 
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         html, body {
             margin: 0;
             padding: 0;
@@ -1044,6 +1040,10 @@ $usuarioLogado = obterUsuarioLogado($pdo);
 
             .nav-wrapper-global {
                 width: 100%;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                pointer-events: none;
             }
 
             .navbar-topo {
@@ -1051,11 +1051,35 @@ $usuarioLogado = obterUsuarioLogado($pdo);
                 width: calc(100% - 40px);
                 margin: 0 auto;
                 justify-content: space-between;
+                pointer-events: auto;
             }
             .nav-logo { cursor: pointer; }
 
             .nav-tabs-side {
-                display: none;
+                display: flex;
+                width: auto;
+                justify-content: center;
+                opacity: 0;
+                transform: translateY(-6px) scale(0.95);
+                pointer-events: none;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .nav-tabs-side.show {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                pointer-events: auto;
+            }
+
+            .nav-tabs-side .tabs-capsula {
+                padding: 4px;
+                background: rgba(255, 255, 255, 0.85);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            }
+
+            .nav-tabs-side .tab-btn {
+                padding: 8px 18px;
+                font-size: 0.88rem;
             }
 
             .conteudo-site {
@@ -1802,13 +1826,20 @@ $usuarioLogado = obterUsuarioLogado($pdo);
         function animarScrollAteTopo(duracao, callback) {
             const getScrollTop = () => window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
             const inicio = getScrollTop();
-            if (inicio <= 20) {
-                window.scrollTo(0, 0);
+            if (inicio <= 15) {
+                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
                 document.documentElement.scrollTop = 0;
                 document.body.scrollTop = 0;
                 if (callback) callback();
                 return;
             }
+
+            const htmlEl = document.documentElement;
+            const bodyEl = document.body;
+            const prevHtmlBehavior = htmlEl.style.scrollBehavior;
+            const prevBodyBehavior = bodyEl.style.scrollBehavior;
+            htmlEl.style.scrollBehavior = 'auto';
+            bodyEl.style.scrollBehavior = 'auto';
 
             const tempoInicio = performance.now();
 
@@ -1816,23 +1847,25 @@ $usuarioLogado = obterUsuarioLogado($pdo);
                 const tempoDecorrido = tempoAtual - tempoInicio;
                 const progresso = Math.min(tempoDecorrido / duracao, 1);
                 
-                // Easing cúbico ultra-suave
+                // Easing cúbico suave (easeInOutCubic)
                 const ease = progresso < 0.5 
                     ? 4 * progresso * progresso * progresso 
                     : 1 - Math.pow(-2 * progresso + 2, 3) / 2;
 
-                const pos = Math.round(inicio * (1 - ease));
+                const pos = Math.max(0, Math.round(inicio * (1 - ease)));
 
-                window.scrollTo(0, pos);
-                document.documentElement.scrollTop = pos;
-                document.body.scrollTop = pos;
+                window.scrollTo({ top: pos, left: 0, behavior: 'instant' });
+                htmlEl.scrollTop = pos;
+                bodyEl.scrollTop = pos;
 
                 if (progresso < 1) {
                     requestAnimationFrame(animar);
                 } else {
-                    window.scrollTo(0, 0);
-                    document.documentElement.scrollTop = 0;
-                    document.body.scrollTop = 0;
+                    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+                    htmlEl.scrollTop = 0;
+                    bodyEl.scrollTop = 0;
+                    htmlEl.style.scrollBehavior = prevHtmlBehavior;
+                    bodyEl.style.scrollBehavior = prevBodyBehavior;
                     if (callback) callback();
                 }
             }
@@ -1860,7 +1893,7 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             trocandoAbaEmAndamento = false;
         }
 
-        function showTab(tabId, btnClicado, forcarDireto) {
+        function showTab(tabId, btnClicado) {
             if (trocandoAbaEmAndamento) return;
 
             const scrollAtual = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -1868,13 +1901,13 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             // Se clicou na mesma aba que já está aberta
             if (tabId === currentTabId) {
                 if (scrollAtual > 20) {
-                    animarScrollAteTopo(450);
+                    animarScrollAteTopo(500);
                 }
                 return;
             }
 
-            // Se for chamada direta (ex: irParaVideo) ou se já estiver no topo
-            if (forcarDireto || scrollAtual <= 20) {
+            // Se já estiver no topo
+            if (scrollAtual <= 20) {
                 aplicarTrocaAba(tabId, btnClicado);
                 return;
             }
@@ -1883,7 +1916,7 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             // Primeiro rola suavemente até o topo e depois troca para a aba desejada
             trocandoAbaEmAndamento = true;
 
-            animarScrollAteTopo(450, () => {
+            animarScrollAteTopo(500, () => {
                 aplicarTrocaAba(tabId, btnClicado);
             });
         }
@@ -1891,22 +1924,40 @@ $usuarioLogado = obterUsuarioLogado($pdo);
 
         function irParaVideo(targetId) {
             const btnVideos = document.querySelector('.tab-btn[data-tab="videos"]');
-            showTab('videos', btnVideos, true);
+            const scrollAtual = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-            setTimeout(() => {
-                const elemento = document.getElementById(targetId);
-                if (elemento) {
-                    elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
-                    elemento.classList.remove('video-card-destaque');
-                    void elemento.offsetWidth;
-                    elemento.classList.add('video-card-destaque');
-
+            if (scrollAtual > 20) {
+                trocandoAbaEmAndamento = true;
+                animarScrollAteTopo(500, () => {
+                    aplicarTrocaAba('videos', btnVideos);
                     setTimeout(() => {
+                        const elemento = document.getElementById(targetId);
+                        if (elemento) {
+                            elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            elemento.classList.remove('video-card-destaque');
+                            void elemento.offsetWidth;
+                            elemento.classList.add('video-card-destaque');
+                            setTimeout(() => {
+                                elemento.classList.remove('video-card-destaque');
+                            }, 3600);
+                        }
+                    }, 120);
+                });
+            } else {
+                aplicarTrocaAba('videos', btnVideos);
+                setTimeout(() => {
+                    const elemento = document.getElementById(targetId);
+                    if (elemento) {
+                        elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         elemento.classList.remove('video-card-destaque');
-                    }, 3600);
-                }
-            }, 120);
+                        void elemento.offsetWidth;
+                        elemento.classList.add('video-card-destaque');
+                        setTimeout(() => {
+                            elemento.classList.remove('video-card-destaque');
+                        }, 3600);
+                    }
+                }, 120);
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { reposicionarSlider('textos'); }, 50); });
