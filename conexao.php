@@ -18,8 +18,9 @@ if (getenv('VERCEL') || !empty($_SERVER['VERCEL'])) {
     }
 }
 
-// Inicia sessão de forma segura se ainda não iniciada
+// Inicia sessão de forma segura se ainda não iniciada com suporte a bfcache
 if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    @session_cache_limiter('private_no_expire');
     session_start();
 }
 

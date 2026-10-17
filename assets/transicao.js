@@ -14,32 +14,27 @@
             if (!document.querySelector('script[type="speculationrules"]')) {
                 const specScript = document.createElement('script');
                 specScript.type = 'speculationrules';
+                const urlsAlvo = [
+                    'inicio.php', '/inicio.php', 'inicio', '/inicio',
+                    'Comunidade.php', '/Comunidade.php', 'comunidade', '/comunidade',
+                    'Diario.php', '/Diario.php', 'diario', '/diario',
+                    'ChatBOT.php', '/ChatBOT.php', 'chatbot', '/chatbot',
+                    'Atividades.php', '/Atividades.php', 'atividades', '/atividades',
+                    'Perfil.php', '/Perfil.php', 'perfil', '/perfil',
+                    'dispositivos.php', '/dispositivos.php', 'dispositivos', '/dispositivos'
+                ];
                 specScript.textContent = JSON.stringify({
                     prerender: [
                         {
                             source: 'list',
-                            urls: [
-                                'inicio.php',
-                                'Comunidade.php',
-                                'Diario.php',
-                                'ChatBOT.php',
-                                'Atividades.php',
-                                'Perfil.php'
-                            ],
+                            urls: urlsAlvo,
                             eagerness: 'moderate'
                         }
                     ],
                     prefetch: [
                         {
                             source: 'list',
-                            urls: [
-                                'inicio.php',
-                                'Comunidade.php',
-                                'Diario.php',
-                                'ChatBOT.php',
-                                'Atividades.php',
-                                'Perfil.php'
-                            ],
+                            urls: urlsAlvo,
                             eagerness: 'moderate'
                         }
                     ]
@@ -87,6 +82,10 @@
         }, { passive: true, capture: true });
 
         document.addEventListener('touchstart', (e) => {
+            tratarElemento(e.target);
+        }, { passive: true, capture: true });
+
+        document.addEventListener('pointerdown', (e) => {
             tratarElemento(e.target);
         }, { passive: true, capture: true });
     }
