@@ -6,9 +6,7 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
-$stmt->execute([$_SESSION['usuario_id']]);
-$usuarioLogado = $stmt->fetch();
+$usuarioLogado = obterUsuarioLogado($pdo);
 
 if (!$usuarioLogado) {
     header("Location: Comeco.php");

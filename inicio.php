@@ -1,16 +1,8 @@
 <?php
 require_once 'conexao.php';
 
-// 1. VERIFICA SE ESTÁ LOGADO (Para carregar dados do usuário)
-$usuarioLogado = null;
-if (isset($_SESSION['usuario_id'])) {
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
-        $stmt->execute([$_SESSION['usuario_id']]);
-        $usuarioLogado = $stmt->fetch();
-    } catch (Exception $e) {
-    }
-}
+// 1. VERIFICA SE ESTÁ LOGADO (Para carregar dados do usuário com cache para máxima velocidade)
+$usuarioLogado = obterUsuarioLogado($pdo);
 $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_concluido']);
 ?>
 <!DOCTYPE html>

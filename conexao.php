@@ -47,6 +47,10 @@ if (!function_exists('salvarSessaoUsuario')) {
             'sig'   => $sig
         ]));
         
+        unset($_SESSION['usuario_cache']);
+        unset($_SESSION['usuario_cache_time']);
+        unset($_SESSION['ultima_checagem_sessao']);
+
         $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
         setcookie('helpfull_session', $payload, [
             'expires'  => time() + (30 * 24 * 60 * 60), // 30 dias de persistência
@@ -70,6 +74,9 @@ if (!function_exists('limparSessaoUsuario')) {
         unset($_SESSION['usuario_id']);
         unset($_SESSION['usuario_nome']);
         unset($_SESSION['token_sessao']);
+        unset($_SESSION['usuario_cache']);
+        unset($_SESSION['usuario_cache_time']);
+        unset($_SESSION['ultima_checagem_sessao']);
         if (session_status() === PHP_SESSION_ACTIVE) {
             @session_destroy();
         }
@@ -93,8 +100,8 @@ $user = 'postgres.mxqhpyzdgthzrzchhjqb';
 // Senha do banco de dados Supabase
 $password = 'HelpFull-2026';
 
-// Monta a string de conexão (DSN)
-$dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+// Monta a string de conexão (DSN) com timezone direto na conexão para evitar round-trip extra
+$dsn = "pgsql:host=$host;port=$port;dbname=$dbname;options='--timezone=America/Sao_Paulo'";
 
 try {
     $pdoOptions = [
@@ -103,7 +110,6 @@ try {
         PDO::ATTR_TIMEOUT => 6
     ];
     $pdo = new PDO($dsn, $user, $password, $pdoOptions);
-    $pdo->exec("SET TIME ZONE 'America/Sao_Paulo'");
 } catch (PDOException $e) {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
@@ -148,30 +154,72 @@ if (!function_exists('atualizarCookieSessaoHelper')) {
     }
 }
 
-// Verificação de sessão ativa no banco (garante que dispositivo revogado seja imediatamente desconectado)
+// Verificação de sessão ativa no banco (garante que dispositivo revogado seja desconectado)
+// Otimização de performance: faz cache de 60s da verificação para não atrasar a navegação entre telas
 if (isset($_SESSION['usuario_id']) && isset($pdo)) {
-    require_once __DIR__ . '/sessao_helper.php';
-    if (!empty($_SESSION['token_sessao'])) {
-        $statusSessao = verificarStatusSessao($pdo, $_SESSION['usuario_id'], $_SESSION['token_sessao']);
-        if ($statusSessao === 'revogada') {
-            limparSessaoUsuario();
-        } elseif ($statusSessao === 'inexistente') {
-            // Sessão válida em memória mas não cadastrada no banco:
-            // Registra ou vincula ao banco sem deslogar o usuário
+    $scriptAtual = strtolower(basename($_SERVER['PHP_SELF'] ?? ''));
+    $forcarChecagem = ($scriptAtual === 'dispositivos.php' || $scriptAtual === 'sair.php');
+    $agora = time();
+    $deveChecar = $forcarChecagem || empty($_SESSION['ultima_checagem_sessao']) || ($agora - (int)$_SESSION['ultima_checagem_sessao'] > 60);
+
+    if ($deveChecar) {
+        $_SESSION['ultima_checagem_sessao'] = $agora;
+        require_once __DIR__ . '/sessao_helper.php';
+        if (!empty($_SESSION['token_sessao'])) {
+            $statusSessao = verificarStatusSessao($pdo, $_SESSION['usuario_id'], $_SESSION['token_sessao']);
+            if ($statusSessao === 'revogada') {
+                limparSessaoUsuario();
+            } elseif ($statusSessao === 'inexistente') {
+                $novoToken = registrarNovaSessao($pdo, $_SESSION['usuario_id']);
+                if ($novoToken) {
+                    $_SESSION['token_sessao'] = $novoToken;
+                    atualizarCookieSessaoHelper($_SESSION['usuario_id'], $_SESSION['usuario_nome'] ?? '', $novoToken);
+                }
+            }
+        } else {
             $novoToken = registrarNovaSessao($pdo, $_SESSION['usuario_id']);
             if ($novoToken) {
                 $_SESSION['token_sessao'] = $novoToken;
                 atualizarCookieSessaoHelper($_SESSION['usuario_id'], $_SESSION['usuario_nome'] ?? '', $novoToken);
             }
         }
-    } else {
-        // Usuário em sessão ativa sem token de sessão registrado:
-        // Registra uma sessão automaticamente para que apareça no painel de dispositivos
-        $novoToken = registrarNovaSessao($pdo, $_SESSION['usuario_id']);
-        if ($novoToken) {
-            $_SESSION['token_sessao'] = $novoToken;
-            atualizarCookieSessaoHelper($_SESSION['usuario_id'], $_SESSION['usuario_nome'] ?? '', $novoToken);
+    }
+}
+
+// Função de carregamento com cache dos dados do usuário logado (evita SELECT * FROM usuarios em cada tela)
+if (!function_exists('obterUsuarioLogado')) {
+    function obterUsuarioLogado($pdo, $forcarAtualizacao = false) {
+        if (empty($_SESSION['usuario_id']) || !$pdo) {
+            return null;
         }
+        $uid = $_SESSION['usuario_id'];
+        $agora = time();
+
+        if (!$forcarAtualizacao && !empty($_SESSION['usuario_cache']) && ($_SESSION['usuario_cache']['id'] ?? '') == $uid) {
+            if (!empty($_SESSION['usuario_cache_time']) && ($agora - (int)$_SESSION['usuario_cache_time'] < 120)) {
+                return $_SESSION['usuario_cache'];
+            }
+        }
+
+        try {
+            $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, onboarding_concluido, videos_assistidos, ultimo_video_data, COALESCE(dois_fatores_ativo, false) as dois_fatores_ativo, COALESCE(is_admin, false) as is_admin, oauth_provider FROM usuarios WHERE id = ?");
+            $stmt->execute([$uid]);
+            $user = $stmt->fetch();
+            if ($user) {
+                $_SESSION['usuario_cache'] = $user;
+                $_SESSION['usuario_cache_time'] = $agora;
+                return $user;
+            }
+        } catch (Exception $e) {}
+
+        return null;
+    }
+}
+
+if (!function_exists('limparCacheUsuarioLogado')) {
+    function limparCacheUsuarioLogado() {
+        unset($_SESSION['usuario_cache']);
+        unset($_SESSION['usuario_cache_time']);
     }
 }
 ?>

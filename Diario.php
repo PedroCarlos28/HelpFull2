@@ -62,9 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
-$stmt->execute([$_SESSION['usuario_id']]);
-$usuarioLogado = $stmt->fetch();
+$usuarioLogado = obterUsuarioLogado($pdo);
+if (!$usuarioLogado) {
+    header("Location: Comeco.php");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>

@@ -2,15 +2,7 @@
 require_once 'conexao.php';
 require_once 'email_helper.php';
 
-$usuarioLogado = null;
-if (isset($_SESSION['usuario_id'])) {
-    try {
-        $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, videos_assistidos, ultimo_video_data, COALESCE(dois_fatores_ativo, false) as dois_fatores_ativo, oauth_provider FROM usuarios WHERE id = ?");
-        $stmt->execute([$_SESSION['usuario_id']]);
-        $usuarioLogado = $stmt->fetch();
-    } catch (Exception $e) {
-    }
-}
+$usuarioLogado = obterUsuarioLogado($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     if ($_POST['acao'] === 'editar_conta') {
@@ -23,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             $stmtUp = $pdo->prepare("UPDATE usuarios SET nome = ?, email = ?, foto_perfil = ?, dois_fatores_ativo = ? WHERE id = ?");
             $stmtUp->execute([$novoNome, $novoEmail, $novaFoto, $novo2FA ? 'true' : 'false', $_SESSION['usuario_id']]);
             $_SESSION['usuario_nome'] = $novoNome;
+            limparCacheUsuarioLogado();
         }
         header("Location: Perfil.php?sucesso=1");
         exit;
@@ -45,25 +38,30 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
 $id = $usuarioLogado['id'];
 $hoje = date('Y-m-d');
 
-$stmtPosts = $pdo->prepare("SELECT COUNT(*) FROM posts_comunidade WHERE usuario_id = ?");
-$stmtPosts->execute([$id]);
-$totalPosts = $stmtPosts->fetchColumn();
-
-$stmtChats = $pdo->prepare("SELECT COUNT(DISTINCT sessao_token) FROM historico_chat WHERE usuario_id = ?");
-$stmtChats->execute([$id]);
-$totalChats = $stmtChats->fetchColumn();
-
-$stmtChatHoje = $pdo->prepare("SELECT COUNT(*) FROM historico_chat WHERE usuario_id = ? AND sessao_token = ?");
-$stmtChatHoje->execute([$id, $hoje]);
-$usouChatHoje = ($stmtChatHoje->fetchColumn() > 0);
+// Otimização: Agrupa as estatísticas em UMA ÚNICA query em vez de 4 round-trips sequenciais
+try {
+    $stmtStats = $pdo->prepare("
+        SELECT 
+            (SELECT COUNT(*) FROM posts_comunidade WHERE usuario_id = :uid) as total_posts,
+            (SELECT COUNT(DISTINCT sessao_token) FROM historico_chat WHERE usuario_id = :uid) as total_chats,
+            (SELECT COUNT(*) FROM historico_chat WHERE usuario_id = :uid AND sessao_token = :hoje) as chat_hoje_count,
+            (SELECT COUNT(*) FROM curtidas_comunidade c JOIN posts_comunidade p ON c.post_id = p.id WHERE p.usuario_id = :uid) as total_likes
+    ");
+    $stmtStats->execute([':uid' => $id, ':hoje' => $hoje]);
+    $statsData = $stmtStats->fetch() ?: [];
+    $totalPosts = (int)($statsData['total_posts'] ?? 0);
+    $totalChats = (int)($statsData['total_chats'] ?? 0);
+    $usouChatHoje = ((int)($statsData['chat_hoje_count'] ?? 0) > 0);
+    $totalLikesRecebidos = (int)($statsData['total_likes'] ?? 0);
+} catch (Exception $e) {
+    $totalPosts = 0;
+    $totalChats = 0;
+    $usouChatHoje = false;
+    $totalLikesRecebidos = 0;
+}
 
 $totalVideos = $usuarioLogado['videos_assistidos'] ?? 0;
 $assistiuVideoHoje = (($usuarioLogado['ultimo_video_data'] ?? '') === $hoje);
-
-// Contar total de curtidas recebidas em todos os posts
-$stmtLikesRec = $pdo->prepare("SELECT COUNT(*) FROM curtidas_comunidade c JOIN posts_comunidade p ON c.post_id = p.id WHERE p.usuario_id = ?");
-$stmtLikesRec->execute([$id]);
-$totalLikesRecebidos = $stmtLikesRec->fetchColumn();
 
 $totalDiarios = 0;
 $totalEmocoes = 0;

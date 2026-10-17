@@ -1,19 +1,8 @@
 <?php
 require_once 'conexao.php';
 
-$usuarioLogado = null;
-$isAdmin = false;
-if (isset($_SESSION['usuario_id'])) {
-    try {
-        $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, COALESCE(is_admin, false) as is_admin FROM usuarios WHERE id = ?");
-        $stmt->execute([$_SESSION['usuario_id']]);
-        $usuarioLogado = $stmt->fetch();
-        if ($usuarioLogado) {
-            $isAdmin = (bool)($usuarioLogado['is_admin'] ?? false);
-        }
-    } catch (Exception $e) {
-    }
-}
+$usuarioLogado = obterUsuarioLogado($pdo);
+$isAdmin = (bool)($usuarioLogado['is_admin'] ?? false);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_SESSION['usuario_id'])) {
@@ -170,8 +159,21 @@ try {
     $stmtPosts = $pdo->prepare($query);
     $stmtPosts->execute([$current_user_id]);
     $posts = $stmtPosts->fetchAll();
+
+    // Otimização: Carrega todas as reações de todos os posts em UMA ÚNICA query em lote
+    $reacoesPorPost = [];
+    if (!empty($posts)) {
+        $postIds = array_column($posts, 'id');
+        $placeholders = implode(',', array_fill(0, count($postIds), '?'));
+        $stmtReacoes = $pdo->prepare("SELECT r.*, u.nome as autor_reacao FROM reacoes_comunidade r JOIN usuarios u ON r.usuario_id = u.id WHERE r.post_id IN ($placeholders) ORDER BY r.criado_em ASC");
+        $stmtReacoes->execute($postIds);
+        foreach ($stmtReacoes->fetchAll() as $r) {
+            $reacoesPorPost[$r['post_id']][] = $r;
+        }
+    }
 } catch (PDOException $e) {
     $posts = [];
+    $reacoesPorPost = [];
 }
 
 $usuarioNovoSemPosts = false;
@@ -2219,9 +2221,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
 
             <?php foreach ($posts as $post):
                 $dataCriacao = date('d/m/Y', strtotime($post['criado_em']));
-                $stmtReacoes = $pdo->prepare("SELECT r.*, u.nome as autor_reacao FROM reacoes_comunidade r JOIN usuarios u ON r.usuario_id = u.id WHERE r.post_id = ? ORDER BY r.criado_em ASC");
-                $stmtReacoes->execute([$post['id']]);
-                $reacoes = $stmtReacoes->fetchAll();
+                $reacoes = $reacoesPorPost[$post['id']] ?? [];
                 ?>
                 <div class="post-card">
                     <div class="post-card-inner">
