@@ -1795,25 +1795,79 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             }
         }
 
-        function showTab(tabId, btnClicado) {
+        let trocandoAbaEmAndamento = false;
+
+        function aplicarTrocaAba(tabId, btnClicado) {
             currentTabId = tabId;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('ativo'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('ativo'));
             document.querySelectorAll('.sobre-content').forEach(content => content.classList.remove('ativo'));
-            if (!btnClicado) {
-                btnClicado = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
-            }
-            if (btnClicado) btnClicado.classList.add('ativo');
+            
+            const btnAtivo = document.querySelector(`.tab-btn[data-tab="${tabId}"]`) || btnClicado;
+            if (btnAtivo) btnAtivo.classList.add('ativo');
+            
             reposicionarSlider(tabId);
             const tabContent = document.getElementById('tab-' + tabId);
             if (tabContent) tabContent.classList.add('ativo');
             const sobreContent = document.getElementById('sobre-' + tabId);
             if (sobreContent) sobreContent.classList.add('ativo');
+            
+            trocandoAbaEmAndamento = false;
         }
+
+        function showTab(tabId, btnClicado, forcarDireto) {
+            if (trocandoAbaEmAndamento) return;
+
+            // Se clicou na mesma aba que já está aberta
+            if (tabId === currentTabId) {
+                if (window.scrollY > 20) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                return;
+            }
+
+            // Se for chamada direta (ex: irParaVideo) ou se já estiver no topo
+            if (forcarDireto || window.scrollY <= 20) {
+                aplicarTrocaAba(tabId, btnClicado);
+                return;
+            }
+
+            // Se estiver rolando a tela e decidir ir para outra aba:
+            // Primeiro rola até o topo e depois troca para a aba desejada
+            trocandoAbaEmAndamento = true;
+
+            let executado = false;
+            function concluirTroca() {
+                if (executado) return;
+                executado = true;
+                window.removeEventListener('scroll', verificarChegadaTopo);
+                if ('onscrollend' in window) {
+                    window.removeEventListener('scrollend', concluirTroca);
+                }
+                aplicarTrocaAba(tabId, btnClicado);
+            }
+
+            function verificarChegadaTopo() {
+                if (window.scrollY <= 20) {
+                    concluirTroca();
+                }
+            }
+
+            window.addEventListener('scroll', verificarChegadaTopo, { passive: true });
+            if ('onscrollend' in window) {
+                window.addEventListener('scrollend', concluirTroca, { once: true });
+            }
+
+            // Fallback de segurança para garantir a troca mesmo em navegadores antigos ou se o scroll for interrompido
+            setTimeout(concluirTroca, 650);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        window.showTab = showTab;
 
         function irParaVideo(targetId) {
             const btnVideos = document.querySelector('.tab-btn[data-tab="videos"]');
-            showTab('videos', btnVideos);
+            showTab('videos', btnVideos, true);
 
             setTimeout(() => {
                 const elemento = document.getElementById(targetId);
