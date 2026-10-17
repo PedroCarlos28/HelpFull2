@@ -1516,8 +1516,6 @@ $totalOutros = count($outrasSessoes);
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
-                <a href="dispositivos.php" class="ativo">Dispositivos Conectados</a>
-                <a href="javascript:void(0)" onclick="if(window.iniciarTutorial){window.iniciarTutorial(true);}">✦ Tour da Página</a>
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
 

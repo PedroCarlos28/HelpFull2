@@ -1261,11 +1261,9 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 <a href="Atividades.php">Adicionais</a>
                 <?php if ($usuarioLogado): ?>
                     <a href="Perfil.php">Perfil</a>
-                    <a href="dispositivos.php">Dispositivos Conectados</a>
                 <?php else: ?>
                     <a href="Comeco.php">Entrar</a>
                 <?php endif; ?>
-                <a href="javascript:void(0)" onclick="var d=document.getElementById('navDropdownMobile'), l=document.querySelector('.nav-logo-capsula'); if(d)d.classList.remove('aberto'); if(l)l.classList.remove('aberto'); window.iniciarTutorial(true);">✦ Tour pelo Site</a>
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
         </nav>

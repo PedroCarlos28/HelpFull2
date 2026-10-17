@@ -903,7 +903,6 @@ if (!$usuarioLogado) {
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
-                <a href="javascript:void(0)" onclick="var d=document.getElementById('navDropdownMobile'), l=document.querySelector('.nav-logo'); if(d)d.classList.remove('aberto'); if(l)l.classList.remove('aberto'); if(window.iniciarTutorial)window.iniciarTutorial(true);">✦ Tour da Página</a>
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
         </nav>

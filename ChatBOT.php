@@ -1153,7 +1153,6 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 <a href="ChatBOT.php" class="ativo">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
                 <a href="Perfil.php">Perfil</a>
-                <a href="javascript:void(0)" onclick="if(window.iniciarTutorial){window.iniciarTutorial(true);}">✦ Tour da Página</a>
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade"
                     onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
