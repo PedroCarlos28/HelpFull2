@@ -145,6 +145,10 @@ $usuarioLogado = obterUsuarioLogado($pdo);
 
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         html, body {
             margin: 0;
             padding: 0;
@@ -1795,6 +1799,47 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             }
         }
 
+        function animarScrollAteTopo(duracao, callback) {
+            const getScrollTop = () => window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            const inicio = getScrollTop();
+            if (inicio <= 20) {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+                if (callback) callback();
+                return;
+            }
+
+            const tempoInicio = performance.now();
+
+            function animar(tempoAtual) {
+                const tempoDecorrido = tempoAtual - tempoInicio;
+                const progresso = Math.min(tempoDecorrido / duracao, 1);
+                
+                // Easing cúbico ultra-suave
+                const ease = progresso < 0.5 
+                    ? 4 * progresso * progresso * progresso 
+                    : 1 - Math.pow(-2 * progresso + 2, 3) / 2;
+
+                const pos = Math.round(inicio * (1 - ease));
+
+                window.scrollTo(0, pos);
+                document.documentElement.scrollTop = pos;
+                document.body.scrollTop = pos;
+
+                if (progresso < 1) {
+                    requestAnimationFrame(animar);
+                } else {
+                    window.scrollTo(0, 0);
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                    if (callback) callback();
+                }
+            }
+
+            requestAnimationFrame(animar);
+        }
+
         let trocandoAbaEmAndamento = false;
 
         function aplicarTrocaAba(tabId, btnClicado) {
@@ -1818,50 +1863,29 @@ $usuarioLogado = obterUsuarioLogado($pdo);
         function showTab(tabId, btnClicado, forcarDireto) {
             if (trocandoAbaEmAndamento) return;
 
+            const scrollAtual = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
             // Se clicou na mesma aba que já está aberta
             if (tabId === currentTabId) {
-                if (window.scrollY > 20) {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (scrollAtual > 20) {
+                    animarScrollAteTopo(450);
                 }
                 return;
             }
 
             // Se for chamada direta (ex: irParaVideo) ou se já estiver no topo
-            if (forcarDireto || window.scrollY <= 20) {
+            if (forcarDireto || scrollAtual <= 20) {
                 aplicarTrocaAba(tabId, btnClicado);
                 return;
             }
 
             // Se estiver rolando a tela e decidir ir para outra aba:
-            // Primeiro rola até o topo e depois troca para a aba desejada
+            // Primeiro rola suavemente até o topo e depois troca para a aba desejada
             trocandoAbaEmAndamento = true;
 
-            let executado = false;
-            function concluirTroca() {
-                if (executado) return;
-                executado = true;
-                window.removeEventListener('scroll', verificarChegadaTopo);
-                if ('onscrollend' in window) {
-                    window.removeEventListener('scrollend', concluirTroca);
-                }
+            animarScrollAteTopo(450, () => {
                 aplicarTrocaAba(tabId, btnClicado);
-            }
-
-            function verificarChegadaTopo() {
-                if (window.scrollY <= 20) {
-                    concluirTroca();
-                }
-            }
-
-            window.addEventListener('scroll', verificarChegadaTopo, { passive: true });
-            if ('onscrollend' in window) {
-                window.addEventListener('scrollend', concluirTroca, { once: true });
-            }
-
-            // Fallback de segurança para garantir a troca mesmo em navegadores antigos ou se o scroll for interrompido
-            setTimeout(concluirTroca, 650);
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         }
         window.showTab = showTab;
 
