@@ -274,15 +274,29 @@ if (isset($_SESSION['usuario_id'])) {
 
         /* === MENSAGEM ERRO INLINE === */
         .msg-erro-inline {
-            font-size: 0.78rem;
+            font-size: 0.84rem;
             font-weight: 700;
-            color: #ff6b6b;
+            color: #dc2626;
             margin-left: 5px;
-            min-height: 14px;
+            margin-top: 4px;
+            min-height: 16px;
             display: none;
+            line-height: 1.35;
         }
 
-        .msg-erro-inline.visivel { display: block; }
+        .msg-erro-inline.visivel {
+            display: block;
+            animation: fadeInErro 0.22s ease-out;
+        }
+
+        @keyframes fadeInErro {
+            from { opacity: 0; transform: translateY(-3px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body.acessibilidade-escuro .msg-erro-inline {
+            color: #f87171 !important;
+        }
 
         /* === FOOTER BOTÕES === */
         .footer-botoes {
@@ -825,6 +839,26 @@ if (isset($_SESSION['usuario_id'])) {
 
         .termo-consentimento-box.shake-box {
             animation: shakeCheckbox 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        .termo-consentimento-box.termo-box-erro .custom-checkbox-ui {
+            border-color: #dc2626 !important;
+            background: #fef2f2 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.22) !important;
+        }
+
+        .termo-consentimento-box.termo-box-erro .termo-label-texto {
+            color: #b91c1c !important;
+        }
+
+        body.acessibilidade-escuro .termo-consentimento-box.termo-box-erro .custom-checkbox-ui {
+            border-color: #f87171 !important;
+            background: rgba(248, 113, 113, 0.15) !important;
+            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.25) !important;
+        }
+
+        body.acessibilidade-escuro .termo-consentimento-box.termo-box-erro .termo-label-texto {
+            color: #fca5a5 !important;
         }
 
         @keyframes shakeCheckbox {
@@ -1388,7 +1422,7 @@ if (isset($_SESSION['usuario_id'])) {
                 </form>
 
                 <!-- CADASTRO -->
-                <form id="formCadastro" class="form-view">
+                <form id="formCadastro" class="form-view" novalidate>
                     <div class="inputs-container">
                         <div class="input-group">
                             <label for="cadNome">Nome:</label>
@@ -1412,7 +1446,7 @@ if (isset($_SESSION['usuario_id'])) {
                         </div>
                         <div class="termo-consentimento-box" id="boxTermosCadastro">
                             <label class="custom-checkbox-label" for="cadTermos">
-                                <input type="checkbox" id="cadTermos" class="termo-real-checkbox" required>
+                                <input type="checkbox" id="cadTermos" class="termo-real-checkbox">
                                 <span class="custom-checkbox-ui">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="20 6 9 17 4 12"></polyline>
@@ -1845,6 +1879,8 @@ if (isset($_SESSION['usuario_id'])) {
             // Limpa erros ao trocar
             document.getElementById('erroLogin').classList.remove('visivel');
             document.getElementById('erroCadastro').classList.remove('visivel');
+            const boxTermosCad = document.getElementById('boxTermosCadastro');
+            if (boxTermosCad) boxTermosCad.classList.remove('termo-box-erro');
         }
 
         // === INDICADOR DE FORÇA DE SENHA ===
@@ -2178,6 +2214,8 @@ if (isset($_SESSION['usuario_id'])) {
             const chkCad = document.getElementById('cadTermos');
             if (chkCad) {
                 chkCad.checked = true;
+                const box = document.getElementById('boxTermosCadastro');
+                if (box) box.classList.remove('termo-box-erro');
                 limparErro('erroCadastro');
             }
             // Marca também no modal do Google caso esteja aberto
@@ -2302,29 +2340,66 @@ if (isset($_SESSION['usuario_id'])) {
         window.confirmarConsentimentoGoogle = confirmarConsentimentoGoogle;
 
         // === CADASTRO ===
+        const chkCadTermos = document.getElementById('cadTermos');
+        if (chkCadTermos) {
+            chkCadTermos.addEventListener('change', () => {
+                if (chkCadTermos.checked) {
+                    const box = document.getElementById('boxTermosCadastro');
+                    if (box) box.classList.remove('termo-box-erro');
+                    const errEl = document.getElementById('erroCadastro');
+                    if (errEl && errEl.textContent.includes('Termos de Uso')) {
+                        limparErro('erroCadastro');
+                    }
+                }
+            });
+        }
+
         document.getElementById('formCadastro').addEventListener('submit', async (e) => {
             e.preventDefault();
             limparErro('erroCadastro');
+            const boxTermos = document.getElementById('boxTermosCadastro');
+            if (boxTermos) boxTermos.classList.remove('termo-box-erro');
 
+            const nome  = document.getElementById('cadNome').value.trim();
+            const email = document.getElementById('cadEmail').value.trim();
             const senha = document.getElementById('cadSenha').value;
+
+            if (!nome) {
+                mostrarErro('erroCadastro', 'Por favor, informe seu nome.');
+                document.getElementById('cadNome').focus();
+                return;
+            }
+
+            if (!email) {
+                mostrarErro('erroCadastro', 'Por favor, informe seu e-mail.');
+                document.getElementById('cadEmail').focus();
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                mostrarErro('erroCadastro', 'Por favor, informe um e-mail válido.');
+                document.getElementById('cadEmail').focus();
+                return;
+            }
 
             // Validação frontend mínimo 6 chars
             if (senha.length < 6) {
                 mostrarErro('erroCadastro', 'A senha deve ter pelo menos 6 caracteres.');
                 document.getElementById('cadSenha').classList.add('input-erro');
+                document.getElementById('cadSenha').focus();
                 return;
             }
 
             // Validação do termo de consentimento
             const chkTermos = document.getElementById('cadTermos');
             if (!chkTermos || !chkTermos.checked) {
-                mostrarErro('erroCadastro', 'Você precisa aceitar os termos de consentimento para prosseguir.');
+                mostrarErro('erroCadastro', 'Você precisa concordar com os Termos de Uso e a Política de Privacidade para criar uma conta.');
                 const box = document.getElementById('boxTermosCadastro');
                 if (box) {
-                    box.classList.add('shake-box');
+                    box.classList.add('shake-box', 'termo-box-erro');
                     setTimeout(() => box.classList.remove('shake-box'), 500);
                 }
-                if (chkTermos) chkTermos.focus();
                 return;
             }
 
@@ -2332,9 +2407,6 @@ if (isset($_SESSION['usuario_id'])) {
             const textoOriginal = btn.innerText;
             btn.innerHTML = loadingHTML;
             btn.disabled = true;
-
-            const nome  = document.getElementById('cadNome').value;
-            const email = document.getElementById('cadEmail').value;
 
             try {
                 const response = await fetch('cadastro_proc.php', {
@@ -2347,6 +2419,10 @@ if (isset($_SESSION['usuario_id'])) {
                     window.location.href = 'inicio.php';
                 } else {
                     mostrarErro('erroCadastro', data.mensagem || 'Erro ao cadastrar.');
+                    if (data.mensagem && data.mensagem.includes('Termos')) {
+                        const box = document.getElementById('boxTermosCadastro');
+                        if (box) box.classList.add('shake-box', 'termo-box-erro');
+                    }
                 }
             } catch (error) {
                 mostrarErro('erroCadastro', 'Erro ao conectar. Tente novamente.');
