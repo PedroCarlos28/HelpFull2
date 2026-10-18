@@ -127,12 +127,21 @@ if (isset($_POST['acao']) && $_POST['acao'] === 'marcar_video_visto') {
 }
 
 $usuarioLogado = obterUsuarioLogado($pdo);
+
+// Desativa cache no navegador para garantir que alterações de JS/layout sejam refletidas imediatamente no perfil do usuário
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Atividades</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
@@ -1829,54 +1838,57 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             }
         }
 
-        function animarScrollAteTopo(duracao, callback) {
-            const getScrollTop = () => window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        function rolarSuavementeAteTopo(callback) {
+            const getScrollTop = () => window.pageYOffset || (document.documentElement ? document.documentElement.scrollTop : 0) || (document.body ? document.body.scrollTop : 0) || window.scrollY || 0;
             const inicio = getScrollTop();
-            if (inicio <= 15) {
-                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
+
+            if (inicio <= 20) {
                 if (callback) callback();
                 return;
             }
 
-            const htmlEl = document.documentElement;
-            const bodyEl = document.body;
-            const prevHtmlBehavior = htmlEl.style.scrollBehavior;
-            const prevBodyBehavior = bodyEl.style.scrollBehavior;
-            htmlEl.style.scrollBehavior = 'auto';
-            bodyEl.style.scrollBehavior = 'auto';
+            let finalizado = false;
+            const concluir = () => {
+                if (finalizado) return;
+                finalizado = true;
+                try {
+                    window.scrollTo(0, 0);
+                    if (document.documentElement) document.documentElement.scrollTop = 0;
+                    if (document.body) document.body.scrollTop = 0;
+                } catch (e) {}
+                if (callback) callback();
+            };
 
+            // Timeout de proteção absoluta
+            const timerSeguranca = setTimeout(concluir, 600);
+
+            const duracao = 450;
             const tempoInicio = performance.now();
 
-            function animar(tempoAtual) {
-                const tempoDecorrido = tempoAtual - tempoInicio;
-                const progresso = Math.min(tempoDecorrido / duracao, 1);
+            function frame(agora) {
+                if (finalizado) return;
+                const decorrido = agora - tempoInicio;
+                const progresso = Math.min(decorrido / duracao, 1);
                 
-                // Easing cúbico suave (easeInOutCubic)
-                const ease = progresso < 0.5 
-                    ? 4 * progresso * progresso * progresso 
-                    : 1 - Math.pow(-2 * progresso + 2, 3) / 2;
-
+                // Desaceleração suave (ease-out cubic)
+                const ease = 1 - Math.pow(1 - progresso, 3);
                 const pos = Math.max(0, Math.round(inicio * (1 - ease)));
 
-                window.scrollTo({ top: pos, left: 0, behavior: 'instant' });
-                htmlEl.scrollTop = pos;
-                bodyEl.scrollTop = pos;
+                try {
+                    window.scrollTo(0, pos);
+                    if (document.documentElement) document.documentElement.scrollTop = pos;
+                    if (document.body) document.body.scrollTop = pos;
+                } catch (e) {}
 
                 if (progresso < 1) {
-                    requestAnimationFrame(animar);
+                    requestAnimationFrame(frame);
                 } else {
-                    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-                    htmlEl.scrollTop = 0;
-                    bodyEl.scrollTop = 0;
-                    htmlEl.style.scrollBehavior = prevHtmlBehavior;
-                    bodyEl.style.scrollBehavior = prevBodyBehavior;
-                    if (callback) callback();
+                    clearTimeout(timerSeguranca);
+                    concluir();
                 }
             }
 
-            requestAnimationFrame(animar);
+            requestAnimationFrame(frame);
         }
 
         let trocandoAbaEmAndamento = false;
@@ -1902,12 +1914,12 @@ $usuarioLogado = obterUsuarioLogado($pdo);
         function showTab(tabId, btnClicado) {
             if (trocandoAbaEmAndamento) return;
 
-            const scrollAtual = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            const scrollAtual = window.pageYOffset || (document.documentElement ? document.documentElement.scrollTop : 0) || (document.body ? document.body.scrollTop : 0) || window.scrollY || 0;
 
             // Se clicou na mesma aba que já está aberta
             if (tabId === currentTabId) {
                 if (scrollAtual > 20) {
-                    animarScrollAteTopo(500);
+                    rolarSuavementeAteTopo();
                 }
                 return;
             }
@@ -1922,7 +1934,10 @@ $usuarioLogado = obterUsuarioLogado($pdo);
             // Primeiro rola suavemente até o topo e depois troca para a aba desejada
             trocandoAbaEmAndamento = true;
 
-            animarScrollAteTopo(500, () => {
+            // Destrava automaticamente se algo inesperado acontecer
+            setTimeout(() => { trocandoAbaEmAndamento = false; }, 800);
+
+            rolarSuavementeAteTopo(() => {
                 aplicarTrocaAba(tabId, btnClicado);
             });
         }
@@ -1930,11 +1945,12 @@ $usuarioLogado = obterUsuarioLogado($pdo);
 
         function irParaVideo(targetId) {
             const btnVideos = document.querySelector('.tab-btn[data-tab="videos"]');
-            const scrollAtual = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            const scrollAtual = window.pageYOffset || (document.documentElement ? document.documentElement.scrollTop : 0) || (document.body ? document.body.scrollTop : 0) || window.scrollY || 0;
 
             if (scrollAtual > 20) {
                 trocandoAbaEmAndamento = true;
-                animarScrollAteTopo(500, () => {
+                setTimeout(() => { trocandoAbaEmAndamento = false; }, 800);
+                rolarSuavementeAteTopo(() => {
                     aplicarTrocaAba('videos', btnVideos);
                     setTimeout(() => {
                         const elemento = document.getElementById(targetId);
