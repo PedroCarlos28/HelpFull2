@@ -1422,7 +1422,7 @@ if (isset($_SESSION['usuario_id'])) {
                 </form>
 
                 <!-- CADASTRO -->
-                <form id="formCadastro" class="form-view" novalidate>
+                <form id="formCadastro" class="form-view" novalidate onsubmit="handleCadastroSubmit(event); return false;">
                     <div class="inputs-container">
                         <div class="input-group">
                             <label for="cadNome">Nome:</label>
@@ -1475,7 +1475,7 @@ if (isset($_SESSION['usuario_id'])) {
                         </button>
                         <div class="footer-botoes-direita">
                             <button type="button" class="btn-form btn-secundario" onclick="toggleMode()">Entrar</button>
-                            <button type="submit" class="btn-form btn-primario" id="btnCadastrar">Finalizar</button>
+                            <button type="button" class="btn-form btn-primario" id="btnCadastrar" onclick="handleCadastroSubmit(event)">Finalizar</button>
                         </div>
                     </div>
                 </form>
@@ -2354,59 +2354,66 @@ if (isset($_SESSION['usuario_id'])) {
             });
         }
 
-        document.getElementById('formCadastro').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        async function handleCadastroSubmit(e) {
+            if (e && e.preventDefault) e.preventDefault();
             limparErro('erroCadastro');
             const boxTermos = document.getElementById('boxTermosCadastro');
             if (boxTermos) boxTermos.classList.remove('termo-box-erro');
 
-            const nome  = document.getElementById('cadNome').value.trim();
-            const email = document.getElementById('cadEmail').value.trim();
-            const senha = document.getElementById('cadSenha').value;
+            const nomeEl  = document.getElementById('cadNome');
+            const emailEl = document.getElementById('cadEmail');
+            const senhaEl = document.getElementById('cadSenha');
+            const chkTermos = document.getElementById('cadTermos');
+
+            const nome  = (nomeEl ? nomeEl.value : '').trim();
+            const email = (emailEl ? emailEl.value : '').trim();
+            const senha = senhaEl ? senhaEl.value : '';
 
             if (!nome) {
                 mostrarErro('erroCadastro', 'Por favor, informe seu nome.');
-                document.getElementById('cadNome').focus();
+                if (nomeEl) nomeEl.focus();
                 return;
             }
 
             if (!email) {
                 mostrarErro('erroCadastro', 'Por favor, informe seu e-mail.');
-                document.getElementById('cadEmail').focus();
+                if (emailEl) emailEl.focus();
                 return;
             }
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 mostrarErro('erroCadastro', 'Por favor, informe um e-mail válido.');
-                document.getElementById('cadEmail').focus();
+                if (emailEl) emailEl.focus();
                 return;
             }
 
             // Validação frontend mínimo 6 chars
             if (senha.length < 6) {
                 mostrarErro('erroCadastro', 'A senha deve ter pelo menos 6 caracteres.');
-                document.getElementById('cadSenha').classList.add('input-erro');
-                document.getElementById('cadSenha').focus();
+                if (senhaEl) {
+                    senhaEl.classList.add('input-erro');
+                    senhaEl.focus();
+                }
                 return;
             }
 
             // Validação do termo de consentimento
-            const chkTermos = document.getElementById('cadTermos');
             if (!chkTermos || !chkTermos.checked) {
                 mostrarErro('erroCadastro', 'Você precisa concordar com os Termos de Uso e a Política de Privacidade para criar uma conta.');
-                const box = document.getElementById('boxTermosCadastro');
-                if (box) {
-                    box.classList.add('shake-box', 'termo-box-erro');
-                    setTimeout(() => box.classList.remove('shake-box'), 500);
+                if (boxTermos) {
+                    boxTermos.classList.add('shake-box', 'termo-box-erro');
+                    setTimeout(() => boxTermos.classList.remove('shake-box'), 500);
                 }
                 return;
             }
 
             const btn = document.getElementById('btnCadastrar');
-            const textoOriginal = btn.innerText;
-            btn.innerHTML = loadingHTML;
-            btn.disabled = true;
+            const textoOriginal = btn ? btn.innerText : 'Finalizar';
+            if (btn) {
+                btn.innerHTML = loadingHTML;
+                btn.disabled = true;
+            }
 
             try {
                 const response = await fetch('cadastro_proc.php', {
@@ -2420,17 +2427,33 @@ if (isset($_SESSION['usuario_id'])) {
                 } else {
                     mostrarErro('erroCadastro', data.mensagem || 'Erro ao cadastrar.');
                     if (data.mensagem && data.mensagem.includes('Termos')) {
-                        const box = document.getElementById('boxTermosCadastro');
-                        if (box) box.classList.add('shake-box', 'termo-box-erro');
+                        if (boxTermos) boxTermos.classList.add('shake-box', 'termo-box-erro');
                     }
                 }
             } catch (error) {
                 mostrarErro('erroCadastro', 'Erro ao conectar. Tente novamente.');
             } finally {
-                btn.innerText = textoOriginal;
-                btn.disabled = false;
+                if (btn) {
+                    btn.innerText = textoOriginal;
+                    btn.disabled = false;
+                }
             }
-        });
+        }
+
+        window.handleCadastroSubmit = handleCadastroSubmit;
+
+        const formCadEl = document.getElementById('formCadastro');
+        if (formCadEl) {
+            formCadEl.addEventListener('submit', handleCadastroSubmit);
+            formCadEl.querySelectorAll('input').forEach(function(inp) {
+                inp.addEventListener('keydown', function(evt) {
+                    if (evt.key === 'Enter') {
+                        evt.preventDefault();
+                        handleCadastroSubmit(evt);
+                    }
+                });
+            });
+        }
 
         // === INSTRUÇÕES FIREBASE ===
         function mostrarInstrucoesFirebase() {
