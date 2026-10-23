@@ -55,43 +55,169 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'buscar_videos_yt') {
         exit;
     }
 
-    $url = 'https://www.youtube.com/results?search_query=' . urlencode($query . ' saúde mental autocuidado');
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 6);
-    $html = curl_exec($ch);
-    curl_close($ch);
-
     $vids = [];
-    if ($html && preg_match('/var ytInitialData = ({.*?});<\/script>/s', $html, $m)) {
-        $data = json_decode($m[1], true);
-        $sections = $data['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'] ?? [];
-        foreach ($sections as $section) {
-            $contents = $section['itemSectionRenderer']['contents'] ?? [];
-            foreach ($contents as $item) {
-                if (isset($item['videoRenderer'])) {
-                    $v = $item['videoRenderer'];
-                    $videoId = $v['videoId'] ?? '';
-                    $title = $v['title']['runs'][0]['text'] ?? '';
-                    $channel = $v['ownerText']['runs'][0]['text'] ?? '';
-                    if ($videoId && $title) {
-                        $vids[] = [
-                            'id' => $videoId,
-                            'titulo' => $title,
-                            'canal' => $channel,
-                            'thumb' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg",
-                            'plataforma' => 'youtube',
-                            'fonte' => 'YouTube'
-                        ];
+    $termoBusca = trim($query . ' saúde mental autocuidado');
+
+    // 1. Tenta API Innertube (endpoint oficial do cliente web do YouTube)
+    try {
+        $payload = json_encode([
+            'context' => [
+                'client' => [
+                    'clientName' => 'WEB',
+                    'clientVersion' => '2.20240101.00.00',
+                    'hl' => 'pt',
+                    'gl' => 'BR',
+                ]
+            ],
+            'query' => $termoBusca
+        ]);
+
+        $ch = curl_init('https://www.youtube.com/youtubei/v1/search?prettyPrint=false');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            'X-YouTube-Client-Name: 1',
+            'X-YouTube-Client-Version: 2.20240101.00.00',
+            'Origin: https://www.youtube.com',
+            'Referer: https://www.youtube.com/'
+        ]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 6);
+
+        $res = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 && $res) {
+            $data = json_decode($res, true);
+            $sections = $data['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'] ?? [];
+            foreach ($sections as $section) {
+                $contents = $section['itemSectionRenderer']['contents'] ?? [];
+                foreach ($contents as $item) {
+                    if (isset($item['videoRenderer'])) {
+                        $v = $item['videoRenderer'];
+                        $videoId = $v['videoId'] ?? '';
+                        $title = $v['title']['runs'][0]['text'] ?? '';
+                        $channel = $v['ownerText']['runs'][0]['text'] ?? '';
+                        if ($videoId && $title) {
+                            $vids[] = [
+                                'id' => $videoId,
+                                'titulo' => $title,
+                                'canal' => $channel ?: 'YouTube',
+                                'thumb' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg",
+                                'plataforma' => 'youtube',
+                                'fonte' => 'YouTube'
+                            ];
+                        }
+                        if (count($vids) >= 4) break 2;
                     }
-                    if (count($vids) >= 4) break 2;
                 }
             }
         }
+    } catch (\Throwable $e) {
+        $vids = [];
     }
+
+    // 2. Fallback: Scraping HTML do YouTube com suporte a IPv4 e regex flexível
+    if (empty($vids)) {
+        try {
+            $url = 'https://www.youtube.com/results?search_query=' . urlencode($termoBusca);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 6);
+            $html = curl_exec($ch);
+            curl_close($ch);
+
+            if ($html && preg_match('/(?:var\s+)?ytInitialData\s*=\s*({.+?});/s', $html, $m)) {
+                $data = json_decode($m[1], true);
+                $sections = $data['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'] ?? [];
+                foreach ($sections as $section) {
+                    $contents = $section['itemSectionRenderer']['contents'] ?? [];
+                    foreach ($contents as $item) {
+                        if (isset($item['videoRenderer'])) {
+                            $v = $item['videoRenderer'];
+                            $videoId = $v['videoId'] ?? '';
+                            $title = $v['title']['runs'][0]['text'] ?? '';
+                            $channel = $v['ownerText']['runs'][0]['text'] ?? '';
+                            if ($videoId && $title) {
+                                $vids[] = [
+                                    'id' => $videoId,
+                                    'titulo' => $title,
+                                    'canal' => $channel ?: 'YouTube',
+                                    'thumb' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg",
+                                    'plataforma' => 'youtube',
+                                    'fonte' => 'YouTube'
+                                ];
+                            }
+                            if (count($vids) >= 4) break 2;
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // Continua para o próximo fallback
+        }
+    }
+
+    // 3. Fallback inteligente de catálogo pré-selecionado de saúde mental do HelpFull
+    if (empty($vids)) {
+        $catalogoFallback = [
+            ['id' => 'aNXKjGFUlMs', 'titulo' => 'Exercício de Respiração Rápida e Foco', 'canal' => 'Saúde Mental & Bem-Estar', 'tags' => ['respiracao', 'foco', 'ansiedade', 'calma', 'ar', 'pulmao']],
+            ['id' => 'fmBRuuQ0Gs8', 'titulo' => 'Técnica de Respiração 4-7-8 Guiada', 'canal' => 'Autocuidado Guiado', 'tags' => ['respiracao', '478', 'sono', 'dormir', 'ansiedade']],
+            ['id' => 'xI_oUWoofJ0', 'titulo' => 'Como o estresse atua no corpo (e como desativá-lo)', 'canal' => 'Ciência da Mente', 'tags' => ['estresse', 'corpo', 'ansiedade', 'mente', 'tensao']],
+            ['id' => 'LsgpZ6IbGx0', 'titulo' => 'O poder das pausas e da autocompaixão', 'canal' => 'Mindfulness Brasil', 'tags' => ['pausas', 'autocompaixao', 'depressao', 'autocuidado', 'paz']],
+            ['id' => '-4igBhtIlhk', 'titulo' => 'Quebrando o ciclo do excesso de pensamentos', 'canal' => 'Psicologia e Vida', 'tags' => ['pensamentos', 'mente', 'ansiedade', 'overthinking', 'foco']],
+            ['id' => 'ySLhZfsagDA', 'titulo' => 'Acolhendo o que você sente sem julgamentos', 'canal' => 'Equilíbrio Emocional', 'tags' => ['emocoes', 'acolhimento', 'calma', 'sentimentos', 'tristeza']],
+            ['id' => 'IiZo1XNEO5A', 'titulo' => 'Ansiedade e o impacto no dia a dia - Dra. Ana Beatriz', 'canal' => 'PodPeople', 'tags' => ['ansiedade', 'depressao', 'saude', 'panico', 'crise']],
+            ['id' => 'oItxOa2LfJk', 'titulo' => 'Estratégias práticas para cuidar melhor da Saúde Mental', 'canal' => 'Ana Streit', 'tags' => ['saude mental', 'estrategias', 'autocuidado', 'habitos', 'vida']]
+        ];
+
+        $qNorm = strtolower($query);
+        if (function_exists('iconv')) {
+            $qNorm = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $query) ?: $query);
+        }
+
+        $matches = [];
+        foreach ($catalogoFallback as $item) {
+            foreach ($item['tags'] as $tag) {
+                if (stripos($qNorm, $tag) !== false || stripos($tag, $qNorm) !== false) {
+                    $matches[] = [
+                        'id' => $item['id'],
+                        'titulo' => $item['titulo'],
+                        'canal' => $item['canal'],
+                        'thumb' => "https://img.youtube.com/vi/{$item['id']}/mqdefault.jpg",
+                        'plataforma' => 'youtube',
+                        'fonte' => 'YouTube'
+                    ];
+                    break;
+                }
+            }
+            if (count($matches) >= 4) break;
+        }
+
+        if (empty($matches)) {
+            foreach (array_slice($catalogoFallback, 0, 4) as $item) {
+                $matches[] = [
+                    'id' => $item['id'],
+                    'titulo' => $item['titulo'],
+                    'canal' => $item['canal'],
+                    'thumb' => "https://img.youtube.com/vi/{$item['id']}/mqdefault.jpg",
+                    'plataforma' => 'youtube',
+                    'fonte' => 'YouTube'
+                ];
+            }
+        }
+        $vids = $matches;
+    }
+
     echo json_encode($vids, JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -1984,7 +2110,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
         window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { reposicionarSlider('textos'); }, 50); });
 
-        function openVideo(videoId, plataforma = 'youtube') {
+        function openVideo(videoId, plataforma = 'youtube', tituloCustom = '') {
             const modal = document.getElementById('videoModal');
             const playerContainer = document.getElementById('video-player-container');
             let embedSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
@@ -2024,7 +2150,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                     '-4igBhtIlhk': 'Quebrando o ciclo do excesso de pensamentos',
                     'ySLhZfsagDA': 'Acolhendo o que você sente sem julgamentos'
                 };
-                const tituloV = titulosPlataforma[videoId] || ('Vídeo: ' + videoId);
+                const tituloV = tituloCustom || titulosPlataforma[videoId] || ('Vídeo: ' + videoId);
                 const fdLog = new FormData();
                 fdLog.append('tipo', 'video_assistido');
                 fdLog.append('termo_ou_titulo', tituloV);
@@ -2244,7 +2370,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             container.classList.add('visivel');
         }
 
-        // === BUSCA VÍDEOS (Múltiplas plataformas: YouTube e Dailymotion) ===
+        // === BUSCA VÍDEOS (Múltiplas plataformas com prioridade ao YouTube) ===
         async function buscarVideos() {
             const query = document.getElementById('busca-video-input').value.trim();
             if (!query) return;
@@ -2272,22 +2398,28 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             const queryEnriquecida = query + ' saúde mental autocuidado';
 
             try {
-                // Busca em paralelo no YouTube e no Dailymotion
+                // Busca em paralelo no YouTube (endpoint local com Innertube e fallbacks) e Dailymotion
                 const [ytResult, dmResult] = await Promise.allSettled([
                     // 1. YouTube via endpoint local
                     fetch(`Atividades.php?acao=buscar_videos_yt&q=${encodeURIComponent(query)}`)
-                        .then(r => r.json()),
+                        .then(r => {
+                            if (!r.ok) throw new Error('HTTP ' + r.status);
+                            return r.json();
+                        }),
 
-                    // 2. Dailymotion API pública
-                    fetch(`https://api.dailymotion.com/videos?search=${encodeURIComponent(query + ' saude mental')}&fields=id,title,owner.screenname,thumbnail_240_url,url&limit=4`)
-                        .then(r => r.json())
+                    // 2. Dailymotion API pública (complemento)
+                    fetch(`https://api.dailymotion.com/videos?search=${encodeURIComponent(query + ' saude mental')}&fields=id,title,owner.screenname,thumbnail_240_url,url&limit=3`)
+                        .then(r => {
+                            if (!r.ok) throw new Error('HTTP ' + r.status);
+                            return r.json();
+                        })
                 ]);
 
                 loader.classList.remove('visivel');
 
                 const videosEncontrados = [];
 
-                // Processa resultados do YouTube
+                // Processa resultados do YouTube (prioridade número 1)
                 if (ytResult.status === 'fulfilled' && Array.isArray(ytResult.value) && ytResult.value.length > 0) {
                     ytResult.value.slice(0, 4).forEach(v => {
                         videosEncontrados.push({
@@ -2301,9 +2433,9 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                     });
                 }
 
-                // Processa resultados do Dailymotion
+                // Processa resultados do Dailymotion (vídeos complementares)
                 if (dmResult.status === 'fulfilled' && dmResult.value?.list) {
-                    dmResult.value.list.slice(0, 3).forEach(v => {
+                    dmResult.value.list.slice(0, 2).forEach(v => {
                         videosEncontrados.push({
                             id: v.id,
                             titulo: v.title,
@@ -2315,49 +2447,24 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                     });
                 }
 
-                // Se nenhuma das fontes diretas retornou resultados, tenta Invidious como fallback
+                // Fallback de catálogo direto no front caso a rede esteja totalmente indisponível
                 if (videosEncontrados.length === 0) {
-                    try {
-                        const resInv = await fetch(`https://inv.nadeko.net/api/v1/search?q=${encodeURIComponent(queryEnriquecida)}&type=video&page=1`);
-                        const dataInv = await resInv.json();
-                        if (Array.isArray(dataInv)) {
-                            dataInv.filter(v => v.type === 'video').slice(0, 4).forEach(v => {
-                                videosEncontrados.push({
-                                    id: v.videoId,
-                                    titulo: v.title,
-                                    canal: v.author || 'YouTube',
-                                    thumb: `https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg`,
-                                    plataforma: 'youtube',
-                                    badge: '▶️ YouTube'
-                                });
-                            });
-                        }
-                    } catch (e) {
-                        console.warn("Fallback Invidious offline:", e);
-                    }
-                }
-
-                if (videosEncontrados.length === 0) {
-                    // Fallback visual com links diretos
-                    container.innerHTML = `
-                        <div class="busca-vazio" style="display:flex;flex-direction:column;gap:15px;align-items:center;">
-                            <span>Nenhum vídeo embutido encontrado no momento.</span>
-                            <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-                                <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(queryEnriquecida)}" 
-                                   target="_blank" rel="noopener noreferrer"
-                                   style="display:inline-flex;align-items:center;gap:8px;background:#cc0000;color:#fff;padding:10px 22px;border-radius:30px;font-weight:800;font-size:0.88rem;text-decoration:none;box-shadow:0 4px 12px rgba(204,0,0,0.3);">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M21.543 6.498C22 8.28 22 12 22 12s0 3.72-.457 5.502c-.254.985-.997 1.76-1.938 2.022C17.896 20 12 20 12 20s-5.893 0-7.605-.476c-.945-.266-1.687-1.04-1.938-2.022C2 15.72 2 12 2 12s0-3.72.457-5.502c.254-.985.997-1.76 1.938-2.022C6.107 4 12 4 12 4s5.896 0 7.605.476c.945.266 1.687 1.04 1.938 2.022zM10 15.5l6-3.5-6-3.5v7z"/></svg>
-                                    Buscar no YouTube
-                                </a>
-                                <a href="https://www.dailymotion.com/search/${encodeURIComponent(queryEnriquecida)}" 
-                                   target="_blank" rel="noopener noreferrer"
-                                   style="display:inline-flex;align-items:center;gap:8px;background:#0066dc;color:#fff;padding:10px 22px;border-radius:30px;font-weight:800;font-size:0.88rem;text-decoration:none;box-shadow:0 4px 12px rgba(0,102,220,0.3);">
-                                    Buscar no Dailymotion
-                                </a>
-                            </div>
-                        </div>`;
-                    container.classList.add('visivel');
-                    return;
+                    const fallbackVideos = [
+                        { id: 'aNXKjGFUlMs', titulo: 'Exercício de Respiração Rápida e Foco', canal: 'Saúde Mental & Bem-Estar' },
+                        { id: 'fmBRuuQ0Gs8', titulo: 'Técnica de Respiração 4-7-8 Guiada', canal: 'Autocuidado Guiado' },
+                        { id: 'xI_oUWoofJ0', titulo: 'Como o estresse atua no corpo (e como desativá-lo)', canal: 'Ciência da Mente' },
+                        { id: 'IiZo1XNEO5A', titulo: 'Ansiedade e o impacto no dia a dia - Dra. Ana Beatriz', canal: 'PodPeople' }
+                    ];
+                    fallbackVideos.forEach(v => {
+                        videosEncontrados.push({
+                            id: v.id,
+                            titulo: v.titulo,
+                            canal: v.canal,
+                            thumb: `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`,
+                            plataforma: 'youtube',
+                            badge: '▶️ YouTube'
+                        });
+                    });
                 }
 
                 const grid = document.createElement('div');
@@ -2368,7 +2475,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                     card.className = 'video-busca-card';
                     card.innerHTML = `
                         <img class="video-busca-thumb" src="${v.thumb}" alt="${v.titulo}"
-                             onerror="this.src='https://via.placeholder.com/320x180?text=Vídeo'">
+                             onerror="this.src='https://img.youtube.com/vi/${v.id}/hqdefault.jpg'">
                         <div class="video-busca-play">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="#1a1a1a"><polygon points="8 5 19 12 8 19 8 5"></polygon></svg>
                         </div>
@@ -2380,7 +2487,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                             </div>
                         </div>
                     `;
-                    card.onclick = () => openVideo(v.id, v.plataforma);
+                    card.onclick = () => openVideo(v.id, v.plataforma, v.titulo);
                     grid.appendChild(card);
                 });
 

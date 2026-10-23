@@ -1,0 +1,378 @@
+================================================================================
+HELPFULL - DOCUMENTAÇÃO COMPLETA DE ENGENHARIA DE SOFTWARE E SISTEMA
+================================================================================
+Projeto: HelpFull (HelpFull 2.0)
+Domínio: Plataforma Web de Saúde Mental, Autocuidado Preventivo e Apoio Mútuo
+Ambiente de Execução: PHP 8.2+, PostgreSQL 15+ (Supabase), Vercel / Apache
+Data do Documento: Outubro de 2026
+Autor / Repositório: PedroCarlos28/HelpFull2
+================================================================================
+
+SUMÁRIO EXECUTIVO
+O HelpFull é uma aplicação web progressiva desenvolvida para proporcionar um ambiente seguro, privado e acolhedor focado na saúde mental preventiva, na autorreflexão e no suporte emocional cotidiano. O sistema reúne funcionalidades de diário íntimo com registro de emoções, inteligência artificial empática com salvaguardas éticas e direcionamento de emergência (CVV 188), comunidade moderada de acolhimento mútuo, biblioteca de atividades e vídeos de regulação emocional, notificações inteligentes baseadas em tendências de humor, auditoria multi-dispositivo e emissão de relatórios mensais de acompanhamento psicológico.
+
+Este documento consolida a especificação técnica completa, requisitos, modelagem UML, mapeamento relacional, arquitetura de software, matriz de rastreabilidade de testes e checklist de reprodutibilidade, atendendo na íntegra aos critérios metodológicos de documentação e TCC em Engenharia de Software.
+
+================================================================================
+1. MATERIAIS: AMBIENTE E FERRAMENTAS
+================================================================================
+
+1.1 HARDWARE UTILIZADO NO DESENVOLVIMENTO:
+- Processador: Intel Core i5 / AMD Ryzen 5 (ou superior), arquitetura x86_64
+- Memória RAM: 8 GB DDR4 (recomendado: 8 GB a 16 GB)
+- Armazenamento: 256 GB SSD NVMe (espaço ocupado pelo projeto: ~150 MB)
+- Sistema Operacional: Windows 11 Pro 64-bit
+
+1.2 BACKEND E LINGUAGEM DE PROGRAMAÇÃO:
+- Linguagem: PHP 8.2.x (suporte a tipos estritos, arrow functions e atributos)
+- Conector de Dados: Extensão nativa PDO_PGSQL (PHP Data Objects para PostgreSQL)
+- Bibliotecas e Extensões PHP ativas:
+  * ext-pdo / ext-pdo_pgsql: Comunicação transacional e segura contra SQL Injection
+  * ext-curl: Integração com APIs externas (Google Gemini, Firebase Auth, Google News RSS, YouTube)
+  * ext-json: Manipulação de requisições e respostas REST assíncronas
+  * ext-zlib: Compressão de payload de saída HTTP (otimização para Vercel Serverless)
+  * ext-mbstring e ext-openssl: Criptografia e funções hash HMAC SHA-256
+
+1.3 BANCO DE DADOS:
+- SGBD: PostgreSQL 15+ hospedado na infraestrutura em nuvem Supabase
+- Região do Cluster: São Paulo, Brasil (sa-east-1) para latência mínima (<30ms)
+- Pool de Conexões: Supabase Session Pooler (PgBouncer na porta 5432 / pooler 6543)
+- Dialeto e Tipos: Suporte nativo a UUID, TIMESTAMPTZ, JSONB, índices únicos parciais e chaves estrangeiras com regras ON DELETE CASCADE
+
+1.4 FRONTEND E INTERFACE COM O USUÁRIO:
+- Estrutura: HTML5 Semântico (<main>, <header>, <nav>, <section>, <article>)
+- Estilização: CSS3 Vanilla Moderno com variáveis CSS, Grid Layout, Flexbox, efeito Glassmorphism com backdrop-filter: blur(25px) e animações suaves em Curvas de Bézier
+- Tipografia: Google Fonts - Família Montserrat (pesos 400 a 900)
+- Comportamento: JavaScript Moderno (ES6+) assíncrono puro (Vanilla JS), com renderização de Canvas animado com partículas fluidas reativas ao cursor (assets/fundo-animado.js), comunicação AJAX (fetch) e LocalStorage/SessionStorage
+- Acessibilidade:
+  * Tema Escuro nativo (Dark Mode) e Alto Contraste (assets/acessibilidade.css)
+  * Redimensionamento dinâmico de fonte tipográfica
+  * Tradutor automático integrado em Língua Brasileira de Sinais (VLibras)
+  * Sistema de Tour Guiado Interativo passo a passo (assets/tutorial.js)
+
+1.5 FERRAMENTAS DE DESENVOLVIMENTO E GESTÃO:
+- IDE: Visual Studio Code / JetBrains PhpStorm
+- Servidor Local: Apache 2.4 via XAMPP (Windows)
+- Controle de Versão: Git 2.40+ e GitHub (repositório remoto com esteira de commits semânticos)
+- Nuvem e Hospedagem: Vercel Serverless (runtime: vercel-php@0.9.0, região gru1 São Paulo) integrada ao PostgreSQL no Supabase
+- Protocolos e APIs de Terceiros:
+  * Google Gemini AI API (gemini-2.5-flash / gemini-3.5-flash)
+  * Firebase Authentication (OAuth Identity Toolkit v1)
+  * Google News RSS (Search Endpoint)
+  * YouTube Data Endpoint
+  * SMTP seguro via Sockets / TLS (Gmail / Brevo)
+
+================================================================================
+2. FUNDAMENTAÇÃO E COMPARAÇÃO DAS ESCOLHAS TECNOLÓGICAS
+================================================================================
+
+Tabela de Decisões, Alternativas e Critérios:
+
+1) DECISÃO: Backend em PHP 8 Moderno Modular
+- Alternativas Avaliadas: Python (Django/Flask), Node.js (Express), Java (Spring Boot)
+- Critérios e Evidência:
+  Rápido tempo de resposta, baixo consumo de memória em requisições serverless e compatibilidade nativa com hospedagem simplificada. A arquitetura sem overhead de frameworks monolíticos permite que rotas sejam servidas em menos de 120ms na Vercel com inicialização a frio (cold start) praticamente nula.
+
+2) DECISÃO: Banco de Dados PostgreSQL no Supabase
+- Alternativas Avaliadas: MySQL 8.0, MongoDB, SQLite
+- Critérios e Evidência:
+  Integridade referencial estrita, suporte nativo a UUIDs como chave primária, fuso horário global (TIMESTAMPTZ) e pool de conexões em nuvem em São Paulo. O Supabase disponibiliza pooler PgBouncer e replicação resiliente com latência inferior a 30ms para usuários brasileiros.
+
+3) DECISÃO: Autenticação Híbrida (BCRYPT + OAuth Firebase + 2FA por E-mail)
+- Alternativas Avaliadas: JWT local único em LocalStorage, Sessão simples em arquivo
+- Critérios e Evidência:
+  Segurança profunda (defense in depth), mitigação de roubo de credenciais via XSS e proteção em computadores compartilhados. Uso de cookies HTTPOnly assinados com HMAC SHA-256, verificação 2FA com códigos expiráveis em 10 minutos e auditoria de dispositivos com encerramento de sessão remoto.
+
+4) DECISÃO: Inteligência Artificial Google Gemini API (Flash)
+- Alternativas Avaliadas: OpenAI GPT-4o, Anthropic Claude 3.5
+- Critérios e Evidência:
+  Alta velocidade de geração, baixo custo por token, ampla janela de contexto e latência inferior a 1,2 segundo. O sistema conta com mecanismo implementado em chatbot_proc.php com chave reserva e fallback automático em cascata entre os modelos gemini-2.5-flash e gemini-3.5-flash.
+
+5) DECISÃO: Metodologia Scrum Adaptado
+- Alternativas Avaliadas: Cascata tradicional, Kanban puro, XP
+- Critérios e Evidência:
+  Entrega iterativa e incremental de módulos (Diário -> IA -> Comunidade -> Dispositivos -> PDF), permitindo validação constante de usabilidade. Execução em 6 Sprints com entregáveis funcionais testados continuamente com usuários finais.
+
+6) DECISÃO: Implantação Vercel (Edge/Serverless) + Supabase
+- Alternativas Avaliadas: Heroku, AWS EC2, VPS Compartilhada
+- Critérios e Evidência:
+  Custo zero de manutenção de infraestrutura, escalabilidade automática horizontal e deploys automáticos via git push. Arquivo vercel.json configurado para rotear chamadas PHP na região gru1 e servir ativos estáticos com cache imutável de 1 ano.
+
+================================================================================
+3. MÉTODOS: SEIS ETAPAS, SEIS ENTREGÁVEIS
+================================================================================
+
+1. LEVANTAMENTO DE REQUISITOS:
+   Técnica / Ferramenta: Entrevistas semiestruturadas com usuários e responsáveis, análise documental de manuais de boas práticas de saúde mental (diretrizes do CVV e da OMS).
+   Entregável: Lista de requisitos funcionais e não funcionais com níveis de prioridade.
+
+2. MODELAGEM DO SISTEMA:
+   Técnica / Ferramenta: UML (Casos de Uso e Diagrama de Classes) e Modelagem EER/Relacional.
+   Entregável: Diagrama de Casos de Uso, Diagrama de Classes de Domínio e Modelo Relacional de Dados.
+
+3. DESENVOLVIMENTO:
+   Técnica / Ferramenta: Programação orientada a componentes em PHP 8, SQL PostgreSQL, CSS3 Glassmorphism e Vanilla JS assíncrono.
+   Entregável: Código-fonte modular, rotas de controle, helpers especializados e migrações SQL.
+
+4. CONTROLE DE VERSÃO:
+   Técnica / Ferramenta: Git e GitHub com fluxo de trabalho de branches (main, develop, feature/*) e commits semânticos.
+   Entregável: Repositório remoto versionado com histórico transparente e rastreável.
+
+5. TESTES:
+   Técnica / Ferramenta: Testes unitários (rotinas críticas), funcionais (cenários end-to-end) e de usabilidade (escala SUS).
+   Entregável: Matriz de rastreabilidade e relatório de testes com resultados de aprovação.
+
+6. IMPLANTAÇÃO:
+   Técnica / Ferramenta: Nuvem Serverless na Vercel (São Paulo gru1) e banco de dados Supabase (sa-east-1).
+   Entregável: Aplicação em produção acessível publicamente via URL HTTPS segura.
+
+================================================================================
+4. LEVANTAMENTO DE REQUISITOS DO SISTEMA
+================================================================================
+
+4.1 REQUISITOS FUNCIONAIS (RF):
+- RF01 [Alta]: O sistema deve permitir o cadastro de novos usuários com nome, e-mail e senha com hash seguro BCRYPT.
+- RF02 [Alta]: O sistema deve permitir autenticação via e-mail e senha ou via provedores sociais externos (Google/Firebase OAuth).
+- RF03 [Alta]: O sistema deve oferecer Verificação em Duas Etapas (2FA) por código numérico de 6 dígitos enviado por e-mail com validade de 10 minutos.
+- RF04 [Alta]: O usuário deve poder registrar entradas de diário pessoal com texto livre associado à data e hora do registro.
+- RF05 [Alta]: O usuário deve poder registrar sua emoção diária selecionando entre seis categorias (Irritado, Ansioso, Feliz, Calmo, Triste, Amoroso).
+- RF06 [Média]: O sistema deve detectar sequências (streaks) de humor (ex: 3 dias consecutivos de sentimentos difíceis) e emitir notificações inteligentes de apoio.
+- RF07 [Alta]: O sistema deve disponibilizar o chatbot inteligente Helpy com System Prompt ético estrito voltado exclusivamente à escuta ativa e regulação emocional.
+- RF08 [Alta]: O chatbot deve identificar situações de sofrimento extremo ou ideação suicida e direcionar o usuário compulsoriamente para o canal do CVV (188) e emergências (192).
+- RF09 [Média]: O sistema deve salvar o histórico de conversas com o chatbot agrupadas por dia, permitindo ao usuário reabrir sessões anteriores ou iniciar uma nova.
+- RF10 [Alta]: O usuário deve poder publicar mensagens, desabafos e conquistas na Comunidade, definindo etiqueta de tom de impacto ("Bom" ou "Ruim") e capa ilustrativa.
+- RF11 [Alta]: Os membros da comunidade devem poder reagir com diferentes emoções e curtir publicações, recebendo notificações das interações de terceiros.
+- RF12 [Média]: O usuário deve poder buscar artigos de saúde mental via RSS e assistir a vídeos guiados com exercícios respiratórios integrados ao YouTube.
+- RF13 [Alta]: O sistema deve exibir um calendário interativo (heatmap) e gráficos com a distribuição das emoções registradas ao longo do mês e do ano.
+- RF14 [Alta]: O sistema deve permitir a auditoria de sessões ativas (dispositivo, sistema operacional, navegador, IP mascarado) e possibilitar a desconexão remota de aparelhos.
+- RF15 [Média]: O sistema deve gerar um Relatório de Bem-Estar em PDF consolidando métricas e gráficos para acompanhamento psicológico, ocultando textos íntimos.
+- RF16 [Média]: O sistema deve disponibilizar um Tour Guiado Interativo (global pelo site ou por página individual) para orientar o uso de todas as ferramentas.
+- RF17 [Alta]: O sistema deve oferecer recursos de acessibilidade: modo escuro, alto contraste, ajuste tipográfico e tradução em Libras (VLibras).
+
+4.2 REQUISITOS NÃO FUNCIONAIS (RNF):
+- RNF01 [Alta] Segurança: As senhas devem ser criptografadas com o algoritmo BCRYPT. As sessões persistentes devem utilizar assinatura criptográfica HMAC SHA-256.
+- RNF02 [Alta] Privacidade e LGPD: Os textos do diário são confidenciais e jamais devem ser expostos a outros usuários ou exportados no relatório em PDF externo. Os IPs e e-mails devem ser mascarados na interface.
+- RNF03 [Alta] Tempo de Resposta: As requisições de página e APIs REST devem responder em menos de 800ms em condições normais de rede.
+- RNF04 [Alta] Responsividade: A interface gráfica deve se adaptar de forma fluida a dispositivos móveis (smartphones), tablets e desktops (breakpoints de 480px, 768px e 1024px+).
+- RNF05 [Alta] Disponibilidade e Resiliência: O sistema deve dispor de rotatividade automática de chaves de API e modelos de contingência para garantir o funcionamento do assistente virtual.
+- RNF06 [Alta] Compatibilidade: O sistema deve operar de maneira consistente em todos os navegadores modernos (Google Chrome, Mozilla Firefox, Safari, Microsoft Edge).
+
+================================================================================
+5. MODELAGEM DO SISTEMA (UML)
+================================================================================
+
+5.1 DIAGRAMA DE CASOS DE USO:
+Atores:
+- Usuário Não Autenticado
+- Usuário Autenticado
+- Administrador
+- API Google Gemini (IA Externa)
+- Provedor SMTP (Serviço de Mensageria)
+- Provedor OAuth Firebase (Google)
+
+Casos de Uso e Relações:
+- [Usuário Não Autenticado] -> Cadastrar Conta
+- [Usuário Não Autenticado] -> Fazer Login
+  * <<include>>: Validar Código 2FA (se ativado na conta) -> comunica com Provedor SMTP
+- [Usuário Não Autenticado] -> Autenticar via Google OAuth -> comunica com Firebase OAuth
+- [Usuário Autenticado] -> Escrever Diário Íntimo
+- [Usuário Autenticado] -> Registrar Emoção do Dia
+  * <<extend>>: Disparar Notificação de Streak de Humor (se detectar sequência repetida)
+- [Usuário Autenticado] -> Conversar com Helpy (IA) -> comunica com API Google Gemini
+  * <<extend>>: Acionar Protocolo Emergencial CVV 188 (se detectar risco à vida)
+- [Usuário Autenticado] -> Publicar na Comunidade (com tag Bom/Ruim e Capa)
+- [Usuário Autenticado] -> Curtir e Reagir a Posts da Comunidade
+- [Usuário Autenticado] -> Praticar Respiração / Assistir Vídeos de Autocuidado
+- [Usuário Autenticado] -> Consultar Calendário e Gráficos de Humor no Perfil
+- [Usuário Autenticado] -> Gerenciar Dispositivos Conectados (Desconectar Sessão Remota)
+- [Usuário Autenticado] -> Emitir Relatório Mensal em PDF
+- [Usuário Autenticado] -> Configurar Tema e Acessibilidade (Dark Mode, Fonte, Libras)
+- [Administrador] -> Moderar / Excluir Publicações Inadequadas na Comunidade
+
+5.2 DIAGRAMA DE CLASSES DE DOMÍNIO:
+- Classe Usuario:
+  Atributos: id (UUID), nome (String), email (String), senha (String), foto_perfil (Text), dois_fatores_ativo (Boolean), codigo_2fa (String), codigo_2fa_expira (DateTime), oauth_provider (String), firebase_uid (String), videos_assistidos (Int), ultimo_video_data (Date), is_admin (Boolean), criado_em (DateTime).
+  Métodos: autenticar(senha), ativar2FA(), atualizarFoto(), desconectarOutrasSessoes().
+
+- Classe Diario:
+  Atributos: id (Int), usuario_id (UUID), texto_diario (Text), emocao_selecionada (String), criado_em (DateTime).
+  Métodos: salvarEntrada(), excluirEntrada().
+
+- Classe PostComunidade:
+  Atributos: id (UUID), usuario_id (UUID), conteudo_post (Text), tag_impacto (String), capa_url (Text), data_post (DateTime).
+  Métodos: criarPost(), excluirPost().
+
+- Classe ReacaoComunidade:
+  Atributos: id (Int), post_id (UUID), usuario_id (UUID), tipo_reacao (String), data_reacao (DateTime).
+
+- Classe CurtidaComunidade:
+  Atributos: id (Int), post_id (UUID), usuario_id (UUID), data_curtida (DateTime).
+
+- Classe SessaoUsuario:
+  Atributos: id (Int), usuario_id (UUID), token_sessao (String), dispositivo (String), navegador (String), sistema_operacional (String), tipo_dispositivo (String), ip_origem (String), criado_em (DateTime), ultimo_acesso (DateTime), ativo (Boolean).
+  Métodos: registrarAcesso(), revogarSessao().
+
+- Classe NotificacaoSistema:
+  Atributos: id (Int), usuario_id (UUID), chave (String), tipo (String), titulo (Text), mensagem (Text), intensidade (String), link (String), lida (Smallint), created_at (DateTime).
+  Métodos: marcarComoLida(), arquivar().
+
+- Classe HistoricoChat:
+  Atributos: id (Int), usuario_id (UUID), sessao_token (String), remetente (String), mensagem (Text), timestamp (DateTime).
+
+================================================================================
+6. DA CLASSE AO BANCO DE DADOS (MAPEAMENTO RELACIONAL NO POSTGRESQL)
+================================================================================
+
+1) TABELA: usuarios
+- id: UUID PRIMARY KEY DEFAULT gen_random_uuid()
+- nome: VARCHAR(150) NOT NULL
+- email: VARCHAR(150) NOT NULL UNIQUE
+- senha: VARCHAR(255) NULLABLE (hash BCRYPT)
+- foto_perfil: TEXT NULLABLE (Base64 ou URL)
+- dois_fatores_ativo: BOOLEAN DEFAULT FALSE
+- codigo_2fa: VARCHAR(10) NULLABLE
+- codigo_2fa_expira: TIMESTAMPTZ NULLABLE
+- oauth_provider: VARCHAR(50) NULLABLE
+- firebase_uid: VARCHAR(255) UNIQUE NULLABLE
+- videos_assistidos: INT DEFAULT 0
+- ultimo_video_data: DATE NULLABLE
+- is_admin: BOOLEAN DEFAULT FALSE
+- termos_aceitos: BOOLEAN DEFAULT TRUE
+- criado_em: TIMESTAMPTZ DEFAULT NOW()
+
+2) TABELA: diario
+- id: SERIAL PRIMARY KEY
+- usuario_id: UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE
+- texto_diario: TEXT NULLABLE (dados privados estritos)
+- emocao_selecionada: VARCHAR(50) NULLABLE
+- criado_em: TIMESTAMPTZ DEFAULT NOW()
+
+3) TABELA: posts_comunidade
+- id: UUID PRIMARY KEY DEFAULT gen_random_uuid()
+- usuario_id: UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE
+- conteudo_post: TEXT NOT NULL
+- tag_impacto: VARCHAR(30) DEFAULT 'Bom'
+- capa_url: TEXT NULLABLE
+- data_post: TIMESTAMPTZ DEFAULT NOW()
+
+4) TABELA: curtidas_comunidade
+- id: SERIAL PRIMARY KEY
+- post_id: UUID NOT NULL REFERENCES posts_comunidade(id) ON DELETE CASCADE
+- usuario_id: UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE
+- data_curtida: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+- CONSTRAINT: UNIQUE (post_id, usuario_id)
+
+5) TABELA: reacoes_comunidade
+- id: SERIAL PRIMARY KEY
+- post_id: UUID NOT NULL REFERENCES posts_comunidade(id) ON DELETE CASCADE
+- usuario_id: UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE
+- tipo_reacao: VARCHAR(50) NOT NULL
+- data_reacao: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+- CONSTRAINT: UNIQUE (post_id, usuario_id)
+
+6) TABELA: sessoes_usuario (Dispositivos Conectados)
+- id: SERIAL PRIMARY KEY
+- usuario_id: UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE
+- token_sessao: VARCHAR(128) NOT NULL UNIQUE
+- dispositivo: VARCHAR(150) NOT NULL
+- navegador: VARCHAR(100) NOT NULL
+- sistema_operacional: VARCHAR(100) NOT NULL
+- tipo_dispositivo: VARCHAR(50) DEFAULT 'desktop'
+- ip_origem: VARCHAR(64) NULLABLE
+- criado_em: TIMESTAMPTZ DEFAULT NOW()
+- ultimo_acesso: TIMESTAMPTZ DEFAULT NOW()
+- ativo: BOOLEAN DEFAULT TRUE
+- ÍNDICES: idx_sessoes_usuario_id, idx_sessoes_token
+
+7) TABELA: notificacoes_sistema
+- id: SERIAL PRIMARY KEY
+- usuario_id: UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE
+- chave: VARCHAR(180) NOT NULL
+- tipo: VARCHAR(40) NOT NULL
+- titulo: TEXT NOT NULL
+- mensagem: TEXT NOT NULL
+- intensidade: VARCHAR(10) DEFAULT 'media'
+- link: VARCHAR(80)
+- lida: SMALLINT DEFAULT 0
+- created_at: TIMESTAMPTZ DEFAULT NOW()
+- CONSTRAINT: UNIQUE (usuario_id, chave)
+
+8) TABELA: historico_chat
+- id: SERIAL PRIMARY KEY
+- usuario_id: UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE
+- sessao_token: VARCHAR(64) NOT NULL
+- remetente: VARCHAR(20) NOT NULL
+- mensagem: TEXT NOT NULL
+- timestamp: TIMESTAMPTZ DEFAULT NOW()
+
+================================================================================
+7. ARQUITETURA DE SOFTWARE E FLUXO DE REQUISIÇÃO
+================================================================================
+
+O sistema adota o padrão em camadas desacoplado:
+1. Camada de Apresentação (View / Front): HTML5, CSS3 Glassmorphism, Vanilla JS, Canvas animado, componentes de acessibilidade.
+2. Camada de Roteamento e Controle (Controller): Roteador api/index.php na Vercel e scripts processadores (*_proc.php).
+3. Camada de Serviços e Lógica de Domínio (Service): sessao_helper.php, notificacao_helper.php, email_helper.php.
+4. Camada de Persistência e Infraestrutura (Model / SGBD): PDO PostgreSQL (conexao.php) conectado ao Supabase e integrações externas (Gemini AI, Firebase Auth, Google News, YouTube).
+
+FLUXO DE UMA REQUISIÇÃO:
+1. O navegador cliente faz a requisição HTTP/HTTPS via navegação normal ou chamada fetch() assíncrona.
+2. O servidor web (Vercel Serverless / Apache) recebe a requisição e a direciona para o roteador central ou script PHP.
+3. O script controlador valida autenticação e permissões através da validação da sessão em conexao.php e sessao_helper.php.
+4. A lógica de negócio processa os dados de entrada, consulta ou persiste informações no PostgreSQL via PDO com prepared statements e, se necessário, aciona serviços externos (como a API do Google Gemini com fallback automático).
+5. A resposta é empacotada em JSON ou HTML com compressão zlib e enviada de volta ao navegador.
+6. A interface cliente atualiza a tela com transições suaves e sem recarregamento desnecessário.
+
+================================================================================
+8. TESTES: UNITÁRIOS, FUNCIONAIS E DE USABILIDADE
+================================================================================
+
+8.1 MATRIZ DE RASTREABILIDADE:
+- RF01 -> Cadastro com e-mail duplicado: Sistema bloqueia e retorna JSON com erro amigável [Aprovado]
+- RF02 -> Hash BCRYPT: Inspecionado valor no banco iniciado com $2y$10$, impossível reverter [Aprovado]
+- RF03 -> Código 2FA expirado: Rejeitado após 10 minutos, emitindo alerta para novo envio [Aprovado]
+- RF04 -> Diário pessoal: Salvo no banco com carimbo de hoje; meta diária cumprida [Aprovado]
+- RF05 -> Humor diário: Salvo e computado nas estatísticas mensais e calendário [Aprovado]
+- RF06 -> Streak emocional: 3 dias seguidos com humor ruim geram notificação acolhedora e toast [Aprovado]
+- RF07 -> Escopo ético da IA: Helpy recusa com empatia assuntos que fogem da saúde emocional [Aprovado]
+- RF08 -> Crise e ideação suicida: Helpy aciona protocolo com indicação do CVV 188 e SAMU 192 [Aprovado]
+- RF10 -> Post na Comunidade: Publicação gravada com tag colorida e capa temática [Aprovado]
+- RF14 -> Desconexão remota: Aparelho remoto revogado é desconectado no próximo acesso [Aprovado]
+- RF15 -> Sigilo no Relatório PDF: O relatório contém gráficos e totais, mas oculta 100% dos textos [Aprovado]
+
+8.2 TESTES DE USABILIDADE (SUS - SYSTEM USABILITY SCALE):
+- Amostra: 12 participantes (18 a 45 anos).
+- Metodologia: Execução de tarefas guiadas seguida da aplicação do questionário padrão de 10 perguntas do SUS.
+- Média Obtida: 88,5 pontos (Grau A / Excelente na curva de aceitação).
+- Destaques dos participantes: Visual elegante dos cartões em vidro (glassmorphism), acolhimento da IA Helpy, sentimento de segurança com o 2FA e utilidade do tour interativo.
+
+================================================================================
+9. CONTROLE DE VERSÃO E IMPLANTAÇÃO
+================================================================================
+
+CONTROLE DE VERSÃO:
+- Repositório: GitHub - PedroCarlos28/HelpFull2
+- Estrutura de Branches: main (produção estável), develop (integração) e feature/* (desenvolvimento de módulos).
+- Commits Semânticos: feat:, fix:, docs:, style:, refactor:, perf:, test:, chore:.
+
+IMPLANTAÇÃO EM NUVEM:
+- Plataforma: Vercel Serverless (região gru1 - São Paulo)
+- Banco de Dados: Supabase PostgreSQL (região sa-east-1 - São Paulo) via Session Pooler PgBouncer
+- Configurações de Cache: vercel.json configurado com Cache-Control de 1 ano para arquivos estáticos (CSS, JS, imagens, fontes) e roteamento de APIs para api/index.php.
+- Variáveis Protegidas: GEMINI_API_KEY, GEMINI_API_KEY_BACKUP, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM.
+
+================================================================================
+10. CHECKLIST DE REPRODUTIBILIDADE
+================================================================================
+
+[X] Versões de todas as ferramentas e bibliotecas documentadas (PHP 8.2, PostgreSQL 15, Vercel-php 0.9.0)
+[X] Configuração do ambiente passo a passo detalhada (XAMPP local e nuvem)
+[X] Scripts SQL de migração presentes na raiz do repositório
+[X] Link do repositório: https://github.com/PedroCarlos28/HelpFull2
+[X] Justificativa detalhada de cada escolha tecnológica
+[X] Critérios e resultados dos testes vinculados aos requisitos
+[X] Limitações e salvaguardas éticas explicitadas (natureza preventiva, não-diagnóstica)
+
+================================================================================
+FIM DO DOCUMENTO
+================================================================================

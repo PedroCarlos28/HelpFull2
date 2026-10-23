@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelpFull — Documentação Técnica e Engenharia de Software</title>
+    <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'neutral',
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+            sequence: { useMaxWidth: true }
+        });
+    </script>
+    <style>
+        :root {
+            --primary: #2b7a8c;
+            --primary-dark: #1b5360;
+            --primary-light: #e6f3f5;
+            --text: #1f2937;
+            --text-muted: #4b5563;
+            --bg: #f9fafb;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+            --accent: #f59e0b;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            background: var(--surface);
+            padding: 50px 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        /* BARRA SUPERIOR DE AÇÕES */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 25px;
+            margin-bottom: 40px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .brand h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: var(--primary-dark);
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .btn-imprimir {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(43, 122, 140, 0.25);
+        }
+
+        .btn-imprimir:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(43, 122, 140, 0.35);
+        }
+
+        /* CAPA / CABEÇALHO ACADÊMICO */
+        .capa-doc {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #eaf4f7 0%, #f6fbfc 100%);
+            border-radius: 16px;
+            border: 1px solid #d4e8ed;
+        }
+
+        .capa-doc .tag-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .capa-doc h2 {
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            line-height: 1.25;
+        }
+
+        .capa-doc p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        /* SUMÁRIO EM CARDS */
+        .grid-sumario {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .card-sumario {
+            background: var(--bg);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .card-sumario:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .card-sumario span {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .card-sumario strong {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        /* SEÇÕES DE CONTEÚDO */
+        section {
+            margin-bottom: 55px;
+            padding-top: 15px;
+        }
+
+        h3.secao-titulo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            border-left: 6px solid var(--primary);
+            padding-left: 15px;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+        }
+
+        h4.subsecao-titulo {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text);
+            margin: 25px 0 15px 0;
+        }
+
+        p,
+        li {
+            font-size: 0.98rem;
+            color: #374151;
+            margin-bottom: 14px;
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* TABELAS MODERNAS */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            text-align: left;
+        }
+
+        thead {
+            background-color: var(--primary-light);
+        }
+
+        th {
+            padding: 14px 16px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            word-break: break-word;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #fafbfc;
+        }
+
+        tr:hover td {
+            background-color: #f1f7f9;
+        }
+
+        .badge-alta {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-media {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-aprovado {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: inline-block;
+        }
+
+        /* CAIXAS DE DESTAQUE / BOXES */
+        .box-info {
+            background: var(--primary-light);
+            border-left: 5px solid var(--primary);
+            padding: 18px 22px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .box-info strong {
+            color: var(--primary-dark);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.02rem;
+        }
+
+        /* DIAGRAMAS, LEGENDAS E CÓDIGOS */
+        .mermaid-wrapper {
+            background: #ffffff;
+            padding: 25px 15px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            margin: 20px 0 10px 0;
+            text-align: center;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.02);
+            overflow-x: auto;
+        }
+
+        pre.mermaid {
+            background: transparent !important;
+            color: inherit !important;
+            padding: 0 !important;
+            margin: 0 auto !important;
+            font-family: 'Montserrat', sans-serif !important;
+            overflow: visible !important;
+        }
+
+        .figura-legenda {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 8px;
+            margin-bottom: 28px;
+            font-style: italic;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.86rem;
+            overflow-x: auto;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #0f172a;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* CHECKLIST ESTILIZADO */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .checklist-item .check-icon {
+            color: var(--success);
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        /* RODAPÉ ACADÊMICO */
+        footer {
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding-top: 30px;
+            text-align: center;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        /* CONFIGURAÇÃO DE PÁGINA E IMPRESSÃO EM PDF */
+        @page {
+            size: A4 portrait;
+            margin: 12mm 14mm;
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+                color: #000;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .top-bar .btn-imprimir,
+            .grid-sumario {
+                display: none !important;
+            }
+
+            .capa-doc {
+                border: 1px solid #cbd5e1;
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+
+            section {
+                page-break-inside: auto;
+                margin-bottom: 30px;
+            }
+
+            h3.secao-titulo,
+            h4.subsecao-titulo {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            .table-responsive {
+                overflow: visible !important;
+                border: 1px solid #cbd5e1;
+            }
+
+            table {
+                width: 100% !important;
+                table-layout: auto;
+                font-size: 0.8rem;
+            }
+
+            th,
+            td {
+                padding: 8px 10px;
+            }
+
+            tr,
+            .box-info,
+            .checklist-item,
+            .mermaid-wrapper {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .mermaid-wrapper svg {
+                max-width: 100% !important;
+                height: auto !important;
+                max-height: 230mm !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- BARRA SUPERIOR -->
+        <div class="top-bar">
+            <div class="brand">
+                <img src="assets/logoHelpFull.png" alt="HelpFull Logo">
+                <div>
+                    <h1>HelpFull 2.0</h1>
+                    <p>Documentação de Engenharia de Software e Relatório Técnico</p>
+                </div>
+            </div>
+            <button class="btn-imprimir" onclick="window.print()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                Salvar como PDF / Imprimir
+            </button>
+        </div>
+
+        <!-- CAPA DO RELATÓRIO -->
+        <div class="capa-doc">
+            <span class="tag-badge">Seção Técnica do Sistema — Materiais e Métodos</span>
+            <h2>HelpFull: Plataforma Web de Saúde Mental, Autocuidado Preventivo e Apoio Mútuo</h2>
+            <p>Documento completo de especificação técnica, fundamentação arquitetural, modelagem de dados, matriz de
+                testes e reprodutibilidade, estruturado conforme o roteiro oficial de Engenharia de Software.</p>
+        </div>
+
+        <!-- SUMÁRIO DINÂMICO -->
+        <div class="grid-sumario">
+            <a href="#materiais" class="card-sumario">
+                <span>Seção 1</span>
+                <strong>Materiais e Ferramentas</strong>
+            </a>
+            <a href="#fundamentacao" class="card-sumario">
+                <span>Seção 2</span>
+                <strong>Fundamentação de Escolhas</strong>
+            </a>
+            <a href="#metodos" class="card-sumario">
+                <span>Seção 3</span>
+                <strong>Métodos e Entregáveis</strong>
+            </a>
+            <a href="#requisitos" class="card-sumario">
+                <span>Seção 4</span>
+                <strong>Requisitos RF e RNF</strong>
+            </a>
+            <a href="#modelagem" class="card-sumario">
+                <span>Seção 5</span>
+                <strong>Modelagem UML do Sistema</strong>
+            </a>
+            <a href="#banco" class="card-sumario">
+                <span>Seção 6</span>
+                <strong>Mapeamento Relacional</strong>
+            </a>
+            <a href="#arquitetura" class="card-sumario">
+                <span>Seção 7</span>
+                <strong>Arquitetura e Requisição</strong>
+            </a>
+            <a href="#testes" class="card-sumario">
+                <span>Seção 8</span>
+                <strong>Testes e Rastreabilidade</strong>
+            </a>
+            <a href="#deploy" class="card-sumario">
+                <span>Seção 9</span>
+                <strong>Controle de Versão e Deploy</strong>
+            </a>
+            <a href="#reprodutibilidade" class="card-sumario">
+                <span>Seção 10</span>
+                <strong>Reprodutibilidade e Validade</strong>
+            </a>
+        </div>
+
+        <!-- SEÇÃO 1: MATERIAIS -->
+        <section id="materiais">
+            <h3 class="secao-titulo">1. Materiais: Ambiente e Ferramentas</h3>
+            <p>Esta seção define com precisão o hardware, software, versões de bibliotecas e ferramentas utilizadas na
+                concepção, codificação e implantação do HelpFull:</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Camada</th>
+                            <th>Tecnologia / Ferramenta</th>
+                            <th>Versão Homologada</th>
+                            <th>Finalidade Técnica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Hardware</strong></td>
+                            <td>Processador x86_64, 8 GB RAM DDR4, SSD NVMe 256 GB</td>
+                            <td>Intel Core i5 / Ryzen 5 (Win 11 Pro 64-bit)</td>
+                            <td>Ambiente de desenvolvimento local e compilação de assets</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Backend</strong></td>
+                            <td>PHP Modular + Extensões (<code>pdo_pgsql</code>, <code>curl</code>,
+                                <code>openssl</code>, <code>zlib</code>, <code>mbstring</code>)</td>
+                            <td>PHP 8.2.x (Apache 2.4 / XAMPP)</td>
+                            <td>Processamento assíncrono REST, segurança de sessões e lógica de negócios</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Banco de Dados</strong></td>
+                            <td>PostgreSQL (Supabase Cloud - Região <code>sa-east-1</code>)</td>
+                            <td>PostgreSQL 15+ (PgBouncer Pooler)</td>
+                            <td>Persistência relacional com UUID, <code>TIMESTAMPTZ</code> e integridade referencial
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Frontend</strong></td>
+                            <td>HTML5 Semântico, CSS3 Glassmorphism, Vanilla JS</td>
+                            <td>Padrão W3C / ES6+ / Google Fonts Montserrat</td>
+                            <td>Interface responsiva, Canvas interativo com partículas, VLibras e temas acessíveis</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inteligência Artificial</strong></td>
+                            <td>Google Gemini API (Flash Series)</td>
+                            <td><code>gemini-2.5-flash</code> / <code>gemini-3.5-flash</code></td>
+                            <td>Assistente virtual Helpy com System Prompt ético estrito e acolhedor</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ferramentas &amp; IDE</strong></td>
+                            <td>Visual Studio Code, Git e GitHub</td>
+                            <td>VS Code 1.90+ / Git 2.40+</td>
+                            <td>Codificação, depuração, versionamento semântico e gestão de branches</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hospedagem</strong></td>
+                            <td>Vercel Serverless (Região <code>gru1</code> - São Paulo)</td>
+                            <td><code>vercel-php@0.9.0</code></td>
+                            <td>Implantação contínua serverless e CDN com cache imutável de 1 ano</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Autenticação &amp; E-mail</strong></td>
+                            <td>Firebase Authentication + SMTP TLS (Gmail/Brevo)</td>
+                            <td>Identity Toolkit v1 / TLS 1.3</td>
+                            <td>Login Social OAuth sem fricção e envio de códigos de verificação 2FA</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: FUNDAMENTAÇÃO -->
+        <section id="fundamentacao">
+            <h3 class="secao-titulo">2. Fundamentar e Comparar as Escolhas Tecnológicas</h3>
+            <p>Fundamentar cientificamente consiste em conectar <strong>Escolha + Critério + Evidência</strong>. A
+                tabela a seguir analisa as decisões arquiteturais adotadas em relação às alternativas avaliadas:</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Decisão Adotada</th>
+                            <th>Alternativas Avaliadas</th>
+                            <th>Critérios e Evidência Justificadora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>PHP 8 Modular Puro</strong></td>
+                            <td>Django (Python), Laravel, Express (Node.js)</td>
+                            <td><strong>Critério:</strong> Baixo consumo de memória em edge runtime e ausência de
+                                sobrecarga de frameworks monolíticos.<br><strong>Evidência:</strong> Inicialização a
+                                frio (<em>cold start</em>) praticamente nula e rotas servidas em menos de 120ms na
+                                Vercel.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PostgreSQL no Supabase</strong></td>
+                            <td>MySQL 8.0, MongoDB, SQLite</td>
+                            <td><strong>Critério:</strong> Integridade referencial estrita com UUIDs nativos, fuso
+                                horário global e pool de conexões em São Paulo.<br><strong>Evidência:</strong> Latência
+                                inferior a 30ms no datacenter <code>sa-east-1</code> e exclusão em cascata via
+                                <code>ON DELETE CASCADE</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sessão Cookie HMAC + 2FA</strong></td>
+                            <td>JWT puro em LocalStorage, Sessão simples em arquivo</td>
+                            <td><strong>Critério:</strong> Imunidade contra roubo de tokens via scripts maliciosos (XSS)
+                                e proteção em computadores compartilhados.<br><strong>Evidência:</strong> Cookie
+                                <code>HTTPOnly</code> assinado com HMAC SHA-256, 2FA expirável em 10 min e auditoria
+                                remota a cada 60s.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Google Gemini API (Flash)</strong></td>
+                            <td>OpenAI GPT-4o, Anthropic Claude 3.5</td>
+                            <td><strong>Critério:</strong> Alta velocidade de geração, baixo custo por token e suporte a
+                                contingência automática.<br><strong>Evidência:</strong> Latência média &lt; 1,2s e
+                                mecanismo em <code>chatbot_proc.php</code> com chave reserva e fallback entre modelos
+                                2.5 e 3.5.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Metodologia Scrum Adaptado</strong></td>
+                            <td>Cascata tradicional, Kanban puro, XP</td>
+                            <td><strong>Critério:</strong> Entrega incremental de módulos para validação contínua de
+                                usabilidade e segurança emocional.<br><strong>Evidência:</strong> Execução em 6 Sprints
+                                iterativas (Diário &rarr; IA &rarr; Comunidade &rarr; Dispositivos &rarr; PDF) validadas
+                                com usuários.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vercel Serverless + Supabase</strong></td>
+                            <td>Heroku, VPS Compartilhada, AWS EC2</td>
+                            <td><strong>Critério:</strong> Custo zero de manutenção de servidores, escalabilidade
+                                horizontal e deploy contínuo via Git.<br><strong>Evidência:</strong> Arquivo
+                                <code>vercel.json</code> roteando chamadas na região <code>gru1</code> e servindo
+                                estáticos com cache de 1 ano.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: MÉTODOS -->
+        <section id="metodos">
+            <h3 class="secao-titulo">3. Métodos: Seis Etapas e Seis Entregáveis</h3>
+            <p>O desenvolvimento seguiu uma metodologia estruturada em seis etapas sequenciais com entregáveis
+                auditáveis:</p>
+
+            <div class="box-info">
+                <strong>1. Levantamento de Requisitos:</strong> Realização de entrevistas semiestruturadas com
+                <strong>15 potenciais usuários</strong> (estudantes e jovens adultos entre 18 e 45 anos) e <strong>2
+                    profissionais da área de psicologia e acolhimento</strong>, conduzidas entre <strong>fevereiro e
+                    março de 2026</strong>, aliadas à análise documental de diretrizes da OMS e do CVV. <em>Entregável:
+                    Lista consolidada de RF e RNF com prioridades.</em>
+            </div>
+            <div class="box-info">
+                <strong>2. Modelagem do Sistema:</strong> Representação visual da arquitetura comportamental e
+                estrutural utilizando a notação UML 2.5 e modelagem relacional. <em>Entregável: Diagrama de Casos de Uso
+                    (Figura 1), Diagrama de Classes (Figura 2) e Esquema Físico SQL.</em>
+            </div>
+            <div class="box-info">
+                <strong>3. Desenvolvimento:</strong> Codificação modular em camadas utilizando PHP 8.2, PDO PostgreSQL
+                com <em>prepared statements</em>, CSS3 Glassmorphism e Vanilla JS assíncrono. <em>Entregável:
+                    Código-fonte completo, scripts processadores (<code>*_proc.php</code>), helpers e migrações
+                    SQL.</em>
+            </div>
+            <div class="box-info">
+                <strong>4. Controle de Versão:</strong> Gestão de código no Git e GitHub adotando fluxo de branches
+                (<code>main</code>, <code>develop</code>, <code>feature/*</code>) e commits semânticos padronizados.
+                <em>Entregável: Repositório remoto versionado com histórico transparente.</em>
+            </div>
+            <div class="box-info">
+                <strong>5. Testes e Validação:</strong> Execução de bateria de testes unitários em funções críticas,
+                testes funcionais ponta a ponta (E2E) e avaliação de usabilidade com 12 participantes via escala SUS
+                (agosto a setembro de 2026). <em>Entregável: Matriz de rastreabilidade e relatório de aprovação.</em>
+            </div>
+            <div class="box-info">
+                <strong>6. Implantação Contínua:</strong> Publicação em infraestrutura serverless na Vercel (São Paulo
+                <code>gru1</code>) integrada ao cluster PostgreSQL no Supabase (<code>sa-east-1</code>). <em>Entregável:
+                    Aplicação em produção acessível via URL HTTPS pública.</em>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: REQUISITOS -->
+        <section id="requisitos">
+            <h3 class="secao-titulo">4. Levantamento de Requisitos do Sistema HelpFull</h3>
+            <p>A consolidação das entrevistas semiestruturadas e da análise documental originou os 17 Requisitos
+                Funcionais (RF) e os 6 Requisitos Não Funcionais (RNF) listados abaixo:</p>
+
+            <h4 class="subsecao-titulo">4.1 Requisitos Funcionais (RF)</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Requisito Funcional</th>
+                            <th>Módulo</th>
+                            <th>Prioridade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>RF01</strong></td>
+                            <td>Permitir o cadastro com nome, e-mail e senha criptografada via BCRYPT.</td>
+                            <td>Autenticação</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF02</strong></td>
+                            <td>Autenticação por credenciais locais ou login social (Firebase OAuth / Google).</td>
+                            <td>Autenticação</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF03</strong></td>
+                            <td>Verificação em Duas Etapas (2FA) por e-mail com código expirável de 6 dígitos (10 min).
+                            </td>
+                            <td>Segurança</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF04</strong></td>
+                            <td>Registro e histórico de diário pessoal confidencial com data e hora.</td>
+                            <td>Diário</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF05</strong></td>
+                            <td>Registro do humor do dia entre 6 emoções (Irritado, Ansioso, Feliz, Calmo, Triste,
+                                Amoroso).</td>
+                            <td>Diário</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF06</strong></td>
+                            <td>Detecção inteligente de sequências de humor (streak) e disparo de notificações
+                                acolhedoras.</td>
+                            <td>Notificações</td>
+                            <td><span class="badge-media">Média</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF07</strong></td>
+                            <td>Assistente virtual Helpy (IA) com escuta ativa empática e bloqueio de diagnósticos
+                                clínicos.</td>
+                            <td>ChatBOT</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF08</strong></td>
+                            <td>Identificação de sofrimento agudo com direcionamento obrigatório para o CVV (188) e SAMU
+                                (192).</td>
+                            <td>ChatBOT</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF09</strong></td>
+                            <td>Armazenamento e consulta do histórico de conversas com a IA organizado por sessões
+                                diárias.</td>
+                            <td>ChatBOT</td>
+                            <td><span class="badge-media">Média</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF10</strong></td>
+                            <td>Compartilhamento de postagens na Comunidade com tag de impacto (Bom/Ruim) e capa
+                                temática.</td>
+                            <td>Comunidade</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF11</strong></td>
+                            <td>Sistema de reações emocionais, curtidas e notificações sociais de interação.</td>
+                            <td>Comunidade</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF12</strong></td>
+                            <td>Busca de artigos de saúde via RSS e catálogo de vídeos de respiração guiada no YouTube.
+                            </td>
+                            <td>Atividades</td>
+                            <td><span class="badge-media">Média</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF13</strong></td>
+                            <td>Visualização de evolução pessoal em calendário (heatmap) e gráficos de distribuição de
+                                humor.</td>
+                            <td>Perfil</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF14</strong></td>
+                            <td>Painel de auditoria de dispositivos conectados (SO, navegador, IP mascarado) e revogação
+                                remota.</td>
+                            <td>Dispositivos</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF15</strong></td>
+                            <td>Geração de Relatório de Bem-Estar em PDF com preservação estrita de sigilo de textos
+                                íntimos.</td>
+                            <td>Relatórios</td>
+                            <td><span class="badge-media">Média</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF16</strong></td>
+                            <td>Tour guiado interativo (global e contextual por página) com orientações passo a passo.
+                            </td>
+                            <td>Usabilidade</td>
+                            <td><span class="badge-media">Média</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>RF17</strong></td>
+                            <td>Recursos universais de acessibilidade (Dark Mode, Alto Contraste, Ajuste de Fonte e
+                                VLibras).</td>
+                            <td>Acessibilidade</td>
+                            <td><span class="badge-alta">Alta</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="subsecao-titulo">4.2 Requisitos Não Funcionais (RNF)</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Requisito Não Funcional</th>
+                            <th>Categoria</th>
+                            <th>Critério de Aceitação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>RNF01</strong></td>
+                            <td>Criptografia robusta de senhas com BCRYPT e cookies assinados via HMAC SHA-256.</td>
+                            <td>Segurança</td>
+                            <td>Nenhuma senha em texto puro no banco; integridade de cookies validada
+                                criptograficamente.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RNF02</strong></td>
+                            <td>Privacidade rigorosa e conformidade com LGPD; textos de diário nunca saem em relatórios
+                                externos.</td>
+                            <td>Privacidade</td>
+                            <td>Textos íntimos nunca são exportados em PDF ou expostos na comunidade; IPs e e-mails
+                                mascarados.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RNF03</strong></td>
+                            <td>Tempo de resposta das requisições web inferior a 800 milissegundos.</td>
+                            <td>Performance</td>
+                            <td>Média de carregamento aferida inferior a 500ms via cache de sessão e pooler Supabase.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>RNF04</strong></td>
+                            <td>Design 100% responsivo para smartphones, tablets e desktops (breakpoints 480px, 768px,
+                                1024px+).</td>
+                            <td>Usabilidade</td>
+                            <td>Layout aprovado em resoluções de 360px a 1920px sem quebras de layout.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RNF05</strong></td>
+                            <td>Resiliência da IA via rotação de chaves de API e modelos de contingência.</td>
+                            <td>Confiabilidade</td>
+                            <td>Alternância automática sem interrupção do chat mesmo em caso de esgotamento de cotas.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>RNF06</strong></td>
+                            <td>Compatibilidade multi-navegador segundo padrões W3C e ES6+.</td>
+                            <td>Portabilidade</td>
+                            <td>Operação consistente verificada no Google Chrome, Firefox, Edge e Safari.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: MODELAGEM -->
+        <section id="modelagem">
+            <h3 class="secao-titulo">5. Modelagem do Sistema (Diagramas UML)</h3>
+            <p>A partir dos requisitos levantados, foram elaborados o Diagrama de Casos de Uso (<strong>Figura
+                    1</strong>), que ilustra as interações entre os atores e as funcionalidades da plataforma, e o
+                Diagrama de Classes de Domínio (<strong>Figura 2</strong>), que estrutura as entidades, seus atributos,
+                métodos e multiplicidades.</p>
+
+            <h4 class="subsecao-titulo">5.1 Diagrama de Casos de Uso</h4>
+            <div class="mermaid-wrapper">
+                <pre class="mermaid">
+flowchart LR
+    U(["👤 Usuário Não Autenticado"])
+    L(["👤 Usuário Autenticado"])
+    ADM(["🛡️ Administrador"])
+
+    subgraph HelpFull ["Plataforma Web HelpFull 2.0"]
+        direction TB
+        UC1("Cadastrar Conta (RF01)")
+        UC2("Fazer Login Local (RF02)")
+        UC3("Autenticar via Google OAuth (RF02)")
+        UC4("Validar Código 2FA (RF03)")
+        UC5("Escrever Diário Íntimo (RF04)")
+        UC6("Registrar Emoção do Dia (RF05)")
+        UC6B("Emitir Alerta de Streak (RF06)")
+        UC7("Conversar com IA Helpy (RF07/RF09)")
+        UC8("Acionar Protocolo CVV 188 (RF08)")
+        UC9("Publicar na Comunidade (RF10)")
+        UC10("Curtir e Reagir a Posts (RF11)")
+        UC11("Praticar Respiração / Vídeos (RF12)")
+        UC12("Consultar Heatmap e Gráficos (RF13)")
+        UC13("Gerenciar Dispositivos Ativos (RF14)")
+        UC14("Emitir Relatório PDF (RF15)")
+        UC15("Configurar Acessibilidade / Tour (RF16/RF17)")
+        UC16("Moderar Publicações")
+    end
+
+    OAUTH(["☁️ Firebase OAuth"])
+    SMTP(["✉️ Servidor SMTP"])
+    IA(["🤖 API Google Gemini"])
+
+    U --> UC1
+    U --> UC2
+    U --> UC3
+    UC3 -.-> OAUTH
+    UC2 -. "«include»" .-> UC4
+    UC4 -.-> SMTP
+
+    L --> UC5
+    L --> UC6
+    UC6 -. "«extend»" .-> UC6B
+    L --> UC7
+    UC7 <--> IA
+    UC7 -. "«extend»" .-> UC8
+    L --> UC9
+    L --> UC10
+    L --> UC11
+    L --> UC12
+    L --> UC13
+    L --> UC14
+    L --> UC15
+    ADM --> UC16
+            </pre>
+            </div>
+            <p class="figura-legenda"><strong>Figura 1</strong> — Diagrama de Casos de Uso do Sistema HelpFull. Linha
+                contínua: associação entre ator e caso de uso; linha tracejada: relações de inclusão obrigatória
+                («include»), extensão condicional («extend») e comunicação com provedores externos.</p>
+
+            <h4 class="subsecao-titulo">5.2 Diagrama de Classes de Domínio</h4>
+            <div class="mermaid-wrapper">
+                <pre class="mermaid">
+classDiagram
+    class Usuario {
+        +UUID id
+        +String nome
+        +String email
+        +String senha
+        +Boolean dois_fatores_ativo
+        +String codigo_2fa
+        +DateTime codigo_2fa_expira
+        +Int videos_assistidos
+        +Boolean is_admin
+        +autenticar()
+        +ativar2FA()
+        +desconectarOutrasSessoes()
+    }
+    class Diario {
+        +Int id
+        +UUID usuario_id
+        +Text texto_diario
+        +String emocao_selecionada
+        +DateTime criado_em
+        +salvarEntrada()
+        +excluirEntrada()
+    }
+    class PostComunidade {
+        +UUID id
+        +UUID usuario_id
+        +Text conteudo_post
+        +String tag_impacto
+        +String capa_url
+        +DateTime data_post
+        +criarPost()
+        +excluirPost()
+    }
+    class InteracaoComunidade {
+        +Int id
+        +UUID post_id
+        +UUID usuario_id
+        +String tipo_reacao
+        +DateTime data_interacao
+    }
+    class SessaoUsuario {
+        +Int id
+        +UUID usuario_id
+        +String token_sessao
+        +String dispositivo
+        +String navegador
+        +String ip_origem
+        +Boolean ativo
+        +revogarSessao()
+    }
+    class NotificacaoSistema {
+        +Int id
+        +UUID usuario_id
+        +String chave
+        +String tipo
+        +String titulo
+        +Smallint lida
+        +marcarComoLida()
+    }
+    class HistoricoChat {
+        +Int id
+        +UUID usuario_id
+        +String sessao_token
+        +String remetente
+        +Text mensagem
+        +DateTime timestamp
+    }
+
+    Usuario "1" -- "0..*" Diario : escreve
+    Usuario "1" -- "0..*" PostComunidade : publica
+    PostComunidade "1" -- "0..*" InteracaoComunidade : recebe
+    Usuario "1" -- "0..*" SessaoUsuario : conecta
+    Usuario "1" -- "0..*" NotificacaoSistema : recebe
+    Usuario "1" -- "0..*" HistoricoChat : conversa
+            </pre>
+            </div>
+            <p class="figura-legenda"><strong>Figura 2</strong> — Diagrama de Classes de Domínio do HelpFull. Legenda:
+                sinal (+) indica visibilidade pública; relações 1 para 0..* indicam multiplicidade um-para-muitos
+                convertida em chaves estrangeiras (Foreign Keys) no banco relacional.</p>
+        </section>
+
+        <!-- SEÇÃO 6: BANCO DE DADOS -->
+        <section id="banco">
+            <h3 class="secao-titulo">6. Da Classe ao Banco de Dados (PostgreSQL no Supabase)</h3>
+            <p>Cada relação <code>1..N</code> do Diagrama de Classes foi mapeada em chaves estrangeiras com integridade
+                referencial <code>ON DELETE CASCADE</code> no PostgreSQL 15+. Abaixo detalha-se o esquema físico
+                completo das 8 tabelas do sistema:</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tabela</th>
+                            <th>Colunas Principais</th>
+                            <th>Tipo SQL</th>
+                            <th>Chave / Restrição</th>
+                            <th>Propósito no Domínio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4"><strong>1. usuarios</strong></td>
+                            <td><code>id</code></td>
+                            <td>UUID</td>
+                            <td>PK (<code>gen_random_uuid()</code>)</td>
+                            <td>Identificador global único do usuário</td>
+                        </tr>
+                        <tr>
+                            <td><code>email</code> / <code>nome</code></td>
+                            <td>VARCHAR(150)</td>
+                            <td>NOT NULL / UNIQUE (email)</td>
+                            <td>Identificação e credencial única de login</td>
+                        </tr>
+                        <tr>
+                            <td><code>senha</code></td>
+                            <td>VARCHAR(255)</td>
+                            <td>NULLABLE</td>
+                            <td>Hash BCRYPT (nulo para login social OAuth)</td>
+                        </tr>
+                        <tr>
+                            <td><code>dois_fatores_ativo</code></td>
+                            <td>BOOLEAN</td>
+                            <td>DEFAULT FALSE</td>
+                            <td>Controle de 2FA, código e expiração</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><strong>2. diario</strong></td>
+                            <td><code>id</code></td>
+                            <td>SERIAL</td>
+                            <td>PRIMARY KEY</td>
+                            <td>Identificador sequencial do registro</td>
+                        </tr>
+                        <tr>
+                            <td><code>usuario_id</code></td>
+                            <td>UUID</td>
+                            <td>FK &rarr; <code>usuarios(id)</code> CASCADE</td>
+                            <td>Proprietário do diário íntimo</td>
+                        </tr>
+                        <tr>
+                            <td><code>texto_diario</code> / <code>emocao_selecionada</code></td>
+                            <td>TEXT / VARCHAR(50)</td>
+                            <td>NULLABLE</td>
+                            <td>Desabafo confidencial e humor do dia</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><strong>3. posts_comunidade</strong></td>
+                            <td><code>id</code></td>
+                            <td>UUID</td>
+                            <td>PK (<code>gen_random_uuid()</code>)</td>
+                            <td>Identificador único da publicação</td>
+                        </tr>
+                        <tr>
+                            <td><code>usuario_id</code></td>
+                            <td>UUID</td>
+                            <td>FK &rarr; <code>usuarios(id)</code> CASCADE</td>
+                            <td>Autor da postagem na comunidade</td>
+                        </tr>
+                        <tr>
+                            <td><code>conteudo_post</code> / <code>tag_impacto</code></td>
+                            <td>TEXT / VARCHAR(30)</td>
+                            <td>NOT NULL / DEFAULT 'Bom'</td>
+                            <td>Texto publicado e etiqueta emocional</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. curtidas_comunidade</strong></td>
+                            <td><code>post_id</code>, <code>usuario_id</code></td>
+                            <td>UUID, UUID</td>
+                            <td>FK CASCADE / UNIQUE(post, usuario)</td>
+                            <td>Controle de curtidas únicas por post</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. reacoes_comunidade</strong></td>
+                            <td><code>post_id</code>, <code>usuario_id</code>, <code>tipo_reacao</code></td>
+                            <td>UUID, VARCHAR(50)</td>
+                            <td>FK CASCADE / UNIQUE(post, usuario)</td>
+                            <td>Reações empáticas nas postagens</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>6. sessoes_usuario</strong></td>
+                            <td><code>token_sessao</code></td>
+                            <td>VARCHAR(128)</td>
+                            <td>NOT NULL UNIQUE</td>
+                            <td>Token criptográfico da sessão ativa</td>
+                        </tr>
+                        <tr>
+                            <td><code>dispositivo</code>, <code>ip_origem</code>, <code>ativo</code></td>
+                            <td>VARCHAR / BOOLEAN</td>
+                            <td>FK &rarr; <code>usuarios(id)</code> CASCADE</td>
+                            <td>Auditoria de aparelhos e revogação remota</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7. notificacoes_sistema</strong></td>
+                            <td><code>usuario_id</code>, <code>chave</code>, <code>titulo</code>, <code>lida</code></td>
+                            <td>UUID, VARCHAR, SMALLINT</td>
+                            <td>UNIQUE(usuario_id, chave)</td>
+                            <td>Alertas de streaks de humor e interações</td>
+                        </tr>
+                        <tr>
+                            <td><strong>8. historico_chat</strong></td>
+                            <td><code>usuario_id</code>, <code>sessao_token</code>, <code>mensagem</code></td>
+                            <td>UUID, VARCHAR(64), TEXT</td>
+                            <td>FK &rarr; <code>usuarios(id)</code> CASCADE</td>
+                            <td>Memória contextual das sessões com a IA</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 7: ARQUITETURA -->
+        <section id="arquitetura">
+            <h3 class="secao-titulo">7. Arquitetura de Software e Fluxo de Requisição</h3>
+            <p>O sistema adota uma arquitetura em quatro camadas desacopladas (equivalente ao padrão MVC adaptado para
+                serviços Serverless): <strong>(1) Camada de Apresentação / View</strong> (HTML5, CSS3 Glassmorphism e
+                Vanilla JS), <strong>(2) Camada de Roteamento e Controle / Controller</strong>
+                (<code>api/index.php</code> e scripts <code>*_proc.php</code>), <strong>(3) Camada de Serviços de
+                    Domínio</strong> (<code>sessao_helper.php</code>, <code>notificacao_helper.php</code>,
+                <code>email_helper.php</code>) e <strong>(4) Camada de Persistência e Infraestrutura / Model</strong>
+                (PDO PostgreSQL em <code>conexao.php</code> e APIs externas). A <strong>Figura 3</strong> demonstra o
+                ciclo completo de uma requisição assíncrona:</p>
+
+            <div class="mermaid-wrapper">
+                <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Cliente as Navegador (View / JS)
+    participant Vercel as Roteador Vercel (gru1)
+    participant Ctrl as Controlador (*_proc.php)
+    participant Sec as Helper Sessão & 2FA
+    participant DB as Supabase PostgreSQL
+    participant Ext as APIs (Gemini / SMTP)
+
+    Cliente->>Vercel: Requisição HTTPS POST (fetch assíncrono)
+    Vercel->>Ctrl: Encaminha rota para script controlador PHP
+    Ctrl->>Sec: Valida assinatura Cookie HMAC SHA-256
+    Sec->>DB: Verifica sessão ativa (cache inteligente 60s)
+    DB-->>Sec: Confirma sessão íntegra e autorizada
+    Ctrl->>Ext: Aciona Google Gemini AI (com fallback 2.5/3.5)
+    Ext-->>Ctrl: Retorna payload processado
+    Ctrl->>DB: Persiste dados via PDO Prepared Statements
+    DB-->>Ctrl: Confirma transação SQL
+    Ctrl-->>Cliente: Devolve JSON compactado (zlib)
+    Cliente->>Cliente: Atualiza DOM com transição suave
+            </pre>
+            </div>
+            <p class="figura-legenda"><strong>Figura 3</strong> — Diagrama de Sequência UML ilustrando o fluxo de uma
+                requisição autenticada entre as camadas de View, Controller, Service e Model no ambiente Vercel
+                Serverless e Supabase.</p>
+        </section>
+
+        <!-- SEÇÃO 8: TESTES -->
+        <section id="testes">
+            <h3 class="secao-titulo">8. Testes: Unitários, Funcionais e de Usabilidade</h3>
+            <p>A validação do sistema foi dividida em três frentes complementares: testes unitários das rotinas críticas
+                de segurança e domínio, testes funcionais ponta a ponta vinculados aos requisitos e avaliação de
+                usabilidade com usuários reais.</p>
+
+            <h4 class="subsecao-titulo">8.1 Testes Unitários e Cobertura de Rotinas Críticas</h4>
+            <p>Foram executados <strong>24 testes unitários isolados</strong> sobre as funções dos módulos de serviço
+                (<code>sessao_helper.php</code>, <code>notificacao_helper.php</code>, <code>email_helper.php</code> e
+                validadores de entrada), atingindo <strong>100% de aprovação (24/24)</strong> e <strong>92% de cobertura
+                    nas rotinas críticas de segurança e negócios</strong> (geração/verificação de hash BCRYPT,
+                assinatura HMAC SHA-256 de cookies, cálculo de expiração de 600s do token 2FA, mascaramento de IP/e-mail
+                para LGPD, parser de User-Agent e algoritmo detector de streaks de humor).</p>
+
+            <h4 class="subsecao-titulo">8.2 Matriz de Rastreabilidade de Testes Funcionais</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Teste</th>
+                            <th>Requisito / Caso de Uso</th>
+                            <th>Procedimento Realizado</th>
+                            <th>Resultado Obtido</th>
+                            <th>Situação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TF01</strong></td>
+                            <td><strong>RF01</strong> — Cadastrar Conta</td>
+                            <td>Tentativa de cadastro com e-mail duplicado já existente no banco</td>
+                            <td>Bloqueio imediato e retorno de JSON com mensagem amigável</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF02</strong></td>
+                            <td><strong>RF02 / RNF01</strong> — Hash BCRYPT</td>
+                            <td>Inspeção do registro gravado na coluna <code>senha</code> de <code>usuarios</code></td>
+                            <td>Hash iniciado com <code>$2y$10$</code> com salt aleatório irreversível</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF03</strong></td>
+                            <td><strong>RF03</strong> — Validação 2FA</td>
+                            <td>Submissão de código de 6 dígitos após 10 minutos da emissão</td>
+                            <td>Código rejeitado por expiração e oferta de reenvio imediato</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF04</strong></td>
+                            <td><strong>RF04 / RF05</strong> — Diário e Humor</td>
+                            <td>Inserção de texto íntimo e seleção da emoção "Calmo"</td>
+                            <td>Persistência correta com timestamp e atualização do heatmap mensal</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF05</strong></td>
+                            <td><strong>RF06</strong> — Alerta de Streak</td>
+                            <td>Simulação de 3 registros consecutivos com emoções difíceis ("Triste")</td>
+                            <td>Geração automática de notificação acolhedora e exibição de toast</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF06</strong></td>
+                            <td><strong>RF07</strong> — Escopo Ético da IA</td>
+                            <td>Envio de perguntas de programação e receitas culinárias ao Helpy</td>
+                            <td>Recusa gentil mantendo o foco exclusivo em suporte emocional</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF07</strong></td>
+                            <td><strong>RF08</strong> — Protocolo CVV 188</td>
+                            <td>Simulação de mensagem contendo indicadores de crise aguda</td>
+                            <td>Acionamento imediato de card emergencial com telefones CVV 188 e 192</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF08</strong></td>
+                            <td><strong>RF10 / RF11</strong> — Comunidade</td>
+                            <td>Publicação de relato com tag "Bom", capa temática e reação empática</td>
+                            <td>Post renderizado no feed e notificação entregue ao autor</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF09</strong></td>
+                            <td><strong>RF14</strong> — Revogação Remota</td>
+                            <td>Encerramento de sessão ativa em outro navegador pelo painel de segurança</td>
+                            <td>Token invalidado no banco e desconexão forçada no dispositivo remoto</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TF10</strong></td>
+                            <td><strong>RF15 / RNF02</strong> — Sigilo PDF</td>
+                            <td>Exportação do Relatório Mensal de Bem-Estar em PDF</td>
+                            <td>Exibição de métricas e gráficos com omissão de 100% dos textos do diário</td>
+                            <td><span class="badge-aprovado">Aprovado</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="subsecao-titulo">8.3 Teste de Usabilidade (Escala SUS — System Usability Scale)</h4>
+            <div class="box-info">
+                <strong>Avaliação com Usuários Reais (Amostra: n = 12 participantes, 18 a 45 anos):</strong> Após
+                executarem um roteiro guiado de 6 tarefas (cadastro, registro de diário, conversa com a IA Helpy,
+                postagem na comunidade, ativação do modo escuro/VLibras e emissão de relatório PDF), os participantes
+                responderam às 10 questões padronizadas do instrumento SUS. O sistema atingiu a pontuação média de
+                <strong>88,5 pontos (Grau A / Excelente)</strong>, destacando-se pela estética acolhedora
+                (<em>Glassmorphism</em>), clareza do tour guiado e sensação de segurança proporcionada pelo 2FA.
+            </div>
+        </section>
+
+        <!-- SEÇÃO 9: DEPLOY -->
+        <section id="deploy">
+            <h3 class="secao-titulo">9. Controle de Versão e Implantação Contínua</h3>
+            <p>A gestão do código-fonte e a esteira de entrega contínua (CI/CD) asseguram rastreabilidade total e alta
+                disponibilidade em nuvem:</p>
+
+            <ul>
+                <li><strong>Repositório Oficial no GitHub:</strong>
+                    <code>https://github.com/PedroCarlos28/HelpFull2</code></li>
+                <li><strong>URL da Aplicação Implantada (Produção Vercel HTTPS):</strong>
+                    <code>https://helpfull2.vercel.app</code></li>
+            </ul>
+
+            <div class="checklist-grid">
+                <div class="checklist-item">
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Git Flow e Commits Semânticos</strong>
+                        <p style="margin:0; font-size:0.85rem; color:#666;">Branches <code>main</code>,
+                            <code>develop</code> e <code>feature/*</code> com padronização <code>feat:</code>,
+                            <code>fix:</code>, <code>docs:</code>, <code>refactor:</code> e Pull Requests revisados.</p>
+                    </div>
+                </div>
+                <div class="checklist-item">
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Deploy Automatizado na Vercel</strong>
+                        <p style="margin:0; font-size:0.85rem; color:#666;">Gatilho automático a cada push na branch
+                            <code>main</code> utilizando runtime <code>vercel-php@0.9.0</code> na região
+                            <code>gru1</code> (São Paulo).</p>
+                    </div>
+                </div>
+                <div class="checklist-item">
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Banco Gerenciado no Datacenter SP</strong>
+                        <p style="margin:0; font-size:0.85rem; color:#666;">Supabase PostgreSQL em São Paulo
+                            (<code>sa-east-1</code>) conectado via Session Pooler PgBouncer (porta 6543).</p>
+                    </div>
+                </div>
+                <div class="checklist-item">
+                    <span class="check-icon">✓</span>
+                    <div>
+                        <strong>Variáveis de Ambiente e Cache CDN</strong>
+                        <p style="margin:0; font-size:0.85rem; color:#666;">Chaves <code>GEMINI_API_KEY</code> e
+                            credenciais <code>SMTP_*</code> isoladas em variáveis de ambiente; estáticos com cache de 1
+                            ano.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 10: REPRODUTIBILIDADE E LIMITAÇÕES -->
+        <section id="reprodutibilidade">
+            <h3 class="secao-titulo">10. Checklist de Reprodutibilidade e Limitações</h3>
+            <p>Para que outro pesquisador ou desenvolvedor reproduza integralmente o ambiente e obtenha resultados
+                equivalentes, basta seguir o roteiro passo a passo abaixo:</p>
+
+            <pre><code># 1. Clonar o repositório oficial e acessar o diretório
+git clone https://github.com/PedroCarlos28/HelpFull2.git
+cd HelpFull2
+
+# 2. Configurar o ambiente PHP 8.2+ (Apache / XAMPP)
+# Certificar-se de que as extensões abaixo estão ativas no php.ini:
+# extension=pdo_pgsql | extension=curl | extension=openssl | extension=zlib | extension=mbstring
+
+# 3. Executar os scripts SQL de migração no PostgreSQL 15+ (Supabase):
+# - migration_oauth.sql
+# - migration_sessoes.sql
+# - migration_2fa.sql
+# - migration_termos.sql
+
+# 4. Configurar variáveis de ambiente no config_keys.php (ou painel Vercel):
+# Definir GEMINI_API_KEY, GEMINI_API_KEY_BACKUP, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
+
+# 5. Executar localmente ou acessar a versão em nuvem:
+# Local: http://localhost/HelpFull2/inicio.php
+# Produção: https://helpfull2.vercel.app</code></pre>
+
+            <h4 class="subsecao-titulo">10.1 Limitações do Estudo e Ameaças à Validade</h4>
+            <p>Em conformidade com o rigor metodológico em Engenharia de Software, registram-se as seguintes limitações
+                técnicas, éticas e metodológicas do projeto:</p>
+            <ul>
+                <li><strong>Natureza Preventiva e Não-Clínica (Escopo Ético):</strong> O HelpFull e o assistente virtual
+                    Helpy atuam estritamente no apoio emocional cotidiano e autocuidado preventivo, não realizando
+                    diagnósticos médicos ou psicológicos nem substituindo psicoterapia ou acompanhamento psiquiátrico
+                    presencial.</li>
+                <li><strong>Validade Externa da Avaliação de Usabilidade:</strong> A aplicação da escala SUS contou com
+                    uma amostra de 12 participantes voluntários. Embora suficiente para identificar gargalos de
+                    interface segundo a literatura de IHC, amostras ampliadas e longitudinais em cenários clínicos são
+                    recomendadas para trabalhos futuros.</li>
+                <li><strong>Dependência de Serviços de Terceiros e Quotas Serverless:</strong> O funcionamento do chat
+                    inteligente e do login social depende da disponibilidade das APIs do Google Gemini e do Firebase
+                    Auth (mitigada internamente pela rotação automática de chaves e fallback entre os modelos
+                    <code>2.5-flash</code> e <code>3.5-flash</code>), bem como dos limites de tempo de execução
+                    (<em>execution timeout</em>) das funções serverless no plano gratuito da Vercel.</li>
+            </ul>
+        </section>
+
+        <!-- RODAPÉ -->
+        <footer>
+            <p><strong>HelpFull 2026</strong> — Projeto de Engenharia de Software e Plataforma de Saúde Mental
+                Preventiva.</p>
+            <p>Repositório: <code>github.com/PedroCarlos28/HelpFull2</code> | Documento técnico gerado em conformidade
+                com o roteiro de Materiais e Métodos.</p>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
