@@ -86,7 +86,7 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'buscar_videos_yt') {
         ]);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 6);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 
         $res = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -120,51 +120,6 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'buscar_videos_yt') {
         }
     } catch (\Throwable $e) {
         $vids = [];
-    }
-
-    // 2. Fallback: Scraping HTML do YouTube com suporte a IPv4 e regex flexível
-    if (empty($vids)) {
-        try {
-            $url = 'https://www.youtube.com/results?search_query=' . urlencode($termoBusca);
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 6);
-            $html = curl_exec($ch);
-            curl_close($ch);
-
-            if ($html && preg_match('/(?:var\s+)?ytInitialData\s*=\s*({.+?});/s', $html, $m)) {
-                $data = json_decode($m[1], true);
-                $sections = $data['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'] ?? [];
-                foreach ($sections as $section) {
-                    $contents = $section['itemSectionRenderer']['contents'] ?? [];
-                    foreach ($contents as $item) {
-                        if (isset($item['videoRenderer'])) {
-                            $v = $item['videoRenderer'];
-                            $videoId = $v['videoId'] ?? '';
-                            $title = $v['title']['runs'][0]['text'] ?? '';
-                            $channel = $v['ownerText']['runs'][0]['text'] ?? '';
-                            if ($videoId && $title) {
-                                $vids[] = [
-                                    'id' => $videoId,
-                                    'titulo' => $title,
-                                    'canal' => $channel ?: 'YouTube',
-                                    'thumb' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg",
-                                    'plataforma' => 'youtube',
-                                    'fonte' => 'YouTube'
-                                ];
-                            }
-                            if (count($vids) >= 4) break 2;
-                        }
-                    }
-                }
-            }
-        } catch (\Throwable $e) {
-            // Continua para o próximo fallback
-        }
     }
 
     // 3. Fallback inteligente de catálogo pré-selecionado de saúde mental do HelpFull
@@ -2398,17 +2353,21 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             const queryEnriquecida = query + ' saúde mental autocuidado';
 
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 4000);
+
                 // Busca em paralelo no YouTube (endpoint local com Innertube e fallbacks) e Dailymotion
                 const [ytResult, dmResult] = await Promise.allSettled([
                     // 1. YouTube via endpoint local
-                    fetch(`Atividades.php?acao=buscar_videos_yt&q=${encodeURIComponent(query)}`)
+                    fetch(`Atividades.php?acao=buscar_videos_yt&q=${encodeURIComponent(query)}`, { signal: controller.signal })
                         .then(r => {
                             if (!r.ok) throw new Error('HTTP ' + r.status);
                             return r.json();
-                        }),
+                        })
+                        .finally(() => clearTimeout(timeoutId)),
 
                     // 2. Dailymotion API pública (complemento)
-                    fetch(`https://api.dailymotion.com/videos?search=${encodeURIComponent(query + ' saude mental')}&fields=id,title,owner.screenname,thumbnail_240_url,url&limit=3`)
+                    fetch(`https://api.dailymotion.com/videos?search=${encodeURIComponent(query + ' saude mental')}&fields=id,title,owner.screenname,thumbnail_240_url,url&limit=2`)
                         .then(r => {
                             if (!r.ok) throw new Error('HTTP ' + r.status);
                             return r.json();
@@ -2419,7 +2378,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
                 const videosEncontrados = [];
 
-                // Processa resultados do YouTube (prioridade número 1)
+                // Processa resultados do YouTube recebidos do backend
                 if (ytResult.status === 'fulfilled' && Array.isArray(ytResult.value) && ytResult.value.length > 0) {
                     ytResult.value.slice(0, 4).forEach(v => {
                         videosEncontrados.push({
@@ -2427,6 +2386,46 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                             titulo: v.titulo,
                             canal: v.canal || 'YouTube',
                             thumb: v.thumb || `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`,
+                            plataforma: 'youtube',
+                            badge: '▶️ YouTube'
+                        });
+                    });
+                }
+
+                // Garante que SEMPRE haverá vídeos do YouTube nos resultados
+                const temYouTube = videosEncontrados.some(v => v.plataforma === 'youtube');
+                if (!temYouTube) {
+                    const catalogoYt = [
+                        { id: 'IiZo1XNEO5A', titulo: 'Ansiedade, Depressão e os Impactos no dia a dia - Dra. Ana Beatriz', canal: 'PodPeople', tags: ['ansiedade', 'depressao', 'panico', 'crise', 'medo', 'saude'] },
+                        { id: 'aNXKjGFUlMs', titulo: 'Exercício de Respiração Rápida e Foco', canal: 'Saúde Mental & Bem-Estar', tags: ['respiracao', 'foco', 'ansiedade', 'calma', 'ar', 'pulmao'] },
+                        { id: 'fmBRuuQ0Gs8', titulo: 'Técnica de Respiração 4-7-8 Guiada', canal: 'Autocuidado Guiado', tags: ['respiracao', '478', 'sono', 'dormir', 'ansiedade', 'noite'] },
+                        { id: 'CE6kq_8YlIk', titulo: 'Meditação Guiada: Desintoxique sua Mente e Pensamentos', canal: 'Meditar para Despertar', tags: ['meditacao', 'mente', 'desintoxicar', 'pensamentos', 'paz'] },
+                        { id: 'xI_oUWoofJ0', titulo: 'Como o estresse atua no corpo (e como desativá-lo)', canal: 'Ciência da Mente', tags: ['estresse', 'corpo', 'tensao', 'ansiedade', 'mente'] },
+                        { id: 'LsgpZ6IbGx0', titulo: 'O poder das pausas e da autocompaixão', canal: 'Mindfulness Brasil', tags: ['pausas', 'autocompaixao', 'mindfulness', 'autocuidado', 'gentileza'] },
+                        { id: '-4igBhtIlhk', titulo: 'Quebrando o ciclo do excesso de pensamentos', canal: 'Psicologia e Vida', tags: ['pensamentos', 'overthinking', 'mente', 'rumina', 'foco'] },
+                        { id: 'ySLhZfsagDA', titulo: 'Acolhendo o que você sente sem julgamentos', canal: 'Equilíbrio Emocional', tags: ['emocoes', 'acolhimento', 'calma', 'sentimentos', 'tristeza'] },
+                        { id: '9laAtD91JUQ', titulo: 'Meditação guiada para saúde física e mental', canal: 'Raissa Zoccal', tags: ['meditacao', 'saude', 'fisica', 'relaxar', 'zen'] },
+                        { id: 'pv-aymg97JM', titulo: 'Meditação Calma para Aliviar Ansiedade e Medo', canal: 'Raissa Zoccal', tags: ['calma', 'ansiedade', 'medo', 'alivio', 'paz'] },
+                        { id: '5G5btRRHob4', titulo: 'Meditação para Saúde Mente, Corpo e Alma', canal: 'Vanessa Alcici', tags: ['alma', 'mente', 'corpo', 'yoga', 'meditacao'] },
+                        { id: 'oItxOa2LfJk', titulo: 'Estratégias práticas para cuidar melhor da Saúde Mental', canal: 'Ana Streit', tags: ['estrategias', 'saude mental', 'autocuidado', 'vida', 'habitos'] }
+                    ];
+
+                    const qNorm = (query || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                    let matchesYt = catalogoYt.filter(v => 
+                        v.tags.some(t => qNorm.includes(t) || t.includes(qNorm)) ||
+                        v.titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(qNorm)
+                    );
+
+                    if (matchesYt.length === 0) {
+                        matchesYt = catalogoYt.slice(0, 4);
+                    }
+
+                    matchesYt.slice(0, 4).forEach(v => {
+                        videosEncontrados.unshift({
+                            id: v.id,
+                            titulo: v.titulo,
+                            canal: v.canal,
+                            thumb: `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`,
                             plataforma: 'youtube',
                             badge: '▶️ YouTube'
                         });
@@ -2443,26 +2442,6 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                             thumb: v.thumbnail_240_url,
                             plataforma: 'dailymotion',
                             badge: '🎬 Dailymotion'
-                        });
-                    });
-                }
-
-                // Fallback de catálogo direto no front caso a rede esteja totalmente indisponível
-                if (videosEncontrados.length === 0) {
-                    const fallbackVideos = [
-                        { id: 'aNXKjGFUlMs', titulo: 'Exercício de Respiração Rápida e Foco', canal: 'Saúde Mental & Bem-Estar' },
-                        { id: 'fmBRuuQ0Gs8', titulo: 'Técnica de Respiração 4-7-8 Guiada', canal: 'Autocuidado Guiado' },
-                        { id: 'xI_oUWoofJ0', titulo: 'Como o estresse atua no corpo (e como desativá-lo)', canal: 'Ciência da Mente' },
-                        { id: 'IiZo1XNEO5A', titulo: 'Ansiedade e o impacto no dia a dia - Dra. Ana Beatriz', canal: 'PodPeople' }
-                    ];
-                    fallbackVideos.forEach(v => {
-                        videosEncontrados.push({
-                            id: v.id,
-                            titulo: v.titulo,
-                            canal: v.canal,
-                            thumb: `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`,
-                            plataforma: 'youtube',
-                            badge: '▶️ YouTube'
                         });
                     });
                 }
