@@ -1,6 +1,11 @@
 <?php
 require_once 'conexao.php';
 
+// Headers anti-cache para garantir que status de autenticação reflita imediatamente no celular
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 // 1. VERIFICA SE ESTÁ LOGADO (Para carregar dados do usuário com cache para máxima velocidade)
 $usuarioLogado = obterUsuarioLogado($pdo);
 $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_concluido']);

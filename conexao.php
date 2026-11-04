@@ -18,15 +18,50 @@ if (getenv('VERCEL') || !empty($_SERVER['VERCEL'])) {
     }
 }
 
-// Inicia sessão de forma segura se ainda não iniciada com suporte a bfcache
+if (!function_exists('isHttpsAtivo')) {
+    function isHttpsAtivo() {
+        if (getenv('VERCEL') || !empty($_SERVER['VERCEL'])) {
+            return true;
+        }
+        if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+            return true;
+        }
+        if (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443) {
+            return true;
+        }
+        if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+            return true;
+        }
+        if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') {
+            return true;
+        }
+        return false;
+    }
+}
+
+// Inicia sessão de forma segura se ainda não iniciada
 if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    @session_cache_limiter('private_no_expire');
+    $isHttps = isHttpsAtivo();
+    @session_set_cookie_params([
+        'lifetime' => 0,
+        'path'     => '/',
+        'domain'   => '',
+        'secure'   => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    @session_cache_limiter('nocache');
     session_start();
 }
 
 if (!function_exists('salvarSessaoUsuario')) {
     function salvarSessaoUsuario($id, $nome) {
         global $pdo;
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+            @session_cache_limiter('nocache');
+            session_start();
+        }
+
         $_SESSION['usuario_id']   = $id;
         $_SESSION['usuario_nome'] = $nome;
 
@@ -50,16 +85,18 @@ if (!function_exists('salvarSessaoUsuario')) {
         
         unset($_SESSION['usuario_cache']);
         unset($_SESSION['usuario_cache_time']);
-        unset($_SESSION['ultima_checagem_sessao']);
+        $_SESSION['ultima_checagem_sessao'] = time();
 
-        $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
-        setcookie('helpfull_session', $payload, [
-            'expires'  => time() + (30 * 24 * 60 * 60), // 30 dias de persistência
-            'path'     => '/',
-            'httponly' => true,
-            'secure'   => $secure,
-            'samesite' => 'Lax'
-        ]);
+        $secure = isHttpsAtivo();
+        if (!headers_sent()) {
+            setcookie('helpfull_session', $payload, [
+                'expires'  => time() + (30 * 24 * 60 * 60), // 30 dias de persistência
+                'path'     => '/',
+                'httponly' => true,
+                'secure'   => $secure,
+                'samesite' => 'Lax'
+            ]);
+        }
     }
 }
 
@@ -72,23 +109,46 @@ if (!function_exists('limparSessaoUsuario')) {
                 desconectarSessao($pdo, $_SESSION['usuario_id'], $_SESSION['token_sessao']);
             } catch (Exception $e) {}
         }
+        
+        $_SESSION = [];
         unset($_SESSION['usuario_id']);
         unset($_SESSION['usuario_nome']);
         unset($_SESSION['token_sessao']);
         unset($_SESSION['usuario_cache']);
         unset($_SESSION['usuario_cache_time']);
         unset($_SESSION['ultima_checagem_sessao']);
+        unset($_COOKIE['helpfull_session']);
+        
         if (session_status() === PHP_SESSION_ACTIVE) {
             @session_destroy();
         }
-        $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
-        setcookie('helpfull_session', '', [
-            'expires'  => time() - 3600,
-            'path'     => '/',
-            'httponly' => true,
-            'secure'   => $secure,
-            'samesite' => 'Lax'
-        ]);
+        
+        if (!headers_sent()) {
+            $secure = isHttpsAtivo();
+            setcookie('helpfull_session', '', [
+                'expires'  => time() - 86400,
+                'path'     => '/',
+                'httponly' => true,
+                'secure'   => $secure,
+                'samesite' => 'Lax'
+            ]);
+            if ($secure) {
+                setcookie('helpfull_session', '', [
+                    'expires'  => time() - 86400,
+                    'path'     => '/',
+                    'httponly' => true,
+                    'secure'   => false,
+                    'samesite' => 'Lax'
+                ]);
+            }
+            if (ini_get("session.use_cookies")) {
+                $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 86400,
+                    $params["path"] ?? '/', $params["domain"] ?? '',
+                    $params["secure"] ?? false, $params["httponly"] ?? true
+                );
+            }
+        }
     }
 }
 
@@ -129,6 +189,12 @@ if (!isset($_SESSION['usuario_id']) && !empty($_COOKIE['helpfull_session'])) {
             if (!empty($token)) {
                 $_SESSION['token_sessao'] = $token;
             }
+        } else {
+            // Assinatura inválida: expira imediatamente o cookie corrompido
+            unset($_COOKIE['helpfull_session']);
+            if (!headers_sent()) {
+                setcookie('helpfull_session', '', time() - 86400, '/');
+            }
         }
     }
 }
@@ -142,7 +208,7 @@ if (!function_exists('atualizarCookieSessaoHelper')) {
             'token' => $token,
             'sig'   => $sig
         ]));
-        $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+        $secure = isHttpsAtivo();
         if (!headers_sent()) {
             setcookie('helpfull_session', $payload, [
                 'expires'  => time() + (30 * 24 * 60 * 60),
@@ -211,8 +277,26 @@ if (!function_exists('obterUsuarioLogado')) {
                 $_SESSION['usuario_cache_time'] = $agora;
                 return $user;
             }
-        } catch (Exception $e) {}
+        } catch (Throwable $e) {
+            // Fallback caso colunas opcionais ainda não tenham migrado no schema
+            try {
+                $stmtFallback = $pdo->prepare("SELECT id, nome, email, foto_perfil FROM usuarios WHERE id = ?");
+                $stmtFallback->execute([$uid]);
+                $userFallback = $stmtFallback->fetch();
+                if ($userFallback) {
+                    $userFallback['onboarding_concluido'] = true;
+                    $userFallback['dois_fatores_ativo'] = false;
+                    $userFallback['is_admin'] = false;
+                    $userFallback['oauth_provider'] = null;
+                    $_SESSION['usuario_cache'] = $userFallback;
+                    $_SESSION['usuario_cache_time'] = $agora;
+                    return $userFallback;
+                }
+            } catch (Throwable $eFallback) {}
+        }
 
+        // Se o id da sessão não foi localizado no banco, a sessão é inválida (zumbi)
+        limparSessaoUsuario();
         return null;
     }
 }

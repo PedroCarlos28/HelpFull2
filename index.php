@@ -1,8 +1,9 @@
 <?php
 require_once __DIR__ . '/conexao.php';
 
-// Se já estiver logado, vai direto para a página inicial do sistema
-if (isset($_SESSION['usuario_id'])) {
+// Se já estiver logado com sessão válida e ativa, vai direto para a página inicial do sistema
+$usuarioLogado = obterUsuarioLogado($pdo);
+if ($usuarioLogado) {
     header("Location: inicio.php");
     exit();
 }

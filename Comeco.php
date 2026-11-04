@@ -1,19 +1,22 @@
 <?php
 require_once 'conexao.php';
 
-if (isset($_SESSION['usuario_id'])) {
-    if (isset($_GET['trocar']) || isset($_GET['logout'])) {
+// Headers anti-cache para evitar que a tela de login fique retida em bfcache/histórico de dispositivos móveis
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+if (isset($_GET['trocar']) || isset($_GET['logout'])) {
+    limparSessaoUsuario();
+} else {
+    // Só redireciona para inicio se o usuário de fato estiver com sessão válida e ativa no banco
+    $usuarioValido = obterUsuarioLogado($pdo);
+    if ($usuarioValido) {
+        header("Location: inicio.php");
+        exit();
+    } elseif (isset($_SESSION['usuario_id'])) {
+        // Se havia resíduo de usuario_id mas a conta não é válida, limpa a sessão zumbi
         limparSessaoUsuario();
-    } else {
-        try {
-            $stmtVal = $pdo->prepare("SELECT id FROM usuarios WHERE id = ?");
-            $stmtVal->execute([$_SESSION['usuario_id']]);
-            if ($stmtVal->fetch()) {
-                header("Location: inicio.php");
-                exit();
-            }
-        } catch (Exception $e) {
-        }
     }
 }
 ?>
@@ -1677,8 +1680,7 @@ if (isset($_SESSION['usuario_id'])) {
             getAuth,
             GoogleAuthProvider,
             signInWithPopup,
-            signInWithRedirect,
-            getRedirectResult
+            signOut
         } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
         // ============================================================
@@ -1750,6 +1752,7 @@ if (isset($_SESSION['usuario_id'])) {
                 const idToken = await user.getIdToken();
                 const response = await fetch('oauth_firebase.php', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         idToken:        idToken,
@@ -1785,7 +1788,7 @@ if (isset($_SESSION['usuario_id'])) {
                         emailPendente2FA = data.email || user.email;
                         abrirModo2FA(data.email_mascarado || emailPendente2FA, data.debug_codigo);
                     } else {
-                        window.location.href = 'inicio.php';
+                        window.location.replace('inicio.php');
                     }
                 } else if (data) {
                     animarErroBotaoGoogle('Erro no login: ' + (data.mensagem || 'Tente novamente.'));
@@ -1808,15 +1811,12 @@ if (isset($_SESSION['usuario_id'])) {
             app  = initializeApp(firebaseConfig);
             auth = getAuth(app);
 
-            // Processa o resultado caso venha de um redirecionamento
-            getRedirectResult(auth).then(async (result) => {
-                if (result && result.user) {
-                    await finalizarLoginOAuth(result.user);
-                }
-            }).catch((err) => {
-                console.error('Redirect error:', err);
-                animarErroBotaoGoogle('Falha no redirecionamento do Google.');
-            });
+            // Garante logout completo do Firebase no cliente mobile se o usuário saiu da conta
+            const _urlParams = new URLSearchParams(window.location.search);
+            if (_urlParams.get('logout') === '1' || _urlParams.get('trocar') === '1') {
+                signOut(auth).catch(() => {});
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
         }
 
         // Expõe a função para o onclick inline dos botões Google
@@ -1837,26 +1837,41 @@ if (isset($_SESSION['usuario_id'])) {
             const provider = new GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
 
-            try {
-                // Tenta abrir em Popup primeiro (muito mais rápido e confiável no localhost)
-                const result = await signInWithPopup(auth, provider);
-                if (result && result.user) {
-                    await finalizarLoginOAuth(result.user);
-                }
-            } catch (err) {
-                console.warn('Popup falhou ou bloqueado:', err);
-                // Se o popup for bloqueado pelo navegador, tenta via Redirect como fallback
-                if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') {
-                    try {
-                        await signInWithRedirect(auth, provider);
-                    } catch (redirectErr) {
-                        animarErroBotaoGoogle('Erro ao redirecionar: ' + redirectErr.message);
+            // Número máximo de tentativas com popup (cobre o caso de popup bloqueado no mobile)
+            const MAX_TENTATIVAS = 2;
+            let tentativa = 0;
+
+            while (tentativa < MAX_TENTATIVAS) {
+                tentativa++;
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    if (result && result.user) {
+                        await finalizarLoginOAuth(result.user);
                     }
-                } else if (err.code === 'auth/popup-closed-by-user') {
-                    // Usuário fechou ou cancelou o popup do Google: ativa a transição para o X vermelho
-                    animarErroBotaoGoogle('Login com o Google foi cancelado.');
-                } else {
+                    return; // Login bem-sucedido, sai da função
+                } catch (err) {
+                    console.warn('Popup tentativa ' + tentativa + ' falhou:', err.code, err.message);
+
+                    if (err.code === 'auth/popup-closed-by-user') {
+                        // Usuário fechou ou cancelou o popup do Google
+                        animarErroBotaoGoogle('Login com o Google foi cancelado.');
+                        return;
+                    }
+
+                    if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') {
+                        if (tentativa < MAX_TENTATIVAS) {
+                            // Tenta novamente (às vezes a segunda tentativa abre o popup)
+                            await new Promise(r => setTimeout(r, 500));
+                            continue;
+                        }
+                        // Se todas as tentativas falharam, orienta o usuário
+                        animarErroBotaoGoogle('Popup bloqueado pelo navegador. Permita popups para este site e tente novamente.');
+                        return;
+                    }
+
+                    // Qualquer outro erro
                     animarErroBotaoGoogle('Erro ao conectar com Google: ' + (err.message || err.code));
+                    return;
                 }
             }
         };
@@ -1965,6 +1980,7 @@ if (isset($_SESSION['usuario_id'])) {
             try {
                 const response = await fetch('login_proc.php', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, senha })
                 });
@@ -1975,7 +1991,7 @@ if (isset($_SESSION['usuario_id'])) {
                         emailPendente2FA = email;
                         abrirModo2FA(data.email_mascarado || email, data.debug_codigo);
                     } else {
-                        window.location.href = 'inicio.php';
+                        window.location.replace('inicio.php');
                     }
                 } else {
                     mostrarErro('erroLogin', data.mensagem || 'Email ou senha incorretos.');
@@ -2049,6 +2065,7 @@ if (isset($_SESSION['usuario_id'])) {
             try {
                 const resp = await fetch('verificar_2fa.php', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         acao: 'verificar',
@@ -2058,7 +2075,7 @@ if (isset($_SESSION['usuario_id'])) {
                 });
                 const data = await resp.json();
                 if (data.sucesso) {
-                    window.location.href = 'inicio.php';
+                    window.location.replace('inicio.php');
                 } else {
                     mostrarErro('erro2FA', data.mensagem || 'Código incorreto.');
                     inputCodigo.focus();
@@ -2081,6 +2098,7 @@ if (isset($_SESSION['usuario_id'])) {
             try {
                 const resp = await fetch('verificar_2fa.php', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         acao: 'reenviar',
@@ -2418,12 +2436,13 @@ if (isset($_SESSION['usuario_id'])) {
             try {
                 const response = await fetch('cadastro_proc.php', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nome, email, senha, termos: true })
                 });
                 const data = await response.json();
                 if (data.sucesso) {
-                    window.location.href = 'inicio.php';
+                    window.location.replace('inicio.php');
                 } else {
                     mostrarErro('erroCadastro', data.mensagem || 'Erro ao cadastrar.');
                     if (data.mensagem && data.mensagem.includes('Termos')) {

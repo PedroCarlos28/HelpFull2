@@ -201,7 +201,7 @@ try {
                         'sucesso' => true,
                         'logout_atual' => true,
                         'mensagem' => 'Este dispositivo foi desconectado.',
-                        'redirecionar' => 'Comeco.php'
+                        'redirecionar' => 'Comeco.php?logout=1'
                     ]);
                 } else {
                     // Notificação de segurança interna
@@ -310,7 +310,7 @@ try {
                 'sucesso' => true,
                 'logout_atual' => true,
                 'mensagem' => 'Todas as sessões foram encerradas.',
-                'redirecionar' => 'Comeco.php'
+                'redirecionar' => 'Comeco.php?logout=1'
             ]);
             break;
 
