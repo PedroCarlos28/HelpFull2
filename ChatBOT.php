@@ -17,6 +17,15 @@ if (!$usuarioLogado) {
 $stmtHist = $pdo->prepare("SELECT DISTINCT sessao_token FROM historico_chat WHERE usuario_id = ? ORDER BY sessao_token DESC");
 $stmtHist->execute([$usuarioLogado['id']]);
 $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
+
+// Buscar conversa de hoje (se existir) para carregar imediatamente na tela sem perder ao trocar de tela
+$hoje = date('Y-m-d');
+$conversaHoje = [];
+if (in_array($hoje, $datasHistorico)) {
+    $stmtHoje = $pdo->prepare("SELECT mensagem, resposta FROM historico_chat WHERE usuario_id = ? AND sessao_token = ? ORDER BY criado_em ASC");
+    $stmtHoje->execute([$usuarioLogado['id'], $hoje]);
+    $conversaHoje = $stmtHoje->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 <!DOCTYPE html>
@@ -581,6 +590,14 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
         .btn-historico:hover {
             background: rgba(255, 255, 255, 0.95);
             transform: scale(1.03);
+        }
+
+        .btn-historico.ativo {
+            background: linear-gradient(135deg, #184e5d 0%, #2b7a8c 100%);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 15px rgba(24, 78, 93, 0.3);
+            transform: scale(1.02);
         }
 
         /* JANELA DO CHAT */
@@ -1239,8 +1256,9 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                     <?php else: ?>
                         <?php foreach ($datasHistorico as $data):
                             $dataFormatada = date('d/m', strtotime($data));
+                            $isAtivo = ($data === $hoje && !empty($conversaHoje));
                             ?>
-                            <button class="btn-historico" id="btn-hist-<?= $data ?>"
+                            <button class="btn-historico <?= $isAtivo ? 'ativo' : '' ?>" id="btn-hist-<?= $data ?>"
                                 onclick="carregarHistorico('<?= $data ?>')">Dia <?= $dataFormatada ?></button>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -1255,6 +1273,12 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                         Olá, <?= htmlspecialchars($usuarioLogado['nome']) ?>! Aqui é o seu assistente Helpy. Como
                         posso te apoiar hoje?
                     </div>
+                    <?php if (!empty($conversaHoje)): ?>
+                        <?php foreach ($conversaHoje as $msg): ?>
+                            <div class="mensagem msg-usuario"><?= htmlspecialchars($msg['mensagem']) ?></div>
+                            <div class="mensagem msg-bot"><?= nl2br(preg_replace('/\*\*(.*?)\*\*/s', '<strong>$1</strong>', htmlspecialchars($msg['resposta']))) ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
 
                 <div class="area-input-chat">
@@ -1284,6 +1308,17 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
     </div>
 
     <script>
+        function formatarTexto(texto) {
+            if (!texto) return '';
+            return texto
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+        }
+
         function toggleHistoricoMobile(forcado) {
             const sidebar = document.querySelector('.sidebar-historico');
             const overlay = document.getElementById('overlayHistoricoMobile');
@@ -1301,6 +1336,10 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                     Olá, <?= htmlspecialchars($usuarioLogado['nome']) ?>! Aqui é o seu assistente Helpy. Como posso te apoiar hoje?
                 </div>
             `;
+            document.querySelectorAll('.btn-historico').forEach(b => b.classList.remove('ativo'));
+            sessionStorage.setItem('helpy_sessao_ativa', 'nova');
+            const input = document.getElementById('inputChat');
+            if (input) input.focus();
         }
 
         async function enviarMensagem() {
@@ -1309,12 +1348,39 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
             const areaMensagens = document.getElementById('area-mensagens');
 
             if (mensagemTexto !== "") {
-                const formatarTexto = (texto) => {
-                    return texto
-                        .replace(/</g, "&lt;").replace(/>/g, "&gt;")
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                        .replace(/\n/g, '<br>');
-                };
+                const hoje = new Date();
+                const ano = hoje.getFullYear();
+                const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+                const dia = String(hoje.getDate()).padStart(2, '0');
+                const dataYMD = `${ano}-${mes}-${dia}`;
+                const dataDM = `${dia}/${mes}`;
+
+                // Se o usuário estava visualizando um dia antigo no histórico, volta a tela para a conversa de hoje
+                const sessaoAtiva = sessionStorage.getItem('helpy_sessao_ativa');
+                if (sessaoAtiva && sessaoAtiva !== 'nova' && sessaoAtiva !== dataYMD) {
+                    try {
+                        const resp = await fetch(`get_history.php?sessao=${dataYMD}`);
+                        const msgsHoje = await resp.json();
+                        areaMensagens.innerHTML = `
+                            <div class="mensagem msg-bot">
+                                Olá, <?= htmlspecialchars($usuarioLogado['nome']) ?>! Aqui é o seu assistente Helpy. Como posso te apoiar hoje?
+                            </div>
+                        `;
+                        if (Array.isArray(msgsHoje)) {
+                            msgsHoje.forEach(m => {
+                                const msgFormat = (m.mensagem || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                                areaMensagens.insertAdjacentHTML('beforeend', `
+                                    <div class="mensagem msg-usuario">${msgFormat}</div>
+                                `);
+                                areaMensagens.insertAdjacentHTML('beforeend', `
+                                    <div class="mensagem msg-bot">${formatarTexto(m.resposta || '')}</div>
+                                `);
+                            });
+                        }
+                    } catch (e) {}
+                }
+
+                sessionStorage.setItem('helpy_sessao_ativa', dataYMD);
 
                 const novaMensagemHTML = `
                     <div class="mensagem msg-usuario">
@@ -1325,22 +1391,19 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 areaMensagens.scrollTop = areaMensagens.scrollHeight;
                 input.value = "";
 
-                const hoje = new Date();
-                const ano = hoje.getFullYear();
-                const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-                const dia = String(hoje.getDate()).padStart(2, '0');
-                const dataYMD = `${ano}-${mes}-${dia}`;
-                const dataDM = `${dia}/${mes}`;
-
-                const btnHoje = document.getElementById(`btn-hist-${dataYMD}`);
+                // Marca o botão do histórico de hoje como ativo
+                document.querySelectorAll('.btn-historico').forEach(b => b.classList.remove('ativo'));
+                let btnHoje = document.getElementById(`btn-hist-${dataYMD}`);
                 if (!btnHoje) {
                     const containerHist = document.getElementById('lista-historico-container');
                     const msgSemHist = document.getElementById('msg-sem-historico');
 
                     if (msgSemHist) msgSemHist.remove();
 
-                    const novoBtn = `<button class="btn-historico" id="btn-hist-${dataYMD}" onclick="carregarHistorico('${dataYMD}')">Dia ${dataDM}</button>`;
+                    const novoBtn = `<button class="btn-historico ativo" id="btn-hist-${dataYMD}" onclick="carregarHistorico('${dataYMD}')">Dia ${dataDM}</button>`;
                     containerHist.insertAdjacentHTML('afterbegin', novoBtn);
+                } else {
+                    btnHoje.classList.add('ativo');
                 }
 
                 const idDigitando = "digitando-" + Date.now();
@@ -1417,23 +1480,33 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 </div>
             `;
 
+            document.querySelectorAll('.btn-historico').forEach(b => b.classList.remove('ativo'));
+            const btnAtivo = document.getElementById(`btn-hist-${dataSessao}`);
+            if (btnAtivo) btnAtivo.classList.add('ativo');
+            sessionStorage.setItem('helpy_sessao_ativa', dataSessao);
+
             try {
                 const response = await fetch(`get_history.php?sessao=${dataSessao}`);
                 const mensagens = await response.json();
 
-                areaMensagens.innerHTML = '';
+                areaMensagens.innerHTML = `
+                    <div class="mensagem msg-bot">
+                        Olá, <?= htmlspecialchars($usuarioLogado['nome']) ?>! Aqui está a conversa gravada deste dia. Como posso te apoiar hoje?
+                    </div>
+                `;
 
-                if (mensagens.length === 0) {
+                if (!Array.isArray(mensagens) || mensagens.length === 0) {
                     areaMensagens.innerHTML = '<div class="mensagem msg-bot">Nenhuma mensagem encontrada nesta data.</div>';
                     return;
                 }
 
                 mensagens.forEach(msg => {
+                    const msgFormat = (msg.mensagem || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     areaMensagens.insertAdjacentHTML('beforeend', `
-                        <div class="mensagem msg-usuario">${msg.mensagem}</div>
+                        <div class="mensagem msg-usuario">${msgFormat}</div>
                     `);
                     areaMensagens.insertAdjacentHTML('beforeend', `
-                        <div class="mensagem msg-bot">${msg.resposta.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>')}</div>
+                        <div class="mensagem msg-bot">${formatarTexto(msg.resposta || '')}</div>
                     `);
                 });
 
@@ -1443,6 +1516,29 @@ $datasHistorico = $stmtHist->fetchAll(PDO::FETCH_COLUMN);
                 areaMensagens.innerHTML = '<div class="mensagem msg-bot" style="color: red;">Erro ao carregar o histórico.</div>';
             }
         }
+
+        // Restaura a rolagem e a conversa correta ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            const areaMensagens = document.getElementById('area-mensagens');
+            if (areaMensagens) {
+                areaMensagens.scrollTop = areaMensagens.scrollHeight;
+            }
+
+            const sessaoSalva = sessionStorage.getItem('helpy_sessao_ativa');
+            const dataHoje = '<?= $hoje ?>';
+
+            // Se o usuário navegou entre telas enquanto visualizava uma data anterior específica:
+            if (sessaoSalva && sessaoSalva !== 'nova' && sessaoSalva !== dataHoje) {
+                const btnAlvo = document.getElementById(`btn-hist-${sessaoSalva}`);
+                if (btnAlvo) {
+                    carregarHistorico(sessaoSalva);
+                }
+            } else if (sessaoSalva === 'nova') {
+                novoChat();
+            } else if (<?= !empty($conversaHoje) ? 'true' : 'false' ?>) {
+                sessionStorage.setItem('helpy_sessao_ativa', dataHoje);
+            }
+        });
 
         // === MOBILE DROPDOWN TOGGLE ===
         const navLogo = document.querySelector('.nav-logo');

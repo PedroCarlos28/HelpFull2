@@ -1,12 +1,15 @@
 <?php
 require_once 'conexao.php';
-session_start();
 
-header('Content-Type: application/json');
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+header('Content-Type: application/json; charset=utf-8');
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
-    echo json_encode(['reply' => 'Você precisa estar logado para usar o chat.']);
+    echo json_encode(['reply' => 'Você precisa estar logado para usar o chat.'], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -14,7 +17,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 $userMessage = $input['message'] ?? '';
 
 if (empty($userMessage)) {
-    echo json_encode(['reply' => 'Por favor, digite uma mensagem.']);
+    echo json_encode(['reply' => 'Por favor, digite uma mensagem.'], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -293,12 +296,8 @@ if (empty($botReply)) {
                      . "Por favor, tente me mandar a mensagem novamente daqui a alguns instantes! Se estiver precisando de acolhimento urgente, o **CVV está disponível 24h pelo número 188**. 🌿✨";
     }
 
-    echo json_encode([
-        'reply' => $msgResposta,
-        'quota_error' => $houveErroQuota,
-        'aviso_sistema' => true
-    ]);
-    exit;
+    $botReply = $msgResposta;
+    $avisoSistema = true;
 }
 
 // Salvar no histórico do banco de dados e verificar meta
@@ -316,12 +315,14 @@ try {
     $stmt = $pdo->prepare("INSERT INTO historico_chat (usuario_id, mensagem, resposta, sessao_token) VALUES (?, ?, ?, ?)");
     $stmt->execute([$_SESSION['usuario_id'], $userMessage, $botReply, $sessao]);
 } catch (PDOException $e) {
-    // Silencioso
+    error_log("Erro ao salvar historico_chat: " . $e->getMessage());
 }
 
 // Devolve a resposta pra tela
 echo json_encode([
     'reply' => $botReply,
+    'quota_error' => $houveErroQuota,
+    'aviso_sistema' => !empty($avisoSistema),
     'meta_concluida' => $metaConcluida
-]);
+], JSON_UNESCAPED_UNICODE);
 ?>
