@@ -1356,7 +1356,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             color: #fed7aa !important;
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261017-notif-scroll">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 

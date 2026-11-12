@@ -275,26 +275,33 @@ if (!$usuarioLogado) {
 
         .painel-notificacoes {
             position: absolute;
-            top: 65px;
+            top: 68px;
             right: -60px;
-            width: 320px;
-            background: rgba(200, 200, 200, 0.85);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-radius: 25px;
-            padding: 20px;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            width: 375px;
+            max-width: calc(100vw - 32px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            border-radius: 24px;
+            padding: 18px 18px 16px 18px;
+            box-shadow: 0 20px 48px -10px rgba(15, 23, 42, 0.16),
+                        0 0 0 1px rgba(0, 0, 0, 0.05),
+                        0 4px 14px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.9);
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            z-index: 2100;
+            gap: 12px;
+            z-index: 2200;
+            box-sizing: border-box;
+
             transform-origin: 90% 0%;
-            transform: translateX(40px) scale(0.8);
+            transform: translateX(25px) scale(0.94);
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.25s ease,
+                        visibility 0.3s ease;
         }
 
         .painel-notificacoes.aberto {
@@ -306,115 +313,167 @@ if (!$usuarioLogado) {
 
         .painel-header-top {
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: space-between;
             position: relative;
+            padding: 2px 2px 2px 2px;
         }
 
         .painel-header-top h3 {
-            font-size: 1.1rem;
+            font-size: 1.08rem;
             font-weight: 800;
-            color: #1a1a1a;
+            color: #0f172a;
+            letter-spacing: -0.3px;
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.2;
         }
 
         .btn-fechar-painel {
-            position: absolute;
-            right: 0;
-            background: transparent;
+            position: static;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.04);
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             line-height: 1;
-            color: #555;
+            color: #64748b;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 0;
         }
 
         .btn-fechar-painel:hover {
-            color: #ff4d4d;
-            transform: scale(1.1);
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            transform: scale(1.08) rotate(90deg);
         }
 
         .painel-actions {
             display: flex;
+            align-items: center;
             justify-content: flex-end;
-            margin-bottom: -5px;
+            margin: -4px 0 2px 0;
+            padding: 0 2px;
         }
 
         .btn-limpar-pill {
-            background: #fff;
-            color: #333;
-            font-weight: 800;
-            font-size: 0.75rem;
-            padding: 4px 15px;
-            border-radius: 15px;
-            border: none;
+            background: rgba(43, 122, 140, 0.08);
+            color: #2b7a8c;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.74rem;
+            letter-spacing: 0.2px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(43, 122, 140, 0.16);
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            transition: 0.2s;
+            box-shadow: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn-limpar-pill:hover {
-            transform: scale(1.05);
-            background: #ffe6e6;
-            color: #cc0000;
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border-color: rgba(239, 68, 68, 0.25);
+            transform: translateY(-1px);
         }
 
         .lista-notificacoes {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-height: min(400px, calc(100vh - 190px));
+            gap: 9px;
+            max-height: min(420px, calc(100vh - 210px));
             overflow-y: auto;
             overflow-x: hidden;
-            padding-right: 6px;
-            padding-left: 2px;
+            padding: 2px 6px 4px 2px;
+            box-sizing: border-box;
             scrollbar-width: thin;
         }
 
         .item-notificacao {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 15px;
-            padding: 15px 15px 15px 25px;
+            flex-shrink: 0;
+            min-height: fit-content;
+            box-sizing: border-box;
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 16px;
+            padding: 13px 14px 13px 22px;
             position: relative;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
             overflow: hidden;
-            transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .item-notificacao:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: translateX(-5px);
+            background: #ffffff;
+            border-color: rgba(43, 122, 140, 0.32);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -4px rgba(43, 122, 140, 0.14),
+                        0 2px 6px rgba(0, 0, 0, 0.04);
         }
 
         .item-notificacao .barra-intensidade {
             position: absolute;
-            left: 10px;
-            top: 15px;
-            bottom: 15px;
-            width: 5px;
-            border-radius: 5px;
+            left: 8px;
+            top: 10px;
+            bottom: 10px;
+            width: 4px;
+            border-radius: 4px;
         }
 
-        .item-notificacao.alta .barra-intensidade { background: #eab8b8; }
-        .item-notificacao.media .barra-intensidade { background: #fff1a0; }
-        .item-notificacao.baixa .barra-intensidade { background: #b5ff99; }
+        .item-notificacao.alta .barra-intensidade {
+            background: #f43f5e;
+            box-shadow: 0 0 6px rgba(244, 63, 94, 0.45);
+        }
 
-        .notif-content { flex: 1; }
+        .item-notificacao.media .barra-intensidade {
+            background: #f59e0b;
+            box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+        }
+
+        .item-notificacao.baixa .barra-intensidade {
+            background: #10b981;
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+        }
+
+        .notif-content {
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
         .notif-content strong {
             display: block;
-            font-size: 0.85rem;
-            color: #1a1a1a;
-            margin-bottom: 2px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.35;
+            margin: 0;
+            word-break: break-word;
         }
+
         .notif-content p {
             margin: 0;
-            font-size: 0.75rem;
-            color: #444;
-            line-height: 1.3;
+            font-size: 0.77rem;
+            color: #475569;
+            line-height: 1.42;
+            word-break: break-word;
         }
 
         .toast-notificacao {
@@ -866,7 +925,7 @@ if (!$usuarioLogado) {
             .btn-emocao { flex: 1 1 calc(50% - 10px); min-width: auto; font-size: 0.85rem; padding: 10px 5px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261017-notif-scroll">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v3">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <link rel="stylesheet" href="assets/tutorial.css?v=20261017-tour">
 </head>
@@ -1170,7 +1229,7 @@ if (!$usuarioLogado) {
         }
     </script>
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
-    <script src="notificacoes.js?v=20260927-v2" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20260927-v2';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20261112-notif-v3" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261112-notif-v3';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script src="assets/tutorial.js?v=20261017-tour"></script>
 </body>

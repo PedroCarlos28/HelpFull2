@@ -78,6 +78,22 @@
         }
     };
 
+    function getEmptyStateHtml() {
+        var isEn = (localStorage.getItem('helpfull_idioma') === 'en');
+        var titulo = isEn ? 'All caught up' : 'Tudo limpo por aqui';
+        var desc = isEn ? 'No new notifications right now.' : 'Nenhuma notificação nova no momento.';
+        return '<div class="notif-vazio-container">' +
+            '<div class="notif-vazio-icone">' +
+            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>' +
+            '<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>' +
+            '</svg>' +
+            '</div>' +
+            '<span class="notif-vazio-titulo">' + titulo + '</span>' +
+            '<span class="notif-vazio-sub">' + desc + '</span>' +
+            '</div>';
+    }
+
     window.limparNotificacoes = function () {
         var msgConfirm = (localStorage.getItem('helpfull_idioma') === 'en')
             ? 'Do you want to clear notifications?'
@@ -90,12 +106,9 @@
         esconderBtnSino();
         var p = getPainel();
         if (p) p.classList.remove('aberto');
-        var emptyMsg = (localStorage.getItem('helpfull_idioma') === 'en')
-            ? 'No new notifications.'
-            : 'Nenhuma notificação nova.';
         var targets = getContainers();
         targets.forEach(function (c) {
-            c.innerHTML = '<p style="font-size:0.88rem;text-align:left;opacity:0.6;margin:8px 0;" class="nenhuma-notif-texto">' + emptyMsg + '</p>';
+            c.innerHTML = getEmptyStateHtml();
         });
     };
 
@@ -120,8 +133,8 @@
             if (!append) {
                 c.innerHTML = '';
             } else {
-                var ph = c.querySelector('p.nenhuma-notif-texto, p');
-                if (ph && (ph.classList.contains('nenhuma-notif-texto') || ph.textContent.indexOf('Nenhuma') !== -1 || ph.textContent.indexOf('No new') !== -1)) {
+                var ph = c.querySelector('.notif-vazio-container, p.nenhuma-notif-texto, p');
+                if (ph && (ph.classList.contains('nenhuma-notif-texto') || ph.classList.contains('notif-vazio-container') || ph.textContent.indexOf('Nenhuma') !== -1 || ph.textContent.indexOf('No new') !== -1 || ph.textContent.indexOf('Tudo limpo') !== -1)) {
                     ph.remove();
                 }
             }
@@ -292,13 +305,10 @@
         }
 
         // garante placeholder se sem notificações
-        var emptyMsg = (localStorage.getItem('helpfull_idioma') === 'en')
-            ? 'No new notifications.'
-            : 'Nenhuma notificação nova.';
         var targets = getContainers();
         targets.forEach(function (c) {
-            if (c.children.length === 0) {
-                c.innerHTML = '<p style="font-size:0.88rem;text-align:left;opacity:0.6;margin:8px 0;" class="nenhuma-notif-texto">' + emptyMsg + '</p>';
+            if (c.children.length === 0 || !c.querySelector('.item-notificacao')) {
+                c.innerHTML = getEmptyStateHtml();
             }
         });
     }
