@@ -29,6 +29,48 @@
         return arr.length > 0 ? arr[0] : null;
     }
 
+    /* ── Efeito de desfoque / fade gradual nas extremidades da rolagem ── */
+    function atualizarScrollFade(el) {
+        if (!el) return;
+        var temScroll = el.scrollHeight > el.clientHeight + 4;
+        if (!temScroll) {
+            el.classList.add('sem-scroll');
+            el.classList.remove('scroll-topo', 'scroll-meio', 'scroll-fim');
+            return;
+        }
+        el.classList.remove('sem-scroll');
+        var noTopo = el.scrollTop <= 6;
+        var noFim = (el.scrollTop + el.clientHeight) >= (el.scrollHeight - 6);
+
+        if (noTopo && !noFim) {
+            el.classList.add('scroll-topo');
+            el.classList.remove('scroll-meio', 'scroll-fim');
+        } else if (noFim && !noTopo) {
+            el.classList.add('scroll-fim');
+            el.classList.remove('scroll-topo', 'scroll-meio');
+        } else if (!noTopo && !noFim) {
+            el.classList.add('scroll-meio');
+            el.classList.remove('scroll-topo', 'scroll-fim');
+        } else {
+            el.classList.add('sem-scroll');
+            el.classList.remove('scroll-topo', 'scroll-meio', 'scroll-fim');
+        }
+    }
+
+    function inicializarScrollFade() {
+        var targets = getContainers();
+        targets.forEach(function (c) {
+            if (!c) return;
+            if (!c._scrollFadeVinculado) {
+                c._scrollFadeVinculado = true;
+                c.addEventListener('scroll', function () {
+                    atualizarScrollFade(c);
+                }, { passive: true });
+            }
+            atualizarScrollFade(c);
+        });
+    }
+
     /* ── Badge sininho ────────────────────────────────────── */
     function atualizarBadge() {
         var s = getSininho();
@@ -71,6 +113,7 @@
             clearTimeout(_hoverTimer);
             mostrarBtnSino();
             carregarNotificacoes();
+            setTimeout(inicializarScrollFade, 60);
             fetch('notificacao_ia.php?acao=marcar_lidas').catch(function () {});
             fetch('social_notificacoes_proc.php?acao=marcar_lidas').catch(function () {});
         } else {
@@ -110,6 +153,7 @@
         targets.forEach(function (c) {
             c.innerHTML = getEmptyStateHtml();
         });
+        setTimeout(inicializarScrollFade, 30);
     };
 
     /* ── Popular painel ───────────────────────────────────── */
@@ -159,6 +203,7 @@
 
         _totalNotifs++;
         atualizarBadge();
+        setTimeout(inicializarScrollFade, 30);
     }
 
     function _esc(s) {
@@ -311,6 +356,7 @@
                 c.innerHTML = getEmptyStateHtml();
             }
         });
+        setTimeout(inicializarScrollFade, 60);
     }
 
     /* ── Acessibilidade ───────────────────────────────────── */
@@ -1640,6 +1686,8 @@
         garantirBotaoAcessibilidade();
         vincularHoverPerfil();
         carregarNotificacoes();
+        setTimeout(inicializarScrollFade, 80);
+        window.addEventListener('resize', inicializarScrollFade);
 
         var sNav = document.getElementById('sininhoNavbar');
         var cardNotif = document.getElementById('cardNotificacoesPerfil');

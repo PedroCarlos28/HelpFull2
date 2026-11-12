@@ -4455,20 +4455,100 @@ body.acessibilidade-escuro .modal-alterar-senha-card .modal-btn-salvar {
     transform: translateY(-1px) !important;
 }
 
-/* ── 4. Lista de Notificações com Rolagem ───────────────────── */
+/* ── 4. Lista de Notificações com Rolagem & Desfoque Gradual ─── */
 .lista-notificacoes,
-.painel-notificacoes .lista-notificacoes {
+.painel-notificacoes .lista-notificacoes,
+.card-notificacoes-bloco .lista-notificacoes {
     display: flex !important;
     flex-direction: column !important;
-    gap: 9px !important;
-    max-height: min(420px, calc(100vh - 210px)) !important;
+    gap: 10px !important;
+    max-height: min(430px, calc(100vh - 200px)) !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    padding: 2px 6px 4px 2px !important;
+    padding: 6px 6px 14px 2px !important;
     box-sizing: border-box !important;
     scrollbar-width: thin !important;
     scrollbar-color: rgba(43, 122, 140, 0.45) transparent !important;
     -webkit-overflow-scrolling: touch !important;
+
+    /* Desfoque / Fade gradual suave nas extremidades ao rolar */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        #000000 0%,
+        #000000 calc(100% - 36px),
+        rgba(0, 0, 0, 0) 100%
+    ) !important;
+    mask-image: linear-gradient(
+        to bottom,
+        #000000 0%,
+        #000000 calc(100% - 36px),
+        rgba(0, 0, 0, 0) 100%
+    ) !important;
+    transition: -webkit-mask-image 0.22s ease, mask-image 0.22s ease !important;
+}
+
+/* Quando no topo: início 100% nítido, final com desfoque gradual */
+.lista-notificacoes.scroll-topo,
+.painel-notificacoes .lista-notificacoes.scroll-topo,
+.card-notificacoes-bloco .lista-notificacoes.scroll-topo {
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        #000000 0%,
+        #000000 calc(100% - 36px),
+        rgba(0, 0, 0, 0) 100%
+    ) !important;
+    mask-image: linear-gradient(
+        to bottom,
+        #000000 0%,
+        #000000 calc(100% - 36px),
+        rgba(0, 0, 0, 0) 100%
+    ) !important;
+}
+
+/* Quando no meio (rolando): desfoque gradual no início E no final */
+.lista-notificacoes.scroll-meio,
+.painel-notificacoes .lista-notificacoes.scroll-meio,
+.card-notificacoes-bloco .lista-notificacoes.scroll-meio {
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        #000000 24px,
+        #000000 calc(100% - 36px),
+        rgba(0, 0, 0, 0) 100%
+    ) !important;
+    mask-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        #000000 24px,
+        #000000 calc(100% - 36px),
+        rgba(0, 0, 0, 0) 100%
+    ) !important;
+}
+
+/* Quando no fim: início com desfoque gradual e final 100% nítido */
+.lista-notificacoes.scroll-fim,
+.painel-notificacoes .lista-notificacoes.scroll-fim,
+.card-notificacoes-bloco .lista-notificacoes.scroll-fim {
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        #000000 26px,
+        #000000 100%
+    ) !important;
+    mask-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        #000000 26px,
+        #000000 100%
+    ) !important;
+}
+
+/* Quando não houver rolagem necessária */
+.lista-notificacoes.sem-scroll,
+.painel-notificacoes .lista-notificacoes.sem-scroll,
+.card-notificacoes-bloco .lista-notificacoes.sem-scroll {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
 }
 
 .painel-notificacoes .lista-notificacoes::-webkit-scrollbar,

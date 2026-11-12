@@ -1471,7 +1471,7 @@ $totalOutros = count($outrasSessoes);
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v3">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <link rel="stylesheet" href="assets/tutorial.css?v=20261017-tour">
     <script>
@@ -2339,7 +2339,7 @@ $totalOutros = count($outrasSessoes);
             }
         }
     </script>
-    <script src="notificacoes.js?v=20261112-notif-v3" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261112-notif-v3';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20261112-notif-v4" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261112-notif-v4';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script src="assets/tutorial.js?v=20261017-tour"></script>
 </body>
