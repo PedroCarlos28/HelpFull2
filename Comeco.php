@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once 'conexao.php';
 
 // Headers anti-cache para evitar que a tela de login fique retida em bfcache/histórico de dispositivos móveis
@@ -143,7 +143,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
 
         .btn-voltar-inicio:hover {
             background: #ffffff;
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(43, 122, 140, 0.15);
         }
@@ -222,7 +222,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
 
         .input-group input:focus {
             background: #ffffff;
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             box-shadow: 0 0 0 4px rgba(43, 122, 140, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.02);
             transform: translateY(-1px);
         }
@@ -333,7 +333,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         }
 
         .btn-secundario { background: #9cb4b8; color: white; }
-        .btn-primario   { background: #2b7a8c; color: white; }
+        .btn-primario { background: var(--cor-tema-primaria, #2b7a8c); color: white; }
 
         .btn-form:hover {
             transform: translateY(-3px);
@@ -401,7 +401,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             padding: 6px 14px;
             border-radius: 20px;
             background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 0.8rem;
             font-weight: 800;
             letter-spacing: 0.5px;
@@ -428,7 +428,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         }
 
         .desc-2fa strong {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             word-break: break-all;
         }
 
@@ -467,7 +467,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
 
         .input-group-2fa input:focus {
             background: #ffffff;
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             box-shadow: 0 0 0 4px rgba(43, 122, 140, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
@@ -485,7 +485,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         .btn-link-reenviar {
             background: none;
             border: none;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-weight: 800;
             cursor: pointer;
             padding: 0;
@@ -540,7 +540,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
 
         .btn-google-circle:hover {
             background: #ffffff;
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             transform: translateY(-2px) scale(1.07);
             box-shadow: 0 6px 18px rgba(43, 122, 140, 0.15);
         }
@@ -734,7 +734,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             border-radius: 50%;
             flex-shrink: 0;
             background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             transition: all 0.25s ease;
         }
 
@@ -752,7 +752,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
 
         .toast-feedback-2fa.toast-desativado .toast-icone-wrap {
             background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .toast-feedback-2fa.toast-erro .toast-icone-wrap {
@@ -914,7 +914,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         }
 
         .custom-checkbox-label:hover .custom-checkbox-ui {
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             background: #f8fcfe;
             transform: scale(1.05);
         }
@@ -925,8 +925,8 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         }
 
         .termo-real-checkbox:checked + .custom-checkbox-ui {
-            background: #2b7a8c;
-            border-color: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             box-shadow: 0 3px 8px rgba(43, 122, 140, 0.35);
         }
 
@@ -942,7 +942,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         }
 
         .link-termos-inline {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-weight: 800;
             text-decoration: underline;
             text-underline-offset: 3px;
@@ -1013,7 +1013,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             z-index: 10;
             transition: all 0.2s ease;
         }
@@ -1042,7 +1042,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             height: 50px;
             border-radius: 18px;
             background: linear-gradient(135deg, rgba(43, 122, 140, 0.15), rgba(76, 175, 125, 0.2));
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1200,7 +1200,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         .google-modal-email {
             font-size: 0.92rem;
             font-weight: 700;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             margin: 0;
             word-break: break-all;
         }
@@ -1286,8 +1286,8 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         }
 
         body.acessibilidade-escuro .termo-real-checkbox:checked + .custom-checkbox-ui {
-            background: #2b7a8c !important;
-            border-color: #2b7a8c !important;
+            background: var(--cor-tema-primaria, #2b7a8c) !important;
+            border-color: var(--cor-tema-primaria, #2b7a8c) !important;
         }
 
         body.acessibilidade-escuro .modal-card {

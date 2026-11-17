@@ -1,9 +1,9 @@
-/* ========================================================
+﻿/* ========================================================
    HELPEFULL - SISTEMA DE TUTORIAL E TOUR GUIADO INTERATIVO
    ======================================================== */
 
 :root {
-    --tut-primary: #2b7a8c;
+    --tut-primary: var(--cor-tema-primaria, #2b7a8c);
     --tut-primary-rgb: 43, 122, 140;
     --tut-accent: #0284c7;
     --tut-bg: rgba(255, 255, 255, 0.96);
@@ -139,7 +139,7 @@ body.acessibilidade-escuro .tutorial-progress-bar {
 .tutorial-progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #2b7a8c, #38bdf8);
+    background: linear-gradient(90deg, var(--cor-tema-primaria, #2b7a8c), #38bdf8);
     transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -353,7 +353,7 @@ body.acessibilidade-escuro .tutorial-btn-voltar:hover:not(:disabled) {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: linear-gradient(135deg, #2b7a8c, #1f606e);
+    background: linear-gradient(135deg, var(--cor-tema-primaria, #2b7a8c), var(--cor-tema-hover, #1f606e));
     color: #ffffff;
     border: none;
     font-size: 0.86rem;
@@ -462,7 +462,7 @@ body.acessibilidade-escuro .tutorial-etapa::before {
 }
 
 .tutorial-etapa.atual::before {
-    background: linear-gradient(90deg, #2b7a8c, #38bdf8);
+    background: linear-gradient(90deg, var(--cor-tema-primaria, #2b7a8c), #38bdf8);
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
 }
 
@@ -500,7 +500,7 @@ body.acessibilidade-escuro .tutorial-etapa.atual .tutorial-etapa-nome {
 
 /* Botão "Ir para [página] →" */
 .tutorial-btn-proximo.tutorial-btn-ir {
-    background: linear-gradient(135deg, #0ea5e9, #2b7a8c);
+    background: linear-gradient(135deg, #0ea5e9, var(--cor-tema-primaria, #2b7a8c));
     animation: tutorialBtnIrPulse 2s infinite ease-in-out;
 }
 
@@ -588,7 +588,7 @@ body.acessibilidade-escuro .tutorial-btn-proximo.tutorial-btn-concluir {
 /* BOTÃO DE TOUR DENTRO DO PAINEL DE ACESSIBILIDADE */
 .acessibilidade-btn-tour {
     background: rgba(43, 122, 140, 0.12);
-    color: #2b7a8c;
+    color: var(--cor-tema-primaria, #2b7a8c);
     border: 1.5px solid rgba(43, 122, 140, 0.28);
     border-radius: 20px;
     padding: 7px 16px;
@@ -604,7 +604,7 @@ body.acessibilidade-escuro .tutorial-btn-proximo.tutorial-btn-concluir {
 }
 
 .acessibilidade-btn-tour:hover {
-    background: #2b7a8c;
+    background: var(--cor-tema-primaria, #2b7a8c);
     color: #ffffff;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(43, 122, 140, 0.25);

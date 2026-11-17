@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once 'conexao.php';
 
 $usuarioLogado = obterUsuarioLogado($pdo);
@@ -419,7 +419,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .nav-links a.ativo {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .nav-entrar-btn {
@@ -429,7 +429,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             justify-content: center;
             font-weight: 800;
             text-decoration: none;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 0.95rem;
             white-space: nowrap;
         }
@@ -455,7 +455,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             right: -4px;
             width: 18px;
             height: 18px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             border: 2px solid #fff;
             border-radius: 50%;
             display: none;
@@ -611,8 +611,8 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .btn-limpar-pill {
-            background: rgba(43, 122, 140, 0.08);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-family: inherit;
             font-weight: 700;
             font-size: 0.74rem;
@@ -1025,7 +1025,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         .post-avatar {
             width: 32px;
             height: 32px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1434,7 +1434,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .modal-busca-barra:focus-within {
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             box-shadow: 0 4px 22px rgba(43, 122, 140, 0.18);
             background: rgba(255, 255, 255, 0.85);
         }
@@ -1463,7 +1463,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             padding: 10px 26px;
             border-radius: 30px;
             border: none;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff;
             font-weight: 800;
             cursor: pointer;
@@ -1500,7 +1500,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             width: 18px;
             height: 18px;
             border: 2px solid rgba(0, 0, 0, 0.1);
-            border-top: 2px solid #2b7a8c;
+            border-top: 2px solid var(--cor-tema-primaria, #2b7a8c);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -1622,7 +1622,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .compact-pill {
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #fff;
             font-weight: 800;
             padding: 8px 25px;
@@ -1659,10 +1659,10 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .btn-filtro.active {
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #fff;
             box-shadow: 0 8px 20px rgba(43, 122, 140, 0.25);
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             transform: scale(1.05);
         }
 
@@ -1942,8 +1942,8 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .nav-dropdown-mobile a.ativo {
-            color: #2b7a8c;
-            background: rgba(43, 122, 140, 0.08);
+            color: var(--cor-tema-primaria, #2b7a8c);
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
         }
 
         @keyframes fadeInDropdown {
@@ -2011,8 +2011,8 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             width: 42px;
             height: 42px;
             border-radius: 14px;
-            background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.12));
+            color: var(--cor-tema-primaria, #2b7a8c);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2026,7 +2026,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         .bv-comunidade-info h4 {
             font-size: 0.95rem;
             font-weight: 800;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             margin-bottom: 3px;
         }
 
@@ -2346,7 +2346,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .popup-regras-corpo::-webkit-scrollbar-thumb:hover {
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .regra-item {
@@ -2368,8 +2368,8 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         .regra-num {
             width: 22px;
             height: 22px;
-            background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.12));
+            color: var(--cor-tema-primaria, #2b7a8c);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -2430,7 +2430,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         .btn-aceitar-regras {
             width: 100%;
             padding: 11px 20px;
-            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
+            background: linear-gradient(135deg, var(--cor-tema-primaria, #2b7a8c), var(--cor-tema-hover, #1f5d6b));
             color: #ffffff;
             border: none;
             border-radius: 999px;
@@ -2593,7 +2593,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             font-family: inherit;
             font-size: 0.88rem;
             font-weight: 700;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             cursor: pointer;
             transition: 0.2s;
         }
@@ -2634,7 +2634,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             height: 44px;
             border-radius: 16px;
             background: linear-gradient(135deg, rgba(43, 122, 140, 0.15), rgba(43, 122, 140, 0.08));
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2665,7 +2665,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
 
         .badge-adm-pill {
-            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
+            background: linear-gradient(135deg, var(--cor-tema-primaria, #2b7a8c), var(--cor-tema-hover, #1f5d6b));
             color: #ffffff;
             font-size: 0.64rem;
             font-weight: 800;
@@ -2690,7 +2690,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             gap: 8px;
             padding: 10px 22px;
             border-radius: 999px;
-            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
+            background: linear-gradient(135deg, var(--cor-tema-primaria, #2b7a8c), var(--cor-tema-hover, #1f5d6b));
             color: #ffffff !important;
             text-decoration: none;
             font-size: 0.86rem;
@@ -2737,7 +2737,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             <button type="button" class="btn-fechar-popup-x" onclick="aceitarRegras()" aria-label="Fechar popup">&times;</button>
             <div class="pr-header">
                 <div class="pr-icone">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7a8c" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="svg-tema-cor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                     </svg>
                 </div>
@@ -3323,7 +3323,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                         onmouseover="this.style.background='#e0e0e0'"
                         onmouseout="this.style.background='#eee'">Cancelar</button>
                     <button type="submit"
-                        style="padding: 10px 25px; border-radius: 25px; border: none; background: #2b7a8c; color: #fff; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(43, 122, 140, 0.3);"
+                        style="padding: 10px 25px; border-radius: 25px; border: none; background: var(--cor-tema-primaria, #2b7a8c); color: #fff; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(43, 122, 140, 0.3);"
                         onmouseover="this.style.transform='scale(1.05)'"
                         onmouseout="this.style.transform='scale(1)'">Salvar Alterações</button>
                 </div>

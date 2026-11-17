@@ -1096,6 +1096,7 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
             hover: '#27AD60',
             ativa: '#219351',
             clara: '#6DDB9C',
+            textoBtn: '#1a3a28',
             suave: 'rgba(46, 204, 113, 0.12)',
             borda: 'rgba(46, 204, 113, 0.28)',
             sombra: 'rgba(46, 204, 113, 0.35)',
@@ -1192,6 +1193,7 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
             hover: '#CDA70D',
             ativa: '#AE8D0B',
             clara: '#F5D657',
+            textoBtn: '#3d2c00',
             suave: 'rgba(241, 196, 15, 0.12)',
             borda: 'rgba(241, 196, 15, 0.28)',
             sombra: 'rgba(241, 196, 15, 0.35)',
@@ -1264,6 +1266,7 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
             hover: '#7F8C8D',
             ativa: '#6B7778',
             clara: '#B5C0C1',
+            textoBtn: '#1a1a1a',
             suave: 'rgba(149, 165, 166, 0.12)',
             borda: 'rgba(149, 165, 166, 0.28)',
             sombra: 'rgba(149, 165, 166, 0.35)',
@@ -1603,6 +1606,7 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
 
         if (window.localStorage) window.localStorage.setItem('helpfull_cor_tema', corId);
         var p = window.HelpFullPaletaCores[corId];
+        var textoBtn = p.textoBtn || '#ffffff';
 
         if (!styleEl) {
             styleEl = document.createElement('style');
@@ -1633,7 +1637,7 @@ styleEl.textContent = `
             a.btn-gerenciar-dispositivos, a.btn-primario, a.btn-gerar-relatorio, a.btn-adm-link {
                 background: linear-gradient(135deg, ${p.primaria}, ${p.hover}) !important;
                 border-color: ${p.primaria} !important;
-                color: #ffffff !important;
+                color: ${textoBtn} !important;
                 box-shadow: 0 4px 14px ${p.sombra} !important;
             }
 
@@ -1650,6 +1654,7 @@ styleEl.textContent = `
             a.btn-adm-link:hover {
                 background: linear-gradient(135deg, ${p.hover}, ${p.ativa}) !important;
                 border-color: ${p.hover} !important;
+                color: ${textoBtn} !important;
                 box-shadow: 0 6px 18px ${p.sombra} !important;
                 filter: brightness(1.08) !important;
             }
@@ -1810,7 +1815,7 @@ styleEl.textContent = `
             body.acessibilidade-escuro .busca-btn {
                 background: linear-gradient(135deg, ${p.primaria}, ${p.hover}) !important;
                 border-color: ${p.primaria} !important;
-                color: #ffffff !important;
+                color: ${textoBtn} !important;
                 box-shadow: 0 6px 18px ${p.sombra} !important;
             }
 
@@ -1823,6 +1828,7 @@ styleEl.textContent = `
             body.acessibilidade-escuro .btn-gerenciar-dispositivos:hover,
             body.acessibilidade-escuro .busca-btn:hover {
                 background: linear-gradient(135deg, ${p.hover}, ${p.ativa}) !important;
+                color: ${textoBtn} !important;
             }
 
             body.acessibilidade-escuro .onboarding-preview-icone-badge,
@@ -1834,6 +1840,53 @@ styleEl.textContent = `
                 background: ${p.suave} !important;
                 color: ${p.clara} !important;
                 border-color: ${p.borda} !important;
+            }
+
+            /* 11. Correção de SVG inline com currentColor */
+            .svg-tema-cor {
+                color: var(--cor-tema-primaria, #2b7a8c) !important;
+                stroke: var(--cor-tema-primaria, #2b7a8c) !important;
+                fill: var(--cor-tema-primaria, #2b7a8c) !important;
+            }
+
+            /* 12. Legibilidade: texto sobre fundo tema (badges, pílulas, contadores) */
+            #contadorDiariosDia,
+            .sininho-notificacao,
+            .post-avatar,
+            .card-relatorio-icone,
+            #badgeNotificacoesPerfil,
+            .badge-adm-pill {
+                color: ${textoBtn} !important;
+            }
+
+            /* 13. Abas ativas - texto legível */
+            .tab-btn.ativo, .filtro-btn.ativo, .btn-filtro.ativo,
+            .categoria-pill.ativo, .filtro-categoria.ativo,
+            .onboarding-tema-btn.ativo, .painel-tema-btn.ativo,
+            .btn-historico.ativo, .disp-filtro-pill.ativo {
+                color: ${textoBtn} !important;
+            }
+
+            /* 14. Calendário: texto legível nos dias selecionados */
+            .cal-dia.selecionado,
+            .cal-dia.hoje {
+                color: ${textoBtn} !important;
+            }
+
+            /* 15. Elementos com background tema precisam de texto legível */
+            [style*="--cor-tema-primaria"] {
+                color: ${textoBtn};
+            }
+
+            /* 16. Btn-limpar-pill: fundo suave já via var(), garante cor certa */
+            .btn-limpar-pill {
+                background: var(--cor-tema-suave, rgba(43,122,140,0.08)) !important;
+                color: var(--cor-tema-primaria, #2b7a8c) !important;
+            }
+
+            /* 17. Nav entrar btn - garantir legibilidade */
+            .nav-entrar-btn {
+                color: ${p.primaria} !important;
             }
         `;
 

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once 'conexao.php';
 
 // Headers anti-cache para garantir que status de autenticação reflita imediatamente no celular
@@ -226,7 +226,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
 
         .carrossel-dot.ativo {
             width: 26px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             border-radius: 999px;
             box-shadow: 0 0 8px rgba(43, 122, 140, 0.8), 0 0 16px rgba(43, 122, 140, 0.45);
             animation: brilhoDot 2.4s ease-in-out infinite;
@@ -469,7 +469,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             right: -4px;
             width: 18px;
             height: 18px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             border: 2px solid #fff;
             border-radius: 50%;
             display: none;
@@ -501,7 +501,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             justify-content: center;
             font-weight: 800;
             text-decoration: none;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 0.95rem;
             white-space: nowrap;
         }
@@ -723,8 +723,8 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
         }
 
         .btn-limpar-pill {
-            background: rgba(43, 122, 140, 0.08);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-family: inherit;
             font-weight: 700;
             font-size: 0.74rem;
@@ -1147,7 +1147,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             border: none !important;
         }
         body.acessibilidade-escuro .carrossel-dot.ativo {
-            background: #2b7a8c !important;
+            background: var(--cor-tema-primaria, #2b7a8c) !important;
             border: none !important;
             box-shadow: 0 0 8px rgba(43, 122, 140, 0.8), 0 0 16px rgba(43, 122, 140, 0.45) !important;
             animation: brilhoDot 2.4s ease-in-out infinite !important;
@@ -1234,8 +1234,8 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
         }
 
         .nav-dropdown-mobile a.ativo {
-            color: #2b7a8c;
-            background: rgba(43, 122, 140, 0.08);
+            color: var(--cor-tema-primaria, #2b7a8c);
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
         }
 
         @keyframes fadeInDropdown {
@@ -1445,7 +1445,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 <?php if ($usuarioLogado): ?>
                     <a href="Perfil.php">Perfil</a>
                 <?php else: ?>
-                    <a href="Comeco.php" style="color: #2b7a8c; font-weight: 800;">Entrar</a>
+                    <a href="Comeco.php" style="color: var(--cor-tema-primaria, #2b7a8c); font-weight: 800;">Entrar</a>
                 <?php endif; ?>
             </div>
 

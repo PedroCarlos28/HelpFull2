@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // =======================================================
 // HELPFULL - PAINEL DE MODERAÇÃO DA COMUNIDADE
 // Design exclusivo com a mesma identidade visual de Dispositivos Conectados
@@ -113,7 +113,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
         .nav-links a:hover,
         .nav-links a.ativo {
             opacity: 0.7;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .perfil-capsula {
@@ -129,14 +129,14 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             background-size: cover;
             background-position: center;
             position: relative;
-            box-shadow: 0 0 0 3px #2b7a8c;
+            box-shadow: 0 0 0 3px var(--cor-tema-primaria, #2b7a8c);
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .perfil-capsula:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 0 3px #2b7a8c, 0 4px 12px rgba(43, 122, 140, 0.2);
+            box-shadow: 0 0 0 3px var(--cor-tema-primaria, #2b7a8c), 0 4px 12px rgba(43, 122, 140, 0.2);
         }
 
         .acessibilidade-anchor {
@@ -165,7 +165,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
         .btn-acessibilidade:hover {
             transform: scale(1.05);
             background: rgba(255, 255, 255, 0.6);
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .nav-dropdown-mobile {
@@ -198,7 +198,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             text-decoration: none;
             font-size: 0.88rem;
             font-weight: 700;
@@ -248,7 +248,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             padding: 6px 14px;
             border-radius: 20px;
             background: #d6d6d6;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             border: 1px solid rgba(255, 255, 255, 0.6);
             font-size: 0.76rem;
             font-weight: 800;
@@ -294,7 +294,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             padding: 7px 16px;
             border-radius: 20px;
             background: #d6d6d6;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 0.82rem;
             font-weight: 700;
             border: 1px solid rgba(255, 255, 255, 0.6);
@@ -354,7 +354,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
@@ -412,7 +412,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             border: 1px solid rgba(255, 255, 255, 0.6);
             flex-shrink: 0;
         }
@@ -430,7 +430,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
         .dicas-titulo {
             font-size: 0.98rem;
             font-weight: 800;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             margin: 0 0 8px 0;
         }
 
@@ -485,7 +485,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             stroke: currentColor;
             width: 18px;
             height: 18px;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         /* BARRA DE BUSCA E FILTROS */
@@ -536,7 +536,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
 
         .input-busca:focus {
             background: #ffffff;
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
             box-shadow: 0 0 0 3px rgba(43, 122, 140, 0.2);
         }
 
@@ -550,7 +550,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             padding: 8px 16px;
             border-radius: 20px;
             background: #d6d6d6;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             border: 1px solid rgba(255, 255, 255, 0.6);
             font-size: 0.78rem;
             font-weight: 800;
@@ -561,7 +561,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
 
         .btn-filtro-pill:hover,
         .btn-filtro-pill.ativo {
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(43, 122, 140, 0.25);
@@ -609,7 +609,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 1.15rem;
             font-weight: 900;
             border: 1px solid rgba(255, 255, 255, 0.6);
@@ -758,7 +758,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             margin-bottom: 4px;
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
@@ -872,7 +872,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             width: 22px;
             height: 22px;
             border: 2.5px solid rgba(43, 122, 140, 0.25);
-            border-top-color: #2b7a8c;
+            border-top-color: var(--cor-tema-primaria, #2b7a8c);
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
@@ -1015,7 +1015,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             .nav-dropdown-mobile a:hover,
             .nav-dropdown-mobile a.ativo {
                 background: rgba(43, 122, 140, 0.1);
-                color: #2b7a8c;
+                color: var(--cor-tema-primaria, #2b7a8c);
             }
 
             .conteudo-site {

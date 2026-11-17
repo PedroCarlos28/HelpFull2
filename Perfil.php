@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once 'conexao.php';
 require_once 'email_helper.php';
 
@@ -404,8 +404,8 @@ try {
             gap: 7px;
             padding: 5px 12px;
             border-radius: 20px;
-            background: rgba(43, 122, 140, 0.1);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.1));
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 0.76rem;
             font-weight: 800;
             letter-spacing: 0.5px;
@@ -447,9 +447,9 @@ try {
         }
 
         .balao-2fa-status-pill.ativo {
-            background: #e6f6f9;
-            color: #2b7a8c;
-            border: 1px solid rgba(43, 122, 140, 0.25);
+            background: var(--cor-tema-suave, #e6f6f9);
+            color: var(--cor-tema-primaria, #2b7a8c);
+            border: 1px solid var(--cor-tema-borda, rgba(43,122,140,0.25));
         }
 
         .balao-2fa-status-pill.inativo {
@@ -470,7 +470,7 @@ try {
         }
 
         .balao-2fa-email-aviso strong {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         /* Suporte ao Modo Escuro */
@@ -559,8 +559,8 @@ try {
             height: 32px;
             border-radius: 50%;
             flex-shrink: 0;
-            background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.12));
+            color: var(--cor-tema-primaria, #2b7a8c);
             transition: all 0.25s ease;
         }
 
@@ -577,8 +577,8 @@ try {
         }
 
         .toast-feedback-2fa.toast-desativado .toast-icone-wrap {
-            background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.12));
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .toast-feedback-2fa.toast-erro .toast-icone-wrap {
@@ -697,7 +697,7 @@ try {
         }
 
         .nav-links a.ativo {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .nav-links a:hover {
@@ -717,7 +717,7 @@ try {
             background-size: cover;
             background-position: center;
             position: relative;
-            box-shadow: 0 0 0 3px #2b7a8c;
+            box-shadow: 0 0 0 3px var(--cor-tema-primaria, #2b7a8c);
         }
 
         .sininho-notificacao {
@@ -726,7 +726,7 @@ try {
             right: -4px;
             width: 18px;
             height: 18px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             border: 2px solid #fff;
             border-radius: 50%;
             display: none;
@@ -882,8 +882,8 @@ try {
         }
 
         .btn-limpar-pill {
-            background: rgba(43, 122, 140, 0.08);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-family: inherit;
             font-weight: 700;
             font-size: 0.74rem;
@@ -1274,7 +1274,7 @@ try {
         }
 
         body.acessibilidade-escuro .btn-salvar {
-            background: #2b7a8c !important;
+            background: var(--cor-tema-primaria, #2b7a8c) !important;
             color: #ffffff !important;
             border: 1px solid rgba(125, 211, 252, 0.4) !important;
         }
@@ -1392,7 +1392,7 @@ try {
         }
 
         .meta-item:hover .meta-checkbox {
-            border-color: #2b7a8c;
+            border-color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .check-icon {
@@ -1527,7 +1527,7 @@ try {
             display: block;
             width: 16px;
             height: 3px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             border-radius: 2px;
             position: absolute;
             bottom: 4px;
@@ -1830,7 +1830,7 @@ try {
             width: 52px;
             height: 52px;
             border-radius: 16px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -1871,7 +1871,7 @@ try {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff !important;
             font-weight: 800;
             font-size: 0.95rem;
@@ -2060,7 +2060,7 @@ try {
             transition: background 0.2s;
         }
         .nav-dropdown-mobile a:hover { background: rgba(0,0,0,0.05); }
-        .nav-dropdown-mobile a.ativo { color: #2b7a8c; background: rgba(43,122,140,0.08); }
+        .nav-dropdown-mobile a.ativo { color: var(--cor-tema-primaria, #2b7a8c); background: var(--cor-tema-suave, rgba(43,122,140,0.08)); }
         @keyframes fadeInDropdown {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -2265,7 +2265,7 @@ try {
                 justify-content: space-between !important;
                 align-items: center !important;
                 padding: 10px 14px !important;
-                background: rgba(43, 122, 140, 0.08) !important;
+                background: var(--cor-tema-suave, rgba(43,122,140,0.08)) !important;
                 border-radius: 14px !important;
                 box-sizing: border-box !important;
                 margin-top: 4px !important;
@@ -2632,7 +2632,7 @@ try {
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            background: rgba(43, 122, 140, 0.08);
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
             border: 1px solid rgba(43, 122, 140, 0.2);
             border-radius: 20px;
             padding: 14px 16px;
@@ -2666,7 +2666,7 @@ try {
             margin-bottom: 6px;
             font-size: 0.83rem;
             color: #204953;
-            background: rgba(43, 122, 140, 0.08);
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
             border: 1px solid rgba(43, 122, 140, 0.2);
             border-radius: 12px;
             padding: 8px 12px;
@@ -2719,7 +2719,7 @@ try {
         }
 
         .btn-reenviar-codigo-modal:hover:not(:disabled) {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .btn-reenviar-codigo-modal:disabled {
@@ -2849,9 +2849,9 @@ try {
 
         .modal-msg-alerta.sucesso {
             display: block;
-            background: #e6f6f9;
-            border: 1px solid rgba(43, 122, 140, 0.25);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, #e6f6f9);
+            border: 1px solid var(--cor-tema-borda, rgba(43,122,140,0.25));
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         body.acessibilidade-escuro .modal-msg-alerta.sucesso {
@@ -2906,7 +2906,7 @@ try {
         }
 
         .modal-btn-salvar {
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff;
             box-shadow: 0 4px 14px rgba(43, 122, 140, 0.28);
         }
@@ -2918,7 +2918,7 @@ try {
         }
 
         body.acessibilidade-escuro .modal-btn-salvar {
-            background: #2b7a8c !important;
+            background: var(--cor-tema-primaria, #2b7a8c) !important;
             color: #ffffff !important;
             border: 1px solid rgba(125, 211, 252, 0.25) !important;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
@@ -3055,7 +3055,7 @@ try {
             height: 48px;
             border-radius: 16px;
             background: #d6d6d6;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -3076,7 +3076,7 @@ try {
             gap: 8px;
             padding: 10px 20px;
             border-radius: 18px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff;
             font-size: 0.88rem;
             font-weight: 700;
@@ -3109,7 +3109,7 @@ try {
         }
 
         body.acessibilidade-escuro .btn-gerenciar-dispositivos {
-            background: #2b7a8c !important;
+            background: var(--cor-tema-primaria, #2b7a8c) !important;
             color: #ffffff !important;
             border: 1px solid rgba(125, 211, 252, 0.25) !important;
         }
@@ -3408,7 +3408,7 @@ try {
             <div class="card-perfil" style="position: relative;">
                 <h2 class="titulo-central">Detalhes do dia</h2>
                 <div id="contadorDiariosDia"
-                    style="position: absolute; top: 35px; right: 35px; background: #2b7a8c; color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                    style="position: absolute; top: 35px; right: 35px; background: var(--cor-tema-primaria, #2b7a8c); color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2);">
                     0</div>
                 <div class="detalhes-wrapper">
                     <div class="detalhes-scroll" id="painelDetalhes"></div>

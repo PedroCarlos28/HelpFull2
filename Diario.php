@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once 'conexao.php';
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -179,7 +179,7 @@ if (!$usuarioLogado) {
         }
 
         .nav-links a.ativo {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .nav-links a:hover {
@@ -208,7 +208,7 @@ if (!$usuarioLogado) {
             right: -4px;
             width: 18px;
             height: 18px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             border: 2px solid #fff;
             border-radius: 50%;
             display: none;
@@ -364,8 +364,8 @@ if (!$usuarioLogado) {
         }
 
         .btn-limpar-pill {
-            background: rgba(43, 122, 140, 0.08);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-family: inherit;
             font-weight: 700;
             font-size: 0.74rem;
@@ -570,8 +570,8 @@ if (!$usuarioLogado) {
             width: 42px;
             height: 42px;
             border-radius: 14px;
-            background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.12));
+            color: var(--cor-tema-primaria, #2b7a8c);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -585,7 +585,7 @@ if (!$usuarioLogado) {
         .bv-diario-info h4 {
             font-size: 0.95rem;
             font-weight: 800;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             margin-bottom: 3px;
         }
 
@@ -840,7 +840,7 @@ if (!$usuarioLogado) {
             transition: background 0.2s;
         }
         .nav-dropdown-mobile a:hover { background: rgba(0,0,0,0.05); }
-        .nav-dropdown-mobile a.ativo { color: #2b7a8c; background: rgba(43,122,140,0.08); }
+        .nav-dropdown-mobile a.ativo { color: var(--cor-tema-primaria, #2b7a8c); background: var(--cor-tema-suave, rgba(43,122,140,0.08)); }
         @keyframes fadeInDropdown {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }

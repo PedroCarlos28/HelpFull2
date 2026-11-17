@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // =======================================================
 // HELPFULL - PAINEL DE DISPOSITIVOS CONECTADOS
 // Design exclusivo HelpFull - Sem emojis
@@ -149,7 +149,7 @@ $totalOutros = count($outrasSessoes);
 
         .nav-links a:hover {
             opacity: 0.7;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .perfil-capsula {
@@ -165,14 +165,14 @@ $totalOutros = count($outrasSessoes);
             background-size: cover;
             background-position: center;
             position: relative;
-            box-shadow: 0 0 0 3px #2b7a8c;
+            box-shadow: 0 0 0 3px var(--cor-tema-primaria, #2b7a8c);
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .perfil-capsula:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 0 3px #2b7a8c, 0 4px 12px rgba(43, 122, 140, 0.2);
+            box-shadow: 0 0 0 3px var(--cor-tema-primaria, #2b7a8c), 0 4px 12px rgba(43, 122, 140, 0.2);
         }
 
         .acessibilidade-anchor {
@@ -201,7 +201,7 @@ $totalOutros = count($outrasSessoes);
         .btn-acessibilidade:hover {
             transform: scale(1.05);
             background: rgba(255, 255, 255, 0.6);
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .nav-dropdown-mobile {
@@ -234,7 +234,7 @@ $totalOutros = count($outrasSessoes);
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             text-decoration: none;
             font-size: 0.88rem;
             font-weight: 700;
@@ -284,7 +284,7 @@ $totalOutros = count($outrasSessoes);
             padding: 6px 14px;
             border-radius: 20px;
             background: #d6d6d6;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             border: 1px solid rgba(255, 255, 255, 0.6);
             font-size: 0.76rem;
             font-weight: 800;
@@ -328,7 +328,7 @@ $totalOutros = count($outrasSessoes);
             padding: 7px 16px;
             border-radius: 20px;
             background: #d6d6d6;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 0.82rem;
             font-weight: 700;
             border: 1px solid rgba(255, 255, 255, 0.6);
@@ -441,7 +441,7 @@ $totalOutros = count($outrasSessoes);
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
@@ -480,7 +480,7 @@ $totalOutros = count($outrasSessoes);
             gap: 5px;
             padding: 4px 10px;
             border-radius: 12px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff;
             font-size: 0.72rem;
             font-weight: 800;
@@ -602,7 +602,7 @@ $totalOutros = count($outrasSessoes);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             margin-bottom: 4px;
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
@@ -648,7 +648,7 @@ $totalOutros = count($outrasSessoes);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             border: 1px solid rgba(255, 255, 255, 0.6);
             flex-shrink: 0;
         }
@@ -666,7 +666,7 @@ $totalOutros = count($outrasSessoes);
         .dicas-titulo {
             font-size: 0.98rem;
             font-weight: 800;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             margin: 0 0 6px 0;
         }
 
@@ -678,7 +678,7 @@ $totalOutros = count($outrasSessoes);
         }
 
         .dicas-link {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-weight: 700;
             text-decoration: underline;
             text-underline-offset: 3px;
@@ -686,7 +686,7 @@ $totalOutros = count($outrasSessoes);
         }
 
         .dicas-link:hover {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         /* TRAVAMENTO DO FUNDO QUANDO MODAL ESTIVER ABERTO */
@@ -841,7 +841,7 @@ $totalOutros = count($outrasSessoes);
         }
 
         .modal-disp-preview svg {
-            stroke: #2b7a8c;
+            stroke: var(--cor-tema-primaria, #2b7a8c);
             width: 18px;
             height: 18px;
             flex-shrink: 0;
@@ -855,12 +855,12 @@ $totalOutros = count($outrasSessoes);
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            background: rgba(43, 122, 140, 0.1);
+            background: var(--cor-tema-suave, rgba(43,122,140,0.1));
             border: 1px solid rgba(43, 122, 140, 0.22);
             border-radius: 18px;
             padding: 12px 16px;
             font-size: 0.84rem;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             line-height: 1.45;
             margin-bottom: 16px;
             text-align: left;
@@ -869,7 +869,7 @@ $totalOutros = count($outrasSessoes);
         .modal-alerta-info svg {
             flex-shrink: 0;
             margin-top: 2px;
-            stroke: #2b7a8c;
+            stroke: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .campo-grupo-modal {
@@ -890,7 +890,7 @@ $totalOutros = count($outrasSessoes);
         .btn-reenviar-codigo-modal {
             background: none;
             border: none;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 0.82rem;
             font-weight: 800;
             font-family: 'Montserrat', sans-serif !important;
@@ -973,7 +973,7 @@ $totalOutros = count($outrasSessoes);
         }
 
         .btn-olho-toggle:hover {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             background: rgba(0, 0, 0, 0.04);
         }
 
@@ -997,9 +997,9 @@ $totalOutros = count($outrasSessoes);
 
         .modal-msg-alerta.sucesso {
             display: block;
-            background: #e6f6f9;
-            border: 1px solid rgba(43, 122, 140, 0.25);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, #e6f6f9);
+            border: 1px solid var(--cor-tema-borda, rgba(43,122,140,0.25));
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .modal-acoes {
@@ -1013,7 +1013,7 @@ $totalOutros = count($outrasSessoes);
             padding: 12px 20px;
             border-radius: 16px;
             background: #d6d6d6;
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             border: 1px solid rgba(255, 255, 255, 0.6);
             font-size: 0.88rem;
             font-weight: 700;
@@ -1214,7 +1214,7 @@ $totalOutros = count($outrasSessoes);
         }
 
         body.acessibilidade-escuro .card-dicas-seguranca {
-            background: rgba(43, 122, 140, 0.12) !important;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.12)) !important;
             border-color: rgba(125, 211, 252, 0.2) !important;
         }
 
@@ -1400,8 +1400,8 @@ $totalOutros = count($outrasSessoes);
 
             .nav-dropdown-mobile a:hover,
             .nav-dropdown-mobile a.ativo {
-                background: rgba(43, 122, 140, 0.1);
-                color: #2b7a8c;
+                background: var(--cor-tema-suave, rgba(43,122,140,0.1));
+                color: var(--cor-tema-primaria, #2b7a8c);
             }
 
             .conteudo-site {

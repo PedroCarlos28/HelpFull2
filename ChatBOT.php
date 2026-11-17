@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once 'conexao.php';
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -157,7 +157,7 @@ if (in_array($hoje, $datasHistorico)) {
         }
 
         .nav-links a.ativo {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
         }
 
         .nav-links a:hover {
@@ -186,7 +186,7 @@ if (in_array($hoje, $datasHistorico)) {
             right: -4px;
             width: 18px;
             height: 18px;
-            background: #2b7a8c;
+            background: var(--cor-tema-primaria, #2b7a8c);
             border: 2px solid #fff;
             border-radius: 50%;
             display: none;
@@ -342,8 +342,8 @@ if (in_array($hoje, $datasHistorico)) {
         }
 
         .btn-limpar-pill {
-            background: rgba(43, 122, 140, 0.08);
-            color: #2b7a8c;
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
+            color: var(--cor-tema-primaria, #2b7a8c);
             font-family: inherit;
             font-weight: 700;
             font-size: 0.74rem;
@@ -589,7 +589,7 @@ if (in_array($hoje, $datasHistorico)) {
         }
 
         .btn-novo-chat:hover {
-            color: #2b7a8c;
+            color: var(--cor-tema-primaria, #2b7a8c);
             transform: scale(1.1);
         }
 
@@ -640,7 +640,7 @@ if (in_array($hoje, $datasHistorico)) {
         }
 
         .btn-historico.ativo {
-            background: linear-gradient(135deg, #184e5d 0%, #2b7a8c 100%);
+            background: linear-gradient(135deg, var(--cor-tema-ativa, #184e5d) 0%, var(--cor-tema-primaria, #2b7a8c) 100%);
             color: #ffffff;
             border-color: rgba(255, 255, 255, 0.5);
             box-shadow: 0 4px 15px rgba(24, 78, 93, 0.3);
@@ -907,8 +907,8 @@ if (in_array($hoje, $datasHistorico)) {
         }
 
         .nav-dropdown-mobile a.ativo {
-            color: #2b7a8c;
-            background: rgba(43, 122, 140, 0.08);
+            color: var(--cor-tema-primaria, #2b7a8c);
+            background: var(--cor-tema-suave, rgba(43,122,140,0.08));
         }
 
         @keyframes fadeInDropdown {
