@@ -1,11 +1,15 @@
 <?php
-/**
- * adm_comunidade.php
- * Painel administrativo de moderação da Comunidade HelpFull
- * Acesso exclusivo para administradores
- */
+// =======================================================
+// HELPFULL - PAINEL DE MODERAÇÃO DA COMUNIDADE
+// Design exclusivo com a mesma identidade visual de Dispositivos Conectados
+// =======================================================
 
-require_once 'conexao.php';
+require_once __DIR__ . '/conexao.php';
+
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: Comeco.php');
+    exit;
+}
 
 $usuarioLogado = obterUsuarioLogado($pdo);
 $isAdmin       = !empty($usuarioLogado['is_admin']);
@@ -15,30 +19,35 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
     header('Location: Comunidade.php');
     exit;
 }
+
+$fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HelpFull — Painel de Moderação</title>
+    <title>HelpFull - Moderação da Comunidade</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
+    <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+        html,
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
             max-width: 100vw;
             overflow-x: hidden;
-            background-color: #dbe7eb;
+            background-color: #F3F3F3;
             font-family: 'Montserrat', sans-serif;
             color: #1a1a1a;
             display: flex;
@@ -46,775 +55,823 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
             min-height: 100vh;
         }
 
-        /* FUNDO ANIMADO */
-        .fundo-animado-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-            display: block;
-            filter: blur(32px);
-            -webkit-filter: blur(32px);
-            transform: scale(1.08);
-            transform-origin: center center;
-        }
-
-        /* NAVBAR UNIVERSAL */
+        /* NAVBAR GLOBAL (UNIVERSAL HELPFULL) */
         .nav-container-global {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            justify-content: center;
-            padding-top: 15px;
-            z-index: 1000;
-            pointer-events: none;
+            align-items: center;
+            gap: 15px;
+            z-index: 2000;
         }
 
         .navbar-topo {
-            position: relative;
-            width: calc(100% - 40px);
-            max-width: 1000px;
-            background: rgba(255, 255, 255, 0.75);
+            display: flex;
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border-radius: 40px;
-            padding: 12px 28px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            pointer-events: auto;
-            transition: all 0.3s ease;
-        }
-
-        .nav-top-row {
-            display: flex;
+            padding: 12px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             align-items: center;
-            justify-content: space-between;
-            width: 100%;
+            gap: 30px;
+            position: relative;
         }
 
         .nav-logo {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #0f172a;
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: -0.5px;
             text-decoration: none;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            color: inherit;
         }
 
         .nav-seta-dropdown {
             display: none;
-            color: #2b7a8c;
-            transition: transform 0.3s ease;
         }
 
         .nav-links {
             display: flex;
-            align-items: center;
-            gap: 24px;
+            gap: 25px;
             list-style: none;
+            align-items: center;
             margin: 0;
             padding: 0;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: #64748b;
-            font-size: 0.92rem;
-            font-weight: 600;
-            transition: 0.2s;
-            position: relative;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: color 0.3s;
         }
 
         .nav-links a:hover,
         .nav-links a.ativo {
+            opacity: 0.7;
             color: #2b7a8c;
-            font-weight: 700;
-        }
-
-        .nav-links a.ativo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2.5px;
-            background: #2b7a8c;
-            border-radius: 2px;
         }
 
         .perfil-capsula {
+            width: 36px;
+            height: 36px;
+            background: #333;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(43, 122, 140, 0.2);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-            transition: 0.2s;
-            color: #2b7a8c;
-            text-decoration: none;
-            width: 40px;
-            height: 40px;
             justify-content: center;
+            color: #fff;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
             position: relative;
+            box-shadow: 0 0 0 3px #2b7a8c;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .perfil-capsula:hover {
-            transform: translateY(-2px);
-            border-color: rgba(43, 122, 140, 0.4);
-            box-shadow: 0 6px 16px rgba(43, 122, 140, 0.15);
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px #2b7a8c, 0 4px 12px rgba(43, 122, 140, 0.2);
+        }
+
+        .acessibilidade-anchor {
+            position: absolute;
+            right: -60px;
+            pointer-events: auto;
+        }
+
+        .btn-acessibilidade {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #1a1a1a;
+            transition: all 0.3s;
+        }
+
+        .btn-acessibilidade:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.6);
+            color: #2b7a8c;
         }
 
         .nav-dropdown-mobile {
             display: none;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid rgba(0, 0, 0, 0.06);
         }
 
-        .nav-dropdown-mobile.aberto {
-            display: flex;
-        }
-
-        .nav-dropdown-mobile a {
-            text-decoration: none;
-            color: #475569;
-            font-weight: 600;
-            font-size: 0.95rem;
-            padding: 8px 12px;
-            border-radius: 12px;
-            transition: 0.2s;
-        }
-
-        .nav-dropdown-mobile a:hover,
-        .nav-dropdown-mobile a.ativo {
-            background: rgba(43, 122, 140, 0.08);
-            color: #2b7a8c;
-            font-weight: 700;
-        }
-
-        /* CONTEÚDO PRINCIPAL */
+        /* CONTAINER PRINCIPAL */
         .conteudo-site {
             position: relative;
-            z-index: 1;
+            z-index: 10;
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 100px 20px 60px 20px;
+            padding: 120px 20px 80px 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            box-sizing: border-box;
+            gap: 22px;
         }
 
-        .caixa-agrupadora {
-            position: relative;
-            z-index: 1;
-            border-radius: 40px;
-            padding: 36px 30px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            box-sizing: border-box;
-        }
-
-        .caixa-agrupadora::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            z-index: -3;
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 50px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), inset 0 2px 10px rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            pointer-events: none;
-        }
-
-        /* HEADER DO PAINEL */
-        .adm-header-banner {
+        /* BARRA SUPERIOR DE NAVEGAÇÃO INTERNA */
+        .topo-voltar-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-            background: #ffffff;
-            border-radius: 32px;
-            padding: 24px 28px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            margin-top: 10px;
+            margin-bottom: 4px;
         }
 
-        .adm-header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            min-width: 0;
-        }
-
-        .adm-header-icone {
-            width: 54px;
-            height: 54px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, rgba(43, 122, 140, 0.16), rgba(43, 122, 140, 0.06));
-            color: #2b7a8c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid rgba(43, 122, 140, 0.2);
-            flex-shrink: 0;
-        }
-
-        .adm-header-titulos {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            min-width: 0;
-        }
-
-        .adm-header-titulo-linha {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .adm-header-titulos h1 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #0f172a;
-        }
-
-        .badge-adm-pill {
-            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
-            color: #ffffff;
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-            padding: 3px 10px;
-            border-radius: 999px;
-            text-transform: uppercase;
-        }
-
-        .adm-header-titulos p {
-            font-size: 0.83rem;
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .btn-voltar-pill {
+        .link-voltar {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 20px;
-            border-radius: 999px;
-            background: rgba(43, 122, 140, 0.08);
             color: #2b7a8c;
             text-decoration: none;
-            font-size: 0.84rem;
+            font-size: 0.88rem;
             font-weight: 700;
-            transition: all 0.25s ease;
-            border: 1.5px solid rgba(43, 122, 140, 0.18);
-            white-space: nowrap;
+            padding: 8px 18px;
+            background: #eaeaea;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
         }
 
-        .btn-voltar-pill:hover {
-            background: #2b7a8c;
-            color: #ffffff;
+        .link-voltar:hover {
+            background: #e0e0e0;
             transform: translateX(-3px);
-            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.25);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
         }
 
-        /* STATS GRID */
-        .adm-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+        .link-voltar svg {
+            stroke: currentColor;
+            width: 16px;
+            height: 16px;
         }
 
-        .adm-stat-card {
-            background: #ffffff;
-            border-radius: 28px;
-            padding: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.04);
+        /* CARD HEADER PRINCIPAL */
+        .card-dispositivos-header {
+            background: #eaeaea;
+            border-radius: 30px;
+            padding: 35px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.25s ease;
-        }
-
-        .adm-stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        }
-
-        .adm-stat-icone {
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .adm-stat-card.total .adm-stat-icone {
-            background: rgba(43, 122, 140, 0.12);
-            color: #2b7a8c;
-        }
-
-        .adm-stat-card.n1 .adm-stat-icone {
-            background: rgba(245, 158, 11, 0.15);
-            color: #d97706;
-        }
-
-        .adm-stat-card.n2 .adm-stat-icone {
-            background: rgba(234, 88, 12, 0.15);
-            color: #ea580c;
-        }
-
-        .adm-stat-card.n3 .adm-stat-icone {
-            background: rgba(220, 38, 38, 0.15);
-            color: #dc2626;
-        }
-
-        .adm-stat-info .num {
-            font-size: 1.8rem;
-            font-weight: 800;
-            line-height: 1.1;
-            color: #0f172a;
-        }
-
-        .adm-stat-info .label {
-            font-size: 0.74rem;
-            font-weight: 700;
-            color: #64748b;
-            margin-top: 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* SEÇÃO DE CONTEÚDO */
-        .card-adm-secao {
-            background: #ffffff;
-            border-radius: 36px;
-            padding: 28px 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .secao-header {
-            display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            align-items: center;
+            gap: 24px;
             flex-wrap: wrap;
         }
 
-        .secao-header h2 {
-            font-size: 1.05rem;
-            font-weight: 800;
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .header-textos {
+            flex: 1;
+            min-width: 280px;
         }
 
-        .secao-header-icone {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            background: rgba(43, 122, 140, 0.1);
+        .badge-seguranca {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: #d6d6d6;
             color: #2b7a8c;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .badge-seguranca svg {
+            stroke: currentColor;
+            width: 14px;
+            height: 14px;
+        }
+
+        .titulo-pagina {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .desc-pagina {
+            font-size: 0.92rem;
+            color: #555;
+            line-height: 1.55;
+            margin: 0;
+            max-width: 600px;
+        }
+
+        .header-acoes {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .pill-contador-ativo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 16px;
+            border-radius: 20px;
+            background: #d6d6d6;
+            color: #2b7a8c;
+            font-size: 0.82rem;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .ponto-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* GRID DE ESTATÍSTICAS */
+        .stats-grid-dispositivos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
+        }
+
+        .card-stat-box {
+            background: #eaeaea;
+            border-radius: 24px;
+            padding: 22px 24px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-icone-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 18px;
+            background: #d6d6d6;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
+            color: #2b7a8c;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* BOX DE REGRAS */
-        .aviso-regras-banner {
-            background: rgba(43, 122, 140, 0.05);
-            border: 1px solid rgba(43, 122, 140, 0.15);
-            border-radius: 20px;
-            padding: 16px 20px;
+        .stat-icone-box svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+        }
+
+        .card-stat-box.n1 .stat-icone-box {
+            color: #d97706;
+        }
+
+        .card-stat-box.n2 .stat-icone-box {
+            color: #ea580c;
+        }
+
+        .card-stat-box.n3 .stat-icone-box {
+            color: #dc2626;
+        }
+
+        .stat-textos .num {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #1a1a1a;
+            line-height: 1.1;
+        }
+
+        .stat-textos .label {
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
+        /* CARD DE DICAS / REGRAS DE MODERAÇÃO */
+        .card-dicas-seguranca {
+            background: #eaeaea;
+            border-radius: 30px;
+            padding: 26px 35px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
             display: flex;
             align-items: flex-start;
-            gap: 14px;
+            gap: 18px;
         }
 
-        .aviso-regras-icone {
+        .dicas-icone {
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            background: #d6d6d6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #2b7a8c;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             flex-shrink: 0;
-            margin-top: 2px;
         }
 
-        .legenda-niveis-grid {
+        .dicas-icone svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+        }
+
+        .dicas-conteudo {
+            flex: 1;
+        }
+
+        .dicas-titulo {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #2b7a8c;
+            margin: 0 0 8px 0;
+        }
+
+        .dicas-texto-lista {
             display: flex;
             flex-direction: column;
             gap: 6px;
-            font-size: 0.8rem;
-            color: #334155;
-            line-height: 1.45;
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.5;
         }
 
-        .legenda-item {
+        .dicas-regra-item {
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .legenda-dot {
-            width: 9px;
-            height: 9px;
+        .dicas-regra-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             flex-shrink: 0;
         }
 
-        .legenda-dot.n1 { background: #d97706; }
-        .legenda-dot.n2 { background: #ea580c; }
-        .legenda-dot.n3 { background: #dc2626; }
+        .dicas-regra-dot.n1 { background: #d97706; }
+        .dicas-regra-dot.n2 { background: #ea580c; }
+        .dicas-regra-dot.n3 { background: #dc2626; }
 
-        /* CONTROLES / FILTRO E BUSCA */
-        .adm-controles-row {
+        /* SEÇÃO: MEMBROS COM INFRAÇÃO */
+        .secao-titulo-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 14px;
+            margin-top: 10px;
+            margin-bottom: 2px;
+            padding: 0 6px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .secao-subtitulo {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .secao-subtitulo svg {
+            stroke: currentColor;
+            width: 18px;
+            height: 18px;
+            color: #2b7a8c;
+        }
+
+        /* BARRA DE BUSCA E FILTROS */
+        .card-barra-filtros {
+            background: #eaeaea;
+            border-radius: 24px;
+            padding: 16px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
-        .busca-input-wrapper {
+        .busca-input-box {
             position: relative;
             flex: 1;
-            min-width: 240px;
+            min-width: 250px;
         }
 
-        .busca-input-wrapper svg {
+        .busca-input-box svg {
             position: absolute;
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #94a3b8;
+            stroke: #777;
+            width: 16px;
+            height: 16px;
             pointer-events: none;
         }
 
-        .busca-input-wrapper input {
+        .input-busca {
             width: 100%;
-            padding: 11px 16px 11px 44px;
-            border-radius: 999px;
-            border: 1.5px solid rgba(0, 0, 0, 0.08);
-            background: rgba(248, 250, 252, 0.9);
-            font-family: inherit;
-            font-size: 0.86rem;
+            height: 44px;
+            border-radius: 20px;
+            border: 1.5px solid rgba(255, 255, 255, 0.6);
+            background: #d6d6d6;
+            padding: 0 18px 0 44px;
+            font-size: 0.88rem;
             font-weight: 600;
+            font-family: inherit;
             color: #1a1a1a;
             outline: none;
             transition: all 0.2s ease;
         }
 
-        .busca-input-wrapper input:focus {
-            border-color: #2b7a8c;
+        .input-busca:focus {
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(43, 122, 140, 0.15);
+            border-color: #2b7a8c;
+            box-shadow: 0 0 0 3px rgba(43, 122, 140, 0.2);
         }
 
-        .filtros-pills {
+        .filtros-pills-row {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
         }
 
-        .btn-filtro {
+        .btn-filtro-pill {
             padding: 8px 16px;
-            border-radius: 999px;
-            border: 1.5px solid rgba(0, 0, 0, 0.08);
-            background: rgba(255, 255, 255, 0.9);
-            font-family: inherit;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #64748b;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn-filtro.ativo,
-        .btn-filtro:hover {
-            background: rgba(43, 122, 140, 0.1);
-            border-color: rgba(43, 122, 140, 0.3);
-            color: #2b7a8c;
-        }
-
-        /* TABELA DE MODERAÇÃO */
-        .tabela-wrapper {
-            width: 100%;
-            overflow-x: auto;
             border-radius: 20px;
-        }
-
-        .tabela-moderacao {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-        }
-
-        .tabela-moderacao th {
-            text-align: left;
-            padding: 8px 14px;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: #64748b;
-            font-weight: 700;
-            border: none;
-        }
-
-        .tabela-moderacao tbody tr {
-            background: rgba(248, 250, 252, 0.7);
-            border-radius: 16px;
+            background: #d6d6d6;
+            color: #2b7a8c;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            font-size: 0.78rem;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .tabela-moderacao tbody tr:hover {
-            background: rgba(43, 122, 140, 0.05);
+        .btn-filtro-pill:hover,
+        .btn-filtro-pill.ativo {
+            background: #2b7a8c;
+            color: #ffffff;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(43, 122, 140, 0.25);
         }
 
-        .tabela-moderacao td {
-            padding: 14px 14px;
-            font-size: 0.84rem;
-            border: none;
-            vertical-align: middle;
+        /* LISTA DE MEMBROS RESTRITOS */
+        .lista-membros-moderacao {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
-        .tabela-moderacao td:first-child {
-            border-top-left-radius: 16px;
-            border-bottom-left-radius: 16px;
-        }
-
-        .tabela-moderacao td:last-child {
-            border-top-right-radius: 16px;
-            border-bottom-right-radius: 16px;
-        }
-
-        .celula-usuario {
+        .card-membro-item {
+            background: #eaeaea;
+            border-radius: 30px;
+            padding: 24px 35px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: space-between;
+            gap: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .usuario-avatar-circ {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
-            color: #ffffff;
-            font-size: 0.88rem;
-            font-weight: 800;
+        .card-membro-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .membro-esquerda {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .membro-avatar-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 20px;
+            background: #d6d6d6;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(43, 122, 140, 0.2);
+            color: #2b7a8c;
+            font-size: 1.15rem;
+            font-weight: 900;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        .usuario-textos .nome {
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .usuario-textos .email {
-            font-size: 0.75rem;
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .badge-nivel {
-            display: inline-flex;
-            align-items: center;
+        .membro-info-textos {
+            display: flex;
+            flex-direction: column;
             gap: 6px;
-            padding: 5px 12px;
-            border-radius: 999px;
-            font-size: 0.74rem;
-            font-weight: 700;
+            min-width: 0;
+        }
+
+        .membro-topo-nome {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .membro-nome {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #1a1a1a;
             white-space: nowrap;
-        }
-
-        .badge-nivel.n1 {
-            background: rgba(245, 158, 11, 0.15);
-            color: #92400e;
-        }
-
-        .badge-nivel.n2 {
-            background: rgba(234, 88, 12, 0.15);
-            color: #9a3412;
-        }
-
-        .badge-nivel.n3 {
-            background: rgba(220, 38, 38, 0.15);
-            color: #991b1b;
-        }
-
-        .motivo-tooltip {
-            max-width: 240px;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
-            color: #475569;
-            font-size: 0.82rem;
-            font-weight: 500;
-            cursor: pointer;
         }
 
-        .btn-liberar {
-            background: rgba(16, 185, 129, 0.12);
-            color: #047857;
-            border: 1.5px solid rgba(16, 185, 129, 0.3);
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s ease;
-            white-space: nowrap;
+        .badge-nivel-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .badge-nivel-pill.n1 {
+            background: rgba(245, 158, 11, 0.18);
+            color: #b45309;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-nivel-pill.n2 {
+            background: rgba(234, 88, 12, 0.18);
+            color: #c2410c;
+            border: 1px solid rgba(234, 88, 12, 0.3);
+        }
+
+        .badge-nivel-pill.n3 {
+            background: rgba(220, 38, 38, 0.18);
+            color: #b91c1c;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .membro-detalhes-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.84rem;
+            color: #555;
+        }
+
+        .membro-meta-item {
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
-        .btn-liberar:hover {
+        .membro-meta-item svg {
+            width: 14px;
+            height: 14px;
+            stroke: #777;
+            flex-shrink: 0;
+        }
+
+        .membro-motivo-box {
+            font-size: 0.83rem;
+            color: #475569;
+            background: #d6d6d6;
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            max-width: fit-content;
+            cursor: pointer;
+        }
+
+        .membro-direita-acao {
+            flex-shrink: 0;
+        }
+
+        .btn-liberar-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 18px;
+            background: #d6d6d6;
+            color: #047857;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            font-size: 0.86rem;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-liberar-item:hover {
             background: #10b981;
             color: #ffffff;
             border-color: #10b981;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+            transform: scale(1.02);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
         }
 
-        .btn-liberar:disabled {
-            opacity: 0.5;
-            cursor: default;
-            transform: none;
+        .btn-liberar-item svg {
+            stroke: currentColor;
+            width: 16px;
+            height: 16px;
         }
 
-        /* HISTÓRICO */
-        .historico-lista {
+        /* ESTADO VAZIO (SEM MEMBROS RESTRITOS) */
+        .card-estado-vazio {
+            background: #eaeaea;
+            border-radius: 30px;
+            padding: 45px 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .vazio-icone-wrapper {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: #d6d6d6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2b7a8c;
+            margin-bottom: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .vazio-icone-wrapper svg {
+            width: 32px;
+            height: 32px;
+            stroke: currentColor;
+        }
+
+        .vazio-titulo {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        .vazio-desc {
+            font-size: 0.88rem;
+            color: #555;
+            margin: 0;
+            max-width: 480px;
+            line-height: 1.5;
+        }
+
+        /* HISTÓRICO RECENTE */
+        .lista-historico-items {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .hist-item {
+        .card-historico-item {
+            background: #eaeaea;
+            border-radius: 24px;
+            padding: 18px 28px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             display: flex;
-            gap: 16px;
-            padding: 14px 18px;
-            background: rgba(248, 250, 252, 0.85);
-            border-radius: 18px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
             align-items: flex-start;
+            gap: 16px;
             transition: all 0.2s ease;
         }
 
-        .hist-item:hover {
-            background: #ffffff;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-            transform: translateX(2px);
+        .card-historico-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
         }
 
-        .hist-acao-badge {
-            flex-shrink: 0;
+        .hist-acao-tag {
             padding: 5px 12px;
-            border-radius: 999px;
-            font-size: 0.7rem;
+            border-radius: 12px;
+            font-size: 0.72rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
-        .hist-acao-badge.aviso {
-            background: rgba(245, 158, 11, 0.15);
-            color: #92400e;
+        .hist-acao-tag.aviso {
+            background: #d6d6d6;
+            color: #b45309;
+            border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
-        .hist-acao-badge.banimento {
-            background: rgba(220, 38, 38, 0.15);
-            color: #991b1b;
+        .hist-acao-tag.banimento {
+            background: #d6d6d6;
+            color: #b91c1c;
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
-        .hist-acao-badge.liberacao {
-            background: rgba(16, 185, 129, 0.15);
+        .hist-acao-tag.liberacao {
+            background: #d6d6d6;
             color: #047857;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        .hist-info {
+        .hist-corpo {
             flex: 1;
             min-width: 0;
         }
 
-        .hist-usuario {
-            font-weight: 700;
-            font-size: 0.88rem;
-            color: #0f172a;
+        .hist-autor-linha {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #1a1a1a;
         }
 
-        .hist-motivo {
+        .hist-email-suave {
+            font-weight: 500;
+            color: #666;
             font-size: 0.8rem;
+        }
+
+        .hist-motivo-texto {
+            font-size: 0.84rem;
             color: #475569;
             margin-top: 4px;
             line-height: 1.45;
         }
 
-        .hist-data {
-            font-size: 0.74rem;
-            color: #94a3b8;
+        .hist-data-rodape {
+            font-size: 0.76rem;
+            color: #777;
             margin-top: 6px;
-            font-weight: 500;
-        }
-
-        /* ESTADO VAZIO & SPINNER */
-        .vazio-estado {
-            text-align: center;
-            padding: 40px 20px;
-            color: #64748b;
-            font-size: 0.9rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .vazio-icone-box {
-            width: 56px;
-            height: 56px;
-            border-radius: 20px;
-            background: rgba(43, 122, 140, 0.08);
-            color: #2b7a8c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2.5px solid rgba(43, 122, 140, 0.2);
+            width: 22px;
+            height: 22px;
+            border: 2.5px solid rgba(43, 122, 140, 0.25);
             border-top-color: #2b7a8c;
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
@@ -824,275 +881,421 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
             to { transform: rotate(360deg); }
         }
 
-        /* RESPONSIVIDADE */
+        /* SUPORTE A TEMA ESCURO (Acessibilidade) */
+        html.acessibilidade-escuro,
+        body.acessibilidade-escuro {
+            background-color: var(--tema-fundo, #121619) !important;
+            background: var(--tema-fundo, #121619) !important;
+            color: var(--tema-texto, #f1f5f9) !important;
+        }
+
+        body.acessibilidade-escuro .navbar-topo {
+            background: rgba(26, 33, 38, 0.75) !important;
+            border-color: var(--tema-borda, #2f383e) !important;
+        }
+
+        body.acessibilidade-escuro .nav-logo,
+        body.acessibilidade-escuro .nav-links a {
+            color: var(--tema-texto, #f1f5f9) !important;
+        }
+
+        body.acessibilidade-escuro .link-voltar {
+            background: var(--tema-superficie, #1a2227) !important;
+            color: #7dd3fc !important;
+            border-color: rgba(125, 211, 252, 0.25) !important;
+        }
+
+        body.acessibilidade-escuro .card-dispositivos-header,
+        body.acessibilidade-escuro .card-stat-box,
+        body.acessibilidade-escuro .card-dicas-seguranca,
+        body.acessibilidade-escuro .card-barra-filtros,
+        body.acessibilidade-escuro .card-membro-item,
+        body.acessibilidade-escuro .card-estado-vazio,
+        body.acessibilidade-escuro .card-historico-item {
+            background: var(--tema-superficie, #1a2227) !important;
+            border-color: var(--tema-borda, #2f383e) !important;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4) !important;
+            color: var(--tema-texto, #f1f5f9) !important;
+        }
+
+        body.acessibilidade-escuro .titulo-pagina,
+        body.acessibilidade-escuro .stat-textos .num,
+        body.acessibilidade-escuro .membro-nome,
+        body.acessibilidade-escuro .vazio-titulo,
+        body.acessibilidade-escuro .secao-subtitulo,
+        body.acessibilidade-escuro .hist-autor-linha {
+            color: var(--tema-texto, #ffffff) !important;
+        }
+
+        body.acessibilidade-escuro .desc-pagina,
+        body.acessibilidade-escuro .dicas-texto-lista,
+        body.acessibilidade-escuro .vazio-desc,
+        body.acessibilidade-escuro .membro-detalhes-meta {
+            color: var(--tema-texto-secundario, #94a3b8) !important;
+        }
+
+        body.acessibilidade-escuro .badge-seguranca,
+        body.acessibilidade-escuro .pill-contador-ativo,
+        body.acessibilidade-escuro .stat-icone-box,
+        body.acessibilidade-escuro .dicas-icone,
+        body.acessibilidade-escuro .membro-avatar-box,
+        body.acessibilidade-escuro .vazio-icone-wrapper,
+        body.acessibilidade-escuro .btn-filtro-pill {
+            background: rgba(43, 122, 140, 0.2) !important;
+            color: #7dd3fc !important;
+            border-color: rgba(125, 211, 252, 0.2) !important;
+        }
+
+        body.acessibilidade-escuro .input-busca {
+            background: #252d32 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            color: #f1f5f9 !important;
+        }
+
+        /* RESPONSIVIDADE (Mobile) */
         @media (max-width: 768px) {
-            .nav-seta-dropdown {
-                display: block;
+            .nav-container-global {
+                width: 100%;
+                left: 0;
+                transform: none;
+                top: 15px;
             }
+
             .nav-links {
                 display: none;
             }
+
+            .nav-seta-dropdown {
+                display: inline-block;
+                margin-left: 6px;
+                vertical-align: middle;
+            }
+
+            .navbar-topo {
+                padding: 12px 25px;
+                width: calc(100% - 40px);
+                margin: 0 auto;
+                justify-content: space-between;
+                overflow: visible !important;
+            }
+
+            .nav-dropdown-mobile {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(25px);
+                -webkit-backdrop-filter: blur(25px);
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.8);
+                display: none;
+                flex-direction: column;
+                padding: 10px;
+                gap: 5px;
+                margin-top: 10px;
+                z-index: 1000;
+            }
+
+            .nav-dropdown-mobile.ativo {
+                display: flex;
+            }
+
+            .nav-dropdown-mobile a {
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #1a1a1a;
+                font-weight: 600;
+                font-size: 0.9rem;
+                border-radius: 12px;
+                transition: background 0.2s;
+            }
+
+            .nav-dropdown-mobile a:hover,
+            .nav-dropdown-mobile a.ativo {
+                background: rgba(43, 122, 140, 0.1);
+                color: #2b7a8c;
+            }
+
             .conteudo-site {
-                padding: 90px 14px 50px 14px;
+                padding-top: 135px !important;
+                padding-left: 16px !important;
+                padding-right: 16px !important;
             }
-            .caixa-agrupadora {
-                padding: 24px 16px;
-                border-radius: 30px;
+
+            .card-dispositivos-header {
+                padding: 24px 20px;
+                flex-direction: column;
+                align-items: flex-start;
             }
-            .caixa-agrupadora::before {
-                border-radius: 35px;
+
+            .header-acoes {
+                align-items: flex-start;
             }
-            .card-adm-secao {
-                padding: 20px 16px;
-                border-radius: 26px;
+
+            .card-membro-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
             }
-            .adm-header-banner {
-                padding: 18px 16px;
-                border-radius: 24px;
+
+            .membro-direita-acao {
+                width: 100%;
             }
-            .btn-voltar-pill {
+
+            .btn-liberar-item {
                 width: 100%;
                 justify-content: center;
             }
+
+            .card-dicas-seguranca {
+                flex-direction: column;
+                padding: 20px 18px;
+            }
         }
     </style>
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
+    <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
+    <script>
+        (function() {
+            try {
+                var modo = localStorage.getItem('helpfull_tema_modo');
+                var escuro = localStorage.getItem('helpfull_escuro') === 'true';
+                if (modo === 'escuro' || (!modo && escuro) || (modo === 'sistema' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('acessibilidade-escuro');
+                    if (document.body) document.body.classList.add('acessibilidade-escuro');
+                }
+            } catch(e) {}
+        })();
+    </script>
 </head>
 
 <body>
-    <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas sem-mouse" data-mouse="false"></canvas>
 
-    <!-- NAVBAR UNIVERSAL -->
+    <!-- NAVBAR TOPO GLOBAL -->
     <div class="nav-container-global">
-        <nav class="navbar-topo" id="mainNavbar">
-            <div class="nav-top-row">
-                <a href="inicio.php" class="nav-logo">
-                    HELPFULL
-                    <span class="nav-seta-dropdown">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </span>
-                </a>
-                <ul class="nav-links">
-                    <li><a href="Diario.php">Diário</a></li>
-                    <li><a href="Comunidade.php">Comunidade</a></li>
-                    <li><a href="ChatBOT.php">Helpy</a></li>
-                    <li><a href="Atividades.php">Adicionais</a></li>
-                    <li><a href="adm_comunidade.php" class="ativo">Moderação</a></li>
-                </ul>
-                <?php if ($usuarioLogado): ?>
-                    <?php 
-                        $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; 
-                        $temFotoNav = !empty($fotoPerfilDb) && (strlen($fotoPerfilDb) <= 150000);
-                    ?>
-                    <a href="Perfil.php" style="text-decoration: none;">
-                        <div class="perfil-capsula" <?= $temFotoNav ? "style='background-image: url($fotoPerfilDb); background-size: cover; background-position: center;'" : '' ?>>
-                            <?php if (!$temFotoNav): ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
-                            <?php endif; ?>
-                        </div>
-                    </a>
-                <?php else: ?>
-                    <a href="Comeco.php" class="nav-entrar-btn">Entrar</a>
-                <?php endif; ?>
-            </div>
+        <nav class="navbar-topo">
+            <a href="inicio.php" class="nav-logo" id="navLogoBtn">
+                HELPFULL
+                <span class="nav-seta-dropdown">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="Diario.php">Diário</a></li>
+                <li><a href="Comunidade.php">Comunidade</a></li>
+                <li><a href="ChatBOT.php">Helpy</a></li>
+                <li><a href="Atividades.php">Adicionais</a></li>
+            </ul>
+
             <div class="nav-dropdown-mobile" id="navDropdownMobile">
                 <a href="inicio.php">Início</a>
                 <a href="Diario.php">Diário</a>
                 <a href="Comunidade.php">Comunidade</a>
                 <a href="ChatBOT.php">Helpy</a>
                 <a href="Atividades.php">Adicionais</a>
-                <a href="adm_comunidade.php" class="ativo">Painel de Moderação</a>
                 <a href="Perfil.php">Perfil</a>
             </div>
+
+            <a href="Perfil.php" style="text-decoration: none;">
+                <div class="perfil-capsula" <?= !empty($fotoPerfilDb) ? "style='background-image: url($fotoPerfilDb);'" : '' ?> title="Meu Perfil">
+                    <?php if (empty($fotoPerfilDb)): ?>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    <?php endif; ?>
+                </div>
+            </a>
         </nav>
     </div>
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <div class="conteudo-site">
-        <div class="caixa-agrupadora">
+    <main class="conteudo-site">
 
-            <!-- HEADER BANNER -->
-            <div class="adm-header-banner">
-                <div class="adm-header-left">
-                    <div class="adm-header-icone">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
-                    </div>
-                    <div class="adm-header-titulos">
-                        <div class="adm-header-titulo-linha">
-                            <h1>Painel de Moderação</h1>
-                            <span class="badge-adm-pill">Admin</span>
-                        </div>
-                        <p>Gerencie o sistema de advertências, membros suspensos e histórico disciplinar</p>
-                    </div>
-                </div>
-                <a href="Comunidade.php" class="btn-voltar-pill">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    Voltar para Comunidade
-                </a>
-            </div>
-
-            <!-- STATS CARDS -->
-            <div class="adm-stats-grid" id="statsRow">
-                <div class="adm-stat-card total">
-                    <div class="adm-stat-icone">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                    </div>
-                    <div class="adm-stat-info">
-                        <div class="num" id="statTotal">—</div>
-                        <div class="label">Total com infrações</div>
-                    </div>
-                </div>
-
-                <div class="adm-stat-card n1">
-                    <div class="adm-stat-icone">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                    </div>
-                    <div class="adm-stat-info">
-                        <div class="num" id="statN1">—</div>
-                        <div class="label">1º Aviso (1/3)</div>
-                    </div>
-                </div>
-
-                <div class="adm-stat-card n2">
-                    <div class="adm-stat-icone">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                            <line x1="12" y1="9" x2="12" y2="13"></line>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                    </div>
-                    <div class="adm-stat-info">
-                        <div class="num" id="statN2">—</div>
-                        <div class="label">2º Aviso (Alerta 2/3)</div>
-                    </div>
-                </div>
-
-                <div class="adm-stat-card n3">
-                    <div class="adm-stat-icone">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-                        </svg>
-                    </div>
-                    <div class="adm-stat-info">
-                        <div class="num" id="statN3">—</div>
-                        <div class="label">Banidos da Comunidade</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO DE USUÁRIOS COM INFRAÇÃO -->
-            <div class="card-adm-secao">
-                <div class="secao-header">
-                    <h2>
-                        <span class="secao-header-icone">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                            </svg>
-                        </span>
-                        Membros com Infrações / Suspensão
-                    </h2>
-                </div>
-
-                <!-- BOX INFORMATIVO DAS REGRAS -->
-                <div class="aviso-regras-banner">
-                    <div class="aviso-regras-icone">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                    </div>
-                    <div class="legenda-niveis-grid">
-                        <div class="legenda-item">
-                            <div class="legenda-dot n1"></div>
-                            <span><strong>Nível 1 (1º Aviso):</strong> 1º post apagado por infração. Expira automaticamente em 6 meses se não houver novos avisos.</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-dot n2"></div>
-                            <span><strong>Nível 2 (2º Aviso):</strong> Alerta de reincidência. O próximo post apagado causará banimento definitivo da comunidade.</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-dot n3"></div>
-                            <span><strong>Nível 3 (Banido):</strong> 3ª infração atingida. Conta bloqueada para publicações e reações (apenas visualização permitida).</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BARRA DE CONTROLES: BUSCA & FILTROS -->
-                <div class="adm-controles-row">
-                    <div class="busca-input-wrapper">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <input type="text" id="inputBuscaUsuario" placeholder="Buscar por nome ou e-mail..." oninput="filtrarPorBusca()">
-                    </div>
-
-                    <div class="filtros-pills">
-                        <button class="btn-filtro ativo" onclick="filtrarNivel(0, this)">Todos</button>
-                        <button class="btn-filtro" onclick="filtrarNivel(1, this)">1º Aviso</button>
-                        <button class="btn-filtro" onclick="filtrarNivel(2, this)">2º Aviso</button>
-                        <button class="btn-filtro" onclick="filtrarNivel(3, this)">Banidos</button>
-                    </div>
-                </div>
-
-                <!-- TABELA -->
-                <div id="tabelaWrapper" class="tabela-wrapper">
-                    <div class="vazio-estado">
-                        <span class="spinner"></span>
-                        <span>Carregando dados da moderação...</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO DE HISTÓRICO -->
-            <div class="card-adm-secao">
-                <div class="secao-header">
-                    <h2>
-                        <span class="secao-header-icone">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                        </span>
-                        Histórico Recente de Moderações
-                    </h2>
-                </div>
-                <div id="historicoWrapper">
-                    <div class="vazio-estado">
-                        <span class="spinner"></span>
-                        <span>Carregando histórico...</span>
-                    </div>
-                </div>
-            </div>
-
+        <!-- BOTÃO DE VOLTAR À COMUNIDADE -->
+        <div class="topo-voltar-row">
+            <a href="Comunidade.php" class="link-voltar">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Voltar para Comunidade</span>
+            </a>
         </div>
-    </div>
+
+        <!-- CARD HEADER PRINCIPAL -->
+        <section class="card-dispositivos-header">
+            <div class="header-textos">
+                <div class="badge-seguranca">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Painel Administrativo</span>
+                </div>
+                <h1 class="titulo-pagina">Moderação da Comunidade</h1>
+                <p class="desc-pagina">Supervisão de infrações, membros sob aviso disciplinar e histórico de ações de moderação da plataforma HelpFull.</p>
+            </div>
+
+            <div class="header-acoes">
+                <div class="pill-contador-ativo">
+                    <span class="ponto-pulse"></span>
+                    <span id="statContadorPill">Moderação Ativa</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRID DE ESTATÍSTICAS -->
+        <section class="stats-grid-dispositivos">
+            <div class="card-stat-box">
+                <div class="stat-icone-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="stat-textos">
+                    <div class="num" id="statTotal">—</div>
+                    <div class="label">Total sob restrição</div>
+                </div>
+            </div>
+
+            <div class="card-stat-box n1">
+                <div class="stat-icone-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <div class="stat-textos">
+                    <div class="num" id="statN1">—</div>
+                    <div class="label">1º Aviso (1/3)</div>
+                </div>
+            </div>
+
+            <div class="card-stat-box n2">
+                <div class="stat-icone-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="stat-textos">
+                    <div class="num" id="statN2">—</div>
+                    <div class="label">2º Aviso (2/3)</div>
+                </div>
+            </div>
+
+            <div class="card-stat-box n3">
+                <div class="stat-icone-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                    </svg>
+                </div>
+                <div class="stat-textos">
+                    <div class="num" id="statN3">—</div>
+                    <div class="label">Banidos (3/3)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CARD DE DIRETRIZES E REGRAS -->
+        <section class="card-dicas-seguranca">
+            <div class="dicas-icone">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </div>
+            <div class="dicas-conteudo">
+                <h3 class="dicas-titulo">Regras e Sistema de Infrações</h3>
+                <div class="dicas-texto-lista">
+                    <div class="dicas-regra-item">
+                        <div class="dicas-regra-dot n1"></div>
+                        <span><strong>1º Aviso (1/3):</strong> Primeiro post removido por violação. Expira automaticamente após 6 meses sem reincidências.</span>
+                    </div>
+                    <div class="dicas-regra-item">
+                        <div class="dicas-regra-dot n2"></div>
+                        <span><strong>2º Aviso (2/3):</strong> Notificação de alerta reforçado. Mais uma publicação removida causará banimento definitivo.</span>
+                    </div>
+                    <div class="dicas-regra-item">
+                        <div class="dicas-regra-dot n3"></div>
+                        <span><strong>Banimento (3/3):</strong> Suspensão da conta na comunidade. Fica bloqueada a criação de posts e reações.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: USUÁRIOS COM INFRAÇÃO -->
+        <div class="secao-titulo-row">
+            <h2 class="secao-subtitulo">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                <span>Membros com Infrações Registradas</span>
+            </h2>
+        </div>
+
+        <!-- BARRA DE PESQUISA E FILTROS -->
+        <div class="card-barra-filtros">
+            <div class="busca-input-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="inputBusca" class="input-busca" placeholder="Filtrar por nome, e-mail ou motivo..." oninput="filtrarPorBusca()">
+            </div>
+            <div class="filtros-pills-row">
+                <button type="button" class="btn-filtro-pill ativo" onclick="filtrarNivel(0, this)">Todos</button>
+                <button type="button" class="btn-filtro-pill" onclick="filtrarNivel(1, this)">1º Aviso</button>
+                <button type="button" class="btn-filtro-pill" onclick="filtrarNivel(2, this)">2º Aviso</button>
+                <button type="button" class="btn-filtro-pill" onclick="filtrarNivel(3, this)">Banidos</button>
+            </div>
+        </div>
+
+        <!-- LISTA DINÂMICA DE USUÁRIOS -->
+        <section id="containerMembros" class="lista-membros-moderacao">
+            <div class="card-estado-vazio">
+                <div class="spinner"></div>
+                <p class="vazio-desc">Carregando dados da moderação...</p>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: HISTÓRICO RECENTE -->
+        <div class="secao-titulo-row" style="margin-top: 20px;">
+            <h2 class="secao-subtitulo">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Histórico Recente de Moderações</span>
+            </h2>
+        </div>
+
+        <section id="containerHistorico" class="lista-historico-items">
+            <div class="card-estado-vazio">
+                <div class="spinner"></div>
+                <p class="vazio-desc">Carregando histórico disciplinar...</p>
+            </div>
+        </section>
+
+    </main>
 
     <!-- SCRIPTS -->
-    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script>
     let todosUsuarios = [];
@@ -1100,17 +1303,17 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
     let termoBusca = '';
 
     // Menu Mobile Navbar
-    const navLogo = document.querySelector('.nav-logo');
+    const navLogoBtn = document.getElementById('navLogoBtn');
     const navDropdownMobile = document.getElementById('navDropdownMobile');
     const navSeta = document.querySelector('.nav-seta-dropdown');
 
-    if (navLogo && navDropdownMobile) {
-        navLogo.addEventListener('click', function(e) {
+    if (navLogoBtn && navDropdownMobile) {
+        navLogoBtn.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
-                navDropdownMobile.classList.toggle('aberto');
+                navDropdownMobile.classList.toggle('ativo');
                 if (navSeta) {
-                    navSeta.style.transform = navDropdownMobile.classList.contains('aberto') ? 'rotate(180deg)' : 'rotate(0deg)';
+                    navSeta.style.transform = navDropdownMobile.classList.contains('ativo') ? 'rotate(180deg)' : 'rotate(0deg)';
                 }
             }
         });
@@ -1120,34 +1323,48 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
         try {
             const r = await fetch('comunidade_moderacao_proc.php?acao=listar_banidos');
             const d = await r.json();
-            if (!d.success) throw new Error(d.error);
+            if (!d.success) throw new Error(d.error || 'Erro ao consultar');
             todosUsuarios = d.usuarios || [];
             atualizarStats();
             aplicarFiltros();
         } catch (e) {
-            document.getElementById('tabelaWrapper').innerHTML =
-                `<div class="vazio-estado">Erro ao carregar dados: ${escHtml(e.message)}</div>`;
+            document.getElementById('containerMembros').innerHTML = `
+                <div class="card-estado-vazio">
+                    <h3 class="vazio-titulo">Erro ao carregar dados</h3>
+                    <p class="vazio-desc">${escHtml(e.message)}</p>
+                </div>
+            `;
         }
 
         carregarHistorico();
     }
 
     function atualizarStats() {
-        document.getElementById('statTotal').textContent = todosUsuarios.length;
-        document.getElementById('statN1').textContent = todosUsuarios.filter(u => u.nivel == 1).length;
-        document.getElementById('statN2').textContent = todosUsuarios.filter(u => u.nivel == 2).length;
-        document.getElementById('statN3').textContent = todosUsuarios.filter(u => u.nivel == 3).length;
+        const total = todosUsuarios.length;
+        const n1 = todosUsuarios.filter(u => u.nivel == 1).length;
+        const n2 = todosUsuarios.filter(u => u.nivel == 2).length;
+        const n3 = todosUsuarios.filter(u => u.nivel == 3).length;
+
+        document.getElementById('statTotal').textContent = total;
+        document.getElementById('statN1').textContent = n1;
+        document.getElementById('statN2').textContent = n2;
+        document.getElementById('statN3').textContent = n3;
+
+        const pill = document.getElementById('statContadorPill');
+        if (pill) {
+            pill.textContent = total > 0 ? `${total} membro${total > 1 ? 's' : ''} sob restrição` : 'Comunidade sem infrações';
+        }
     }
 
     function filtrarNivel(nivel, btn) {
         filtroAtual = nivel;
-        document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
+        document.querySelectorAll('.btn-filtro-pill').forEach(b => b.classList.remove('ativo'));
         if (btn) btn.classList.add('ativo');
         aplicarFiltros();
     }
 
     function filtrarPorBusca() {
-        termoBusca = (document.getElementById('inputBuscaUsuario').value || '').trim().toLowerCase();
+        termoBusca = (document.getElementById('inputBusca').value || '').trim().toLowerCase();
         aplicarFiltros();
     }
 
@@ -1163,88 +1380,88 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
                 (u.motivo || '').toLowerCase().includes(termoBusca)
             );
         }
-        renderTabela(filtrados);
+        renderMembros(filtrados);
     }
 
-    function renderTabela(usuarios) {
-        const wrapper = document.getElementById('tabelaWrapper');
+    function renderMembros(usuarios) {
+        const container = document.getElementById('containerMembros');
         if (!usuarios.length) {
-            wrapper.innerHTML = `<div class="vazio-estado">
-                <div class="vazio-icone-box">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-                        <path d="m9 12 2 2 4-4"/>
-                    </svg>
+            container.innerHTML = `
+                <div class="card-estado-vazio">
+                    <div class="vazio-icone-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <polyline points="9 12 11 14 15 10"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="vazio-titulo">Nenhum membro encontrado</h3>
+                    <p class="vazio-desc">Não há infrações registradas para o filtro selecionado no momento.</p>
                 </div>
-                <div><strong>Nenhum usuário encontrado nesta listagem!</strong></div>
-                <span style="font-size:0.8rem;color:#94a3b8">A comunidade está saudável e sem infrações ativas.</span>
-            </div>`;
+            `;
             return;
         }
 
-        const labelNivel = { 1: '1º Aviso (1/3)', 2: '2º Aviso (2/3)', 3: 'Banido (3/3)' };
-        const classNivel = { 1: 'n1', 2: 'n2', 3: 'n3' };
+        const labels = { 1: '1º Aviso (1/3)', 2: '2º Aviso (2/3)', 3: 'Banido da Comunidade (3/3)' };
+        const classes = { 1: 'n1', 2: 'n2', 3: 'n3' };
 
-        const rows = usuarios.map(u => {
+        const html = usuarios.map(u => {
             const criado = new Date(u.criado_em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
             const expira = u.expira_avisos_em
                 ? `Expira em: ${new Date(u.expira_avisos_em).toLocaleDateString('pt-BR')}`
-                : (u.nivel < 3 ? 'Aviso ativo' : 'Banimento permanente');
+                : (u.nivel < 3 ? 'Aviso ativo' : 'Permanente');
 
             const inicial = (u.nome || 'U').charAt(0).toUpperCase();
 
-            return `<tr>
-                <td>
-                    <div class="celula-usuario">
-                        <div class="usuario-avatar-circ">${escHtml(inicial)}</div>
-                        <div class="usuario-textos">
-                            <div class="nome">${escHtml(u.nome)}</div>
-                            <div class="email">${escHtml(u.email)}</div>
+            return `
+                <div class="card-membro-item" id="membroCard_${escHtml(u.usuario_id)}">
+                    <div class="membro-esquerda">
+                        <div class="membro-avatar-box">${escHtml(inicial)}</div>
+                        <div class="membro-info-textos">
+                            <div class="membro-topo-nome">
+                                <span class="membro-nome">${escHtml(u.nome)}</span>
+                                <span class="badge-nivel-pill ${classes[u.nivel]}">${labels[u.nivel]}</span>
+                            </div>
+                            <div class="membro-detalhes-meta">
+                                <span class="membro-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                    ${escHtml(u.email)}
+                                </span>
+                                <span class="membro-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    ${criado} (${expira})
+                                </span>
+                                <span class="membro-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20h9"></path>
+                                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                    </svg>
+                                    ${u.total_punicoes ?? 1} ocorrência${(u.total_punicoes ?? 1) > 1 ? 's' : ''}
+                                </span>
+                            </div>
+                            <div class="membro-motivo-box" title="Clique para ver o motivo completo" onclick="alert('Motivo registrado:\\n\\n' + ${JSON.stringify(u.motivo)})">
+                                <strong>Motivo:</strong> ${escHtml((u.motivo || '').substring(0, 100))}${(u.motivo || '').length > 100 ? '...' : ''}
+                            </div>
                         </div>
                     </div>
-                </td>
-                <td>
-                    <span class="badge-nivel ${classNivel[u.nivel]}">
-                        <span class="legenda-dot ${classNivel[u.nivel]}"></span>
-                        ${labelNivel[u.nivel]}
-                    </span>
-                </td>
-                <td>
-                    <div class="motivo-tooltip" title="${escHtml(u.motivo)}" onclick="alert('Motivo completo:\\n\\n' + this.title)">
-                        ${escHtml(u.motivo)}
+                    <div class="membro-direita-acao">
+                        <button type="button" class="btn-liberar-item" onclick="liberarUsuario('${escHtml(u.usuario_id)}', this)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Liberar Membro</span>
+                        </button>
                     </div>
-                </td>
-                <td style="font-size:0.78rem;color:#475569">
-                    <div><strong>${criado}</strong></div>
-                    <div style="font-size:0.73rem;color:#94a3b8">${expira}</div>
-                </td>
-                <td style="font-size:0.85rem;color:#0f172a;text-align:center;font-weight:700">
-                    ${u.total_punicoes ?? 0}
-                </td>
-                <td>
-                    <button class="btn-liberar" onclick="liberarUsuario('${u.usuario_id}', this)">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Liberar
-                    </button>
-                </td>
-            </tr>`;
+                </div>
+            `;
         }).join('');
 
-        wrapper.innerHTML = `<table class="tabela-moderacao">
-            <thead>
-                <tr>
-                    <th>Membro</th>
-                    <th>Nível</th>
-                    <th>Motivo do Registro</th>
-                    <th>Data / Expiração</th>
-                    <th style="text-align:center">Histórico</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-        </table>`;
+        container.innerHTML = html;
     }
 
     async function liberarUsuario(usuarioId, btn) {
@@ -1265,26 +1482,39 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
             } else {
                 alert('Erro ao liberar: ' + (d.error || 'Erro desconhecido'));
                 btn.disabled = false;
-                btn.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline> Liberar';
+                btn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Liberar Membro</span>
+                `;
             }
         } catch (e) {
-            alert('Erro de rede. Tente novamente.');
+            alert('Erro de rede ao tentar liberar usuário.');
             btn.disabled = false;
-            btn.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline> Liberar';
+            btn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Liberar Membro</span>
+            `;
         }
     }
 
     async function carregarHistorico() {
-        const wrapper = document.getElementById('historicoWrapper');
+        const container = document.getElementById('containerHistorico');
         try {
             const r = await fetch('comunidade_moderacao_proc.php?acao=listar_historico');
             const d = await r.json();
             if (!d.success || !d.historico.length) {
-                wrapper.innerHTML = `<div class="vazio-estado">
-                    <span style="opacity:0.7">Nenhuma ação de moderação registrada recentemente.</span>
-                </div>`;
+                container.innerHTML = `
+                    <div class="card-estado-vazio" style="padding: 30px;">
+                        <p class="vazio-desc">Nenhuma ação de moderação registrada no histórico recente.</p>
+                    </div>
+                `;
                 return;
             }
+
             const acaoLabel = {
                 aviso_1: '1º Aviso',
                 aviso_2: '2º Aviso',
@@ -1299,22 +1529,33 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
                 liberacao: 'liberacao',
                 expiracao_automatica: 'liberacao'
             };
+
             const html = d.historico.map(h => {
                 const data = new Date(h.criado_em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
                 const cls = acaoClass[h.acao] || 'aviso';
                 const lbl = acaoLabel[h.acao] || h.acao;
-                return `<div class="hist-item">
-                    <span class="hist-acao-badge ${cls}">${escHtml(lbl)}</span>
-                    <div class="hist-info">
-                        <div class="hist-usuario">${escHtml(h.usuario_nome)} <span style="color:#94a3b8;font-weight:400;font-size:0.8rem">(${escHtml(h.usuario_email)})</span></div>
-                        <div class="hist-motivo">${escHtml(h.motivo || 'Sem observação adicional')}</div>
-                        <div class="hist-data">Registrado em ${data} · Aplicado por ${escHtml(h.admin_nome || 'Sistema HelpFull')}</div>
+
+                return `
+                    <div class="card-historico-item">
+                        <span class="hist-acao-tag ${cls}">${escHtml(lbl)}</span>
+                        <div class="hist-corpo">
+                            <div class="hist-autor-linha">
+                                ${escHtml(h.usuario_nome)} <span class="hist-email-suave">(${escHtml(h.usuario_email)})</span>
+                            </div>
+                            <div class="hist-motivo-texto">${escHtml(h.motivo || 'Sem observação adicional')}</div>
+                            <div class="hist-data-rodape">Registrado em ${data} · Aplicado por ${escHtml(h.admin_nome || 'Sistema')}</div>
+                        </div>
                     </div>
-                </div>`;
+                `;
             }).join('');
-            wrapper.innerHTML = `<div class="historico-lista">${html}</div>`;
+
+            container.innerHTML = html;
         } catch (e) {
-            wrapper.innerHTML = `<div class="vazio-estado">Erro ao carregar histórico.</div>`;
+            container.innerHTML = `
+                <div class="card-estado-vazio" style="padding: 30px;">
+                    <p class="vazio-desc">Erro ao carregar histórico.</p>
+                </div>
+            `;
         }
     }
 
@@ -1326,4 +1567,5 @@ if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
     carregarDados();
     </script>
 </body>
+
 </html>
