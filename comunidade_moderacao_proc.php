@@ -262,7 +262,17 @@ if ($acao === 'aplicar_punicao') {
             } catch (Throwable $e2) {}
         }
 
-        echo json_encode(['success' => true, 'nivel_novo' => $nivel_novo]);
+        // Se post_id foi fornecido, apaga a publicação e suas interações
+        if (!empty($post_id)) {
+            try {
+                $pdo->prepare("DELETE FROM curtidas_comunidade WHERE post_id = ?")->execute([$post_id]);
+                $pdo->prepare("DELETE FROM reacoes_comunidade WHERE post_id = ?")->execute([$post_id]);
+                $pdo->prepare("DELETE FROM notificacoes_sociais WHERE post_id = ?")->execute([$post_id]);
+                $pdo->prepare("DELETE FROM posts_comunidade WHERE id = ?")->execute([$post_id]);
+            } catch (Throwable $eDel) {}
+        }
+
+        echo json_encode(['success' => true, 'nivel_novo' => $nivel_novo, 'post_id' => $post_id]);
     } catch (Throwable $e) {
         echo json_encode(['success' => false, 'error' => $e->getMessage()]);
     }

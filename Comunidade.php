@@ -186,14 +186,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = $pdo->prepare("DELETE FROM posts_comunidade WHERE id = ?");
                     $stmt->execute([$post_id]);
 
-                    // Se admin apagou post de outro usuário, retorna dados para modal de punição
-                    if ($isAdmin && $postInfo['usuario_id'] != $_SESSION['usuario_id'] && isset($_POST['ajax'])) {
-                        echo json_encode([
-                            'success'      => true,
-                            'show_punicao' => true,
-                            'usuario_id'   => $postInfo['usuario_id'],
-                            'post_id'      => $post_id,
-                        ]);
+                    if (isset($_POST['ajax'])) {
+                        echo json_encode(['success' => true]);
+                        exit;
+                    }
+                } else {
+                    if (isset($_POST['ajax'])) {
+                        echo json_encode(['success' => false, 'error' => 'Permissão negada ou publicação não encontrada.']);
                         exit;
                     }
                 }
@@ -1803,7 +1802,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             flex-direction: column;
             align-items: stretch;
             gap: 2px;
-            min-width: 140px;
+            min-width: 220px;
             transform: translateY(-8px) scale(0.95);
             transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
@@ -1826,7 +1825,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             background: transparent;
             font-family: inherit;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.94rem;
             color: #333;
             cursor: pointer;
             transition: 0.2s;
@@ -1845,6 +1844,19 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
 
         .btn-menu-opcao.excluir svg {
             color: #ef7d7d;
+        }
+
+        .btn-menu-opcao.punir {
+            color: #d32f2f;
+        }
+
+        .btn-menu-opcao.punir svg {
+            color: #d32f2f;
+        }
+
+        .btn-menu-opcao.punir:hover {
+            background: rgba(211, 47, 47, 0.08);
+            color: #b71c1c;
         }
 
         .divisor-menu {
@@ -2415,9 +2427,11 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         .modal-punicao-btns {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
         .btn-cancelar-punicao {
             flex: 1;
+            min-width: 100px;
             padding: 12px;
             border-radius: 14px;
             border: 1.5px solid rgba(0,0,0,0.12);
@@ -2432,6 +2446,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         .btn-cancelar-punicao:hover { background: rgba(0,0,0,0.04); }
         .btn-confirmar-punicao {
             flex: 2;
+            min-width: 170px;
             padding: 12px;
             border-radius: 14px;
             border: none;
@@ -2446,7 +2461,8 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         .btn-confirmar-punicao:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(220,38,38,0.3); }
         .btn-confirmar-punicao:disabled { opacity: 0.6; cursor: default; transform: none; }
         .btn-sem-punicao {
-            flex: 1;
+            flex: 1.2;
+            min-width: 140px;
             padding: 12px;
             border-radius: 14px;
             border: 1.5px solid rgba(43,122,140,0.25);
@@ -2547,30 +2563,30 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
     </div>
     <?php endif; ?>
 
-    <?php if ($isAdmin && ($usuarioLogado['email'] ?? '') === $adminEmail): ?>
+    <?php if ($isAdmin || ($usuarioLogado['email'] ?? '') === $adminEmail): ?>
     <!-- MODAL DE PUNIÇÃO (admin) -->
     <div class="overlay-punicao" id="overlayPunicao">
         <div class="modal-punicao">
-            <h3>🛡️ Aplicar Punição ao Usuário</h3>
-            <p class="subtitulo">Post excluído por violação das diretrizes. Deseja aplicar uma punição ao autor?</p>
+            <h3>🛡️ Apagar Post e Aplicar Punição</h3>
+            <p class="subtitulo">A publicação será apagada e uma notificação de advertência será enviada ao autor.</p>
             <input type="hidden" id="punicaoUsuarioId" value="">
             <input type="hidden" id="punicaoPostId" value="">
-            <div class="nivel-info" id="punicaoNivelInfo">Verificando nível de punição...</div>
-            <label>Motivo (mensagem pronta)</label>
+            <div class="nivel-info" id="punicaoNivelInfo">Verificando nível de infração...</div>
+            <label for="punicaoMensagemSelect">Motivo da remoção (mensagem padrão)</label>
             <select id="punicaoMensagemSelect">
-                <option value="">— Selecione uma mensagem —</option>
+                <option value="">— Selecione uma mensagem padrão —</option>
                 <?php foreach ($mensagensProntas as $mp): ?>
                     <option value="<?= $mp['id'] ?>" data-msg="<?= htmlspecialchars($mp['mensagem']) ?>">
                         <?= htmlspecialchars($mp['titulo']) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
-            <label>Observação adicional (opcional)</label>
-            <textarea id="punicaoMotivoCustom" rows="3" placeholder="Adicione detalhes se necessário..."></textarea>
+            <label for="punicaoMotivoCustom">Observação adicional ou justificativa personalizada (opcional)</label>
+            <textarea id="punicaoMotivoCustom" rows="3" placeholder="Adicione detalhes específicos se necessário..."></textarea>
             <div class="modal-punicao-btns">
-                <button class="btn-sem-punicao" onclick="fecharModalPunicao()">Só apagar</button>
-                <button class="btn-cancelar-punicao" onclick="fecharModalPunicao()">Cancelar</button>
-                <button class="btn-confirmar-punicao" id="btnConfirmarPunicao" onclick="confirmarPunicao()">Aplicar Punição</button>
+                <button type="button" class="btn-cancelar-punicao" onclick="fecharModalPunicao()">Cancelar</button>
+                <button type="button" class="btn-sem-punicao" onclick="confirmarExclusaoSemPunicaoModal()">Só apagar (sem punição)</button>
+                <button type="button" class="btn-confirmar-punicao" id="btnConfirmarPunicao" onclick="confirmarPunicao()">Apagar e Aplicar Punição</button>
             </div>
         </div>
     </div>
@@ -2691,7 +2707,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
     <div class="conteudo-site">
         <div class="caixa-agrupadora">
 
-            <?php if ($isAdmin && ($usuarioLogado['email'] ?? '') === $adminEmail): ?>
+            <?php if ($isAdmin || ($usuarioLogado['email'] ?? '') === $adminEmail): ?>
                 <a href="adm_comunidade.php" class="btn-painel-adm">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                     Painel de Moderação
@@ -2790,7 +2806,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 $dataCriacao = date('d/m/Y', strtotime($post['criado_em']));
                 $reacoes = $reacoesPorPost[$post['id']] ?? [];
                 ?>
-                <div class="post-card" data-usuario-id="<?= $post['usuario_id'] ?>">
+                <div class="post-card" id="post-<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" data-usuario-id="<?= $post['usuario_id'] ?>">
                     <div class="post-card-inner">
                         <div style="flex: 1; display: flex; flex-direction: column;">
                             <div class="post-header">
@@ -2825,26 +2841,47 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                                             </svg>
                                         </button>
                                         <div class="menu-opcoes-post">
-                                            <button type="button" class="btn-menu-opcao excluir" onclick="deletarPost('<?= $post['id'] ?>', this)">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2.5">
-                                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                                    <path
-                                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                                    </path>
-                                                </svg>
-                                                Apagar
-                                            </button>
-                                            <?php if ($isAutorPost): ?>
+                                            <?php if ($isAdmin && !$isAutorPost): ?>
+                                                <button type="button" class="btn-menu-opcao excluir" onclick="apagarPostSemPunicao('<?= $post['id'] ?>', this)">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                    </svg>
+                                                    Apagar sem punição
+                                                </button>
                                                 <div class="divisor-menu"></div>
-                                                <button type="button" class="btn-menu-opcao"
-                                                    onclick="abrirEdicaoPost('<?= $post['id'] ?>', this)">
+                                                <button type="button" class="btn-menu-opcao punir" onclick="apagarPostComPunicao('<?= $post['id'] ?>', '<?= $post['usuario_id'] ?>', this)">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                                    </svg>
+                                                    Apagar e aplicar punição
+                                                </button>
+                                            <?php else: ?>
+                                                <button type="button" class="btn-menu-opcao excluir" onclick="deletarPost('<?= $post['id'] ?>', this)">
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="2.5">
-                                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                                        <path
+                                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                        </path>
                                                     </svg>
-                                                    Editar
+                                                    Apagar
                                                 </button>
+                                                <?php if ($isAutorPost): ?>
+                                                    <div class="divisor-menu"></div>
+                                                    <button type="button" class="btn-menu-opcao"
+                                                        onclick="abrirEdicaoPost('<?= $post['id'] ?>', this)">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2.5">
+                                                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                                        </svg>
+                                                        Editar
+                                                    </button>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -3485,40 +3522,63 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             if (!id) return;
             if (!confirm("Tem certeza que deseja apagar esta publicação?")) return;
 
-            // Descobre o usuario_id do post pelo card
-            const card = btn ? btn.closest('.post-card') : null;
-            const autorId = card ? card.getAttribute('data-usuario-id') : null;
+            const card = (btn ? btn.closest('.post-card') : null) || document.getElementById('post-' + id) || document.querySelector(`.post-card[data-post-id="${id}"]`);
 
-            if (IS_ADMIN && autorId) {
-                // Admin apagando post de outro: usa AJAX e abre modal de punição
-                const formData = new FormData();
-                formData.append('acao', 'deletar_post');
-                formData.append('post_id', id);
-                formData.append('ajax', '1');
-                fetch('Comunidade.php', { method: 'POST', body: formData })
-                    .then(r => r.json())
-                    .then(d => {
-                        if (d.success) {
-                            // Remove o card visualmente
-                            if (card) card.style.display = 'none';
-                            if (d.show_punicao) {
-                                abrirModalPunicao(d.usuario_id, d.post_id);
-                            }
+            const formData = new FormData();
+            formData.append('acao', 'deletar_post');
+            formData.append('post_id', id);
+            formData.append('ajax', '1');
+
+            fetch('Comunidade.php', { method: 'POST', body: formData })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success) {
+                        if (card) {
+                            card.style.transition = 'all 0.3s ease';
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(-10px)';
+                            setTimeout(() => card.remove(), 300);
+                        } else {
+                            window.location.reload();
                         }
-                    })
-                    .catch(() => window.location.reload());
-            } else {
-                // Fallback (usuário comum apagando próprio post)
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = 'Comunidade.php';
-                form.innerHTML = `
-                    <input type="hidden" name="acao" value="deletar_post">
-                    <input type="hidden" name="post_id" value="${id}">
-                `;
-                document.body.appendChild(form);
-                form.submit();
-            }
+                    } else {
+                        alert('Erro ao apagar publicação: ' + (d.error || 'Erro desconhecido'));
+                    }
+                })
+                .catch(() => window.location.reload());
+        }
+
+        function apagarPostSemPunicao(id, btn) {
+            if (!id) return;
+            if (!confirm("Deseja apagar esta publicação sem aplicar nenhuma punição ou aviso ao autor?")) return;
+
+            const card = (btn ? btn.closest('.post-card') : null) || document.getElementById('post-' + id) || document.querySelector(`.post-card[data-post-id="${id}"]`);
+
+            const formData = new FormData();
+            formData.append('acao', 'deletar_post');
+            formData.append('post_id', id);
+            formData.append('ajax', '1');
+
+            fetch('Comunidade.php', { method: 'POST', body: formData })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success) {
+                        if (card) {
+                            card.style.transition = 'all 0.3s ease';
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(-10px)';
+                            setTimeout(() => card.remove(), 300);
+                        }
+                    } else {
+                        alert('Erro ao apagar publicação: ' + (d.error || 'Erro desconhecido'));
+                    }
+                })
+                .catch(() => alert('Erro de rede ao apagar publicação.'));
+        }
+
+        function apagarPostComPunicao(postId, usuarioId, btn) {
+            if (!postId || !usuarioId) return;
+            abrirModalPunicao(usuarioId, postId);
         }
 
         function abrirEdicaoPost(id, btn) {
@@ -3623,22 +3683,24 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             document.getElementById('punicaoMensagemSelect').value = '';
             document.getElementById('punicaoMotivoCustom').value = '';
 
+            const info = document.getElementById('punicaoNivelInfo');
+            if (info) info.innerHTML = 'Verificando histórico do autor...';
+
             // Busca nível atual do usuário para exibir info
             fetch('comunidade_moderacao_proc.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: 'acao=status_usuario_alvo&usuario_id=' + encodeURIComponent(usuarioId)
             }).then(r => r.json()).then(d => {
-                const info = document.getElementById('punicaoNivelInfo');
                 const labels = {
-                    0: 'Este usuário não possui infrações registradas. Ao confirmar, ele receberá o <strong>1° Aviso (1/3)</strong> com a justificativa.',
-                    1: 'Este usuário já possui 1 aviso. Ao confirmar, receberá o <strong>2° Aviso (2/3)</strong> alertando que mais um post excluído causará o <strong>banimento da comunidade</strong>.',
-                    2: 'Este usuário já possui 2 avisos (2/3). Ao confirmar, esta será a 3ª infração e o usuário será <strong>BANIDO DA COMUNIDADE (3/3)</strong> (ficará proibido de postar e interagir).',
-                    3: 'Este usuário já está <strong>banido da comunidade</strong>.'
+                    0: 'O autor não possui infrações registradas. Ao confirmar, o post será apagado e ele receberá o <strong>1° Aviso (1/3)</strong>.',
+                    1: 'O autor já possui 1 aviso. Ao confirmar, o post será apagado e ele receberá o <strong>2° Aviso (2/3)</strong> com alerta de banimento no próximo.',
+                    2: 'O autor já possui 2 avisos (2/3). Ao confirmar, o post será apagado e o usuário será <strong>BANIDO DA COMUNIDADE (3/3)</strong> (ficará proibido de postar e interagir).',
+                    3: 'O autor já está <strong>banido da comunidade</strong>. Ao confirmar, a publicação será apagada.'
                 };
-                info.innerHTML = labels[d.nivel] || labels[0];
+                if (info) info.innerHTML = labels[d.nivel] || labels[0];
             }).catch(() => {
-                document.getElementById('punicaoNivelInfo').innerHTML = 'Primeiro aviso será aplicado.';
+                if (info) info.innerHTML = 'Ao confirmar, o post será apagado e uma advertência será registrada.';
             });
 
             overlay.classList.add('ativo');
@@ -3649,6 +3711,16 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             if (overlay) overlay.classList.remove('ativo');
         }
 
+        function confirmarExclusaoSemPunicaoModal() {
+            const postId = document.getElementById('punicaoPostId').value;
+            if (!postId) {
+                fecharModalPunicao();
+                return;
+            }
+            fecharModalPunicao();
+            apagarPostSemPunicao(postId, null);
+        }
+
         async function confirmarPunicao() {
             const btn = document.getElementById('btnConfirmarPunicao');
             const usuarioId = document.getElementById('punicaoUsuarioId').value;
@@ -3657,12 +3729,12 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             const motivoCustom = document.getElementById('punicaoMotivoCustom').value;
 
             if (!mensagemId && !motivoCustom.trim()) {
-                alert('Selecione uma mensagem pronta ou digite o motivo da exclusão.');
+                alert('Selecione uma mensagem pronta ou digite o motivo da remoção/punição.');
                 return;
             }
 
             btn.disabled = true;
-            btn.textContent = 'Aplicando...';
+            btn.textContent = 'Apagando e aplicando...';
 
             try {
                 const fd = new FormData();
@@ -3675,12 +3747,20 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 const d = await r.json();
 
                 if (d.success) {
+                    const card = document.getElementById('post-' + postId) || document.querySelector(`.post-card[data-post-id="${postId}"]`);
+                    if (card) {
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(-10px)';
+                        setTimeout(() => card.remove(), 300);
+                    }
+
                     const nomes = { 
-                        1: '1° Aviso aplicado com sucesso (1/3).', 
-                        2: '2° Aviso aplicado (2/3) com alerta de banimento no próximo.', 
-                        3: 'Usuário BANIDO da comunidade (3/3). Proibido de postar e interagir.' 
+                        1: 'Publicação apagada e 1° Aviso aplicado com sucesso (1/3).', 
+                        2: 'Publicação apagada e 2° Aviso aplicado (2/3) com alerta de banimento no próximo.', 
+                        3: 'Publicação apagada e autor BANIDO da comunidade (3/3).' 
                     };
-                    alert(nomes[d.nivel_novo] || 'Punição aplicada com sucesso.');
+                    alert(nomes[d.nivel_novo] || 'Publicação apagada e punição aplicada com sucesso.');
                     fecharModalPunicao();
                 } else {
                     alert('Erro: ' + (d.error || 'Erro desconhecido'));
@@ -3689,7 +3769,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 alert('Erro de rede ao aplicar punição.');
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Aplicar Punição';
+                btn.textContent = 'Apagar e Aplicar Punição';
             }
         }
     </script>
