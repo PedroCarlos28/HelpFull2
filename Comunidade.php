@@ -3,6 +3,48 @@ require_once 'conexao.php';
 
 $usuarioLogado = obterUsuarioLogado($pdo);
 $isAdmin = (bool)($usuarioLogado['is_admin'] ?? false);
+$adminEmail = 'contatohelpfull@gmail.com';
+
+// ── Nível de punição do usuário atual na Comunidade ──────────────
+$nivelPunicaoUsuario = 0; // 0=livre, 1=aviso, 2=sem interação, 3=banido
+$motivoPunicao = '';
+if (!empty($usuarioLogado['id'])) {
+    try {
+        // Expira avisos automáticos de nível 1 e 2 (6 meses)
+        $pdo->prepare("
+            DELETE FROM moderacao_comunidade
+            WHERE nivel < 3 AND expira_avisos_em IS NOT NULL AND expira_avisos_em <= NOW()
+        ")->execute();
+
+        $stmtPun = $pdo->prepare("SELECT nivel, motivo FROM moderacao_comunidade WHERE usuario_id = ?");
+        $stmtPun->execute([$usuarioLogado['id']]);
+        $punicao = $stmtPun->fetch();
+        if ($punicao) {
+            $nivelPunicaoUsuario = (int)$punicao['nivel'];
+            $motivoPunicao = $punicao['motivo'];
+        }
+    } catch (Throwable $e) {}
+}
+
+// ── Regras aceitas? ───────────────────────────────────────────────
+$usuarioAceitouRegras = false;
+if (!empty($usuarioLogado['id'])) {
+    try {
+        $stmtRegras = $pdo->prepare("SELECT aceito_em FROM comunidade_regras_aceitas WHERE usuario_id = ?");
+        $stmtRegras->execute([$usuarioLogado['id']]);
+        $usuarioAceitouRegras = (bool)$stmtRegras->fetch();
+    } catch (Throwable $e) {}
+}
+
+// ── Mensagens prontas para admin (ao excluir post) ────────────────
+$mensagensProntas = [];
+if ($isAdmin) {
+    try {
+        $stmtMsgP = $pdo->prepare("SELECT id, titulo, mensagem FROM moderacao_mensagens_prontas WHERE ativo = TRUE ORDER BY id");
+        $stmtMsgP->execute();
+        $mensagensProntas = $stmtMsgP->fetchAll();
+    } catch (Throwable $e) {}
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_SESSION['usuario_id'])) {
@@ -10,6 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     if (isset($_POST['acao']) && $_POST['acao'] === 'criar_post') {
+        // Bloqueia se usuário estiver banido da comunidade (nível 3)
+        if ($nivelPunicaoUsuario >= 3 && !$isAdmin) {
+            if (isset($_POST['ajax'])) {
+                echo json_encode(['success' => false, 'error' => 'Sua conta está banida da comunidade e não pode publicar.']);
+                exit;
+            }
+            header("Location: Comunidade.php");
+            exit;
+        }
         $conteudo = $_POST['conteudo'] ?? '';
         $tagImpacto = $_POST['tag_impacto'] ?? 'Bom';
         $capaUrl = $_POST['capa_url'] ?? '';
@@ -34,6 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     if (isset($_POST['acao']) && $_POST['acao'] === 'reagir') {
+        // Bloqueia se usuário estiver banido da comunidade (nível 3)
+        if ($nivelPunicaoUsuario >= 3 && !$isAdmin) {
+            header("Location: Comunidade.php");
+            exit;
+        }
         $post_id = $_POST['post_id'];
         $tipo_reacao = $_POST['tipo_reacao'];
 
@@ -59,6 +115,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_POST['acao']) && $_POST['acao'] === 'curtir') {
+        // Bloqueia se usuário estiver banido da comunidade (nível 3)
+        if ($nivelPunicaoUsuario >= 3 && !$isAdmin) {
+            if (isset($_POST['ajax'])) {
+                echo json_encode(['success' => false, 'error' => 'Conta banida de interagir na comunidade.']);
+                exit;
+            }
+            header("Location: Comunidade.php");
+            exit;
+        }
         $post_id = $_POST['post_id'];
         $usuario_id = $usuarioLogado['id'];
         try {
@@ -120,9 +185,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $stmt = $pdo->prepare("DELETE FROM posts_comunidade WHERE id = ?");
                     $stmt->execute([$post_id]);
+
+                    // Se admin apagou post de outro usuário, retorna dados para modal de punição
+                    if ($isAdmin && $postInfo['usuario_id'] != $_SESSION['usuario_id'] && isset($_POST['ajax'])) {
+                        echo json_encode([
+                            'success'      => true,
+                            'show_punicao' => true,
+                            'usuario_id'   => $postInfo['usuario_id'],
+                            'post_id'      => $post_id,
+                        ]);
+                        exit;
+                    }
                 }
             } catch (PDOException $e) {
+                if (isset($_POST['ajax'])) {
+                    echo json_encode(['success' => false]);
+                    exit;
+                }
             }
+        }
+        if (isset($_POST['ajax'])) {
+            echo json_encode(['success' => true, 'show_punicao' => false]);
+            exit;
         }
         header("Location: Comunidade.php");
         exit;
@@ -2095,6 +2179,305 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             .grid-resultados { grid-template-columns: 1fr; }
             .post-texto { font-size: 1.05rem; }
         }
+
+        /* ══ POPUP REGRAS DA COMUNIDADE ══════════════════════════════ */
+        .overlay-regras {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99990;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeInOverlay 0.3s ease;
+        }
+        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+        .popup-regras {
+            position: relative;
+            background: rgba(255,255,255,0.97);
+            border-radius: 24px;
+            padding: 36px 32px 28px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: slideUpPopup 0.4s cubic-bezier(0.16,1,0.3,1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .btn-fechar-popup-x {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            width: 34px;
+            height: 34px;
+            background: rgba(0,0,0,0.05);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            line-height: 1;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-fechar-popup-x:hover {
+            background: rgba(239, 68, 68, 0.15);
+            color: #dc2626;
+            transform: scale(1.08);
+        }
+        @keyframes slideUpPopup { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .popup-regras .pr-titulo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .popup-regras .pr-titulo .pr-icone {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, rgba(43,122,140,0.15), rgba(43,122,140,0.05));
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .popup-regras .pr-subtitulo {
+            font-size: 0.82rem;
+            color: #64748b;
+            margin-bottom: 22px;
+            font-weight: 500;
+            padding-left: 54px;
+        }
+        .regra-item {
+            display: flex;
+            gap: 14px;
+            padding: 13px 16px;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            background: rgba(248,250,252,0.9);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .regra-num {
+            width: 26px; height: 26px;
+            background: rgba(43,122,140,0.12);
+            color: #2b7a8c;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .regra-texto strong {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+        .regra-texto p {
+            font-size: 0.78rem;
+            color: #475569;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .aviso-consequencias {
+            background: rgba(234,179,8,0.1);
+            border: 1px solid rgba(234,179,8,0.3);
+            border-radius: 14px;
+            padding: 13px 16px;
+            margin: 16px 0;
+            font-size: 0.8rem;
+            color: #78350f;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .aviso-consequencias svg { flex-shrink: 0; margin-top: 1px; }
+        .btn-aceitar-regras {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2b7a8c, #1d5f70);
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(43,122,140,0.3);
+        }
+        .btn-aceitar-regras:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(43,122,140,0.35); }
+
+        /* ══ BANNER DE PUNIÇÃO (para o usuário punido) ══════════════ */
+        .banner-punicao {
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            border: 1px solid;
+        }
+        .banner-punicao.nivel-1 {
+            background: rgba(234,179,8,0.1);
+            border-color: rgba(234,179,8,0.35);
+            color: #78350f;
+        }
+        .banner-punicao.nivel-2 {
+            background: rgba(234,88,12,0.1);
+            border-color: rgba(234,88,12,0.35);
+            color: #7c2d12;
+        }
+        .banner-punicao.nivel-3 {
+            background: rgba(220,38,38,0.1);
+            border-color: rgba(220,38,38,0.35);
+            color: #7f1d1d;
+        }
+        .banner-punicao svg { flex-shrink: 0; margin-top: 2px; }
+        .banner-punicao strong { display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 3px; }
+        .banner-punicao p { font-size: 0.8rem; margin: 0; line-height: 1.5; }
+
+        /* ══ MODAL DE PUNIÇÃO (para o admin) ════════════════════════ */
+        .overlay-punicao {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            z-index: 99995;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .overlay-punicao.ativo { display: flex; }
+        .modal-punicao {
+            background: rgba(255,255,255,0.98);
+            border-radius: 24px;
+            padding: 32px 28px 24px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        .modal-punicao h3 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .modal-punicao p.subtitulo {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        .modal-punicao label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .modal-punicao select, .modal-punicao textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(0,0,0,0.1);
+            font-family: inherit;
+            font-size: 0.85rem;
+            color: #1a1a1a;
+            background: rgba(248,250,252,0.9);
+            margin-bottom: 14px;
+            transition: 0.2s;
+            resize: vertical;
+        }
+        .modal-punicao select:focus, .modal-punicao textarea:focus {
+            border-color: rgba(43,122,140,0.4);
+            outline: none;
+            background: #fff;
+        }
+        .modal-punicao .nivel-info {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 18px;
+            padding: 10px 14px;
+            background: rgba(43,122,140,0.07);
+            border-radius: 10px;
+            line-height: 1.6;
+        }
+        .modal-punicao-btns {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-cancelar-punicao {
+            flex: 1;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(0,0,0,0.12);
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #64748b;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-cancelar-punicao:hover { background: rgba(0,0,0,0.04); }
+        .btn-confirmar-punicao {
+            flex: 2;
+            padding: 12px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-confirmar-punicao:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(220,38,38,0.3); }
+        .btn-confirmar-punicao:disabled { opacity: 0.6; cursor: default; transform: none; }
+        .btn-sem-punicao {
+            flex: 1;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(43,122,140,0.25);
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #2b7a8c;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-sem-punicao:hover { background: rgba(43,122,140,0.07); }
+
+        /* ══ BOTÃO ADM PAINEL ══════════════════════════════════════ */
+        .btn-painel-adm {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-painel-adm:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+        .btn-painel-adm svg { flex-shrink: 0; }
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
@@ -2102,6 +2485,96 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
 </head>
 
 <body>
+
+    <?php if (!$usuarioAceitouRegras && !empty($usuarioLogado)): ?>
+    <!-- POPUP DE REGRAS DA COMUNIDADE -->
+    <div class="overlay-regras" id="overlayRegras">
+        <div class="popup-regras" role="dialog" aria-modal="true" aria-labelledby="tituloRegras">
+            <button type="button" class="btn-fechar-popup-x" onclick="aceitarRegras()" aria-label="Fechar popup">&times;</button>
+            <div class="pr-titulo" id="tituloRegras">
+                <span class="pr-icone">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7a8c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </span>
+                Diretrizes da Comunidade HelpFull 🌿
+            </div>
+            <p class="pr-subtitulo">Este é um espaço seguro e acolhedor. Antes de interagir, leia nossas regras:</p>
+
+            <div class="regra-item">
+                <div class="regra-num">1</div>
+                <div class="regra-texto">
+                    <strong>Respeito e Empatia</strong>
+                    <p>Trate todos com acolhimento e consideração. Ataques, termos ofensivos, preconceito ou agressividade não são tolerados.</p>
+                </div>
+            </div>
+            <div class="regra-item">
+                <div class="regra-num">2</div>
+                <div class="regra-texto">
+                    <strong>Sem Spam ou Divulgação Comercial</strong>
+                    <p>Não publique links suspeitos, vendas, publicidade ou mensagens repetidas em massa.</p>
+                </div>
+            </div>
+            <div class="regra-item">
+                <div class="regra-num">3</div>
+                <div class="regra-texto">
+                    <strong>Conteúdo Sensível e Gatilhos</strong>
+                    <p>Ao compartilhar experiências difíceis, utilize as tags de sensibilidade adequadas para proteger os demais membros.</p>
+                </div>
+            </div>
+            <div class="regra-item">
+                <div class="regra-num">4</div>
+                <div class="regra-texto">
+                    <strong>Não Compartilhe Desinformação</strong>
+                    <p>Evite disseminar conselhos médicos não verificados, notícias falsas ou informações prejudiciais à saúde.</p>
+                </div>
+            </div>
+            <div class="regra-item">
+                <div class="regra-num">5</div>
+                <div class="regra-texto">
+                    <strong>Privacidade e Sigilo</strong>
+                    <p>Nunca exponha dados pessoais, fotos privadas ou conversas de terceiros sem autorização.</p>
+                </div>
+            </div>
+
+            <div class="aviso-consequencias">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                <div><strong>Sistema de Moderação:</strong> A cada post removido por descumprir as regras, o usuário recebe um aviso (1º e 2º avisos). No 3º post removido, a conta é <strong>banida da comunidade</strong> (somente poderá visualizar posts, sem poder postar ou interagir). Os avisos de nível 1 e 2 expiram em 6 meses caso nenhuma nova infração ocorra.</div>
+            </div>
+
+            <button type="button" class="btn-aceitar-regras" onclick="aceitarRegras()">
+                Entendi as regras e fechar ✓
+            </button>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($isAdmin && ($usuarioLogado['email'] ?? '') === $adminEmail): ?>
+    <!-- MODAL DE PUNIÇÃO (admin) -->
+    <div class="overlay-punicao" id="overlayPunicao">
+        <div class="modal-punicao">
+            <h3>🛡️ Aplicar Punição ao Usuário</h3>
+            <p class="subtitulo">Post excluído por violação das diretrizes. Deseja aplicar uma punição ao autor?</p>
+            <input type="hidden" id="punicaoUsuarioId" value="">
+            <input type="hidden" id="punicaoPostId" value="">
+            <div class="nivel-info" id="punicaoNivelInfo">Verificando nível de punição...</div>
+            <label>Motivo (mensagem pronta)</label>
+            <select id="punicaoMensagemSelect">
+                <option value="">— Selecione uma mensagem —</option>
+                <?php foreach ($mensagensProntas as $mp): ?>
+                    <option value="<?= $mp['id'] ?>" data-msg="<?= htmlspecialchars($mp['mensagem']) ?>">
+                        <?= htmlspecialchars($mp['titulo']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <label>Observação adicional (opcional)</label>
+            <textarea id="punicaoMotivoCustom" rows="3" placeholder="Adicione detalhes se necessário..."></textarea>
+            <div class="modal-punicao-btns">
+                <button class="btn-sem-punicao" onclick="fecharModalPunicao()">Só apagar</button>
+                <button class="btn-cancelar-punicao" onclick="fecharModalPunicao()">Cancelar</button>
+                <button class="btn-confirmar-punicao" id="btnConfirmarPunicao" onclick="confirmarPunicao()">Aplicar Punição</button>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas sem-mouse" data-mouse="false"></canvas>
 
@@ -2151,6 +2624,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 <a href="javascript:void(0)" class="btn-abrir-acessibilidade" onclick="abrirPainelAcessibilidadeMobile(event);">Configurações</a>
             </div>
 
+            <?php if ($nivelPunicaoUsuario < 3 || $isAdmin): ?>
             <div class="nav-publish-row">
                 <form method="POST" id="formCriarPostNav">
                     <input type="hidden" name="acao" value="criar_post">
@@ -2190,6 +2664,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                     </div>
                 </form>
             </div>
+            <?php endif; ?>
         </nav>
 
         <button class="btn-notificacao-separado" id="btnNotificacaoDetached" onclick="togglePainelNotificacoes()">
@@ -2215,7 +2690,46 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
 
     <div class="conteudo-site">
         <div class="caixa-agrupadora">
+
+            <?php if ($isAdmin && ($usuarioLogado['email'] ?? '') === $adminEmail): ?>
+                <a href="adm_comunidade.php" class="btn-painel-adm">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Painel de Moderação
+                </a>
+            <?php endif; ?>
+
+            <?php if ($nivelPunicaoUsuario >= 1 && !$isAdmin): ?>
+                <?php
+                    $labelPunicao = [
+                        1 => [
+                            'titulo' => '⚠️ Primeiro Aviso da Comunidade (1/3)',
+                            'msg' => 'Um post seu foi removido por descumprir as diretrizes da comunidade. Você ainda pode postar e interagir normalmente, mas atente-se às regras.'
+                        ],
+                        2 => [
+                            'titulo' => '⚠️ Segundo Aviso da Comunidade (2/3) — Atenção!',
+                            'msg' => 'Você recebeu o 2º aviso. Atenção: mais UM post que sair das diretrizes da comunidade resultará no banimento da sua conta, ficando proibida de postar e interagir com outros posts. Este aviso expira em 6 meses se nenhuma nova infração for cometida.'
+                        ],
+                        3 => [
+                            'titulo' => '🔴 Conta Banida da Comunidade (3/3)',
+                            'msg' => 'Sua conta atingiu o limite de 3 infrações e foi banida da comunidade. Você pode somente visualizar as publicações, sem permissão para publicar ou interagir.'
+                        ],
+                    ];
+                    $lp = $labelPunicao[$nivelPunicaoUsuario];
+                ?>
+                <div class="banner-punicao nivel-<?= $nivelPunicaoUsuario ?>">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <div style="flex: 1;">
+                        <strong><?= $lp['titulo'] ?></strong>
+                        <p><?= $lp['msg'] ?></p>
+                        <?php if (!empty($motivoPunicao)): ?>
+                            <p style="margin-top: 6px; padding: 6px 10px; background: rgba(0,0,0,0.04); border-radius: 8px; font-size: 0.82rem;"><strong>Motivo informado:</strong> <?= nl2br(htmlspecialchars($motivoPunicao)) ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div id="cardPlaceholder">
+                <?php if ($nivelPunicaoUsuario < 3 || $isAdmin): ?>
                 <form method="POST" class="card-postagem" id="formCriarPost">
                     <input type="hidden" name="acao" value="criar_post">
                     <input type="hidden" name="tag_impacto" id="inputTagImpacto" value="Bom">
@@ -2254,6 +2768,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                     <div id="preview-capa-container"
                         style="display: none; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div>
                 </form>
+                <?php endif; ?>
             </div>
 
             <?php if ($usuarioNovoSemPosts): ?>
@@ -2275,7 +2790,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 $dataCriacao = date('d/m/Y', strtotime($post['criado_em']));
                 $reacoes = $reacoesPorPost[$post['id']] ?? [];
                 ?>
-                <div class="post-card">
+                <div class="post-card" data-usuario-id="<?= $post['usuario_id'] ?>">
                     <div class="post-card-inner">
                         <div style="flex: 1; display: flex; flex-direction: column;">
                             <div class="post-header">
@@ -2310,7 +2825,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                                             </svg>
                                         </button>
                                         <div class="menu-opcoes-post">
-                                            <button type="button" class="btn-menu-opcao excluir" onclick="deletarPost('<?= $post['id'] ?>')">
+                                            <button type="button" class="btn-menu-opcao excluir" onclick="deletarPost('<?= $post['id'] ?>', this)">
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2.5">
                                                     <polyline points="3 6 5 6 21 6"></polyline>
@@ -2392,12 +2907,16 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                             </form>
 
                             <div class="post-botoes-row">
+                                <?php if ($nivelPunicaoUsuario < 3 || $isAdmin): ?>
                                 <button type="button"
                                     class="pill-cinza <?php echo ($post['usuario_curtiu'] > 0) ? 'curtido' : ''; ?>"
                                     onclick="curtirPost(this, '<?php echo $post['id']; ?>')">
                                     ♡ <?php echo $post['total_curtidas'] ?? 0; ?>
                                 </button>
                                 <button class="pill-cinza" onclick="toggleMenu('menuReacoes_<?= $post['id'] ?>')">💬 Reagir</button>
+                                <?php else: ?>
+                                <span class="pill-cinza" style="opacity:0.45;cursor:default;" title="Conta banida da comunidade">♡ <?php echo $post['total_curtidas'] ?? 0; ?></span>
+                                <?php endif; ?>
                                 <?php if ($post['tag_impacto'] === 'Ruim'): ?>
                                     <div class="pill-avaliacao ruim">Ruim</div>
                                 <?php else: ?>
@@ -2960,9 +3479,36 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
 
         if (mainForm) mainForm.addEventListener('submit', handlePostSubmission);
         if (navForm) navForm.addEventListener('submit', handlePostSubmission);
-        function deletarPost(id) {
+        const IS_ADMIN = <?= $isAdmin ? 'true' : 'false' ?>;
+
+        function deletarPost(id, btn) {
             if (!id) return;
-            if (confirm("Tem certeza que deseja apagar esta publicação?")) {
+            if (!confirm("Tem certeza que deseja apagar esta publicação?")) return;
+
+            // Descobre o usuario_id do post pelo card
+            const card = btn ? btn.closest('.post-card') : null;
+            const autorId = card ? card.getAttribute('data-usuario-id') : null;
+
+            if (IS_ADMIN && autorId) {
+                // Admin apagando post de outro: usa AJAX e abre modal de punição
+                const formData = new FormData();
+                formData.append('acao', 'deletar_post');
+                formData.append('post_id', id);
+                formData.append('ajax', '1');
+                fetch('Comunidade.php', { method: 'POST', body: formData })
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d.success) {
+                            // Remove o card visualmente
+                            if (card) card.style.display = 'none';
+                            if (d.show_punicao) {
+                                abrirModalPunicao(d.usuario_id, d.post_id);
+                            }
+                        }
+                    })
+                    .catch(() => window.location.reload());
+            } else {
+                // Fallback (usuário comum apagando próprio post)
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = 'Comunidade.php';
@@ -3047,6 +3593,105 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 document.querySelectorAll('.menu-opcoes-post.ativo, .reacoes-expandidas.ativo').forEach(m => m.classList.remove('ativo'));
             }
         });
+
+        /* ══════════════════════════════════════════════════════════
+           SISTEMA DE MODERAÇÃO — JS
+           ══════════════════════════════════════════════════════════ */
+
+        // ── Aceitar regras da comunidade ──────────────────────────
+        function aceitarRegras() {
+            const overlay = document.getElementById('overlayRegras');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.25s ease';
+                setTimeout(() => overlay.remove(), 260);
+            }
+            try { localStorage.setItem('helpfull_regras_comunidade_vistas', 'true'); } catch (e) {}
+            fetch('comunidade_moderacao_proc.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'acao=aceitar_regras'
+            }).catch(() => {});
+        }
+
+        // ── Modal de punição (admin) ─────────────────────────────
+        function abrirModalPunicao(usuarioId, postId) {
+            const overlay = document.getElementById('overlayPunicao');
+            if (!overlay) return;
+            document.getElementById('punicaoUsuarioId').value = usuarioId;
+            document.getElementById('punicaoPostId').value = postId || '';
+            document.getElementById('punicaoMensagemSelect').value = '';
+            document.getElementById('punicaoMotivoCustom').value = '';
+
+            // Busca nível atual do usuário para exibir info
+            fetch('comunidade_moderacao_proc.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'acao=status_usuario_alvo&usuario_id=' + encodeURIComponent(usuarioId)
+            }).then(r => r.json()).then(d => {
+                const info = document.getElementById('punicaoNivelInfo');
+                const labels = {
+                    0: 'Este usuário não possui infrações registradas. Ao confirmar, ele receberá o <strong>1° Aviso (1/3)</strong> com a justificativa.',
+                    1: 'Este usuário já possui 1 aviso. Ao confirmar, receberá o <strong>2° Aviso (2/3)</strong> alertando que mais um post excluído causará o <strong>banimento da comunidade</strong>.',
+                    2: 'Este usuário já possui 2 avisos (2/3). Ao confirmar, esta será a 3ª infração e o usuário será <strong>BANIDO DA COMUNIDADE (3/3)</strong> (ficará proibido de postar e interagir).',
+                    3: 'Este usuário já está <strong>banido da comunidade</strong>.'
+                };
+                info.innerHTML = labels[d.nivel] || labels[0];
+            }).catch(() => {
+                document.getElementById('punicaoNivelInfo').innerHTML = 'Primeiro aviso será aplicado.';
+            });
+
+            overlay.classList.add('ativo');
+        }
+
+        function fecharModalPunicao() {
+            const overlay = document.getElementById('overlayPunicao');
+            if (overlay) overlay.classList.remove('ativo');
+        }
+
+        async function confirmarPunicao() {
+            const btn = document.getElementById('btnConfirmarPunicao');
+            const usuarioId = document.getElementById('punicaoUsuarioId').value;
+            const postId = document.getElementById('punicaoPostId').value;
+            const mensagemId = document.getElementById('punicaoMensagemSelect').value;
+            const motivoCustom = document.getElementById('punicaoMotivoCustom').value;
+
+            if (!mensagemId && !motivoCustom.trim()) {
+                alert('Selecione uma mensagem pronta ou digite o motivo da exclusão.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Aplicando...';
+
+            try {
+                const fd = new FormData();
+                fd.append('acao', 'aplicar_punicao');
+                fd.append('usuario_id', usuarioId);
+                fd.append('post_id', postId);
+                fd.append('mensagem_id', mensagemId);
+                fd.append('motivo_custom', motivoCustom);
+                const r = await fetch('comunidade_moderacao_proc.php', { method: 'POST', body: fd });
+                const d = await r.json();
+
+                if (d.success) {
+                    const nomes = { 
+                        1: '1° Aviso aplicado com sucesso (1/3).', 
+                        2: '2° Aviso aplicado (2/3) com alerta de banimento no próximo.', 
+                        3: 'Usuário BANIDO da comunidade (3/3). Proibido de postar e interagir.' 
+                    };
+                    alert(nomes[d.nivel_novo] || 'Punição aplicada com sucesso.');
+                    fecharModalPunicao();
+                } else {
+                    alert('Erro: ' + (d.error || 'Erro desconhecido'));
+                }
+            } catch (e) {
+                alert('Erro de rede ao aplicar punição.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Aplicar Punição';
+            }
+        }
     </script>
     <script src="assets/fundo-animado.js?v=20260925-v4"></script>
     <script src="notificacoes.js?v=20261112-notif-v4" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261112-notif-v4';document.body.appendChild(s);}"></script>
