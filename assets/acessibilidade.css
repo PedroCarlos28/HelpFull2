@@ -1528,7 +1528,7 @@ body.acessibilidade-escuro .conta-input {
     border-color: var(--tema-borda) !important;
 }
 
-body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ):not(.btn-fechar-painel):not(.btn-fechar-bv):not(.attachment-remove):not(.busca-btn):not(.btn-buscar-api):not(.btn-painel-fechar):not(.btn-onboarding-concluir):not(.painel-tema-btn):not(.onboarding-tema-btn),
+body.acessibilidade-escuro button:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.btn-salvar):not(.btn-editar):not(.btn-trocar-foto):not(.btn-novo-chat):not(.btn-enviar-chat):not(.btn-iniciar):not(.btn-emocao):not(.pill-cinza):not(.pill-toggle-bom):not(.pill-avaliacao):not(.tag-reacao-btn):not(.btn-filtro):not(.tag-solida):not(.btn-acao-circ):not(.btn-fechar-painel):not(.btn-fechar-bv):not(.attachment-remove):not(.busca-btn):not(.btn-buscar-api):not(.btn-painel-fechar):not(.btn-onboarding-concluir):not(.painel-tema-btn):not(.onboarding-tema-btn):not(.tema-cor-bolinha),
 body.acessibilidade-escuro .item-notificacao,
 body.acessibilidade-escuro .btn-limpar-pill,
 body.acessibilidade-escuro .toast-btn {
@@ -1554,7 +1554,7 @@ body.acessibilidade-escuro .nenhuma-notif-texto {
     color: #94a3b8 !important;
 }
 
-body.acessibilidade-escuro button:hover:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.busca-btn):not(.btn-buscar-api):not(.btn-painel-fechar):not(.btn-onboarding-concluir):not(.painel-tema-btn):not(.onboarding-tema-btn),
+body.acessibilidade-escuro button:hover:not(.btn-acessibilidade):not(.tab-btn):not(.carrossel-dot):not(.busca-btn):not(.btn-buscar-api):not(.btn-painel-fechar):not(.btn-onboarding-concluir):not(.painel-tema-btn):not(.onboarding-tema-btn):not(.tema-cor-bolinha),
 body.acessibilidade-escuro .acessibilidade-opcao:hover,
 body.acessibilidade-escuro .acessibilidade-opcao.ativo {
     background: #34434a !important;
@@ -3525,6 +3525,8 @@ body.acessibilidade-escuro .tema-cor-grupo-rotulo {
 
 body.acessibilidade-escuro .tema-cor-bolinha {
     border-color: rgba(255, 255, 255, 0.25) !important;
+    background: var(--cor-dot) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
 }
 
 body.acessibilidade-escuro .tema-cor-bolinha.ativo {
