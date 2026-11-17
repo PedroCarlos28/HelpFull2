@@ -344,10 +344,10 @@ try {
             z-index: 2100;
             width: 100%;
             max-width: 1000px;
-            margin: 18px auto 0 auto;
+            margin: 14px auto 0 auto;
             background: #ffffff;
-            border-radius: 28px;
-            padding: 24px 30px;
+            border-radius: 24px;
+            padding: 18px 24px;
             box-shadow: 0 16px 45px rgba(0, 0, 0, 0.16);
             border: 1.5px solid rgba(43, 122, 140, 0.22);
             box-sizing: border-box;
@@ -1078,18 +1078,18 @@ try {
         /* ESPECÍFICOS PERFIL */
         .card-perfil {
             background: #eaeaea;
-            border-radius: 30px;
-            padding: 35px;
+            border-radius: 26px;
+            padding: 24px 28px;
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
             width: 100%;
         }
 
         .titulo-secao {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 900;
             color: #333;
-            margin-bottom: 25px;
+            margin-bottom: 18px;
             letter-spacing: -0.5px;
         }
 
@@ -1097,7 +1097,7 @@ try {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 40px;
+            gap: 28px;
         }
 
         .conta-form {
@@ -1329,7 +1329,7 @@ try {
         .stats-container {
             display: flex;
             justify-content: space-between;
-            padding: 25px 15px;
+            padding: 16px 15px;
         }
 
         .stat-item {
@@ -3030,13 +3030,13 @@ try {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            padding: 24px 35px;
+            gap: 16px;
+            padding: 18px 26px;
             background: #eaeaea;
-            border-radius: 30px;
+            border-radius: 24px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 

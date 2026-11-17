@@ -1035,6 +1035,246 @@
         }
     }
 
+    // ========================================================
+    // GERENCIAMENTO DA COR TEMA DO SITE (EXPANSÍVEL E COMPACTO)
+    // ========================================================
+    window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
+        'padrao': { id: 'padrao', nome: 'Azul HelpFull (Original)', tipo: 'claro', corBolinha: '#2b7a8c', primaria: '#2b7a8c', hover: '#236878', ativa: '#1a5360', clara: '#38a3b8', suave: 'rgba(43, 122, 140, 0.12)', borda: 'rgba(43, 122, 140, 0.28)', sombra: 'rgba(43, 122, 140, 0.35)' },
+        'celeste': { id: 'celeste', nome: 'Azul Celeste', tipo: 'claro', corBolinha: '#0284c7', primaria: '#0284c7', hover: '#0369a1', ativa: '#075985', clara: '#38bdf8', suave: 'rgba(2, 132, 199, 0.12)', borda: 'rgba(2, 132, 199, 0.28)', sombra: 'rgba(2, 132, 199, 0.35)' },
+        'esmeralda': { id: 'esmeralda', nome: 'Verde Esmeralda', tipo: 'claro', corBolinha: '#10b981', primaria: '#059669', hover: '#047857', ativa: '#065f46', clara: '#34d399', suave: 'rgba(16, 185, 129, 0.12)', borda: 'rgba(16, 185, 129, 0.28)', sombra: 'rgba(16, 185, 129, 0.35)' },
+        'menta': { id: 'menta', nome: 'Verde Menta', tipo: 'claro', corBolinha: '#22c55e', primaria: '#16a34a', hover: '#15803d', ativa: '#166534', clara: '#4ade80', suave: 'rgba(34, 197, 94, 0.12)', borda: 'rgba(34, 197, 94, 0.28)', sombra: 'rgba(34, 197, 94, 0.35)' },
+        'violeta': { id: 'violeta', nome: 'Roxo Violeta', tipo: 'claro', corBolinha: '#8b5cf6', primaria: '#7c3aed', hover: '#6d28d9', ativa: '#5b21b6', clara: '#a78bfa', suave: 'rgba(139, 92, 246, 0.12)', borda: 'rgba(139, 92, 246, 0.28)', sombra: 'rgba(139, 92, 246, 0.35)' },
+        'magenta': { id: 'magenta', nome: 'Rosa Floral', tipo: 'claro', corBolinha: '#ec4899', primaria: '#db2777', hover: '#be185d', ativa: '#9d174d', clara: '#f472b6', suave: 'rgba(236, 72, 153, 0.12)', borda: 'rgba(236, 72, 153, 0.28)', sombra: 'rgba(236, 72, 153, 0.35)' },
+        'coral': { id: 'coral', nome: 'Coral Radiante', tipo: 'claro', corBolinha: '#f97316', primaria: '#ea580c', hover: '#c2410c', ativa: '#9a3412', clara: '#fb923c', suave: 'rgba(249, 115, 22, 0.12)', borda: 'rgba(249, 115, 22, 0.28)', sombra: 'rgba(249, 115, 22, 0.35)' },
+        'ambar': { id: 'ambar', nome: 'Âmbar Dourado', tipo: 'claro', corBolinha: '#f59e0b', primaria: '#d97706', hover: '#b45309', ativa: '#92400e', clara: '#fbbf24', suave: 'rgba(245, 158, 11, 0.12)', borda: 'rgba(245, 158, 11, 0.28)', sombra: 'rgba(245, 158, 11, 0.35)' },
+        'safira': { id: 'safira', nome: 'Azul Meia-Noite', tipo: 'escuro', corBolinha: '#1e3a8a', primaria: '#1e3a8a', hover: '#172554', ativa: '#0f172a', clara: '#3b82f6', suave: 'rgba(30, 58, 138, 0.16)', borda: 'rgba(30, 58, 138, 0.32)', sombra: 'rgba(30, 58, 138, 0.40)' },
+        'floresta': { id: 'floresta', nome: 'Verde Floresta', tipo: 'escuro', corBolinha: '#14532d', primaria: '#14532d', hover: '#052e16', ativa: '#022c22', clara: '#16a34a', suave: 'rgba(20, 83, 45, 0.16)', borda: 'rgba(20, 83, 45, 0.32)', sombra: 'rgba(20, 83, 45, 0.40)' },
+        'indigo': { id: 'indigo', nome: 'Índigo Profundo', tipo: 'escuro', corBolinha: '#312e81', primaria: '#312e81', hover: '#1e1b4b', ativa: '#18181b', clara: '#6366f1', suave: 'rgba(49, 46, 129, 0.16)', borda: 'rgba(49, 46, 129, 0.32)', sombra: 'rgba(49, 46, 129, 0.40)' },
+        'ameixa': { id: 'ameixa', nome: 'Ameixa Imperial', tipo: 'escuro', corBolinha: '#581c87', primaria: '#581c87', hover: '#3b0764', ativa: '#2e1065', clara: '#9333ea', suave: 'rgba(88, 28, 135, 0.16)', borda: 'rgba(88, 28, 135, 0.32)', sombra: 'rgba(88, 28, 135, 0.40)' },
+        'vinho': { id: 'vinho', nome: 'Vinho Carmim', tipo: 'escuro', corBolinha: '#881337', primaria: '#881337', hover: '#4c0519', ativa: '#3b0713', clara: '#e11d48', suave: 'rgba(136, 19, 55, 0.16)', borda: 'rgba(136, 19, 55, 0.32)', sombra: 'rgba(136, 19, 55, 0.40)' },
+        'petroleo': { id: 'petroleo', nome: 'Petróleo Oceânico', tipo: 'escuro', corBolinha: '#134e4a', primaria: '#134e4a', hover: '#042f2e', ativa: '#022c22', clara: '#0d9488', suave: 'rgba(19, 78, 74, 0.16)', borda: 'rgba(19, 78, 74, 0.32)', sombra: 'rgba(19, 78, 74, 0.40)' },
+        'grafite': { id: 'grafite', nome: 'Grafite Chumbo', tipo: 'escuro', corBolinha: '#334155', primaria: '#334155', hover: '#1e293b', ativa: '#0f172a', clara: '#64748b', suave: 'rgba(51, 65, 85, 0.16)', borda: 'rgba(51, 65, 85, 0.32)', sombra: 'rgba(51, 65, 85, 0.40)' },
+        'bronze': { id: 'bronze', nome: 'Bronze Terroso', tipo: 'escuro', corBolinha: '#78350f', primaria: '#78350f', hover: '#451a03', ativa: '#291102', clara: '#b45309', suave: 'rgba(120, 53, 15, 0.16)', borda: 'rgba(120, 53, 15, 0.32)', sombra: 'rgba(120, 53, 15, 0.40)' }
+    };
+
+    function gerarBolinhasCoresHTML(tipo) {
+        if (!window.HelpFullPaletaCores) return '';
+        var chaves = Object.keys(window.HelpFullPaletaCores);
+        var html = '';
+        chaves.forEach(function (k) {
+            var item = window.HelpFullPaletaCores[k];
+            if (item.tipo === tipo) {
+                html += '<button type="button" class="tema-cor-bolinha" data-cor-id="' + item.id + '" data-preview-key="tema-cor" title="' + item.nome + '" style="--cor-dot: ' + item.corBolinha + ';" onclick="selecionarCorTema(\'' + item.id + '\')" aria-label="Cor ' + item.nome + '"><span class="tema-cor-check">✓</span></button>';
+            }
+        });
+        return html;
+    }
+
+    function atualizarBolinhasTemaVisual(corId) {
+        corId = corId || (window.localStorage ? (window.localStorage.getItem('helpfull_cor_tema') || 'padrao') : 'padrao');
+        var p = window.HelpFullPaletaCores ? (window.HelpFullPaletaCores[corId] || window.HelpFullPaletaCores['padrao']) : null;
+        var nomeCor = p ? p.nome : 'Azul HelpFull (Original)';
+        var hexCor = p ? p.corBolinha : '#2b7a8c';
+
+        document.querySelectorAll('.tema-cor-amostra-ativa').forEach(function (el) {
+            el.style.backgroundColor = hexCor;
+        });
+        document.querySelectorAll('.tema-cor-nome-ativa').forEach(function (el) {
+            el.textContent = nomeCor;
+        });
+
+        document.querySelectorAll('.tema-cor-bolinha').forEach(function (btn) {
+            var id = btn.getAttribute('data-cor-id');
+            btn.classList.toggle('ativo', id === corId);
+        });
+    }
+
+    function toggleExpandirCoresTema() {
+        var cards = document.querySelectorAll('.tema-cor-trigger-card');
+        cards.forEach(function (card) {
+            card.classList.toggle('expandido');
+            var btn = card.querySelector('.tema-cor-trigger-btn');
+            if (btn) {
+                var expandido = card.classList.contains('expandido');
+                btn.setAttribute('aria-expanded', expandido ? 'true' : 'false');
+            }
+        });
+    }
+
+    function aplicarCorTema(corId) {
+        corId = corId || (window.localStorage ? (window.localStorage.getItem('helpfull_cor_tema') || 'padrao') : 'padrao');
+        var styleEl = document.getElementById('helpfull-tema-dinamico-css');
+
+        if (corId === 'padrao' || !window.HelpFullPaletaCores || !window.HelpFullPaletaCores[corId]) {
+            if (window.localStorage) window.localStorage.setItem('helpfull_cor_tema', 'padrao');
+            if (styleEl) styleEl.textContent = '';
+            atualizarBolinhasTemaVisual('padrao');
+            window.dispatchEvent(new CustomEvent('helpfull-cor-tema-mudou', { detail: { corId: 'padrao' } }));
+            return;
+        }
+
+        if (window.localStorage) window.localStorage.setItem('helpfull_cor_tema', corId);
+        var p = window.HelpFullPaletaCores[corId];
+
+        if (!styleEl) {
+            styleEl = document.createElement('style');
+            styleEl.id = 'helpfull-tema-dinamico-css';
+            document.head.appendChild(styleEl);
+        }
+
+        styleEl.textContent = `
+            :root, body {
+                --cor-tema-primaria: ${p.primaria} !important;
+                --cor-tema-hover: ${p.hover} !important;
+                --cor-tema-ativa: ${p.ativa} !important;
+                --cor-tema-clara: ${p.clara} !important;
+                --cor-tema-suave: ${p.suave} !important;
+                --cor-tema-borda: ${p.borda} !important;
+                --cor-tema-sombra: ${p.sombra} !important;
+            }
+
+            /* Botões principais (exceto reações, emoções e perigo) */
+            .btn-primario, .btn-salvar, .btn-editar, .btn-novo-chat, .btn-enviar-chat,
+            .btn-painel-fechar, .btn-onboarding-concluir, .btn-gerenciar-dispositivos,
+            .btn-historico, .btn-buscar-api, .busca-btn, .btn-limpar-pill,
+            .acessibilidade-btn-tour, .btn-iniciar, .btn-comentar, .btn-publicar,
+            button.btn-primario, button.btn-salvar, button.btn-editar, button.btn-painel-fechar, button.btn-onboarding-concluir,
+            a.btn-gerenciar-dispositivos, a.btn-primario {
+                background: linear-gradient(135deg, ${p.primaria}, ${p.hover}) !important;
+                border-color: ${p.primaria} !important;
+                color: #ffffff !important;
+                box-shadow: 0 4px 14px ${p.sombra} !important;
+            }
+
+            .btn-primario:hover, .btn-salvar:hover, .btn-editar:hover, .btn-novo-chat:hover,
+            .btn-enviar-chat:hover, .btn-painel-fechar:hover, .btn-onboarding-concluir:hover,
+            .btn-gerenciar-dispositivos:hover, .btn-historico:hover, .btn-buscar-api:hover,
+            .busca-btn:hover, .btn-limpar-pill:hover, .acessibilidade-btn-tour:hover,
+            button.btn-primario:hover, button.btn-salvar:hover, button.btn-editar:hover, button.btn-painel-fechar:hover, button.btn-onboarding-concluir:hover,
+            a.btn-gerenciar-dispositivos:hover, a.btn-primario:hover {
+                background: linear-gradient(135deg, ${p.hover}, ${p.ativa}) !important;
+                border-color: ${p.hover} !important;
+                box-shadow: 0 6px 18px ${p.sombra} !important;
+                filter: brightness(1.08) !important;
+            }
+
+            /* Abas e botões de filtro */
+            .tab-btn.ativo, .filtro-btn.ativo, .btn-filtro.ativo,
+            .onboarding-tema-btn.ativo, .painel-tema-btn.ativo,
+            body.acessibilidade-escuro .onboarding-tema-btn.ativo,
+            body.acessibilidade-escuro .painel-tema-btn.ativo,
+            body.acessibilidade-escuro button.painel-tema-btn.ativo,
+            body.acessibilidade-escuro button.onboarding-tema-btn.ativo {
+                background: linear-gradient(135deg, ${p.primaria}, ${p.hover}) !important;
+                border-color: ${p.primaria} !important;
+                color: #ffffff !important;
+                box-shadow: 0 4px 14px ${p.sombra} !important;
+            }
+
+            /* Switches e opções ativas */
+            .onboarding-opt-row.ativo .onboarding-switch,
+            .painel-opt-row.ativo .onboarding-switch,
+            .switch.ativo {
+                background: ${p.primaria} !important;
+                border-color: ${p.primaria} !important;
+            }
+
+            .onboarding-opt-row.ativo,
+            .painel-opt-row.ativo {
+                border-color: ${p.primaria} !important;
+                background: ${p.suave} !important;
+            }
+
+            /* Badges, tags e contadores */
+            .onboarding-badge, .notificacoes-icone-tag, .disp-preview-tag,
+            .balao-2fa-badge, .onboarding-preview-tag, .tag-solida.azul,
+            .tema-cor-badge-expandir {
+                background: ${p.suave} !important;
+                color: ${p.primaria} !important;
+                border-color: ${p.borda} !important;
+            }
+
+            #contadorDiariosDia, .graficos-badge {
+                background: ${p.primaria} !important;
+                color: #ffffff !important;
+            }
+
+            .balao-2fa-status-pill.ativo {
+                background: ${p.suave} !important;
+                color: ${p.primaria} !important;
+            }
+
+            .meta-item.concluida .meta-checkbox {
+                background: ${p.primaria} !important;
+                border-color: ${p.primaria} !important;
+            }
+
+            .cal-dia.selecionado, .cal-dia.hoje {
+                background: ${p.primaria} !important;
+                color: #ffffff !important;
+            }
+
+            .onboarding-dica-compacta {
+                background: ${p.suave} !important;
+                border-color: ${p.borda} !important;
+            }
+            .onboarding-dica-compacta svg {
+                color: ${p.primaria} !important;
+            }
+
+            .onboarding-opt-row:hover,
+            .painel-opt-row:hover,
+            .onboarding-tema-btn:hover,
+            .painel-tema-btn:hover,
+            .tema-cor-trigger-card:hover {
+                border-color: ${p.primaria} !important;
+            }
+
+            input:focus, textarea:focus, select:focus {
+                border-color: ${p.primaria} !important;
+                box-shadow: 0 0 0 3px ${p.suave} !important;
+            }
+
+            /* Modo Escuro */
+            body.acessibilidade-escuro .onboarding-opt-row.ativo,
+            body.acessibilidade-escuro .painel-opt-row.ativo {
+                background: ${p.suave} !important;
+                border-color: ${p.clara} !important;
+            }
+
+            body.acessibilidade-escuro .btn-painel-fechar,
+            body.acessibilidade-escuro button.btn-painel-fechar,
+            body.acessibilidade-escuro .btn-onboarding-concluir,
+            body.acessibilidade-escuro button.btn-onboarding-concluir {
+                background: ${p.primaria} !important;
+                border: none !important;
+                box-shadow: 0 6px 18px ${p.sombra} !important;
+            }
+
+            body.acessibilidade-escuro .btn-painel-fechar:hover,
+            body.acessibilidade-escuro button.btn-painel-fechar:hover,
+            body.acessibilidade-escuro .btn-onboarding-concluir:hover,
+            body.acessibilidade-escuro button.btn-onboarding-concluir:hover {
+                background: ${p.hover} !important;
+            }
+
+            body.acessibilidade-escuro .onboarding-preview-icone-badge,
+            body.acessibilidade-escuro .onboarding-preview-dica {
+                color: ${p.clara} !important;
+            }
+        `;
+
+        atualizarBolinhasTemaVisual(corId);
+        window.dispatchEvent(new CustomEvent('helpfull-cor-tema-mudou', { detail: { corId: corId, paleta: p } }));
+    }
+
+    window.aplicarCorTema = aplicarCorTema;
+    window.selecionarCorTema = function(corId) { aplicarCorTema(corId); };
+    window.restaurarCorTemaPadrao = function() { aplicarCorTema('padrao'); };
+    window.toggleExpandirCoresTema = toggleExpandirCoresTema;
+    window.atualizarBolinhasTemaVisual = atualizarBolinhasTemaVisual;
+    window.gerarBolinhasCoresHTML = gerarBolinhasCoresHTML;
+
     function aplicarAcessibilidade() {
         var modoTema = localStorage.getItem('helpfull_tema_modo') || 'manual';
         if (modoTema === 'sistema') {
@@ -1063,6 +1303,7 @@
 
         var lb = localStorage.getItem('helpfull_libras') === 'true';
         gerenciarVLibras(lb);
+        aplicarCorTema();
         sincronizarEstadoVisualPainel();
     }
 
@@ -1114,6 +1355,13 @@
                 titulo: 'Idioma da Plataforma',
                 desc: 'Alterne todo o conteúdo, menus e metas diárias entre Português e Inglês com tradução instantânea.',
                 dica: 'A tradução é aplicada imediatamente em todas as páginas.'
+            },
+            'tema-cor': {
+                icone: svgIconesPainel.palette,
+                tag: 'COR DO TEMA',
+                titulo: 'Cor do Tema do Site',
+                desc: 'Altere as cores principais, botões, ícones, elementos ativos e o fundo animado de todo o site com a sua cor favorita!',
+                dica: 'Você pode escolher tons claros ou escuros e voltar ao padrão azul a qualquer momento.'
             },
             'tema-claro': {
                 icone: svgIconesPainel.sun,
@@ -1186,6 +1434,13 @@
                 titulo: 'Platform Language',
                 desc: 'Switch interface, menus, and daily goals between Portuguese and English with instant translation.',
                 dica: 'Changes are applied immediately across all sections.'
+            },
+            'tema-cor': {
+                icone: svgIconesPainel.palette,
+                tag: 'COR DO TEMA',
+                titulo: 'Cor do Tema do Site',
+                desc: 'Altere as cores principais, botões, ícones, elementos ativos e o fundo animado de todo o site com a sua cor favorita!',
+                dica: 'Você pode escolher tons claros ou escuros e voltar ao padrão azul a qualquer momento.'
             },
             'tema-claro': {
                 icone: svgIconesPainel.sun,
@@ -1281,6 +1536,7 @@
         if (si) {
             si.value = localStorage.getItem('helpfull_idioma') || 'pt-BR';
         }
+        atualizarBolinhasTemaVisual();
     }
 
     function criarPainelAcessibilidade() {
@@ -1342,6 +1598,47 @@
                                         <span class="tema-icone">${svgIconesPainel.device}</span>
                                         <span class="tema-nome">Do Dispositivo</span>
                                     </button>
+                                </div>
+                            </div>
+
+                            <div class="tema-cor-secao">
+                                <div class="onboarding-secao-titulo" id="secaoCorTemaTitulo">
+                                    ${svgIconesPainel.palette}
+                                    <span>Cor do Tema do Site</span>
+                                </div>
+                                <div class="tema-cor-trigger-card" id="temaCorCard">
+                                    <button type="button" class="tema-cor-trigger-btn" onclick="toggleExpandirCoresTema()" aria-expanded="false" title="Clique para expandir e escolher cores">
+                                        <div class="tema-cor-trigger-info">
+                                            <span class="tema-cor-amostra-ativa" id="temaCorAmostraAtiva"></span>
+                                            <span class="tema-cor-nome-ativa" id="temaCorNomeAtiva">Azul HelpFull (Original)</span>
+                                        </div>
+                                        <div class="tema-cor-trigger-acoes">
+                                            <span class="tema-cor-badge-expandir">Escolher cor</span>
+                                            <svg class="tema-cor-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </div>
+                                    </button>
+                                    <div class="tema-cor-expansao" id="temaCorExpansao">
+                                        <div class="tema-cor-grupo">
+                                            <div class="tema-cor-grupo-rotulo">☀️ Tons Claros & Vivos</div>
+                                            <div class="tema-cor-bolinhas-grid" id="gridCoresClarasPainel">
+                                                ${gerarBolinhasCoresHTML('claro')}
+                                            </div>
+                                        </div>
+                                        <div class="tema-cor-grupo">
+                                            <div class="tema-cor-grupo-rotulo">🌙 Tons Escuros & Intensos</div>
+                                            <div class="tema-cor-bolinhas-grid" id="gridCoresEscurasPainel">
+                                                ${gerarBolinhasCoresHTML('escuro')}
+                                            </div>
+                                        </div>
+                                        <div class="tema-cor-rodape">
+                                            <button type="button" class="btn-restaurar-cor-padrao" onclick="restaurarCorTemaPadrao()">
+                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                                                <span>Voltar ao padrão</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1621,6 +1918,7 @@
                 localStorage.removeItem('helpfull_tema_modo');
                 localStorage.setItem('helpfull_idioma', 'pt-BR');
                 if (si) si.value = 'pt-BR';
+                restaurarCorTemaPadrao();
                 aplicarAcessibilidade();
                 aplicarIdioma();
                 sincronizarEstadoVisualPainel();

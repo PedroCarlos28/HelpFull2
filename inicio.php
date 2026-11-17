@@ -1784,6 +1784,61 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                         </div>
                     </div>
 
+                    <div class="tema-cor-secao">
+                        <div class="onboarding-secao-titulo">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+                            <span>Cor do Tema do Site</span>
+                        </div>
+                        <div class="tema-cor-trigger-card" id="temaCorCardOnboarding">
+                            <button type="button" class="tema-cor-trigger-btn" onclick="toggleExpandirCoresTema()" aria-expanded="false" title="Clique para expandir e escolher cores">
+                                <div class="tema-cor-trigger-info">
+                                    <span class="tema-cor-amostra-ativa" id="temaCorAmostraAtivaOnboarding"></span>
+                                    <span class="tema-cor-nome-ativa" id="temaCorNomeAtivaOnboarding">Azul HelpFull (Original)</span>
+                                </div>
+                                <div class="tema-cor-trigger-acoes">
+                                    <span class="tema-cor-badge-expandir">Escolher cor</span>
+                                    <svg class="tema-cor-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="tema-cor-expansao" id="temaCorExpansaoOnboarding">
+                                <div class="tema-cor-grupo">
+                                    <div class="tema-cor-grupo-rotulo">☀️ Tons Claros & Vivos</div>
+                                    <div class="tema-cor-bolinhas-grid" id="gridCoresClarasOnboarding">
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="padrao" data-preview-key="tema-cor" title="Azul HelpFull (Original)" style="--cor-dot: #2b7a8c;" onclick="selecionarCorTema('padrao')" aria-label="Cor Azul HelpFull"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="celeste" data-preview-key="tema-cor" title="Azul Celeste" style="--cor-dot: #0284c7;" onclick="selecionarCorTema('celeste')" aria-label="Cor Azul Celeste"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="esmeralda" data-preview-key="tema-cor" title="Verde Esmeralda" style="--cor-dot: #10b981;" onclick="selecionarCorTema('esmeralda')" aria-label="Cor Verde Esmeralda"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="menta" data-preview-key="tema-cor" title="Verde Menta" style="--cor-dot: #22c55e;" onclick="selecionarCorTema('menta')" aria-label="Cor Verde Menta"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="violeta" data-preview-key="tema-cor" title="Roxo Violeta" style="--cor-dot: #8b5cf6;" onclick="selecionarCorTema('violeta')" aria-label="Cor Roxo Violeta"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="magenta" data-preview-key="tema-cor" title="Rosa Floral" style="--cor-dot: #ec4899;" onclick="selecionarCorTema('magenta')" aria-label="Cor Rosa Floral"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="coral" data-preview-key="tema-cor" title="Coral Radiante" style="--cor-dot: #f97316;" onclick="selecionarCorTema('coral')" aria-label="Cor Coral Radiante"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="ambar" data-preview-key="tema-cor" title="Âmbar Dourado" style="--cor-dot: #f59e0b;" onclick="selecionarCorTema('ambar')" aria-label="Cor Âmbar Dourado"><span class="tema-cor-check">✓</span></button>
+                                    </div>
+                                </div>
+                                <div class="tema-cor-grupo">
+                                    <div class="tema-cor-grupo-rotulo">🌙 Tons Escuros & Intensos</div>
+                                    <div class="tema-cor-bolinhas-grid" id="gridCoresEscurasOnboarding">
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="safira" data-preview-key="tema-cor" title="Azul Meia-Noite" style="--cor-dot: #1e3a8a;" onclick="selecionarCorTema('safira')" aria-label="Cor Azul Meia-Noite"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="floresta" data-preview-key="tema-cor" title="Verde Floresta" style="--cor-dot: #14532d;" onclick="selecionarCorTema('floresta')" aria-label="Cor Verde Floresta"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="indigo" data-preview-key="tema-cor" title="Índigo Profundo" style="--cor-dot: #312e81;" onclick="selecionarCorTema('indigo')" aria-label="Cor Índigo Profundo"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="ameixa" data-preview-key="tema-cor" title="Ameixa Imperial" style="--cor-dot: #581c87;" onclick="selecionarCorTema('ameixa')" aria-label="Cor Ameixa Imperial"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="vinho" data-preview-key="tema-cor" title="Vinho Carmim" style="--cor-dot: #881337;" onclick="selecionarCorTema('vinho')" aria-label="Cor Vinho Carmim"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="petroleo" data-preview-key="tema-cor" title="Petróleo Oceânico" style="--cor-dot: #134e4a;" onclick="selecionarCorTema('petroleo')" aria-label="Cor Petróleo Oceânico"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="grafite" data-preview-key="tema-cor" title="Grafite Chumbo" style="--cor-dot: #334155;" onclick="selecionarCorTema('grafite')" aria-label="Cor Grafite Chumbo"><span class="tema-cor-check">✓</span></button>
+                                        <button type="button" class="tema-cor-bolinha" data-cor-id="bronze" data-preview-key="tema-cor" title="Bronze Terroso" style="--cor-dot: #78350f;" onclick="selecionarCorTema('bronze')" aria-label="Cor Bronze Terroso"><span class="tema-cor-check">✓</span></button>
+                                    </div>
+                                </div>
+                                <div class="tema-cor-rodape">
+                                    <button type="button" class="btn-restaurar-cor-padrao" onclick="restaurarCorTemaPadrao()">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                                        <span>Voltar ao padrão</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div>
                         <div class="onboarding-secao-titulo">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
@@ -1862,18 +1917,10 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 </div>
             </div>
 
-            <!-- Dica / Tutorial de onde alterar depois -->
-            <div class="onboarding-dica-painel">
-                <div class="onboarding-dica-icone">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>
-                </div>
-                <div class="onboarding-dica-corpo">
-                    <strong>Onde alterar essas configurações depois?</strong>
-                    <p>
-                        <b>No Computador (PC):</b> Vá na página do seu <b>Perfil</b> e clique no ícone de configurações.<br>
-                        <b>No Celular:</b> Em qualquer aba do site, abra o menu na <b>barra de navegação</b> e toque em <b>Configurações</b>.
-                    </p>
-                </div>
+            <!-- Dica / Tutorial Compacta de onde alterar depois -->
+            <div class="onboarding-dica-compacta">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span><b>Onde alterar depois:</b> No Computador, acesse seu <b>Perfil</b> &gt; Configurações. No Celular, abra o menu na <b>barra de navegação</b> &gt; <b>Configurações</b>.</span>
             </div>
 
             <div class="onboarding-acoes-grupo" style="display: flex; gap: 12px; width: 100%; flex-wrap: wrap; align-items: center; margin-top: 8px;">
@@ -1900,6 +1947,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             'link': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>',
             'zap': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
             'libras': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path></svg>',
+            'palette': '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>',
             'bulb': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>'
         };
 
@@ -1910,6 +1958,13 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 titulo: 'Personalize tudo agora',
                 desc: 'Passe o mouse ou toque sobre qualquer opção para ver os benefícios e detalhes de cada recurso.',
                 dica: 'Suas preferências são salvas e funcionam em todas as páginas do HelpFull!'
+            },
+            'tema-cor': {
+                icone: svgIcones.palette,
+                tag: 'COR DO TEMA',
+                titulo: 'Cor do Site Todo',
+                desc: 'Escolha entre tons vibrantes ou escuros para personalizar botões, destaques e o fundo dinâmico de todas as páginas.',
+                dica: 'Você pode escolher cores claras ou escuras e voltar ao azul padrão quando quiser!'
             },
             'tema-claro': {
                 icone: svgIcones.sun,
@@ -1997,6 +2052,10 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                 const ativo = localStorage.getItem('helpfull_' + key) === 'true';
                 row.classList.toggle('ativo', ativo);
             });
+
+            if (typeof window.atualizarBolinhasTemaVisual === 'function') {
+                window.atualizarBolinhasTemaVisual();
+            }
         }
 
         window.selecionarTemaOnboarding = function (modo) {
