@@ -497,9 +497,9 @@ try {
         }
 
         body.acessibilidade-escuro .balao-2fa-status-pill.ativo {
-            background: rgba(43, 122, 140, 0.25) !important;
-            color: #7dd3fc !important;
-            border-color: rgba(43, 122, 140, 0.4) !important;
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.25)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(43, 122, 140, 0.4)) !important;
         }
 
         body.acessibilidade-escuro .balao-2fa-status-pill.inativo {
@@ -509,8 +509,8 @@ try {
         }
 
         body.acessibilidade-escuro .balao-2fa-badge {
-            background: rgba(43, 122, 140, 0.25) !important;
-            color: #7dd3fc !important;
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.25)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro.modo-edicao #cardSuaConta,
@@ -597,8 +597,8 @@ try {
         }
 
         body.acessibilidade-escuro .toast-feedback-2fa .toast-icone-wrap {
-            background: rgba(43, 122, 140, 0.32) !important;
-            color: #7dd3fc !important;
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.32)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .toast-feedback-2fa.toast-sucesso .toast-icone-wrap {
@@ -1200,8 +1200,8 @@ try {
         }
 
         body.modo-edicao .senha-campo-container:hover .conta-input {
-            border-color: #7dd3fc;
-            box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.25);
+            border-color: var(--cor-tema-clara, #7dd3fc);
+            box-shadow: 0 0 0 2px var(--cor-tema-borda, rgba(125, 211, 252, 0.25));
         }
 
         body.acessibilidade-escuro .btn-lapis-senha {
@@ -1218,7 +1218,9 @@ try {
         }
 
         .btn-apagar,
-        .btn-editar {
+        .btn-editar,
+        .btn-sair,
+        .btn-salvar {
             border: none;
             padding: 12px 20px;
             border-radius: 20px;
@@ -1239,12 +1241,14 @@ try {
         }
 
         .btn-editar {
-            background: #bce0e6;
+            background: var(--cor-tema-primaria, #bce0e6);
+            color: #ffffff;
         }
 
         .btn-salvar {
             display: none;
-            background: #9bd3ff;
+            background: var(--cor-tema-primaria, #9bd3ff);
+            color: #ffffff;
         }
 
         .btn-sair {
@@ -1253,13 +1257,13 @@ try {
         }
 
         body.acessibilidade-escuro .btn-editar {
-            background: #1c3642 !important;
-            color: #7dd3fc !important;
-            border: 1px solid rgba(125, 211, 252, 0.25) !important;
+            background: var(--cor-tema-primaria, #1c3642) !important;
+            color: #ffffff !important;
+            border: 1px solid var(--cor-tema-borda, rgba(125, 211, 252, 0.25)) !important;
         }
 
         body.acessibilidade-escuro .btn-editar:hover {
-            background: #254454 !important;
+            background: var(--cor-tema-hover, #254454) !important;
         }
 
         body.acessibilidade-escuro .btn-sair {
@@ -1276,7 +1280,7 @@ try {
         body.acessibilidade-escuro .btn-salvar {
             background: var(--cor-tema-primaria, #2b7a8c) !important;
             color: #ffffff !important;
-            border: 1px solid rgba(125, 211, 252, 0.4) !important;
+            border: 1px solid var(--cor-tema-borda, rgba(125, 211, 252, 0.4)) !important;
         }
 
         body.acessibilidade-escuro .btn-salvar:hover {
@@ -2431,13 +2435,13 @@ try {
         }
 
         body.acessibilidade-escuro .btn-trocar-senha {
-            background: #1c3642;
-            color: #7dd3fc;
-            border-color: rgba(125, 211, 252, 0.25);
+            background: var(--cor-tema-primaria, #1c3642);
+            color: #ffffff;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.25));
         }
 
         body.acessibilidade-escuro .btn-trocar-senha:hover {
-            background: #254454;
+            background: var(--cor-tema-hover, #254454);
         }
 
         /* TRAVAMENTO DO FUNDO QUANDO MODAL ESTIVER ABERTO */
@@ -2649,13 +2653,13 @@ try {
         }
 
         body.acessibilidade-escuro .modal-alerta-info {
-            background: rgba(125, 211, 252, 0.08) !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
-            color: #7dd3fc !important;
+            background: var(--cor-tema-suave, rgba(125, 211, 252, 0.08)) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .modal-alerta-info svg {
-            stroke: #7dd3fc !important;
+            stroke: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         .senha-google-aviso {
@@ -2679,13 +2683,13 @@ try {
         }
 
         body.acessibilidade-escuro .senha-google-aviso {
-            background: rgba(125, 211, 252, 0.08) !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
-            color: #7dd3fc !important;
+            background: var(--cor-tema-suave, rgba(125, 211, 252, 0.08)) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .senha-google-aviso svg {
-            stroke: #7dd3fc !important;
+            stroke: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         .campo-grupo-modal {
@@ -2729,7 +2733,7 @@ try {
         }
 
         body.acessibilidade-escuro .btn-reenviar-codigo-modal {
-            color: #7dd3fc !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         .input-com-icone-modal {
@@ -2757,8 +2761,8 @@ try {
 
         .modal-input:focus {
             background: #ffffff;
-            border-color: #8ed6e4;
-            box-shadow: 0 0 0 3px rgba(142, 214, 228, 0.35);
+            border-color: var(--cor-tema-primaria, #8ed6e4);
+            box-shadow: 0 0 0 3px var(--cor-tema-suave, rgba(142, 214, 228, 0.35));
         }
 
         body.acessibilidade-escuro .modal-input {
@@ -2769,8 +2773,8 @@ try {
 
         body.acessibilidade-escuro .modal-input:focus {
             background: #182228 !important;
-            border-color: #7dd3fc !important;
-            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.25) !important;
+            border-color: var(--cor-tema-clara, #7dd3fc) !important;
+            box-shadow: 0 0 0 3px var(--cor-tema-suave, rgba(125, 211, 252, 0.25)) !important;
         }
 
         .input-codigo-destaque {
@@ -3099,9 +3103,9 @@ try {
         }
 
         body.acessibilidade-escuro .disp-preview-tag {
-            background: rgba(43, 122, 140, 0.25) !important;
-            color: #7dd3fc !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.25)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
         }
 
         body.acessibilidade-escuro .disp-preview-desc {
@@ -3111,7 +3115,7 @@ try {
         body.acessibilidade-escuro .btn-gerenciar-dispositivos {
             background: var(--cor-tema-primaria, #2b7a8c) !important;
             color: #ffffff !important;
-            border: 1px solid rgba(125, 211, 252, 0.25) !important;
+            border: 1px solid var(--cor-tema-borda, rgba(125, 211, 252, 0.25)) !important;
         }
 
         @media (max-width: 768px) {
@@ -3212,7 +3216,7 @@ try {
                                 </svg>
                             </button>
                         </div>
-                        <button type="button" class="btn-editar btn-sair" id="btnSair"
+                        <button type="button" class="btn-sair" id="btnSair"
                             onclick="location.href='Sair.php'">Sair da conta</button>
                         <button type="button" class="btn-editar" id="btnEditar"
                             onclick="toggleEdicao(true)">Editar</button>

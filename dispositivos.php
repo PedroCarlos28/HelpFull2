@@ -1145,8 +1145,8 @@ $totalOutros = count($outrasSessoes);
 
         body.acessibilidade-escuro .link-voltar {
             background: var(--tema-superficie, #1a2227) !important;
-            color: #7dd3fc !important;
-            border-color: rgba(125, 211, 252, 0.25) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.25)) !important;
         }
 
         body.acessibilidade-escuro .card-dispositivos-header,
@@ -1175,15 +1175,15 @@ $totalOutros = count($outrasSessoes);
         body.acessibilidade-escuro .badge-seguranca,
         body.acessibilidade-escuro .pill-contador-ativo,
         body.acessibilidade-escuro .vazio-icone-wrapper {
-            background: rgba(43, 122, 140, 0.2) !important;
-            color: #7dd3fc !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.2)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
         }
 
         body.acessibilidade-escuro .disp-icone-box {
-            background: rgba(43, 122, 140, 0.25) !important;
-            color: #7dd3fc !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.25)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
         }
 
         body.acessibilidade-escuro .disp-icone-box.outro {
@@ -1215,18 +1215,18 @@ $totalOutros = count($outrasSessoes);
 
         body.acessibilidade-escuro .card-dicas-seguranca {
             background: var(--cor-tema-suave, rgba(43,122,140,0.12)) !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
         }
 
         body.acessibilidade-escuro .dicas-icone {
             background: #1a2227 !important;
-            color: #7dd3fc !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
         }
 
         body.acessibilidade-escuro .dicas-titulo,
         body.acessibilidade-escuro .dicas-link {
-            color: #7dd3fc !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .dicas-texto {
@@ -1275,12 +1275,12 @@ $totalOutros = count($outrasSessoes);
 
         body.acessibilidade-escuro .modal-alerta-info {
             background: rgba(125, 211, 252, 0.08) !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
-            color: #7dd3fc !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .modal-alerta-info svg {
-            stroke: #7dd3fc !important;
+            stroke: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .modal-label {
@@ -1295,12 +1295,12 @@ $totalOutros = count($outrasSessoes);
 
         body.acessibilidade-escuro .modal-input:focus {
             background: #182228 !important;
-            border-color: #7dd3fc !important;
-            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.25) !important;
+            border-color: var(--cor-tema-clara, #7dd3fc) !important;
+            box-shadow: 0 0 0 3px var(--cor-tema-borda, rgba(125, 211, 252, 0.25)) !important;
         }
 
         body.acessibilidade-escuro .btn-reenviar-codigo-modal {
-            color: #7dd3fc !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .modal-hint {

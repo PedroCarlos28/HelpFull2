@@ -730,11 +730,11 @@ if (in_array($hoje, $datasHistorico)) {
 
         .msg-usuario {
             align-self: flex-end;
-            background: linear-gradient(135deg, #184e5d 0%, #206275 100%);
+            background: linear-gradient(135deg, var(--cor-tema-ativa, #184e5d) 0%, var(--cor-tema-primaria, #206275) 100%);
             color: #ffffff;
             border-radius: 35px 35px 10px 35px;
             border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 4px 15px rgba(24, 78, 93, 0.25);
+            box-shadow: 0 4px 15px var(--cor-tema-sombra, rgba(24, 78, 93, 0.25));
         }
 
         .msg-bot {

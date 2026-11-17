@@ -1615,7 +1615,7 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
         }
 
 styleEl.textContent = `
-            :root, body {
+            :root, body, body.acessibilidade-escuro {
                 --cor-tema-primaria: ${p.primaria} !important;
                 --cor-tema-hover: ${p.hover} !important;
                 --cor-tema-ativa: ${p.ativa} !important;
@@ -1623,18 +1623,33 @@ styleEl.textContent = `
                 --cor-tema-suave: ${p.suave} !important;
                 --cor-tema-borda: ${p.borda} !important;
                 --cor-tema-sombra: ${p.sombra} !important;
+                --tema-link: ${p.clara} !important;
             }
 
-            /* 1. Botões principais (exceto reações, emoções e perigo) */
+            /* 1. Botões principais (exceto reações, emoções e perigo) - Claro e Escuro */
             .btn-primario, .btn-salvar, .btn-editar, .btn-novo-chat, .btn-enviar-chat,
             .btn-painel-fechar, .btn-onboarding-concluir, .btn-gerenciar-dispositivos,
-            .btn-historico, .btn-buscar-api, .busca-btn, .btn-limpar-pill,
+            .btn-historico, .btn-buscar-api, .busca-btn,
             .acessibilidade-btn-tour, .btn-iniciar, .btn-comentar, .btn-publicar,
             .btn-gerar-relatorio, .modal-btn-salvar, .btn-aceitar-regras, .btn-adm-link,
-            .compact-pill,
+            .compact-pill, .btn-trocar-senha, #btnEditar, #btnSalvar,
             button.btn-primario, button.btn-salvar, button.btn-editar, button.btn-painel-fechar,
             button.btn-onboarding-concluir, button.modal-btn-salvar, button.btn-aceitar-regras,
-            a.btn-gerenciar-dispositivos, a.btn-primario, a.btn-gerar-relatorio, a.btn-adm-link {
+            a.btn-gerenciar-dispositivos, a.btn-primario, a.btn-gerar-relatorio, a.btn-adm-link,
+            body.acessibilidade-escuro .btn-editar:not(.btn-sair):not(.btn-apagar),
+            body.acessibilidade-escuro #btnEditar,
+            body.acessibilidade-escuro .btn-trocar-senha,
+            body.acessibilidade-escuro .btn-salvar,
+            body.acessibilidade-escuro #btnSalvar,
+            body.acessibilidade-escuro .modal-btn-salvar,
+            body.acessibilidade-escuro .btn-gerenciar-dispositivos,
+            body.acessibilidade-escuro .busca-btn,
+            body.acessibilidade-escuro .btn-novo-chat,
+            body.acessibilidade-escuro .btn-enviar-chat,
+            body.acessibilidade-escuro .btn-painel-fechar,
+            body.acessibilidade-escuro button.btn-painel-fechar,
+            body.acessibilidade-escuro .btn-onboarding-concluir,
+            body.acessibilidade-escuro button.btn-onboarding-concluir {
                 background: linear-gradient(135deg, ${p.primaria}, ${p.hover}) !important;
                 border-color: ${p.primaria} !important;
                 color: ${textoBtn} !important;
@@ -1644,14 +1659,28 @@ styleEl.textContent = `
             .btn-primario:hover, .btn-salvar:hover, .btn-editar:hover, .btn-novo-chat:hover,
             .btn-enviar-chat:hover, .btn-painel-fechar:hover, .btn-onboarding-concluir:hover,
             .btn-gerenciar-dispositivos:hover, .btn-historico:hover, .btn-buscar-api:hover,
-            .busca-btn:hover, .btn-limpar-pill:hover, .acessibilidade-btn-tour:hover,
+            .busca-btn:hover, .acessibilidade-btn-tour:hover,
             .btn-gerar-relatorio:hover, .modal-btn-salvar:hover:not(:disabled), .btn-aceitar-regras:hover,
-            .btn-adm-link:hover,
+            .btn-adm-link:hover, .btn-trocar-senha:hover, #btnEditar:hover, #btnSalvar:hover,
             button.btn-primario:hover, button.btn-salvar:hover, button.btn-editar:hover,
             button.btn-painel-fechar:hover, button.btn-onboarding-concluir:hover,
             button.modal-btn-salvar:hover:not(:disabled), button.btn-aceitar-regras:hover,
             a.btn-gerenciar-dispositivos:hover, a.btn-primario:hover, a.btn-gerar-relatorio:hover,
-            a.btn-adm-link:hover {
+            a.btn-adm-link:hover,
+            body.acessibilidade-escuro .btn-editar:not(.btn-sair):not(.btn-apagar):hover,
+            body.acessibilidade-escuro #btnEditar:hover,
+            body.acessibilidade-escuro .btn-trocar-senha:hover,
+            body.acessibilidade-escuro .btn-salvar:hover,
+            body.acessibilidade-escuro #btnSalvar:hover,
+            body.acessibilidade-escuro .modal-btn-salvar:hover:not(:disabled),
+            body.acessibilidade-escuro .btn-gerenciar-dispositivos:hover,
+            body.acessibilidade-escuro .busca-btn:hover,
+            body.acessibilidade-escuro .btn-novo-chat:hover,
+            body.acessibilidade-escuro .btn-enviar-chat:hover,
+            body.acessibilidade-escuro .btn-painel-fechar:hover,
+            body.acessibilidade-escuro button.btn-painel-fechar:hover,
+            body.acessibilidade-escuro .btn-onboarding-concluir:hover,
+            body.acessibilidade-escuro button.btn-onboarding-concluir:hover {
                 background: linear-gradient(135deg, ${p.hover}, ${p.ativa}) !important;
                 border-color: ${p.hover} !important;
                 color: ${textoBtn} !important;
@@ -1667,17 +1696,47 @@ styleEl.textContent = `
             body.acessibilidade-escuro .onboarding-tema-btn.ativo,
             body.acessibilidade-escuro .painel-tema-btn.ativo,
             body.acessibilidade-escuro button.painel-tema-btn.ativo,
-            body.acessibilidade-escuro button.onboarding-tema-btn.ativo {
+            body.acessibilidade-escuro button.onboarding-tema-btn.ativo,
+            body.acessibilidade-escuro .disp-filtro-pill.ativo,
+            body.acessibilidade-escuro .btn-historico.ativo {
                 background: linear-gradient(135deg, ${p.primaria}, ${p.hover}) !important;
                 border-color: ${p.primaria} !important;
-                color: #ffffff !important;
+                color: ${textoBtn} !important;
                 box-shadow: 0 4px 14px ${p.sombra} !important;
             }
 
-            /* 3. Navegação e links de destaque */
+            /* 3. Títulos de seção e texto de destaque */
+            body.acessibilidade-escuro .titulo-secao,
+            body.acessibilidade-escuro h2.titulo-secao,
+            body.acessibilidade-escuro h3.titulo-secao,
+            body.acessibilidade-escuro #modalSenhaTitulo,
+            body.acessibilidade-escuro #tituloNotificacoesPerfil,
+            body.acessibilidade-escuro .modal-senha-titulo,
+            body.acessibilidade-escuro .dicas-titulo,
+            body.acessibilidade-escuro .dicas-link,
+            body.acessibilidade-escuro .bv-diario-info h4,
+            body.acessibilidade-escuro .balao-2fa-email-aviso strong,
+            body.acessibilidade-escuro .divisor-curado-texto {
+                color: ${p.clara} !important;
+            }
+
+            /* 4. Navegação e links de destaque - Modo Claro e Escuro */
             .nav-links a.ativo,
-            .nav-dropdown-mobile a.ativo {
-                color: ${p.primaria} !important;
+            body.acessibilidade-escuro .nav-links a.ativo,
+            .links-capsula a.ativo,
+            body.acessibilidade-escuro .links-capsula a.ativo,
+            .nav-dropdown-mobile a.ativo,
+            body.acessibilidade-escuro .nav-dropdown-mobile a.ativo {
+                color: ${p.clara} !important;
+            }
+            .nav-links a.ativo::after,
+            body.acessibilidade-escuro .nav-links a.ativo::after,
+            .links-capsula a.ativo::after,
+            body.acessibilidade-escuro .links-capsula a.ativo::after,
+            .nav-dropdown-mobile a.ativo::after,
+            body.acessibilidade-escuro .nav-dropdown-mobile a.ativo::after {
+                background: ${p.primaria} !important;
+                box-shadow: 0 0 8px ${p.primaria}, 0 0 14px ${p.sombra} !important;
             }
             .nav-dropdown-mobile a.ativo {
                 background: ${p.suave} !important;
@@ -1689,7 +1748,18 @@ styleEl.textContent = `
                 color: ${p.primaria} !important;
             }
 
-            /* 4. Notificações, sininho, avatares e contadores */
+            /* 5. Cápsula de perfil e indicadores de topo */
+            .perfil-capsula,
+            .nav-perfil.atual .perfil-capsula,
+            body.acessibilidade-escuro .perfil-capsula,
+            body.acessibilidade-escuro .nav-perfil.atual .perfil-capsula {
+                box-shadow: 0 0 0 2.5px ${p.clara}, 0 0 12px ${p.sombra} !important;
+            }
+            .nav-perfil.atual::after,
+            body.acessibilidade-escuro .nav-perfil.atual::after {
+                background: ${p.primaria} !important;
+                box-shadow: 0 0 8px ${p.primaria} !important;
+            }
             .sininho-notificacao,
             .post-avatar,
             .card-relatorio-icone,
@@ -1697,7 +1767,7 @@ styleEl.textContent = `
             #badgeNotificacoesPerfil,
             .badge-adm-pill {
                 background: ${p.primaria} !important;
-                color: #ffffff !important;
+                color: ${textoBtn} !important;
             }
             .perfil-icone-wrapper,
             .disp-perfil-icone {
@@ -1708,18 +1778,18 @@ styleEl.textContent = `
                 box-shadow: 0 0 0 3px ${p.primaria}, 0 4px 12px ${p.sombra} !important;
             }
 
-            /* 5. Carrossel dots */
+            /* 6. Carrossel dots */
             .carrossel-dot.ativo,
             body.acessibilidade-escuro .carrossel-dot.ativo {
                 background: ${p.primaria} !important;
                 box-shadow: 0 0 8px ${p.sombra}, 0 0 16px ${p.suave} !important;
             }
 
-            /* 6. Calendário */
+            /* 7. Calendário */
             .cal-dia.selecionado,
             .cal-dia.hoje {
                 background: ${p.primaria} !important;
-                color: #ffffff !important;
+                color: ${textoBtn} !important;
             }
             .cal-dia.ativo {
                 background: ${p.suave} !important;
@@ -1729,7 +1799,7 @@ styleEl.textContent = `
                 background: ${p.primaria} !important;
             }
 
-            /* 7. Switches e opções ativas */
+            /* 8. Switches e opções ativas */
             .onboarding-opt-row.ativo .onboarding-switch,
             .painel-opt-row.ativo .onboarding-switch,
             .switch.ativo,
@@ -1738,39 +1808,96 @@ styleEl.textContent = `
                 background: ${p.primaria} !important;
                 border-color: ${p.primaria} !important;
             }
-
             .onboarding-opt-row.ativo,
-            .painel-opt-row.ativo {
+            .painel-opt-row.ativo,
+            body.acessibilidade-escuro .onboarding-opt-row.ativo,
+            body.acessibilidade-escuro .painel-opt-row.ativo {
                 border-color: ${p.primaria} !important;
                 background: ${p.suave} !important;
             }
 
-            /* 8. Badges, tags e pílulas */
+            /* 9. Badges, tags, pílulas e ícones de cabeçalho - Modo Claro e Escuro */
             .onboarding-badge, .notificacoes-icone-tag, .disp-preview-tag,
             .balao-2fa-badge, .onboarding-preview-tag, .tag-solida.azul,
             .tema-cor-badge-expandir, .balao-2fa-status-pill.ativo,
             .bv-diario-icone, .regra-num, .graficos-badge,
-            .disp-badge-atual {
+            .disp-badge-atual, .disp-icone-box, .dicas-icone,
+            .vazio-icone-wrapper, .modal-alerta-info, .link-voltar,
+            .btn-reenviar-codigo-modal, .badge-seguranca, .pill-contador-ativo,
+            .notif-link-btn, .notif-vazio-icone, .bv-comunidade-icone,
+            body.acessibilidade-escuro .onboarding-badge,
+            body.acessibilidade-escuro .notificacoes-icone-tag,
+            body.acessibilidade-escuro .disp-preview-tag,
+            body.acessibilidade-escuro .balao-2fa-badge,
+            body.acessibilidade-escuro .onboarding-preview-tag,
+            body.acessibilidade-escuro .tag-solida.azul,
+            body.acessibilidade-escuro .tema-cor-badge-expandir,
+            body.acessibilidade-escuro .balao-2fa-status-pill.ativo,
+            body.acessibilidade-escuro .bv-diario-icone,
+            body.acessibilidade-escuro .regra-num,
+            body.acessibilidade-escuro .graficos-badge,
+            body.acessibilidade-escuro .disp-badge-atual,
+            body.acessibilidade-escuro .disp-icone-box,
+            body.acessibilidade-escuro .dicas-icone,
+            body.acessibilidade-escuro .vazio-icone-wrapper,
+            body.acessibilidade-escuro .modal-alerta-info,
+            body.acessibilidade-escuro .link-voltar,
+            body.acessibilidade-escuro .btn-reenviar-codigo-modal,
+            body.acessibilidade-escuro .badge-seguranca,
+            body.acessibilidade-escuro .pill-contador-ativo,
+            body.acessibilidade-escuro .notif-link-btn,
+            body.acessibilidade-escuro .notif-vazio-icone,
+            body.acessibilidade-escuro .bv-comunidade-icone {
                 background: ${p.suave} !important;
-                color: ${p.primaria} !important;
+                color: ${p.clara} !important;
                 border-color: ${p.borda} !important;
             }
-            .bv-diario-info h4,
-            .balao-2fa-email-aviso strong,
-            .divisor-curado-texto,
-            .divisor-curado-texto svg {
-                color: ${p.primaria} !important;
+
+            /* 10. SVGs dentro de ícones e tags de tema */
+            .disp-preview-tag svg,
+            .notificacoes-icone-tag svg,
+            .dicas-icone svg,
+            .disp-icone-box svg,
+            .modal-disp-preview svg,
+            .modal-alerta-info svg,
+            .senha-google-aviso svg,
+            .onboarding-dica-compacta svg,
+            .svg-tema-cor {
+                color: ${p.clara} !important;
+                stroke: ${p.clara} !important;
             }
             .busca-icone svg polygon,
             .busca-icone svg path {
                 fill: ${p.primaria} !important;
                 color: ${p.primaria} !important;
             }
-            .modal-disp-preview svg {
-                stroke: ${p.primaria} !important;
+
+            /* 11. Botão Limpar Notificações */
+            .btn-limpar-pill,
+            body.acessibilidade-escuro .btn-limpar-pill,
+            body.acessibilidade-escuro .card-notificacoes-bloco .btn-limpar-pill {
+                background: ${p.suave} !important;
+                color: ${p.clara} !important;
+                border: 1px solid ${p.borda} !important;
+            }
+            .btn-limpar-pill:hover,
+            body.acessibilidade-escuro .btn-limpar-pill:hover,
+            body.acessibilidade-escuro .card-notificacoes-bloco .btn-limpar-pill:hover {
+                background: ${p.primaria} !important;
+                color: ${textoBtn} !important;
+                border-color: ${p.primaria} !important;
             }
 
-            /* 9. Foco e inputs */
+            /* 12. Mensagem do usuário no ChatBOT */
+            .msg-usuario,
+            body.acessibilidade-escuro .msg-usuario {
+                background: linear-gradient(135deg, ${p.hover} 0%, ${p.primaria} 100%) !important;
+                color: ${textoBtn} !important;
+                box-shadow: 0 4px 15px ${p.sombra} !important;
+                border-color: rgba(255, 255, 255, 0.25) !important;
+            }
+
+            /* 13. Foco e inputs */
             .modal-busca-barra:focus-within,
             .onboarding-opt-row:hover,
             .painel-opt-row:hover,
@@ -1779,13 +1906,19 @@ styleEl.textContent = `
             .tema-cor-trigger-card:hover {
                 border-color: ${p.primaria} !important;
             }
-
             input:focus, textarea:focus, select:focus,
-            .balao-2fa-input-codigo:focus, .campo-perfil:focus {
+            .conta-input:focus, .campo-perfil:focus, .modal-input:focus,
+            .balao-2fa-input-codigo:focus,
+            body.acessibilidade-escuro input:focus,
+            body.acessibilidade-escuro textarea:focus,
+            body.acessibilidade-escuro select:focus,
+            body.acessibilidade-escuro .conta-input:focus,
+            body.acessibilidade-escuro .modal-input:focus {
                 border-color: ${p.primaria} !important;
                 box-shadow: 0 0 0 3px ${p.suave} !important;
             }
 
+            /* 14. Spinners */
             .loading-spinner, .spinner {
                 border-top-color: ${p.primaria} !important;
             }
@@ -1794,99 +1927,10 @@ styleEl.textContent = `
                 background: ${p.suave} !important;
                 border-color: ${p.borda} !important;
             }
-            .onboarding-dica-compacta svg {
-                color: ${p.primaria} !important;
-            }
-
-            /* 10. Modo Escuro */
-            body.acessibilidade-escuro .onboarding-opt-row.ativo,
-            body.acessibilidade-escuro .painel-opt-row.ativo {
-                background: ${p.suave} !important;
-                border-color: ${p.clara} !important;
-            }
-
-            body.acessibilidade-escuro .btn-painel-fechar,
-            body.acessibilidade-escuro button.btn-painel-fechar,
-            body.acessibilidade-escuro .btn-onboarding-concluir,
-            body.acessibilidade-escuro button.btn-onboarding-concluir,
-            body.acessibilidade-escuro .btn-salvar,
-            body.acessibilidade-escuro .modal-btn-salvar,
-            body.acessibilidade-escuro .btn-gerenciar-dispositivos,
-            body.acessibilidade-escuro .busca-btn {
-                background: linear-gradient(135deg, ${p.primaria}, ${p.hover}) !important;
-                border-color: ${p.primaria} !important;
-                color: ${textoBtn} !important;
-                box-shadow: 0 6px 18px ${p.sombra} !important;
-            }
-
-            body.acessibilidade-escuro .btn-painel-fechar:hover,
-            body.acessibilidade-escuro button.btn-painel-fechar:hover,
-            body.acessibilidade-escuro .btn-onboarding-concluir:hover,
-            body.acessibilidade-escuro button.btn-onboarding-concluir:hover,
-            body.acessibilidade-escuro .btn-salvar:hover,
-            body.acessibilidade-escuro .modal-btn-salvar:hover,
-            body.acessibilidade-escuro .btn-gerenciar-dispositivos:hover,
-            body.acessibilidade-escuro .busca-btn:hover {
-                background: linear-gradient(135deg, ${p.hover}, ${p.ativa}) !important;
-                color: ${textoBtn} !important;
-            }
 
             body.acessibilidade-escuro .onboarding-preview-icone-badge,
             body.acessibilidade-escuro .onboarding-preview-dica {
                 color: ${p.clara} !important;
-            }
-
-            body.acessibilidade-escuro .disp-preview-tag {
-                background: ${p.suave} !important;
-                color: ${p.clara} !important;
-                border-color: ${p.borda} !important;
-            }
-
-            /* 11. Correção de SVG inline com currentColor */
-            .svg-tema-cor {
-                color: var(--cor-tema-primaria, #2b7a8c) !important;
-                stroke: var(--cor-tema-primaria, #2b7a8c) !important;
-                fill: var(--cor-tema-primaria, #2b7a8c) !important;
-            }
-
-            /* 12. Legibilidade: texto sobre fundo tema (badges, pílulas, contadores) */
-            #contadorDiariosDia,
-            .sininho-notificacao,
-            .post-avatar,
-            .card-relatorio-icone,
-            #badgeNotificacoesPerfil,
-            .badge-adm-pill {
-                color: ${textoBtn} !important;
-            }
-
-            /* 13. Abas ativas - texto legível */
-            .tab-btn.ativo, .filtro-btn.ativo, .btn-filtro.ativo,
-            .categoria-pill.ativo, .filtro-categoria.ativo,
-            .onboarding-tema-btn.ativo, .painel-tema-btn.ativo,
-            .btn-historico.ativo, .disp-filtro-pill.ativo {
-                color: ${textoBtn} !important;
-            }
-
-            /* 14. Calendário: texto legível nos dias selecionados */
-            .cal-dia.selecionado,
-            .cal-dia.hoje {
-                color: ${textoBtn} !important;
-            }
-
-            /* 15. Elementos com background tema precisam de texto legível */
-            [style*="--cor-tema-primaria"] {
-                color: ${textoBtn};
-            }
-
-            /* 16. Btn-limpar-pill: fundo suave já via var(), garante cor certa */
-            .btn-limpar-pill {
-                background: var(--cor-tema-suave, rgba(43,122,140,0.08)) !important;
-                color: var(--cor-tema-primaria, #2b7a8c) !important;
-            }
-
-            /* 17. Nav entrar btn - garantir legibilidade */
-            .nav-entrar-btn {
-                color: ${p.primaria} !important;
             }
         `;
 

@@ -901,8 +901,8 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
 
         body.acessibilidade-escuro .link-voltar {
             background: var(--tema-superficie, #1a2227) !important;
-            color: #7dd3fc !important;
-            border-color: rgba(125, 211, 252, 0.25) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.25)) !important;
         }
 
         body.acessibilidade-escuro .card-dispositivos-header,
@@ -941,9 +941,9 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
         body.acessibilidade-escuro .membro-avatar-box,
         body.acessibilidade-escuro .vazio-icone-wrapper,
         body.acessibilidade-escuro .btn-filtro-pill {
-            background: rgba(43, 122, 140, 0.2) !important;
-            color: #7dd3fc !important;
-            border-color: rgba(125, 211, 252, 0.2) !important;
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.2)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
         }
 
         body.acessibilidade-escuro .input-busca {

@@ -400,7 +400,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             align-self: flex-start;
             padding: 6px 14px;
             border-radius: 20px;
-            background: rgba(43, 122, 140, 0.12);
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.12));
             color: var(--cor-tema-primaria, #2b7a8c);
             font-size: 0.8rem;
             font-weight: 800;
@@ -733,7 +733,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             height: 32px;
             border-radius: 50%;
             flex-shrink: 0;
-            background: rgba(43, 122, 140, 0.12);
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.12));
             color: var(--cor-tema-primaria, #2b7a8c);
             transition: all 0.25s ease;
         }
@@ -751,7 +751,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         }
 
         .toast-feedback-2fa.toast-desativado .toast-icone-wrap {
-            background: rgba(43, 122, 140, 0.12);
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.12));
             color: var(--cor-tema-primaria, #2b7a8c);
         }
 
@@ -772,7 +772,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
 
         body.acessibilidade-escuro .toast-feedback-2fa .toast-icone-wrap {
             background: rgba(43, 122, 140, 0.32) !important;
-            color: #7dd3fc !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .toast-feedback-2fa.toast-sucesso .toast-icone-wrap {
@@ -1272,7 +1272,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
         }
 
         body.acessibilidade-escuro .link-termos-inline:hover {
-            color: #7dd3fc !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
         }
 
         body.acessibilidade-escuro .custom-checkbox-ui {

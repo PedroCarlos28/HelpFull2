@@ -626,7 +626,7 @@ if (!$usuarioLogado) {
         }
 
         body.acessibilidade-escuro .bv-diario-info h4 {
-            color: #78c2d6;
+            color: var(--cor-tema-clara, #78c2d6);
         }
 
         body.acessibilidade-escuro .bv-diario-info p {

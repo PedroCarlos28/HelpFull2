@@ -376,7 +376,7 @@ body.acessibilidade-escuro {
     --tema-borda: #364044;
     --tema-texto: #eef2f4;
     --tema-texto-suave: #b0bec5;
-    --tema-link: #7ecfdb;
+    --tema-link: var(--cor-tema-clara, #7ecfdb);
     background: var(--tema-fundo) !important;
     color: var(--tema-texto) !important;
     color-scheme: dark;
@@ -666,8 +666,8 @@ body.acessibilidade-escuro .toast-feedback-2fa {
 }
 
 body.acessibilidade-escuro .toast-feedback-2fa .toast-icone-wrap {
-    background: rgba(43, 122, 140, 0.32) !important;
-    color: #7dd3fc !important;
+    background: var(--cor-tema-suave, rgba(43, 122, 140, 0.32)) !important;
+    color: var(--cor-tema-clara, #7dd3fc) !important;
 }
 
 body.acessibilidade-escuro .toast-feedback-2fa.toast-sucesso .toast-icone-wrap {
@@ -1416,14 +1416,14 @@ body.acessibilidade-escuro .nav-dropdown-mobile a.ativo::after {
 }
 
 body.acessibilidade-escuro .nav-perfil.atual .perfil-capsula {
-    box-shadow: 0 0 0 2px var(--tema-link),
-        0 0 9px rgba(130, 211, 223, 0.82),
-        0 0 18px rgba(130, 211, 223, 0.38) !important;
+    box-shadow: 0 0 0 2px var(--cor-tema-clara, var(--tema-link)),
+        0 0 9px var(--cor-tema-sombra, rgba(130, 211, 223, 0.82)),
+        0 0 18px var(--cor-tema-suave, rgba(130, 211, 223, 0.38)) !important;
 }
 
 body.acessibilidade-escuro .nav-perfil.atual::after {
-    background: var(--tema-link) !important;
-    box-shadow: 0 0 7px rgba(130, 211, 223, 0.75) !important;
+    background: var(--cor-tema-clara, var(--tema-link)) !important;
+    box-shadow: 0 0 7px var(--cor-tema-sombra, rgba(130, 211, 223, 0.75)) !important;
 }
 
 body.acessibilidade-contraste .nav-perfil.atual .perfil-capsula {
@@ -1437,8 +1437,8 @@ body.acessibilidade-contraste .nav-perfil.atual::after {
 body.acessibilidade-escuro .nav-links a.ativo::after,
 body.acessibilidade-escuro .links-capsula a.ativo::after,
 body.acessibilidade-escuro .nav-dropdown-mobile a.ativo::after {
-    background: var(--tema-link) !important;
-    box-shadow: 0 0 7px rgba(130, 211, 223, 0.75) !important;
+    background: var(--cor-tema-clara, var(--tema-link)) !important;
+    box-shadow: 0 0 7px var(--cor-tema-sombra, rgba(130, 211, 223, 0.75)) !important;
 }
 
 body.acessibilidade-contraste .nav-links a.ativo::after,
@@ -2146,8 +2146,8 @@ body.acessibilidade-escuro .perfil-capsula[style*="url"] {
 }
 
 body.acessibilidade-escuro .bv-comunidade-icone {
-    background: rgba(43, 122, 140, 0.2) !important;
-    color: #82d3df !important;
+    background: var(--cor-tema-suave, rgba(43, 122, 140, 0.2)) !important;
+    color: var(--cor-tema-clara, #82d3df) !important;
     border: none !important;
     box-shadow: none !important;
 }
@@ -4602,8 +4602,8 @@ body.acessibilidade-escuro .modal-alterar-senha-card .modal-input {
 
 body.acessibilidade-escuro .modal-alterar-senha-card .modal-input:focus {
     background: #182228 !important;
-    border-color: #7dd3fc !important;
-    box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.25) !important;
+    border-color: var(--cor-tema-clara, #7dd3fc) !important;
+    box-shadow: 0 0 0 3px var(--cor-tema-borda, rgba(125, 211, 252, 0.25)) !important;
 }
 
 body.acessibilidade-escuro .modal-alterar-senha-card .modal-btn-cancelar {
@@ -5111,9 +5111,9 @@ body.acessibilidade-escuro .card-notificacoes-bloco .notif-content p {
 body.acessibilidade-escuro .notif-link-btn,
 body.acessibilidade-escuro .painel-notificacoes .notif-link-btn,
 body.acessibilidade-escuro .card-notificacoes-bloco .notif-link-btn {
-    background: rgba(43, 122, 140, 0.28) !important;
-    color: #7dd3fc !important;
-    border-color: rgba(125, 211, 252, 0.28) !important;
+    background: var(--cor-tema-suave, rgba(43, 122, 140, 0.28)) !important;
+    color: var(--cor-tema-clara, #7dd3fc) !important;
+    border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.28)) !important;
 }
 
 body.acessibilidade-escuro .notif-link-btn:hover,
@@ -5124,8 +5124,8 @@ body.acessibilidade-escuro .card-notificacoes-bloco .notif-link-btn:hover {
 }
 
 body.acessibilidade-escuro .notif-vazio-icone {
-    background: rgba(56, 163, 184, 0.15) !important;
-    color: #7dd3fc !important;
+    background: var(--cor-tema-suave, rgba(56, 163, 184, 0.15)) !important;
+    color: var(--cor-tema-clara, #7dd3fc) !important;
 }
 
 body.acessibilidade-escuro .notif-vazio-titulo {
