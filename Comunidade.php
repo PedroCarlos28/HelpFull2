@@ -2476,24 +2476,129 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
         .btn-sem-punicao:hover { background: rgba(43,122,140,0.07); }
 
-        /* ══ BOTÃO ADM PAINEL ══════════════════════════════════════ */
-        .btn-painel-adm {
+        /* ══ BANNER DE ACESSO DO PAINEL ADM ════════════════════════ */
+        .banner-adm-acesso {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 26px;
+            padding: 14px 22px;
+            border: 1px solid rgba(43, 122, 140, 0.18);
+            box-shadow: 0 8px 24px rgba(43, 122, 140, 0.08);
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .banner-adm-acesso:hover {
+            border-color: rgba(43, 122, 140, 0.35);
+            box-shadow: 0 12px 30px rgba(43, 122, 140, 0.14);
+            transform: translateY(-1px);
+        }
+
+        .banner-adm-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .badge-adm-icone {
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(43, 122, 140, 0.15), rgba(43, 122, 140, 0.08));
+            color: #2b7a8c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid rgba(43, 122, 140, 0.2);
+        }
+
+        .banner-adm-textos {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+        }
+
+        .banner-adm-tag-linha {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .banner-adm-tag {
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            color: #1e4d58;
+            text-transform: uppercase;
+        }
+
+        .badge-adm-pill {
+            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
+            color: #ffffff;
+            font-size: 0.64rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+
+        .banner-adm-sub {
+            font-size: 0.83rem;
+            font-weight: 500;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn-adm-link {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #fff;
+            padding: 10px 22px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
+            color: #ffffff !important;
             text-decoration: none;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.86rem;
             font-weight: 700;
-            margin-bottom: 18px;
-            transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            white-space: nowrap;
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.25);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
         }
-        .btn-painel-adm:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
-        .btn-painel-adm svg { flex-shrink: 0; }
+
+        .btn-adm-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(43, 122, 140, 0.35);
+            background: linear-gradient(135deg, #205c6a, #164652);
+        }
+
+        @media (max-width: 650px) {
+            .banner-adm-acesso {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 14px;
+                padding: 16px;
+            }
+            .banner-adm-sub {
+                white-space: normal;
+            }
+            .btn-adm-link {
+                justify-content: center;
+                width: 100%;
+            }
+        }
     </style>
     <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
@@ -2708,10 +2813,29 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         <div class="caixa-agrupadora">
 
             <?php if ($isAdmin || ($usuarioLogado['email'] ?? '') === $adminEmail): ?>
-                <a href="adm_comunidade.php" class="btn-painel-adm">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                    Painel de Moderação
-                </a>
+                <div class="banner-adm-acesso">
+                    <div class="banner-adm-info">
+                        <div class="badge-adm-icone">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <div class="banner-adm-textos">
+                            <div class="banner-adm-tag-linha">
+                                <span class="banner-adm-tag">Moderação da Comunidade</span>
+                                <span class="badge-adm-pill">Admin</span>
+                            </div>
+                            <span class="banner-adm-sub">Gerencie avisos, usuários suspensos e histórico disciplinar</span>
+                        </div>
+                    </div>
+                    <a href="adm_comunidade.php" class="btn-adm-link">
+                        <span>Acessar Painel</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
             <?php endif; ?>
 
             <?php if ($nivelPunicaoUsuario >= 1 && !$isAdmin): ?>

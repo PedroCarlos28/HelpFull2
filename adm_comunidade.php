@@ -2,7 +2,7 @@
 /**
  * adm_comunidade.php
  * Painel administrativo de moderação da Comunidade HelpFull
- * Acesso exclusivo para contatohelpfull@gmail.com
+ * Acesso exclusivo para administradores
  */
 
 require_once 'conexao.php';
@@ -11,7 +11,7 @@ $usuarioLogado = obterUsuarioLogado($pdo);
 $isAdmin       = !empty($usuarioLogado['is_admin']);
 $adminEmail    = 'contatohelpfull@gmail.com';
 
-if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
+if (!$isAdmin && ($usuarioLogado['email'] ?? '') !== $adminEmail) {
     header('Location: Comunidade.php');
     exit;
 }
@@ -25,225 +25,527 @@ if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: #dbe7eb;
-            min-height: 100vh;
-            color: #1a1a1a;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .topo-adm {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(43,122,140,0.15);
-            padding: 16px 32px;
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            background-color: #dbe7eb;
+            font-family: 'Montserrat', sans-serif;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* FUNDO ANIMADO */
+        .fundo-animado-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            display: block;
+            filter: blur(32px);
+            -webkit-filter: blur(32px);
+            transform: scale(1.08);
+            transform-origin: center center;
+        }
+
+        /* NAVBAR UNIVERSAL */
+        .nav-container-global {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding-top: 15px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .navbar-topo {
+            position: relative;
+            width: calc(100% - 40px);
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 40px;
+            padding: 12px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+
+        .nav-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .nav-logo {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-seta-dropdown {
+            display: none;
+            color: #2b7a8c;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.ativo {
+            color: #2b7a8c;
+            font-weight: 700;
+        }
+
+        .nav-links a.ativo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2.5px;
+            background: #2b7a8c;
+            border-radius: 2px;
+        }
+
+        .perfil-capsula {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(43, 122, 140, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: 0.2s;
+            color: #2b7a8c;
+            text-decoration: none;
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .perfil-capsula:hover {
+            transform: translateY(-2px);
+            border-color: rgba(43, 122, 140, 0.4);
+            box-shadow: 0 6px 16px rgba(43, 122, 140, 0.15);
+        }
+
+        .nav-dropdown-mobile {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-dropdown-mobile.aberto {
+            display: flex;
+        }
+
+        .nav-dropdown-mobile a {
+            text-decoration: none;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 8px 12px;
+            border-radius: 12px;
+            transition: 0.2s;
+        }
+
+        .nav-dropdown-mobile a:hover,
+        .nav-dropdown-mobile a.ativo {
+            background: rgba(43, 122, 140, 0.08);
+            color: #2b7a8c;
+            font-weight: 700;
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .conteudo-site {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 100px 20px 60px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-sizing: border-box;
+        }
+
+        .caixa-agrupadora {
+            position: relative;
+            z-index: 1;
+            border-radius: 40px;
+            padding: 36px 30px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            box-sizing: border-box;
+        }
+
+        .caixa-agrupadora::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -3;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 50px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), inset 0 2px 10px rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            pointer-events: none;
+        }
+
+        /* HEADER DO PAINEL */
+        .adm-header-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 24px 28px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .adm-header-left {
             display: flex;
             align-items: center;
             gap: 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            min-width: 0;
         }
-        .topo-adm a {
+
+        .adm-header-icone {
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(43, 122, 140, 0.16), rgba(43, 122, 140, 0.06));
             color: #2b7a8c;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid rgba(43, 122, 140, 0.2);
+            flex-shrink: 0;
         }
-        .topo-adm h1 {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #0f172a;
+
+        .adm-header-titulos {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
         }
-        .badge-adm {
-            background: linear-gradient(135deg, #2b7a8c, #1d5f70);
-            color: #fff;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
-        }
-        .container-adm {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 32px 20px 60px;
-        }
-        .card-adm {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(0,0,0,0.07);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            padding: 24px 28px;
-            margin-bottom: 24px;
-        }
-        .card-adm h2 {
-            font-size: 1rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 18px;
+
+        .adm-header-titulo-linha {
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-        .card-adm h2 .icone-h2 {
-            width: 32px; height: 32px;
-            background: rgba(43,122,140,0.1);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        /* Stats */
-        .stats-row {
-            display: flex;
-            gap: 16px;
             flex-wrap: wrap;
-            margin-bottom: 24px;
         }
-        .stat-box {
-            flex: 1;
-            min-width: 140px;
-            background: rgba(255,255,255,0.9);
+
+        .adm-header-titulos h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .badge-adm-pill {
+            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+
+        .adm-header-titulos p {
+            font-size: 0.83rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .btn-voltar-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 999px;
+            background: rgba(43, 122, 140, 0.08);
+            color: #2b7a8c;
+            text-decoration: none;
+            font-size: 0.84rem;
+            font-weight: 700;
+            transition: all 0.25s ease;
+            border: 1.5px solid rgba(43, 122, 140, 0.18);
+            white-space: nowrap;
+        }
+
+        .btn-voltar-pill:hover {
+            background: #2b7a8c;
+            color: #ffffff;
+            transform: translateX(-3px);
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.25);
+        }
+
+        /* STATS GRID */
+        .adm-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .adm-stat-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.25s ease;
+        }
+
+        .adm-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .adm-stat-icone {
+            width: 48px;
+            height: 48px;
             border-radius: 16px;
-            border: 1px solid rgba(0,0,0,0.07);
-            padding: 18px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
-        .stat-box .num { font-size: 2rem; font-weight: 800; color: #2b7a8c; }
-        .stat-box .label { font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 4px; }
-        .stat-box.vermelho .num { color: #dc2626; }
-        .stat-box.laranja .num { color: #ea580c; }
-        .stat-box.amarelo .num { color: #d97706; }
-        /* Tabela */
-        .tabela-moderacao {
-            width: 100%;
-            border-collapse: collapse;
+
+        .adm-stat-card.total .adm-stat-icone {
+            background: rgba(43, 122, 140, 0.12);
+            color: #2b7a8c;
         }
-        .tabela-moderacao th {
-            text-align: left;
-            padding: 10px 14px;
-            font-size: 0.72rem;
+
+        .adm-stat-card.n1 .adm-stat-icone {
+            background: rgba(245, 158, 11, 0.15);
+            color: #d97706;
+        }
+
+        .adm-stat-card.n2 .adm-stat-icone {
+            background: rgba(234, 88, 12, 0.15);
+            color: #ea580c;
+        }
+
+        .adm-stat-card.n3 .adm-stat-icone {
+            background: rgba(220, 38, 38, 0.15);
+            color: #dc2626;
+        }
+
+        .adm-stat-info .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: #0f172a;
+        }
+
+        .adm-stat-info .label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #64748b;
+            margin-top: 3px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #64748b;
-            font-weight: 700;
-            border-bottom: 2px solid rgba(0,0,0,0.06);
         }
-        .tabela-moderacao td {
-            padding: 12px 14px;
-            font-size: 0.85rem;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            vertical-align: middle;
-        }
-        .tabela-moderacao tr:last-child td { border-bottom: none; }
-        .tabela-moderacao tr:hover td { background: rgba(43,122,140,0.03); }
-        .badge-nivel {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        .badge-nivel.n1 { background: rgba(234,179,8,0.15); color: #854d0e; }
-        .badge-nivel.n2 { background: rgba(234,88,12,0.15); color: #9a3412; }
-        .badge-nivel.n3 { background: rgba(220,38,38,0.15); color: #991b1b; }
-        .btn-liberar {
-            background: rgba(16,185,129,0.1);
-            color: #065f46;
-            border: 1px solid rgba(16,185,129,0.25);
-            padding: 7px 16px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: 0.2s;
-        }
-        .btn-liberar:hover {
-            background: rgba(16,185,129,0.2);
-            transform: translateY(-1px);
-        }
-        .btn-liberar:disabled { opacity: 0.5; cursor: default; transform: none; }
-        .motivo-curto {
-            max-width: 220px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: #475569;
-            font-size: 0.8rem;
-        }
-        .vazio-estado {
-            text-align: center;
-            padding: 40px 20px;
-            color: #94a3b8;
-            font-size: 0.88rem;
-        }
-        .vazio-estado svg { opacity: 0.4; margin-bottom: 10px; }
-        /* Legenda de níveis */
-        .legenda-niveis {
+
+        /* SEÇÃO DE CONTEÚDO */
+        .card-adm-secao {
+            background: #ffffff;
+            border-radius: 36px;
+            padding: 28px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.04);
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
+            flex-direction: column;
+            gap: 20px;
         }
+
+        .secao-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .secao-header h2 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .secao-header-icone {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: rgba(43, 122, 140, 0.1);
+            color: #2b7a8c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* BOX DE REGRAS */
+        .aviso-regras-banner {
+            background: rgba(43, 122, 140, 0.05);
+            border: 1px solid rgba(43, 122, 140, 0.15);
+            border-radius: 20px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .aviso-regras-icone {
+            color: #2b7a8c;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .legenda-niveis-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #334155;
+            line-height: 1.45;
+        }
+
         .legenda-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.8rem;
-            color: #475569;
         }
+
         .legenda-dot {
-            width: 10px; height: 10px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
+            flex-shrink: 0;
         }
-        .legenda-dot.n1 { background: #eab308; }
+
+        .legenda-dot.n1 { background: #d97706; }
         .legenda-dot.n2 { background: #ea580c; }
         .legenda-dot.n3 { background: #dc2626; }
-        /* Histórico */
-        .historico-lista {
+
+        /* CONTROLES / FILTRO E BUSCA */
+        .adm-controles-row {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .hist-item {
-            display: flex;
+            align-items: center;
+            justify-content: space-between;
             gap: 14px;
-            padding: 12px 16px;
-            background: rgba(248,250,252,0.8);
-            border-radius: 12px;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .hist-acao-badge {
-            flex-shrink: 0;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            height: fit-content;
-            margin-top: 2px;
-        }
-        .hist-acao-badge.aviso { background: rgba(234,179,8,0.15); color: #854d0e; }
-        .hist-acao-badge.banimento { background: rgba(220,38,38,0.15); color: #991b1b; }
-        .hist-acao-badge.liberacao { background: rgba(16,185,129,0.15); color: #065f46; }
-        .hist-info { flex: 1; min-width: 0; }
-        .hist-usuario { font-weight: 700; font-size: 0.85rem; color: #0f172a; }
-        .hist-motivo { font-size: 0.78rem; color: #64748b; margin-top: 2px; }
-        .hist-data { font-size: 0.72rem; color: #94a3b8; margin-top: 4px; }
-        /* Filtro */
-        .filtros-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 18px;
             flex-wrap: wrap;
         }
+
+        .busca-input-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .busca-input-wrapper svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .busca-input-wrapper input {
+            width: 100%;
+            padding: 11px 16px 11px 44px;
+            border-radius: 999px;
+            border: 1.5px solid rgba(0, 0, 0, 0.08);
+            background: rgba(248, 250, 252, 0.9);
+            font-family: inherit;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .busca-input-wrapper input:focus {
+            border-color: #2b7a8c;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(43, 122, 140, 0.15);
+        }
+
+        .filtros-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .btn-filtro {
-            padding: 8px 18px;
-            border-radius: 20px;
-            border: 1.5px solid rgba(0,0,0,0.1);
-            background: rgba(255,255,255,0.8);
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1.5px solid rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             font-family: inherit;
             font-size: 0.8rem;
             font-weight: 700;
@@ -251,92 +553,568 @@ if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
             cursor: pointer;
             transition: 0.2s;
         }
-        .btn-filtro.ativo, .btn-filtro:hover {
-            background: rgba(43,122,140,0.1);
-            border-color: rgba(43,122,140,0.3);
+
+        .btn-filtro.ativo,
+        .btn-filtro:hover {
+            background: rgba(43, 122, 140, 0.1);
+            border-color: rgba(43, 122, 140, 0.3);
             color: #2b7a8c;
         }
-        /* Loading */
+
+        /* TABELA DE MODERAÇÃO */
+        .tabela-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 20px;
+        }
+
+        .tabela-moderacao {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .tabela-moderacao th {
+            text-align: left;
+            padding: 8px 14px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #64748b;
+            font-weight: 700;
+            border: none;
+        }
+
+        .tabela-moderacao tbody tr {
+            background: rgba(248, 250, 252, 0.7);
+            border-radius: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .tabela-moderacao tbody tr:hover {
+            background: rgba(43, 122, 140, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .tabela-moderacao td {
+            padding: 14px 14px;
+            font-size: 0.84rem;
+            border: none;
+            vertical-align: middle;
+        }
+
+        .tabela-moderacao td:first-child {
+            border-top-left-radius: 16px;
+            border-bottom-left-radius: 16px;
+        }
+
+        .tabela-moderacao td:last-child {
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        .celula-usuario {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .usuario-avatar-circ {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
+            color: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(43, 122, 140, 0.2);
+        }
+
+        .usuario-textos .nome {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .usuario-textos .email {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .badge-nivel {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .badge-nivel.n1 {
+            background: rgba(245, 158, 11, 0.15);
+            color: #92400e;
+        }
+
+        .badge-nivel.n2 {
+            background: rgba(234, 88, 12, 0.15);
+            color: #9a3412;
+        }
+
+        .badge-nivel.n3 {
+            background: rgba(220, 38, 38, 0.15);
+            color: #991b1b;
+        }
+
+        .motivo-tooltip {
+            max-width: 240px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #475569;
+            font-size: 0.82rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-liberar {
+            background: rgba(16, 185, 129, 0.12);
+            color: #047857;
+            border: 1.5px solid rgba(16, 185, 129, 0.3);
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-liberar:hover {
+            background: #10b981;
+            color: #ffffff;
+            border-color: #10b981;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-liberar:disabled {
+            opacity: 0.5;
+            cursor: default;
+            transform: none;
+        }
+
+        /* HISTÓRICO */
+        .historico-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hist-item {
+            display: flex;
+            gap: 16px;
+            padding: 14px 18px;
+            background: rgba(248, 250, 252, 0.85);
+            border-radius: 18px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            align-items: flex-start;
+            transition: all 0.2s ease;
+        }
+
+        .hist-item:hover {
+            background: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+            transform: translateX(2px);
+        }
+
+        .hist-acao-badge {
+            flex-shrink: 0;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hist-acao-badge.aviso {
+            background: rgba(245, 158, 11, 0.15);
+            color: #92400e;
+        }
+
+        .hist-acao-badge.banimento {
+            background: rgba(220, 38, 38, 0.15);
+            color: #991b1b;
+        }
+
+        .hist-acao-badge.liberacao {
+            background: rgba(16, 185, 129, 0.15);
+            color: #047857;
+        }
+
+        .hist-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hist-usuario {
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: #0f172a;
+        }
+
+        .hist-motivo {
+            font-size: 0.8rem;
+            color: #475569;
+            margin-top: 4px;
+            line-height: 1.45;
+        }
+
+        .hist-data {
+            font-size: 0.74rem;
+            color: #94a3b8;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        /* ESTADO VAZIO & SPINNER */
+        .vazio-estado {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .vazio-icone-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 20px;
+            background: rgba(43, 122, 140, 0.08);
+            color: #2b7a8c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .spinner {
             display: inline-block;
-            width: 18px; height: 18px;
-            border: 2px solid rgba(43,122,140,0.2);
+            width: 20px;
+            height: 20px;
+            border: 2.5px solid rgba(43, 122, 140, 0.2);
             border-top-color: #2b7a8c;
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
-            vertical-align: middle;
-            margin-right: 6px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width: 600px) {
-            .topo-adm { padding: 14px 16px; }
-            .container-adm { padding: 20px 12px 60px; }
-            .card-adm { padding: 18px 16px; }
-            .tabela-moderacao th, .tabela-moderacao td { padding: 10px 8px; }
-            .motivo-curto { max-width: 120px; }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            .nav-seta-dropdown {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+            }
+            .conteudo-site {
+                padding: 90px 14px 50px 14px;
+            }
+            .caixa-agrupadora {
+                padding: 24px 16px;
+                border-radius: 30px;
+            }
+            .caixa-agrupadora::before {
+                border-radius: 35px;
+            }
+            .card-adm-secao {
+                padding: 20px 16px;
+                border-radius: 26px;
+            }
+            .adm-header-banner {
+                padding: 18px 16px;
+                border-radius: 24px;
+            }
+            .btn-voltar-pill {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="topo-adm">
-        <a href="Comunidade.php">← Voltar</a>
-        <h1>Painel de Moderação</h1>
-        <span class="badge-adm">ADMIN</span>
+    <canvas id="fundoAnimadoCanvas" class="fundo-animado-canvas sem-mouse" data-mouse="false"></canvas>
+
+    <!-- NAVBAR UNIVERSAL -->
+    <div class="nav-container-global">
+        <nav class="navbar-topo" id="mainNavbar">
+            <div class="nav-top-row">
+                <a href="inicio.php" class="nav-logo">
+                    HELPFULL
+                    <span class="nav-seta-dropdown">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="Diario.php">Diário</a></li>
+                    <li><a href="Comunidade.php">Comunidade</a></li>
+                    <li><a href="ChatBOT.php">Helpy</a></li>
+                    <li><a href="Atividades.php">Adicionais</a></li>
+                    <li><a href="adm_comunidade.php" class="ativo">Moderação</a></li>
+                </ul>
+                <?php if ($usuarioLogado): ?>
+                    <?php 
+                        $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; 
+                        $temFotoNav = !empty($fotoPerfilDb) && (strlen($fotoPerfilDb) <= 150000);
+                    ?>
+                    <a href="Perfil.php" style="text-decoration: none;">
+                        <div class="perfil-capsula" <?= $temFotoNav ? "style='background-image: url($fotoPerfilDb); background-size: cover; background-position: center;'" : '' ?>>
+                            <?php if (!$temFotoNav): ?>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            <?php endif; ?>
+                        </div>
+                    </a>
+                <?php else: ?>
+                    <a href="Comeco.php" class="nav-entrar-btn">Entrar</a>
+                <?php endif; ?>
+            </div>
+            <div class="nav-dropdown-mobile" id="navDropdownMobile">
+                <a href="inicio.php">Início</a>
+                <a href="Diario.php">Diário</a>
+                <a href="Comunidade.php">Comunidade</a>
+                <a href="ChatBOT.php">Helpy</a>
+                <a href="Atividades.php">Adicionais</a>
+                <a href="adm_comunidade.php" class="ativo">Painel de Moderação</a>
+                <a href="Perfil.php">Perfil</a>
+            </div>
+        </nav>
     </div>
 
-    <div class="container-adm">
-        <!-- Stats -->
-        <div class="stats-row" id="statsRow">
-            <div class="stat-box"><div class="num" id="statTotal">—</div><div class="label">Total com infrações</div></div>
-            <div class="stat-box amarelo"><div class="num" id="statN1">—</div><div class="label">Nível 1 — 1º Aviso</div></div>
-            <div class="stat-box laranja"><div class="num" id="statN2">—</div><div class="label">Nível 2 — 2º Aviso (Alerta)</div></div>
-            <div class="stat-box vermelho"><div class="num" id="statN3">—</div><div class="label">Nível 3 — Banidos</div></div>
-        </div>
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="conteudo-site">
+        <div class="caixa-agrupadora">
 
-        <!-- Usuários com restrição -->
-        <div class="card-adm">
-            <h2>
-                <span class="icone-h2">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2b7a8c" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                </span>
-                Usuários com Infrações / Banimento
-            </h2>
-
-            <div class="legenda-niveis">
-                <div class="legenda-item"><div class="legenda-dot n1"></div> Nível 1: 1º Aviso (1º post apagado — expira em 6 meses sem novo aviso)</div>
-                <div class="legenda-item"><div class="legenda-dot n2"></div> Nível 2: 2º Aviso (alerta de que mais 1 post causará banimento — expira em 6 meses)</div>
-                <div class="legenda-item"><div class="legenda-dot n3"></div> Nível 3: Banido (3º post apagado — proibido de postar e interagir, somente visualiza)</div>
+            <!-- HEADER BANNER -->
+            <div class="adm-header-banner">
+                <div class="adm-header-left">
+                    <div class="adm-header-icone">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <div class="adm-header-titulos">
+                        <div class="adm-header-titulo-linha">
+                            <h1>Painel de Moderação</h1>
+                            <span class="badge-adm-pill">Admin</span>
+                        </div>
+                        <p>Gerencie o sistema de advertências, membros suspensos e histórico disciplinar</p>
+                    </div>
+                </div>
+                <a href="Comunidade.php" class="btn-voltar-pill">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Voltar para Comunidade
+                </a>
             </div>
 
-            <div class="filtros-row">
-                <button class="btn-filtro ativo" onclick="filtrarNivel(0, this)">Todos</button>
-                <button class="btn-filtro" onclick="filtrarNivel(1, this)">1º Aviso</button>
-                <button class="btn-filtro" onclick="filtrarNivel(2, this)">2º Aviso</button>
-                <button class="btn-filtro" onclick="filtrarNivel(3, this)">Banidos</button>
+            <!-- STATS CARDS -->
+            <div class="adm-stats-grid" id="statsRow">
+                <div class="adm-stat-card total">
+                    <div class="adm-stat-icone">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="adm-stat-info">
+                        <div class="num" id="statTotal">—</div>
+                        <div class="label">Total com infrações</div>
+                    </div>
+                </div>
+
+                <div class="adm-stat-card n1">
+                    <div class="adm-stat-icone">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <div class="adm-stat-info">
+                        <div class="num" id="statN1">—</div>
+                        <div class="label">1º Aviso (1/3)</div>
+                    </div>
+                </div>
+
+                <div class="adm-stat-card n2">
+                    <div class="adm-stat-icone">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="adm-stat-info">
+                        <div class="num" id="statN2">—</div>
+                        <div class="label">2º Aviso (Alerta 2/3)</div>
+                    </div>
+                </div>
+
+                <div class="adm-stat-card n3">
+                    <div class="adm-stat-icone">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                        </svg>
+                    </div>
+                    <div class="adm-stat-info">
+                        <div class="num" id="statN3">—</div>
+                        <div class="label">Banidos da Comunidade</div>
+                    </div>
+                </div>
             </div>
 
-            <div id="tabelaWrapper">
-                <div class="vazio-estado"><span class="spinner"></span> Carregando...</div>
-            </div>
-        </div>
+            <!-- SEÇÃO DE USUÁRIOS COM INFRAÇÃO -->
+            <div class="card-adm-secao">
+                <div class="secao-header">
+                    <h2>
+                        <span class="secao-header-icone">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                        </span>
+                        Membros com Infrações / Suspensão
+                    </h2>
+                </div>
 
-        <!-- Histórico recente -->
-        <div class="card-adm">
-            <h2>
-                <span class="icone-h2">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2b7a8c" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
-                </span>
-                Histórico Recente de Moderação
-            </h2>
-            <div id="historicoWrapper">
-                <div class="vazio-estado"><span class="spinner"></span> Carregando...</div>
+                <!-- BOX INFORMATIVO DAS REGRAS -->
+                <div class="aviso-regras-banner">
+                    <div class="aviso-regras-icone">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </div>
+                    <div class="legenda-niveis-grid">
+                        <div class="legenda-item">
+                            <div class="legenda-dot n1"></div>
+                            <span><strong>Nível 1 (1º Aviso):</strong> 1º post apagado por infração. Expira automaticamente em 6 meses se não houver novos avisos.</span>
+                        </div>
+                        <div class="legenda-item">
+                            <div class="legenda-dot n2"></div>
+                            <span><strong>Nível 2 (2º Aviso):</strong> Alerta de reincidência. O próximo post apagado causará banimento definitivo da comunidade.</span>
+                        </div>
+                        <div class="legenda-item">
+                            <div class="legenda-dot n3"></div>
+                            <span><strong>Nível 3 (Banido):</strong> 3ª infração atingida. Conta bloqueada para publicações e reações (apenas visualização permitida).</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARRA DE CONTROLES: BUSCA & FILTROS -->
+                <div class="adm-controles-row">
+                    <div class="busca-input-wrapper">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="inputBuscaUsuario" placeholder="Buscar por nome ou e-mail..." oninput="filtrarPorBusca()">
+                    </div>
+
+                    <div class="filtros-pills">
+                        <button class="btn-filtro ativo" onclick="filtrarNivel(0, this)">Todos</button>
+                        <button class="btn-filtro" onclick="filtrarNivel(1, this)">1º Aviso</button>
+                        <button class="btn-filtro" onclick="filtrarNivel(2, this)">2º Aviso</button>
+                        <button class="btn-filtro" onclick="filtrarNivel(3, this)">Banidos</button>
+                    </div>
+                </div>
+
+                <!-- TABELA -->
+                <div id="tabelaWrapper" class="tabela-wrapper">
+                    <div class="vazio-estado">
+                        <span class="spinner"></span>
+                        <span>Carregando dados da moderação...</span>
+                    </div>
+                </div>
             </div>
+
+            <!-- SEÇÃO DE HISTÓRICO -->
+            <div class="card-adm-secao">
+                <div class="secao-header">
+                    <h2>
+                        <span class="secao-header-icone">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </span>
+                        Histórico Recente de Moderações
+                    </h2>
+                </div>
+                <div id="historicoWrapper">
+                    <div class="vazio-estado">
+                        <span class="spinner"></span>
+                        <span>Carregando histórico...</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <!-- SCRIPTS -->
+    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
+    <script src="assets/transicao.js?v=20260926-v1"></script>
     <script>
     let todosUsuarios = [];
     let filtroAtual = 0;
+    let termoBusca = '';
+
+    // Menu Mobile Navbar
+    const navLogo = document.querySelector('.nav-logo');
+    const navDropdownMobile = document.getElementById('navDropdownMobile');
+    const navSeta = document.querySelector('.nav-seta-dropdown');
+
+    if (navLogo && navDropdownMobile) {
+        navLogo.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                navDropdownMobile.classList.toggle('aberto');
+                if (navSeta) {
+                    navSeta.style.transform = navDropdownMobile.classList.contains('aberto') ? 'rotate(180deg)' : 'rotate(0deg)';
+                }
+            }
+        });
+    }
 
     async function carregarDados() {
         try {
@@ -345,10 +1123,10 @@ if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
             if (!d.success) throw new Error(d.error);
             todosUsuarios = d.usuarios || [];
             atualizarStats();
-            renderTabela(todosUsuarios);
+            aplicarFiltros();
         } catch (e) {
             document.getElementById('tabelaWrapper').innerHTML =
-                `<div class="vazio-estado">Erro ao carregar dados: ${e.message}</div>`;
+                `<div class="vazio-estado">Erro ao carregar dados: ${escHtml(e.message)}</div>`;
         }
 
         carregarHistorico();
@@ -364,8 +1142,27 @@ if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
     function filtrarNivel(nivel, btn) {
         filtroAtual = nivel;
         document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
-        btn.classList.add('ativo');
-        const filtrados = nivel === 0 ? todosUsuarios : todosUsuarios.filter(u => u.nivel == nivel);
+        if (btn) btn.classList.add('ativo');
+        aplicarFiltros();
+    }
+
+    function filtrarPorBusca() {
+        termoBusca = (document.getElementById('inputBuscaUsuario').value || '').trim().toLowerCase();
+        aplicarFiltros();
+    }
+
+    function aplicarFiltros() {
+        let filtrados = todosUsuarios;
+        if (filtroAtual > 0) {
+            filtrados = filtrados.filter(u => u.nivel == filtroAtual);
+        }
+        if (termoBusca) {
+            filtrados = filtrados.filter(u => 
+                (u.nome || '').toLowerCase().includes(termoBusca) ||
+                (u.email || '').toLowerCase().includes(termoBusca) ||
+                (u.motivo || '').toLowerCase().includes(termoBusca)
+            );
+        }
         renderTabela(filtrados);
     }
 
@@ -373,47 +1170,87 @@ if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
         const wrapper = document.getElementById('tabelaWrapper');
         if (!usuarios.length) {
             wrapper.innerHTML = `<div class="vazio-estado">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                <div>Nenhum usuário com restrição!</div>
+                <div class="vazio-icone-box">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                </div>
+                <div><strong>Nenhum usuário encontrado nesta listagem!</strong></div>
+                <span style="font-size:0.8rem;color:#94a3b8">A comunidade está saudável e sem infrações ativas.</span>
             </div>`;
             return;
         }
 
-        const labelNivel = { 1: '1º Aviso', 2: '2º Aviso (Alerta)', 3: 'Banido' };
+        const labelNivel = { 1: '1º Aviso (1/3)', 2: '2º Aviso (2/3)', 3: 'Banido (3/3)' };
         const classNivel = { 1: 'n1', 2: 'n2', 3: 'n3' };
 
         const rows = usuarios.map(u => {
             const criado = new Date(u.criado_em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
             const expira = u.expira_avisos_em
-                ? `Expira: ${new Date(u.expira_avisos_em).toLocaleDateString('pt-BR')}`
-                : (u.nivel < 3 ? '' : 'Permanente');
+                ? `Expira em: ${new Date(u.expira_avisos_em).toLocaleDateString('pt-BR')}`
+                : (u.nivel < 3 ? 'Aviso ativo' : 'Banimento permanente');
+
+            const inicial = (u.nome || 'U').charAt(0).toUpperCase();
+
             return `<tr>
-                <td><strong>${escHtml(u.nome)}</strong><br><span style="font-size:0.75rem;color:#94a3b8">${escHtml(u.email)}</span></td>
-                <td><span class="badge-nivel ${classNivel[u.nivel]}">${labelNivel[u.nivel]}</span></td>
-                <td class="motivo-curto" title="${escHtml(u.motivo)}">${escHtml(u.motivo)}</td>
-                <td style="font-size:0.78rem;color:#64748b">${criado}<br>${expira}</td>
-                <td style="font-size:0.78rem;color:#64748b;text-align:center">${u.total_punicoes ?? 0}</td>
-                <td><button class="btn-liberar" onclick="liberarUsuario('${u.usuario_id}', this)">Liberar</button></td>
+                <td>
+                    <div class="celula-usuario">
+                        <div class="usuario-avatar-circ">${escHtml(inicial)}</div>
+                        <div class="usuario-textos">
+                            <div class="nome">${escHtml(u.nome)}</div>
+                            <div class="email">${escHtml(u.email)}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span class="badge-nivel ${classNivel[u.nivel]}">
+                        <span class="legenda-dot ${classNivel[u.nivel]}"></span>
+                        ${labelNivel[u.nivel]}
+                    </span>
+                </td>
+                <td>
+                    <div class="motivo-tooltip" title="${escHtml(u.motivo)}" onclick="alert('Motivo completo:\\n\\n' + this.title)">
+                        ${escHtml(u.motivo)}
+                    </div>
+                </td>
+                <td style="font-size:0.78rem;color:#475569">
+                    <div><strong>${criado}</strong></div>
+                    <div style="font-size:0.73rem;color:#94a3b8">${expira}</div>
+                </td>
+                <td style="font-size:0.85rem;color:#0f172a;text-align:center;font-weight:700">
+                    ${u.total_punicoes ?? 0}
+                </td>
+                <td>
+                    <button class="btn-liberar" onclick="liberarUsuario('${u.usuario_id}', this)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Liberar
+                    </button>
+                </td>
             </tr>`;
         }).join('');
 
         wrapper.innerHTML = `<table class="tabela-moderacao">
-            <thead><tr>
-                <th>Usuário</th>
-                <th>Nível</th>
-                <th>Motivo</th>
-                <th>Data / Expiração</th>
-                <th style="text-align:center">Punicões</th>
-                <th>Ação</th>
-            </tr></thead>
+            <thead>
+                <tr>
+                    <th>Membro</th>
+                    <th>Nível</th>
+                    <th>Motivo do Registro</th>
+                    <th>Data / Expiração</th>
+                    <th style="text-align:center">Histórico</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
             <tbody>${rows}</tbody>
         </table>`;
     }
 
     async function liberarUsuario(usuarioId, btn) {
-        if (!confirm('Liberar este usuário e remover todas as restrições?')) return;
+        if (!confirm('Deseja realmente liberar este usuário e remover todas as restrições da conta dele na comunidade?')) return;
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner"></span>';
+        btn.innerHTML = '<span class="spinner" style="width:14px;height:14px;border-width:2px;"></span>';
         try {
             const fd = new FormData();
             fd.append('acao', 'liberar_usuario');
@@ -423,18 +1260,17 @@ if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
             if (d.success) {
                 todosUsuarios = todosUsuarios.filter(u => u.usuario_id !== usuarioId);
                 atualizarStats();
-                const filtrados = filtroAtual === 0 ? todosUsuarios : todosUsuarios.filter(u => u.nivel == filtroAtual);
-                renderTabela(filtrados);
+                aplicarFiltros();
                 carregarHistorico();
             } else {
                 alert('Erro ao liberar: ' + (d.error || 'Erro desconhecido'));
                 btn.disabled = false;
-                btn.textContent = 'Liberar';
+                btn.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline> Liberar';
             }
         } catch (e) {
             alert('Erro de rede. Tente novamente.');
             btn.disabled = false;
-            btn.textContent = 'Liberar';
+            btn.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline> Liberar';
         }
     }
 
@@ -444,12 +1280,14 @@ if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
             const r = await fetch('comunidade_moderacao_proc.php?acao=listar_historico');
             const d = await r.json();
             if (!d.success || !d.historico.length) {
-                wrapper.innerHTML = `<div class="vazio-estado">Nenhuma ação de moderação registrada ainda.</div>`;
+                wrapper.innerHTML = `<div class="vazio-estado">
+                    <span style="opacity:0.7">Nenhuma ação de moderação registrada recentemente.</span>
+                </div>`;
                 return;
             }
             const acaoLabel = {
-                aviso_1: 'Aviso 1',
-                aviso_2: 'Aviso 2',
+                aviso_1: '1º Aviso',
+                aviso_2: '2º Aviso',
                 banimento: 'Banimento',
                 liberacao: 'Liberação',
                 expiracao_automatica: 'Expirou'
@@ -468,9 +1306,9 @@ if (!$isAdmin || ($usuarioLogado['email'] ?? '') !== $adminEmail) {
                 return `<div class="hist-item">
                     <span class="hist-acao-badge ${cls}">${escHtml(lbl)}</span>
                     <div class="hist-info">
-                        <div class="hist-usuario">${escHtml(h.usuario_nome)} <span style="color:#94a3b8;font-weight:400">&lt;${escHtml(h.usuario_email)}&gt;</span></div>
-                        <div class="hist-motivo">${escHtml((h.motivo || '').substring(0, 120))}${(h.motivo||'').length > 120 ? '...' : ''}</div>
-                        <div class="hist-data">em ${data} · por ${escHtml(h.admin_nome || 'Sistema')}</div>
+                        <div class="hist-usuario">${escHtml(h.usuario_nome)} <span style="color:#94a3b8;font-weight:400;font-size:0.8rem">(${escHtml(h.usuario_email)})</span></div>
+                        <div class="hist-motivo">${escHtml(h.motivo || 'Sem observação adicional')}</div>
+                        <div class="hist-data">Registrado em ${data} · Aplicado por ${escHtml(h.admin_nome || 'Sistema HelpFull')}</div>
                     </div>
                 </div>`;
             }).join('');
