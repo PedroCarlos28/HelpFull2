@@ -2207,127 +2207,250 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             animation: fadeInOverlay 0.3s ease;
         }
         @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+        /* ══ POPUP DE REGRAS DA COMUNIDADE ══════════════════════════ */
+        .overlay-regras {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 99990;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeInOverlay 0.25s ease;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .popup-regras {
             position: relative;
-            background: rgba(255,255,255,0.97);
-            border-radius: 24px;
-            padding: 36px 32px 28px;
-            max-width: 520px;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 22px 26px 20px;
+            max-width: 580px;
             width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            animation: slideUpPopup 0.4s cubic-bezier(0.16,1,0.3,1);
-            max-height: 90vh;
-            overflow-y: auto;
+            max-height: min(92vh, 92dvh);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            animation: slideUpPopup 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            box-sizing: border-box;
+            overflow: hidden;
         }
+
+        @keyframes slideUpPopup {
+            from { transform: translateY(30px) scale(0.97); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
         .btn-fechar-popup-x {
             position: absolute;
-            top: 18px;
-            right: 20px;
-            width: 34px;
-            height: 34px;
-            background: rgba(0,0,0,0.05);
+            top: 16px;
+            right: 18px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.04);
             border: none;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             line-height: 1;
             color: #64748b;
             cursor: pointer;
             transition: all 0.2s ease;
+            z-index: 2;
         }
+
         .btn-fechar-popup-x:hover {
-            background: rgba(239, 68, 68, 0.15);
+            background: rgba(239, 68, 68, 0.12);
             color: #dc2626;
-            transform: scale(1.08);
+            transform: scale(1.06);
         }
-        @keyframes slideUpPopup { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .popup-regras .pr-titulo {
+
+        /* HEADER DO POPUP */
+        .pr-header {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1.15rem;
+            margin-bottom: 12px;
+            padding-right: 36px;
+        }
+
+        .pr-icone {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, rgba(43, 122, 140, 0.16), rgba(43, 122, 140, 0.06));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid rgba(43, 122, 140, 0.18);
+        }
+
+        .pr-titulos {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .pr-titulo {
+            font-size: 1.1rem;
             font-weight: 800;
             color: #0f172a;
-            margin-bottom: 6px;
+            margin: 0;
+            letter-spacing: -0.3px;
         }
-        .popup-regras .pr-titulo .pr-icone {
-            width: 42px; height: 42px;
-            background: linear-gradient(135deg, rgba(43,122,140,0.15), rgba(43,122,140,0.05));
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .popup-regras .pr-subtitulo {
-            font-size: 0.82rem;
+
+        .pr-subtitulo {
+            font-size: 0.8rem;
             color: #64748b;
-            margin-bottom: 22px;
             font-weight: 500;
-            padding-left: 54px;
+            margin: 0;
+            line-height: 1.35;
         }
+
+        /* CORPO COM SCROLL EMBUTIDO E BONITO */
+        .popup-regras-corpo {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            max-height: 100%;
+            padding-right: 6px;
+            margin-right: -4px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(43, 122, 140, 0.25) transparent;
+        }
+
+        .popup-regras-corpo::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .popup-regras-corpo::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .popup-regras-corpo::-webkit-scrollbar-thumb {
+            background: rgba(43, 122, 140, 0.25);
+            border-radius: 999px;
+        }
+
+        .popup-regras-corpo::-webkit-scrollbar-thumb:hover {
+            background: #2b7a8c;
+        }
+
         .regra-item {
             display: flex;
-            gap: 14px;
-            padding: 13px 16px;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 12px;
             border-radius: 14px;
-            margin-bottom: 8px;
-            background: rgba(248,250,252,0.9);
-            border: 1px solid rgba(0,0,0,0.05);
+            background: rgba(248, 250, 252, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.15s ease;
         }
+
+        .regra-item:hover {
+            background: rgba(43, 122, 140, 0.04);
+            border-color: rgba(43, 122, 140, 0.18);
+        }
+
         .regra-num {
-            width: 26px; height: 26px;
-            background: rgba(43,122,140,0.12);
+            width: 22px;
+            height: 22px;
+            background: rgba(43, 122, 140, 0.12);
             color: #2b7a8c;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
             font-weight: 800;
             flex-shrink: 0;
             margin-top: 1px;
         }
-        .regra-texto strong {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 2px;
+
+        .regra-texto {
+            flex: 1;
+            min-width: 0;
         }
+
+        .regra-texto strong {
+            display: inline-block;
+            font-size: 0.84rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-right: 4px;
+        }
+
         .regra-texto p {
+            display: inline;
             font-size: 0.78rem;
             color: #475569;
-            line-height: 1.5;
+            line-height: 1.4;
             margin: 0;
         }
+
         .aviso-consequencias {
-            background: rgba(234,179,8,0.1);
-            border: 1px solid rgba(234,179,8,0.3);
-            border-radius: 14px;
-            padding: 13px 16px;
-            margin: 16px 0;
-            font-size: 0.8rem;
-            color: #78350f;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.28);
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin-top: 4px;
+            font-size: 0.76rem;
+            color: #854d0e;
             display: flex;
-            gap: 10px;
-            align-items: flex-start;
+            gap: 8px;
+            align-items: center;
+            line-height: 1.4;
         }
-        .aviso-consequencias svg { flex-shrink: 0; margin-top: 1px; }
+
+        .aviso-consequencias svg {
+            flex-shrink: 0;
+            color: #d97706;
+        }
+
+        /* FOOTER COM BOTÃO */
+        .pr-footer {
+            margin-top: 12px;
+            padding-top: 4px;
+            flex-shrink: 0;
+        }
+
         .btn-aceitar-regras {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #2b7a8c, #1d5f70);
-            color: #fff;
+            padding: 11px 20px;
+            background: linear-gradient(135deg, #2b7a8c, #1f5d6b);
+            color: #ffffff;
             border: none;
-            border-radius: 16px;
+            border-radius: 999px;
             font-family: inherit;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 18px;
-            transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(43,122,140,0.3);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(43, 122, 140, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .btn-aceitar-regras:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(43,122,140,0.35); }
+
+        .btn-aceitar-regras:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(43, 122, 140, 0.35);
+            background: linear-gradient(135deg, #205c6a, #164652);
+        }
 
         /* ══ BANNER DE PUNIÇÃO (para o usuário punido) ══════════════ */
         .banner-punicao {
@@ -2612,58 +2735,73 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
     <div class="overlay-regras" id="overlayRegras">
         <div class="popup-regras" role="dialog" aria-modal="true" aria-labelledby="tituloRegras">
             <button type="button" class="btn-fechar-popup-x" onclick="aceitarRegras()" aria-label="Fechar popup">&times;</button>
-            <div class="pr-titulo" id="tituloRegras">
-                <span class="pr-icone">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7a8c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                </span>
-                Diretrizes da Comunidade HelpFull 🌿
-            </div>
-            <p class="pr-subtitulo">Este é um espaço seguro e acolhedor. Antes de interagir, leia nossas regras:</p>
-
-            <div class="regra-item">
-                <div class="regra-num">1</div>
-                <div class="regra-texto">
-                    <strong>Respeito e Empatia</strong>
-                    <p>Trate todos com acolhimento e consideração. Ataques, termos ofensivos, preconceito ou agressividade não são tolerados.</p>
+            <div class="pr-header">
+                <div class="pr-icone">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2b7a8c" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
                 </div>
-            </div>
-            <div class="regra-item">
-                <div class="regra-num">2</div>
-                <div class="regra-texto">
-                    <strong>Sem Spam ou Divulgação Comercial</strong>
-                    <p>Não publique links suspeitos, vendas, publicidade ou mensagens repetidas em massa.</p>
-                </div>
-            </div>
-            <div class="regra-item">
-                <div class="regra-num">3</div>
-                <div class="regra-texto">
-                    <strong>Conteúdo Sensível e Gatilhos</strong>
-                    <p>Ao compartilhar experiências difíceis, utilize as tags de sensibilidade adequadas para proteger os demais membros.</p>
-                </div>
-            </div>
-            <div class="regra-item">
-                <div class="regra-num">4</div>
-                <div class="regra-texto">
-                    <strong>Não Compartilhe Desinformação</strong>
-                    <p>Evite disseminar conselhos médicos não verificados, notícias falsas ou informações prejudiciais à saúde.</p>
-                </div>
-            </div>
-            <div class="regra-item">
-                <div class="regra-num">5</div>
-                <div class="regra-texto">
-                    <strong>Privacidade e Sigilo</strong>
-                    <p>Nunca exponha dados pessoais, fotos privadas ou conversas de terceiros sem autorização.</p>
+                <div class="pr-titulos">
+                    <h2 class="pr-titulo" id="tituloRegras">Diretrizes da Comunidade HelpFull</h2>
+                    <p class="pr-subtitulo">Espaço de acolhimento e escuta segura. Leia antes de participar:</p>
                 </div>
             </div>
 
-            <div class="aviso-consequencias">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-                <div><strong>Sistema de Moderação:</strong> A cada post removido por descumprir as regras, o usuário recebe um aviso (1º e 2º avisos). No 3º post removido, a conta é <strong>banida da comunidade</strong> (somente poderá visualizar posts, sem poder postar ou interagir). Os avisos de nível 1 e 2 expiram em 6 meses caso nenhuma nova infração ocorra.</div>
+            <div class="popup-regras-corpo">
+                <div class="regra-item">
+                    <div class="regra-num">1</div>
+                    <div class="regra-texto">
+                        <strong>Respeito e Empatia:</strong>
+                        <p>Trate todos com acolhimento. Ofensas, preconceito ou agressividade não são tolerados.</p>
+                    </div>
+                </div>
+                <div class="regra-item">
+                    <div class="regra-num">2</div>
+                    <div class="regra-texto">
+                        <strong>Sem Spam ou Vendas:</strong>
+                        <p>Proibido links suspeitos, publicidade, correntes ou mensagens repetidas em massa.</p>
+                    </div>
+                </div>
+                <div class="regra-item">
+                    <div class="regra-num">3</div>
+                    <div class="regra-texto">
+                        <strong>Conteúdo Sensível:</strong>
+                        <p>Ao compartilhar experiências difíceis, utilize as tags de sensibilidade adequadas.</p>
+                    </div>
+                </div>
+                <div class="regra-item">
+                    <div class="regra-num">4</div>
+                    <div class="regra-texto">
+                        <strong>Sem Desinformação:</strong>
+                        <p>Evite conselhos médicos não verificados ou notícias prejudiciais à saúde mental.</p>
+                    </div>
+                </div>
+                <div class="regra-item">
+                    <div class="regra-num">5</div>
+                    <div class="regra-texto">
+                        <strong>Privacidade e Sigilo:</strong>
+                        <p>Nunca exponha dados pessoais, fotos privadas ou conversas de terceiros sem permissão.</p>
+                    </div>
+                </div>
+
+                <div class="aviso-consequencias">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span><strong>Moderação com 3 Avisos:</strong> Infrações sucessivas levam ao banimento da comunidade. Avisos expiram em 6 meses.</span>
+                </div>
             </div>
 
-            <button type="button" class="btn-aceitar-regras" onclick="aceitarRegras()">
-                Entendi as regras e fechar ✓
-            </button>
+            <div class="pr-footer">
+                <button type="button" class="btn-aceitar-regras" onclick="aceitarRegras()">
+                    <span>Entendi as regras e continuar</span>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
     <?php endif; ?>
