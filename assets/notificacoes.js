@@ -1863,10 +1863,10 @@ styleEl.textContent = `
                 color: ${p.primaria} !important;
             }
 
-            /* 5. Cápsula de perfil e indicadores de topo */
-            .perfil-capsula,
+            /* 5. Capsula de perfil - so na tela de perfil (nav-perfil.atual) */
+
             .nav-perfil.atual .perfil-capsula,
-            body.acessibilidade-escuro .perfil-capsula,
+
             body.acessibilidade-escuro .nav-perfil.atual .perfil-capsula {
                 box-shadow: 0 0 0 2.5px ${p.clara}, 0 0 12px ${p.sombra} !important;
             }
