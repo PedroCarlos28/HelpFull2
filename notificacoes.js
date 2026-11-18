@@ -1741,6 +1741,11 @@ styleEl.textContent = `
             .nav-dropdown-mobile a.ativo {
                 background: ${p.suave} !important;
             }
+            body.acessibilidade-escuro .nav-logo,
+            body.acessibilidade-escuro .nav-logo-capsula {
+                color: ${p.clara} !important;
+                text-shadow: 0 0 6px ${p.clara}, 0 0 14px ${p.primaria}, 0 0 26px ${p.sombra} !important;
+            }
             .nav-entrar-btn,
             .nav-entrar-btn:hover,
             .dicas-link,

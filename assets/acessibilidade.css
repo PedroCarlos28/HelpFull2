@@ -1480,11 +1480,11 @@ body.acessibilidade-contraste .nav-logo-capsula {
 /* Modo escuro: logo HELPFULL com brilho neon */
 body.acessibilidade-escuro .nav-logo,
 body.acessibilidade-escuro .nav-logo-capsula {
-    color: var(--tema-link) !important;
+    color: var(--tema-link, var(--cor-tema-clara, #7ecfdb)) !important;
     text-shadow:
-        0 0 6px rgba(126, 207, 219, 0.9),
-        0 0 16px rgba(126, 207, 219, 0.5),
-        0 0 32px rgba(126, 207, 219, 0.25) !important;
+        0 0 6px var(--cor-tema-clara, rgba(126, 207, 219, 0.9)),
+        0 0 14px var(--cor-tema-primaria, rgba(126, 207, 219, 0.5)),
+        0 0 26px var(--cor-tema-sombra, rgba(126, 207, 219, 0.25)) !important;
 }
 
 body.acessibilidade-escuro .logo-gigante,
