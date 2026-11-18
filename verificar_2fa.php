@@ -124,9 +124,15 @@ try {
         error_log("Erro ao registrar notificacao 2FA: " . $tNotif->getMessage());
     }
 
+    $prefs = $usuario['preferencias'] ?? [];
+    if (is_string($prefs)) {
+        $prefs = json_decode($prefs, true) ?: [];
+    }
+
     responderJson([
         'sucesso' => true,
-        'mensagem' => 'Autenticação confirmada com sucesso!'
+        'mensagem' => 'Autenticação confirmada com sucesso!',
+        'preferencias' => $prefs
     ]);
 
 } catch (Throwable $e) {

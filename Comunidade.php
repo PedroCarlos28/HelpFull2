@@ -296,6 +296,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Comunidade</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
+    <?= renderizarConfiguracoesUsuarioTags($usuarioLogado) ?>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
@@ -1025,12 +1026,21 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         .post-avatar {
             width: 32px;
             height: 32px;
-            background: var(--cor-tema-primaria, #2b7a8c);
+            background-color: var(--cor-tema-primaria, #2b7a8c);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .post-avatar.tem-foto {
+            background-color: transparent !important;
         }
 
         .post-nome {
@@ -2707,6 +2717,32 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             background: linear-gradient(135deg, #205c6a, #164652);
         }
 
+        /* Suporte ao Modo Escuro para o Banner Admin */
+        body.acessibilidade-escuro .banner-adm-acesso {
+            background: rgba(26, 33, 38, 0.88) !important;
+            border-color: var(--cor-tema-borda, rgba(255, 255, 255, 0.12)) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        body.acessibilidade-escuro .banner-adm-acesso:hover {
+            border-color: var(--cor-tema-clara, rgba(125, 211, 252, 0.4)) !important;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 15px var(--cor-tema-sombra, rgba(43, 122, 140, 0.2)) !important;
+        }
+
+        body.acessibilidade-escuro .badge-adm-icone {
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.15)) !important;
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+            border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.25)) !important;
+        }
+
+        body.acessibilidade-escuro .banner-adm-tag {
+            color: var(--cor-tema-clara, #7dd3fc) !important;
+        }
+
+        body.acessibilidade-escuro .banner-adm-sub {
+            color: #94a3b8 !important;
+        }
+
         @media (max-width: 650px) {
             .banner-adm-acesso {
                 flex-direction: column;
@@ -2723,7 +2759,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261117-v6">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <link rel="stylesheet" href="assets/tutorial.css?v=20261017-tour">
 </head>
@@ -2850,7 +2886,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                 <?php if ($usuarioLogado): ?>
                     <?php 
                         $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_perfil'] : ''; 
-                        $temFotoNav = !empty($fotoPerfilDb) && (strlen($fotoPerfilDb) <= 150000);
+                        $temFotoNav = !empty($fotoPerfilDb);
                     ?>
                     <a href="Perfil.php" style="text-decoration: none;">
                         <div class="perfil-capsula" <?= $temFotoNav ? "style='background-image: url($fotoPerfilDb);'" : '' ?>>
@@ -3074,9 +3110,9 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
                             <div class="post-header">
                                 <?php 
                                     $autorFoto = $post['autor_foto'] ?? '';
-                                    $temFotoAutor = !empty($autorFoto) && (strlen($autorFoto) <= 150000);
+                                    $temFotoAutor = !empty($autorFoto);
                                 ?>
-                                <div class="post-avatar" <?= $temFotoAutor ? "style='background-image: url(" . $autorFoto . "); background-size: cover; background-position: center;'" : '' ?>>
+                                <div class="post-avatar <?= $temFotoAutor ? 'tem-foto' : '' ?>" <?= $temFotoAutor ? "style='background-image: url(" . htmlspecialchars($autorFoto, ENT_QUOTES) . "); background-size: cover; background-position: center;'" : '' ?>>
                                     <?php if (!$temFotoAutor): ?>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                             stroke-width="2">
@@ -4036,7 +4072,7 @@ $tmdbKey = '1482bdfd51f8e2ab38fe49ac49546d17';
         }
     </script>
     <script src="assets/fundo-animado.js?v=20261117-v5"></script>
-    <script src="notificacoes.js?v=20261117-notif-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20261117-notif-v8" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v8';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script src="assets/tutorial.js?v=20261017-tour"></script>
 </body>

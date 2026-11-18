@@ -18,6 +18,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
+    <?= renderizarConfiguracoesUsuarioTags($usuarioLogado) ?>
     <style>
         /* =======================================
            CONFIGURAÇÕES GLOBAIS
@@ -1256,7 +1257,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261117-v6">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <link rel="stylesheet" href="assets/tutorial.css?v=20261017-tour">
 </head>
@@ -1738,7 +1739,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
         })();
     </script>
     <script src="assets/fundo-animado.js?v=20261117-v5"></script>
-    <script src="notificacoes.js?v=20261117-notif-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20261117-notif-v8" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v8';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
 
     <!-- MODAL DE BOAS-VINDAS / ONBOARDING DE CONFIGURAÇÕES -->
@@ -1804,7 +1805,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                             </button>
                             <div class="tema-cor-expansao" id="temaCorExpansaoOnboarding">
                                 <div class="tema-cor-grupo">
-                                    <div class="tema-cor-grupo-rotulo">☀️ Tons Claros & Vivos</div>
+                                    <div class="tema-cor-grupo-rotulo"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> Tons Claros & Vivos</div>
                                     <div class="tema-cor-bolinhas-grid" id="gridCoresClarasOnboarding">
                                         <button type="button" class="tema-cor-bolinha" data-cor-id="c1_turquesa_claro" data-preview-key="tema-cor" title="Turquesa" style="--cor-dot: #1ABC9C;" onclick="selecionarCorTema('c1_turquesa_claro')" aria-label="Cor Turquesa"><span class="tema-cor-check">✓</span></button>
                                         <button type="button" class="tema-cor-bolinha" data-cor-id="c2_verde_claro" data-preview-key="tema-cor" title="Verde Esmeralda" style="--cor-dot: #2ECC71;" onclick="selecionarCorTema('c2_verde_claro')" aria-label="Cor Verde Esmeralda"><span class="tema-cor-check">✓</span></button>
@@ -1819,7 +1820,7 @@ $primeiraVezOnboarding = $usuarioLogado && empty($usuarioLogado['onboarding_conc
                                     </div>
                                 </div>
                                 <div class="tema-cor-grupo">
-                                    <div class="tema-cor-grupo-rotulo">🌙 Tons Escuros & Intensos</div>
+                                    <div class="tema-cor-grupo-rotulo"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Tons Escuros & Intensos</div>
                                     <div class="tema-cor-bolinhas-grid" id="gridCoresEscurasOnboarding">
                                         <button type="button" class="tema-cor-bolinha" data-cor-id="c1_turquesa_escuro" data-preview-key="tema-cor" title="Turquesa Escuro" style="--cor-dot: #11806A;" onclick="selecionarCorTema('c1_turquesa_escuro')" aria-label="Cor Turquesa Escuro"><span class="tema-cor-check">✓</span></button>
                                         <button type="button" class="tema-cor-bolinha" data-cor-id="c2_verde_escuro" data-preview-key="tema-cor" title="Verde Floresta" style="--cor-dot: #1F8B4C;" onclick="selecionarCorTema('c2_verde_escuro')" aria-label="Cor Verde Floresta"><span class="tema-cor-check">✓</span></button>

@@ -75,7 +75,15 @@ try {
             error_log("Erro ao registrar notificacao de login: " . $tNotif->getMessage());
         }
 
-        responderJson(['sucesso' => true]);
+        $prefs = $usuario['preferencias'] ?? [];
+        if (is_string($prefs)) {
+            $prefs = json_decode($prefs, true) ?: [];
+        }
+
+        responderJson([
+            'sucesso' => true,
+            'preferencias' => $prefs
+        ]);
     } else {
         responderJson(['sucesso' => false, 'mensagem' => 'Email ou senha incorretos.']);
     }

@@ -77,6 +77,7 @@ if (!$usuarioLogado) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Diário</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
+    <?= renderizarConfiguracoesUsuarioTags($usuarioLogado) ?>
     <style>
         /* =======================================
            CONFIGURAÇÕES GLOBAIS E FUNDO
@@ -925,7 +926,7 @@ if (!$usuarioLogado) {
             .btn-emocao { flex: 1 1 calc(50% - 10px); min-width: auto; font-size: 0.85rem; padding: 10px 5px; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261117-v6">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <link rel="stylesheet" href="assets/tutorial.css?v=20261017-tour">
 </head>
@@ -1229,7 +1230,7 @@ if (!$usuarioLogado) {
         }
     </script>
     <script src="assets/fundo-animado.js?v=20261117-v5"></script>
-    <script src="notificacoes.js?v=20261117-notif-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20261117-notif-v8" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v8';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script src="assets/tutorial.js?v=20261017-tour"></script>
 </body>

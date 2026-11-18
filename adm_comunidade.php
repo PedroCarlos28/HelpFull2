@@ -30,8 +30,19 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Moderação da Comunidade</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
+    <?= renderizarConfiguracoesUsuarioTags($usuarioLogado) ?>
 
     <style>
+        :root {
+            --cor-tema-primaria: #2b7a8c;
+            --cor-tema-hover: #236878;
+            --cor-tema-ativa: #1a5360;
+            --cor-tema-clara: #38a3b8;
+            --cor-tema-suave: rgba(43, 122, 140, 0.12);
+            --cor-tema-borda: rgba(43, 122, 140, 0.28);
+            --cor-tema-sombra: rgba(43, 122, 140, 0.35);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -894,7 +905,6 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             border-color: var(--tema-borda, #2f383e) !important;
         }
 
-        body.acessibilidade-escuro .nav-logo,
         body.acessibilidade-escuro .nav-links a {
             color: var(--tema-texto, #f1f5f9) !important;
         }
@@ -944,6 +954,33 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             background: var(--cor-tema-suave, rgba(43, 122, 140, 0.2)) !important;
             color: var(--cor-tema-clara, #7dd3fc) !important;
             border-color: var(--cor-tema-borda, rgba(125, 211, 252, 0.2)) !important;
+        }
+
+        body.acessibilidade-escuro .btn-filtro-pill:hover,
+        body.acessibilidade-escuro .btn-filtro-pill.ativo {
+            background: var(--cor-tema-primaria, #2b7a8c) !important;
+            color: #ffffff !important;
+            border-color: var(--cor-tema-primaria, #2b7a8c) !important;
+            box-shadow: 0 4px 14px var(--cor-tema-sombra, rgba(43, 122, 140, 0.35)) !important;
+        }
+
+        body.acessibilidade-escuro .membro-motivo-box {
+            background: #252d32 !important;
+            color: #cbd5e1 !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        body.acessibilidade-escuro .btn-liberar-item {
+            background: rgba(16, 185, 129, 0.15) !important;
+            color: #34d399 !important;
+            border-color: rgba(16, 185, 129, 0.35) !important;
+        }
+
+        body.acessibilidade-escuro .btn-liberar-item:hover {
+            background: #10b981 !important;
+            color: #ffffff !important;
+            border-color: #10b981 !important;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important;
         }
 
         body.acessibilidade-escuro .input-busca {
@@ -1055,7 +1092,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261117-v6">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <script>
         (function() {
@@ -1064,7 +1101,6 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
                 var escuro = localStorage.getItem('helpfull_escuro') === 'true';
                 if (modo === 'escuro' || (!modo && escuro) || (modo === 'sistema' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     document.documentElement.classList.add('acessibilidade-escuro');
-                    if (document.body) document.body.classList.add('acessibilidade-escuro');
                 }
             } catch(e) {}
         })();
@@ -1072,6 +1108,17 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
 </head>
 
 <body>
+    <script>
+        (function() {
+            try {
+                var modo = localStorage.getItem('helpfull_tema_modo');
+                var escuro = localStorage.getItem('helpfull_escuro') === 'true';
+                if (modo === 'escuro' || (!modo && escuro) || (modo === 'sistema' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.body.classList.add('acessibilidade-escuro');
+                }
+            } catch(e) {}
+        })();
+    </script>
 
     <!-- NAVBAR TOPO GLOBAL -->
     <div class="nav-container-global">
@@ -1566,6 +1613,7 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
 
     carregarDados();
     </script>
+    <script src="notificacoes.js?v=20261117-notif-v8" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v8';document.body.appendChild(s);}"></script>
 </body>
 
 </html>

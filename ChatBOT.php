@@ -36,6 +36,7 @@ if (in_array($hoje, $datasHistorico)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Helpy</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
+    <?= renderizarConfiguracoesUsuarioTags($usuarioLogado) ?>
     <style>
         /* =======================================
            CONFIGURAÇÕES GLOBAIS E FUNDO
@@ -584,12 +585,25 @@ if (in_array($hoje, $datasHistorico)) {
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s, color 0.2s;
-            padding: 0;
+            transition: transform 0.2s, color 0.2s, background-color 0.2s;
+            padding: 4px;
+            border-radius: 6px;
         }
 
         .btn-novo-chat:hover {
             color: var(--cor-tema-primaria, #2b7a8c);
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.12));
+            transform: scale(1.1);
+        }
+
+        body.acessibilidade-escuro .btn-novo-chat {
+            color: #cbd5e1;
+            background: transparent;
+        }
+
+        body.acessibilidade-escuro .btn-novo-chat:hover {
+            color: var(--cor-tema-clara, var(--cor-tema-primaria, #38a3b8));
+            background: var(--cor-tema-suave, rgba(43, 122, 140, 0.2));
             transform: scale(1.1);
         }
 
@@ -1194,7 +1208,7 @@ if (in_array($hoje, $datasHistorico)) {
             }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261117-v6">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <link rel="stylesheet" href="assets/tutorial.css?v=20261017-tour">
 </head>
@@ -1617,8 +1631,8 @@ if (in_array($hoje, $datasHistorico)) {
 
     </script>
     <script src="assets/fundo-animado.js?v=20261117-v5"></script>
-    <script src="notificacoes.js?v=20261117-notif-v5"
-        onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20261117-notif-v8"
+        onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v8';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script src="assets/tutorial.js?v=20261017-tour"></script>
 </body>

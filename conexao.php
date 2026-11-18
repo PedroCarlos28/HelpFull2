@@ -269,10 +269,15 @@ if (!function_exists('obterUsuarioLogado')) {
         }
 
         try {
-            $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, onboarding_concluido, videos_assistidos, ultimo_video_data, COALESCE(dois_fatores_ativo, false) as dois_fatores_ativo, COALESCE(is_admin, false) as is_admin, oauth_provider FROM usuarios WHERE id = ?");
+            $stmt = $pdo->prepare("SELECT id, nome, email, foto_perfil, onboarding_concluido, videos_assistidos, ultimo_video_data, COALESCE(dois_fatores_ativo, false) as dois_fatores_ativo, COALESCE(is_admin, false) as is_admin, oauth_provider, COALESCE(preferencias, '{}'::jsonb) as preferencias FROM usuarios WHERE id = ?");
             $stmt->execute([$uid]);
             $user = $stmt->fetch();
             if ($user) {
+                if (isset($user['preferencias']) && is_string($user['preferencias'])) {
+                    $user['preferencias'] = json_decode($user['preferencias'], true) ?: [];
+                } elseif (!isset($user['preferencias']) || !is_array($user['preferencias'])) {
+                    $user['preferencias'] = [];
+                }
                 $_SESSION['usuario_cache'] = $user;
                 $_SESSION['usuario_cache_time'] = $agora;
                 return $user;
@@ -288,6 +293,7 @@ if (!function_exists('obterUsuarioLogado')) {
                     $userFallback['dois_fatores_ativo'] = false;
                     $userFallback['is_admin'] = false;
                     $userFallback['oauth_provider'] = null;
+                    $userFallback['preferencias'] = [];
                     $_SESSION['usuario_cache'] = $userFallback;
                     $_SESSION['usuario_cache_time'] = $agora;
                     return $userFallback;
@@ -305,6 +311,46 @@ if (!function_exists('limparCacheUsuarioLogado')) {
     function limparCacheUsuarioLogado() {
         unset($_SESSION['usuario_cache']);
         unset($_SESSION['usuario_cache_time']);
+    }
+}
+
+if (!function_exists('renderizarConfiguracoesUsuarioTags')) {
+    function renderizarConfiguracoesUsuarioTags($usuarioLogado) {
+        $logado = !empty($usuarioLogado) ? 'true' : 'false';
+        $prefs = $usuarioLogado['preferencias'] ?? [];
+        if (is_string($prefs)) {
+            $prefs = json_decode($prefs, true) ?: [];
+        }
+        if (!is_array($prefs)) {
+            $prefs = [];
+        }
+        $json = json_encode($prefs, JSON_UNESCAPED_UNICODE);
+        $html = "<script>\n";
+        $html .= "window.HelpFullUsuarioLogado = {$logado};\n";
+        $html .= "window.HelpFullUsuarioPreferencias = {$json};\n";
+        $html .= "(function(){\n";
+        $html .= "    try {\n";
+        $html .= "        if ({$logado}) {\n";
+        $html .= "            var p = {$json};\n";
+        $html .= "            if (p && typeof p === 'object') {\n";
+        $html .= "                if (p.cor_tema) localStorage.setItem('helpfull_cor_tema', p.cor_tema);\n";
+        $html .= "                if (p.idioma) localStorage.setItem('helpfull_idioma', p.idioma);\n";
+        $html .= "                if (p.tema_modo) localStorage.setItem('helpfull_tema_modo', p.tema_modo);\n";
+        $html .= "                if (p.escuro !== undefined) localStorage.setItem('helpfull_escuro', p.escuro ? 'true' : 'false');\n";
+        $html .= "                if (p.contraste !== undefined) localStorage.setItem('helpfull_contraste', p.contraste ? 'true' : 'false');\n";
+        $html .= "                if (p.textoGrande !== undefined) localStorage.setItem('helpfull_textoGrande', p.textoGrande ? 'true' : 'false');\n";
+        $html .= "                if (p.sublinhar !== undefined) localStorage.setItem('helpfull_sublinhar', p.sublinhar ? 'true' : 'false');\n";
+        $html .= "                if (p.semAnimacao !== undefined) localStorage.setItem('helpfull_semAnimacao', p.semAnimacao ? 'true' : 'false');\n";
+        $html .= "                if (p.libras !== undefined) localStorage.setItem('helpfull_libras', p.libras ? 'true' : 'false');\n";
+        $html .= "            }\n";
+        $html .= "        } else {\n";
+        $html .= "            var chaves = ['helpfull_cor_tema','helpfull_idioma','helpfull_tema_modo','helpfull_escuro','helpfull_contraste','helpfull_textoGrande','helpfull_sublinhar','helpfull_semAnimacao','helpfull_libras','helpfull_reduzirTransparencia'];\n";
+        $html .= "            chaves.forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });\n";
+        $html .= "        }\n";
+        $html .= "    } catch(e) {}\n";
+        $html .= "})();\n";
+        $html .= "</script>\n";
+        return $html;
     }
 }
 ?>

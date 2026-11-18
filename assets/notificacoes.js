@@ -1,4 +1,4 @@
-/* =============================================================
+﻿/* =============================================================
    HelpFull — Sistema de Notificações (v2 - 2026-09-16)
    ============================================================= */
 (function () {
@@ -450,9 +450,8 @@
             'Here we have gathered materials to support your journey of self-discovery. Explore quick articles, relaxation techniques, and selected reflections to bring more clarity, calm, and lightness to your daily life.',
         'Aqui reunimos conteúdos visuais para apoiar sua jornada de bem-estar. Assista a vídeos curtos com técnicas de respiração, exercícios de foco e reflexões guiadas para ajudar a acalmar a mente e trazer mais leveza ao seu dia.':
             'Here we gather visual content to support your wellness journey. Watch short videos with breathing techniques, focus exercises, and guided reflections to help calm your mind and bring more ease to your day.',
-        '🔍 Pesquisar conteúdos': '🔍 Search content',
-        '🔍 PESQUISAR CONTEÚDOS': '🔍 SEARCH CONTENT',
         'Pesquisar conteúdos': 'Search content',
+        'PESQUISAR CONTEÚDOS': 'SEARCH CONTENT',
         'Ex: ansiedade, meditação, autocuidado...': 'Ex: anxiety, meditation, self-care...',
         'Buscar': 'Search',
         'Buscando artigos...': 'Searching articles...',
@@ -472,9 +471,8 @@
         'Acolhendo o que você sente sem julgamentos': 'Welcoming What You Feel Without Judgment',
         'Sentir tristeza, cansaço, medo ou irritação não significa que você esteja falhando. As emoções são mensagens biológicas que pedem atenção, e tentar suprimi-las à força costuma apenas torná-las mais intensas. Quando uma sensação incômoda surgir, experimente dar um nome a ela sem se criticar: "estou sentindo frustração agora". Observe essa sensação no corpo como quem assiste a uma onda no oceano — ela cresce, atinge seu pico e, se você não lutar contra ela, naturalmente se dissipa. Aprender a conviver com o desconforto é um dos passos mais libertadores da saúde emocional.':
             'Feeling sadness, fatigue, fear, or frustration does not mean you are failing. Emotions are biological messages asking for attention, and forcing them down usually only makes them stronger. When an uncomfortable feeling arises, try naming it without self-criticism: "I am experiencing frustration right now". Observe that bodily sensation as someone watching an ocean wave — it rises, crests, and naturally subsides if you don\'t fight it. Learning to sit with discomfort is one of the most liberating steps in emotional well-being.',
-        '🎬 Pesquisar vídeos e práticas': '🎬 Search videos and practices',
-        '🎬 PESQUISAR VÍDEOS E PRÁTICAS': '🎬 SEARCH VIDEOS AND PRACTICES',
         'Pesquisar vídeos e práticas': 'Search videos and practices',
+        'PESQUISAR VÍDEOS E PRÁTICAS': 'SEARCH VIDEOS AND PRACTICES',
         'Ex: meditação guiada, técnicas de ansiedade...': 'Ex: guided meditation, anxiety techniques...',
         'Buscando vídeos...': 'Searching videos...',
         'Vídeos separados por nós': 'Curated videos',
@@ -1592,7 +1590,77 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
         });
     }
 
-    function aplicarCorTema(corId) {
+    var _timerSalvarPrefRemota = null;
+    function salvarPreferenciaRemota(dados) {
+        if (!dados || typeof dados !== 'object') return;
+        clearTimeout(_timerSalvarPrefRemota);
+        _timerSalvarPrefRemota = setTimeout(function () {
+            try {
+                fetch('preferencias_proc.php?acao=salvar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    keepalive: true,
+                    body: JSON.stringify(dados)
+                }).catch(function () {});
+            } catch (e) {}
+        }, 120);
+    }
+
+    function sincronizarPreferenciasConta(prefs, salvarStorage) {
+        if (!prefs || typeof prefs !== 'object') return;
+        if (salvarStorage !== false && window.localStorage) {
+            if (prefs.cor_tema) localStorage.setItem('helpfull_cor_tema', prefs.cor_tema);
+            if (prefs.idioma) localStorage.setItem('helpfull_idioma', prefs.idioma);
+            if (prefs.tema_modo) localStorage.setItem('helpfull_tema_modo', prefs.tema_modo);
+            if (prefs.escuro !== undefined) localStorage.setItem('helpfull_escuro', prefs.escuro ? 'true' : 'false');
+            if (prefs.contraste !== undefined) localStorage.setItem('helpfull_contraste', prefs.contraste ? 'true' : 'false');
+            if (prefs.textoGrande !== undefined) localStorage.setItem('helpfull_textoGrande', prefs.textoGrande ? 'true' : 'false');
+            if (prefs.sublinhar !== undefined) localStorage.setItem('helpfull_sublinhar', prefs.sublinhar ? 'true' : 'false');
+            if (prefs.semAnimacao !== undefined) localStorage.setItem('helpfull_semAnimacao', prefs.semAnimacao ? 'true' : 'false');
+            if (prefs.libras !== undefined) localStorage.setItem('helpfull_libras', prefs.libras ? 'true' : 'false');
+        }
+        aplicarAcessibilidade();
+        aplicarIdioma();
+        var corFinal = prefs.cor_tema || (window.localStorage ? window.localStorage.getItem('helpfull_cor_tema') : null) || 'padrao';
+        aplicarCorTema(corFinal, false);
+    }
+
+    function resetarPreferenciasPadraoLocal() {
+        var chaves = [
+            'helpfull_cor_tema', 'helpfull_idioma', 'helpfull_tema_modo',
+            'helpfull_escuro', 'helpfull_contraste', 'helpfull_textoGrande',
+            'helpfull_sublinhar', 'helpfull_semAnimacao', 'helpfull_libras',
+            'helpfull_reduzirTransparencia'
+        ];
+        chaves.forEach(function (k) {
+            try { if (window.localStorage) localStorage.removeItem(k); } catch (e) {}
+        });
+        if (window.localStorage) {
+            localStorage.setItem('helpfull_cor_tema', 'padrao');
+            localStorage.setItem('helpfull_idioma', 'pt-BR');
+            localStorage.setItem('helpfull_tema_modo', 'claro');
+            localStorage.setItem('helpfull_escuro', 'false');
+        }
+        try {
+            if (document.documentElement) document.documentElement.className = '';
+            if (document.body) document.body.className = '';
+        } catch (e) {}
+        aplicarAcessibilidade();
+        aplicarIdioma();
+        aplicarCorTema('padrao', false);
+    }
+
+    window.resetarPreferenciasPadraoLocal = resetarPreferenciasPadraoLocal;
+    window.sincronizarPreferenciasConta = sincronizarPreferenciasConta;
+    window.salvarPreferenciaRemota = salvarPreferenciaRemota;
+
+    window.helpfullFazerLogout = function () {
+        resetarPreferenciasPadraoLocal();
+        window.location.href = 'Sair.php';
+    };
+
+    function aplicarCorTema(corId, sincronizarRemoto) {
         corId = corId || (window.localStorage ? (window.localStorage.getItem('helpfull_cor_tema') || 'padrao') : 'padrao');
         var styleEl = document.getElementById('helpfull-tema-dinamico-css');
 
@@ -1600,11 +1668,17 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
             if (window.localStorage) window.localStorage.setItem('helpfull_cor_tema', 'padrao');
             if (styleEl) styleEl.textContent = '';
             atualizarBolinhasTemaVisual('padrao');
+            if (sincronizarRemoto !== false) {
+                salvarPreferenciaRemota({ cor_tema: 'padrao' });
+            }
             window.dispatchEvent(new CustomEvent('helpfull-cor-tema-mudou', { detail: { corId: 'padrao' } }));
             return;
         }
 
         if (window.localStorage) window.localStorage.setItem('helpfull_cor_tema', corId);
+        if (sincronizarRemoto !== false) {
+            salvarPreferenciaRemota({ cor_tema: corId });
+        }
         var p = window.HelpFullPaletaCores[corId];
         var textoBtn = p.textoBtn || '#ffffff';
 
@@ -1627,7 +1701,7 @@ styleEl.textContent = `
             }
 
             /* 1. Botões principais (exceto reações, emoções e perigo) - Claro e Escuro */
-            .btn-primario, .btn-salvar, .btn-editar, .btn-novo-chat, .btn-enviar-chat,
+            .btn-primario, .btn-salvar, .btn-editar, .btn-enviar-chat,
             .btn-painel-fechar, .btn-onboarding-concluir, .btn-gerenciar-dispositivos,
             .btn-historico, .btn-buscar-api, .busca-btn,
             .acessibilidade-btn-tour, .btn-iniciar, .btn-comentar, .btn-publicar,
@@ -1644,7 +1718,6 @@ styleEl.textContent = `
             body.acessibilidade-escuro .modal-btn-salvar,
             body.acessibilidade-escuro .btn-gerenciar-dispositivos,
             body.acessibilidade-escuro .busca-btn,
-            body.acessibilidade-escuro .btn-novo-chat,
             body.acessibilidade-escuro .btn-enviar-chat,
             body.acessibilidade-escuro .btn-painel-fechar,
             body.acessibilidade-escuro button.btn-painel-fechar,
@@ -1656,7 +1729,7 @@ styleEl.textContent = `
                 box-shadow: 0 4px 14px ${p.sombra} !important;
             }
 
-            .btn-primario:hover, .btn-salvar:hover, .btn-editar:hover, .btn-novo-chat:hover,
+            .btn-primario:hover, .btn-salvar:hover, .btn-editar:hover,
             .btn-enviar-chat:hover, .btn-painel-fechar:hover, .btn-onboarding-concluir:hover,
             .btn-gerenciar-dispositivos:hover, .btn-historico:hover, .btn-buscar-api:hover,
             .busca-btn:hover, .acessibilidade-btn-tour:hover,
@@ -1675,7 +1748,6 @@ styleEl.textContent = `
             body.acessibilidade-escuro .modal-btn-salvar:hover:not(:disabled),
             body.acessibilidade-escuro .btn-gerenciar-dispositivos:hover,
             body.acessibilidade-escuro .busca-btn:hover,
-            body.acessibilidade-escuro .btn-novo-chat:hover,
             body.acessibilidade-escuro .btn-enviar-chat:hover,
             body.acessibilidade-escuro .btn-painel-fechar:hover,
             body.acessibilidade-escuro button.btn-painel-fechar:hover,
@@ -1686,6 +1758,44 @@ styleEl.textContent = `
                 color: ${textoBtn} !important;
                 box-shadow: 0 6px 18px ${p.sombra} !important;
                 filter: brightness(1.08) !important;
+            }
+
+            /* Botão Novo Chat no Histórico do Helpy (apenas ícone limpo com hover na cor tema) */
+            .btn-novo-chat,
+            body.acessibilidade-escuro .btn-novo-chat {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 4px !important;
+                border-radius: 6px !important;
+                color: #555 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                transition: transform 0.2s, color 0.2s, background-color 0.2s !important;
+            }
+
+            .btn-novo-chat:hover {
+                background: ${p.suave} !important;
+                border: none !important;
+                box-shadow: none !important;
+                color: ${p.primaria} !important;
+                transform: scale(1.1) !important;
+            }
+
+            body.acessibilidade-escuro .btn-novo-chat {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                color: #cbd5e1 !important;
+            }
+
+            body.acessibilidade-escuro .btn-novo-chat:hover {
+                background: ${p.suave} !important;
+                border: none !important;
+                box-shadow: none !important;
+                color: ${p.clara} !important;
+                transform: scale(1.1) !important;
             }
 
             /* 2. Abas, categorias, filtros e histórico */
@@ -1766,12 +1876,33 @@ styleEl.textContent = `
                 box-shadow: 0 0 8px ${p.primaria} !important;
             }
             .sininho-notificacao,
-            .post-avatar,
             .card-relatorio-icone,
             #contadorDiariosDia,
             #badgeNotificacoesPerfil,
             .badge-adm-pill {
                 background: ${p.primaria} !important;
+                color: ${textoBtn} !important;
+            }
+            .post-avatar:not(.tem-foto) {
+                background-color: ${p.primaria} !important;
+                color: ${textoBtn} !important;
+            }
+            body.acessibilidade-escuro .badge-adm-icone,
+            body.acessibilidade-escuro .badge-seguranca,
+            body.acessibilidade-escuro .pill-contador-ativo,
+            body.acessibilidade-escuro .banner-adm-tag {
+                color: ${p.clara} !important;
+            }
+            body.acessibilidade-escuro .badge-adm-icone,
+            body.acessibilidade-escuro .badge-seguranca,
+            body.acessibilidade-escuro .pill-contador-ativo {
+                background: ${p.suave} !important;
+                border-color: ${p.borda} !important;
+            }
+            .btn-filtro-pill.ativo,
+            body.acessibilidade-escuro .btn-filtro-pill.ativo {
+                background: ${p.primaria} !important;
+                border-color: ${p.primaria} !important;
                 color: ${textoBtn} !important;
             }
             .perfil-icone-wrapper,
@@ -1797,8 +1928,9 @@ styleEl.textContent = `
                 color: ${textoBtn} !important;
             }
             .cal-dia.ativo {
-                background: ${p.suave} !important;
-                color: ${p.primaria} !important;
+                background: linear-gradient(135deg, ${p.primaria}, ${p.hover}) !important;
+                color: ${textoBtn} !important;
+                box-shadow: 0 2px 10px ${p.sombra} !important;
             }
             .cal-dia.tem-registro::after {
                 background: ${p.primaria} !important;
@@ -1825,7 +1957,7 @@ styleEl.textContent = `
             .onboarding-badge, .notificacoes-icone-tag, .disp-preview-tag,
             .balao-2fa-badge, .onboarding-preview-tag, .tag-solida.azul,
             .tema-cor-badge-expandir, .balao-2fa-status-pill.ativo,
-            .bv-diario-icone, .regra-num, .graficos-badge,
+            .bv-diario-icone, .regra-num,
             .disp-badge-atual, .disp-icone-box, .dicas-icone,
             .vazio-icone-wrapper, .modal-alerta-info, .link-voltar,
             .btn-reenviar-codigo-modal, .badge-seguranca, .pill-contador-ativo,
@@ -1840,7 +1972,6 @@ styleEl.textContent = `
             body.acessibilidade-escuro .balao-2fa-status-pill.ativo,
             body.acessibilidade-escuro .bv-diario-icone,
             body.acessibilidade-escuro .regra-num,
-            body.acessibilidade-escuro .graficos-badge,
             body.acessibilidade-escuro .disp-badge-atual,
             body.acessibilidade-escuro .disp-icone-box,
             body.acessibilidade-escuro .dicas-icone,
@@ -1856,6 +1987,20 @@ styleEl.textContent = `
                 background: ${p.suave} !important;
                 color: ${p.clara} !important;
                 border-color: ${p.borda} !important;
+            }
+
+            /* Gráficos badge - legível em modo claro e escuro */
+            .graficos-badge {
+                background: rgba(0,0,0,0.18) !important;
+                color: #fff !important;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.4) !important;
+                backdrop-filter: blur(4px) !important;
+                border: 1px solid rgba(255,255,255,0.15) !important;
+            }
+            body.acessibilidade-escuro .graficos-badge {
+                background: rgba(0,0,0,0.3) !important;
+                color: #fff !important;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
             }
 
             /* 10. SVGs dentro de ícones e tags de tema */
@@ -1944,8 +2089,8 @@ styleEl.textContent = `
     }
 
     window.aplicarCorTema = aplicarCorTema;
-    window.selecionarCorTema = function(corId) { aplicarCorTema(corId); };
-    window.restaurarCorTemaPadrao = function() { aplicarCorTema('padrao'); };
+    window.selecionarCorTema = function(corId) { aplicarCorTema(corId, true); };
+    window.restaurarCorTemaPadrao = function() { aplicarCorTema('padrao', true); };
     window.toggleExpandirCoresTema = toggleExpandirCoresTema;
     window.atualizarBolinhasTemaVisual = atualizarBolinhasTemaVisual;
     window.gerarBolinhasCoresHTML = gerarBolinhasCoresHTML;
@@ -2296,13 +2441,13 @@ styleEl.textContent = `
                                     </button>
                                     <div class="tema-cor-expansao" id="temaCorExpansao">
                                         <div class="tema-cor-grupo">
-                                            <div class="tema-cor-grupo-rotulo">☀️ Tons Claros & Vivos</div>
+                                            <div class="tema-cor-grupo-rotulo"><svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-1px;flex-shrink:0\"><circle cx=\"12\" cy=\"12\" r=\"5\"></circle><line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"3\"></line><line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"23\"></line><line x1=\"4.22\" y1=\"4.22\" x2=\"5.64\" y2=\"5.64\"></line><line x1=\"18.36\" y1=\"18.36\" x2=\"19.78\" y2=\"19.78\"></line><line x1=\"1\" y1=\"12\" x2=\"3\" y2=\"12\"></line><line x1=\"21\" y1=\"12\" x2=\"23\" y2=\"12\"></line><line x1=\"4.22\" y1=\"19.78\" x2=\"5.64\" y2=\"18.36\"></line><line x1=\"18.36\" y1=\"5.64\" x2=\"19.78\" y2=\"4.22\"></line></svg> Tons Claros & Vivos</div>
                                             <div class="tema-cor-bolinhas-grid" id="gridCoresClarasPainel">
                                                 ${gerarBolinhasCoresHTML('claro')}
                                             </div>
                                         </div>
                                         <div class="tema-cor-grupo">
-                                            <div class="tema-cor-grupo-rotulo">🌙 Tons Escuros & Intensos</div>
+                                            <div class="tema-cor-grupo-rotulo"><svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-1px;flex-shrink:0\"><path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"></path></svg> Tons Escuros & Intensos</div>
                                             <div class="tema-cor-bolinhas-grid" id="gridCoresEscurasPainel">
                                                 ${gerarBolinhasCoresHTML('escuro')}
                                             </div>
@@ -2521,6 +2666,7 @@ styleEl.textContent = `
             si.value = localStorage.getItem('helpfull_idioma') || 'pt-BR';
             si.addEventListener('change', function () {
                 localStorage.setItem('helpfull_idioma', si.value);
+                salvarPreferenciaRemota({ idioma: si.value });
                 aplicarIdioma();
                 atualizarPreviewPainel('idioma');
             });
@@ -2598,6 +2744,12 @@ styleEl.textContent = `
                 aplicarIdioma();
                 sincronizarEstadoVisualPainel();
                 atualizarPreviewPainel('padrao');
+                try {
+                    fetch('preferencias_proc.php?acao=resetar', {
+                        method: 'POST',
+                        credentials: 'same-origin'
+                    }).catch(function () {});
+                } catch (err) {}
             });
         }
 
@@ -2616,12 +2768,15 @@ styleEl.textContent = `
     window.definirTemaModo = function (modo) {
         if (modo === 'sistema') {
             localStorage.setItem('helpfull_tema_modo', 'sistema');
+            salvarPreferenciaRemota({ tema_modo: 'sistema' });
         } else if (modo === 'escuro') {
             localStorage.setItem('helpfull_tema_modo', 'escuro');
             localStorage.setItem('helpfull_escuro', 'true');
+            salvarPreferenciaRemota({ tema_modo: 'escuro', escuro: true });
         } else {
             localStorage.setItem('helpfull_tema_modo', 'claro');
             localStorage.setItem('helpfull_escuro', 'false');
+            salvarPreferenciaRemota({ tema_modo: 'claro', escuro: false });
         }
         aplicarAcessibilidade();
     };
@@ -2629,11 +2784,9 @@ styleEl.textContent = `
     window.alternarAcessibilidadeOpcao = function (k) {
         if (k === 'autoTema') {
             var modoAtual = localStorage.getItem('helpfull_tema_modo');
-            if (modoAtual === 'sistema') {
-                localStorage.setItem('helpfull_tema_modo', 'manual');
-            } else {
-                localStorage.setItem('helpfull_tema_modo', 'sistema');
-            }
+            var novoModo = (modoAtual === 'sistema') ? 'manual' : 'sistema';
+            localStorage.setItem('helpfull_tema_modo', novoModo);
+            salvarPreferenciaRemota({ tema_modo: novoModo });
             aplicarAcessibilidade();
             return;
         }
@@ -2641,13 +2794,43 @@ styleEl.textContent = `
             localStorage.setItem('helpfull_tema_modo', 'manual');
         }
         var ativo = localStorage.getItem('helpfull_' + k) === 'true';
-        localStorage.setItem('helpfull_' + k, (!ativo).toString());
+        var novoValor = !ativo;
+        localStorage.setItem('helpfull_' + k, novoValor.toString());
+        var payload = {};
+        payload[k] = novoValor;
+        if (k === 'escuro') {
+            payload.tema_modo = 'manual';
+        }
+        salvarPreferenciaRemota(payload);
         aplicarAcessibilidade();
     };
 
     window.aplicarAcessibilidade = aplicarAcessibilidade;
 
     /* ── Inicialização ────────────────────────────────────── */
+    // 1. Sincronização inicial com as preferências da conta do usuário logado
+    if (window.HelpFullUsuarioPreferencias && typeof window.HelpFullUsuarioPreferencias === 'object' && Object.keys(window.HelpFullUsuarioPreferencias).length > 0) {
+        sincronizarPreferenciasConta(window.HelpFullUsuarioPreferencias, true);
+    } else if (window.HelpFullUsuarioLogado === false) {
+        resetarPreferenciasPadraoLocal();
+    } else {
+        // Fallback assíncrono: verifica se a conta logada tem preferências salvas no banco
+        try {
+            fetch('preferencias_proc.php?acao=obter', { credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (res) {
+                    if (res && res.sucesso) {
+                        if (res.logado && res.preferencias && Object.keys(res.preferencias).length > 0) {
+                            sincronizarPreferenciasConta(res.preferencias, true);
+                        } else if (res.logado === false) {
+                            resetarPreferenciasPadraoLocal();
+                        }
+                    }
+                })
+                .catch(function () {});
+        } catch (e) {}
+    }
+
     aplicarAcessibilidade();
     aplicarIdioma();
 

@@ -29,6 +29,30 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
     <title>HelpFull - Entrar</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var foiLogout = urlParams.get('logout') === '1' || urlParams.get('trocar') === '1';
+            var estaLogado = <?= !empty($_SESSION['usuario_id']) ? 'true' : 'false' ?>;
+            if (foiLogout || !estaLogado) {
+                var chaves = [
+                    'helpfull_cor_tema', 'helpfull_idioma', 'helpfull_tema_modo',
+                    'helpfull_escuro', 'helpfull_contraste', 'helpfull_textoGrande',
+                    'helpfull_sublinhar', 'helpfull_semAnimacao', 'helpfull_libras',
+                    'helpfull_reduzirTransparencia'
+                ];
+                chaves.forEach(function(k) {
+                    try { localStorage.removeItem(k); } catch (e) {}
+                });
+                try {
+                    if (document.documentElement) document.documentElement.className = '';
+                    if (document.body) document.body.className = '';
+                    var styleEl = document.getElementById('helpfull-tema-dinamico-css');
+                    if (styleEl) styleEl.remove();
+                } catch (e) {}
+            }
+        })();
+    </script>
     <style>
         * {
             margin: 0;
@@ -1356,7 +1380,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             color: #fed7aa !important;
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261117-v6">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
 </head>
 
@@ -1738,6 +1762,19 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
             }, 2600);
         }
 
+        function aplicarPreferenciasConta(preferencias) {
+            if (!preferencias || typeof preferencias !== 'object') return;
+            if (preferencias.cor_tema) localStorage.setItem('helpfull_cor_tema', preferencias.cor_tema);
+            if (preferencias.idioma) localStorage.setItem('helpfull_idioma', preferencias.idioma);
+            if (preferencias.tema_modo) localStorage.setItem('helpfull_tema_modo', preferencias.tema_modo);
+            if (preferencias.escuro !== undefined) localStorage.setItem('helpfull_escuro', preferencias.escuro ? 'true' : 'false');
+            if (preferencias.contraste !== undefined) localStorage.setItem('helpfull_contraste', preferencias.contraste ? 'true' : 'false');
+            if (preferencias.textoGrande !== undefined) localStorage.setItem('helpfull_textoGrande', preferencias.textoGrande ? 'true' : 'false');
+            if (preferencias.sublinhar !== undefined) localStorage.setItem('helpfull_sublinhar', preferencias.sublinhar ? 'true' : 'false');
+            if (preferencias.semAnimacao !== undefined) localStorage.setItem('helpfull_semAnimacao', preferencias.semAnimacao ? 'true' : 'false');
+            if (preferencias.libras !== undefined) localStorage.setItem('helpfull_libras', preferencias.libras ? 'true' : 'false');
+        }
+
         // Variável para armazenar temporariamente o usuário do Google pendente de consentimento
         let usuarioGooglePendente = null;
 
@@ -1788,6 +1825,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
                         emailPendente2FA = data.email || user.email;
                         abrirModo2FA(data.email_mascarado || emailPendente2FA, data.debug_codigo);
                     } else {
+                        aplicarPreferenciasConta(data.preferencias);
                         window.location.replace('inicio.php');
                     }
                 } else if (data) {
@@ -1991,6 +2029,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
                         emailPendente2FA = email;
                         abrirModo2FA(data.email_mascarado || email, data.debug_codigo);
                     } else {
+                        aplicarPreferenciasConta(data.preferencias);
                         window.location.replace('inicio.php');
                     }
                 } else {
@@ -2075,6 +2114,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
                 });
                 const data = await resp.json();
                 if (data.sucesso) {
+                    aplicarPreferenciasConta(data.preferencias);
                     window.location.replace('inicio.php');
                 } else {
                     mostrarErro('erro2FA', data.mensagem || 'Código incorreto.');

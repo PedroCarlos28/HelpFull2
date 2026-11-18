@@ -153,7 +153,12 @@ try {
         require_once __DIR__ . '/notificacao_helper.php';
         registrarNotificacaoNovoLogin($pdo, $usuario['id']);
 
-        responderJson(['sucesso' => true, 'novo' => false]);
+        $prefs = $usuario['preferencias'] ?? [];
+        if (is_string($prefs)) {
+            $prefs = json_decode($prefs, true) ?: [];
+        }
+
+        responderJson(['sucesso' => true, 'novo' => false, 'preferencias' => $prefs]);
     }
 
     // 4. Se for primeiro acesso (novo usuário), exige consentimento com os Termos de Uso
@@ -241,7 +246,7 @@ try {
     registrarNotificacaoBoasVindas($pdo, $novoId);
     registrarNotificacaoNovoLogin($pdo, $novoId);
 
-    responderJson(['sucesso' => true, 'novo' => true]);
+    responderJson(['sucesso' => true, 'novo' => true, 'preferencias' => []]);
 } catch (PDOException $e) {
     responderJson(['sucesso' => false, 'mensagem' => 'Erro ao salvar no banco: ' . $e->getMessage()]);
 }

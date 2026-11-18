@@ -226,6 +226,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpFull - Atividades</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
+    <?= renderizarConfiguracoesUsuarioTags($usuarioLogado) ?>
     <style>
         * {
             margin: 0;
@@ -1618,7 +1619,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             .video-busca-grid { grid-template-columns: 1fr; }
         }
     </style>
-    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261112-notif-v4">
+    <link rel="stylesheet" href="assets/acessibilidade.css?v=20261117-v6">
     <link rel="stylesheet" href="assets/transicao.css?v=20260926-v1">
     <link rel="stylesheet" href="assets/tutorial.css?v=20261017-tour">
 </head>
@@ -1722,7 +1723,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
         <div id="tab-textos" class="tab-content ativo">
             <!-- Barra de busca textos -->
             <div class="busca-wrapper">
-                <div class="busca-label">🔍 Pesquisar conteúdos</div>
+                <div class="busca-label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> Pesquisar conteúdos</div>
                 <div class="busca-row">
                     <div class="busca-icone">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -1801,7 +1802,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
         <div id="tab-videos" class="tab-content">
             <!-- Barra de busca vídeos -->
             <div class="busca-wrapper">
-                <div class="busca-label">🎬 Pesquisar vídeos e práticas</div>
+                <div class="busca-label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;flex-shrink:0"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg> Pesquisar vídeos e práticas</div>
                 <div class="busca-row">
                     <div class="busca-icone">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="svg-tema-cor">
@@ -2571,7 +2572,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
         }
     </script>
     <script src="assets/fundo-animado.js?v=20261117-v5"></script>
-    <script src="notificacoes.js?v=20261117-notif-v5" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v5';document.body.appendChild(s);}"></script>
+    <script src="notificacoes.js?v=20261117-notif-v8" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261117-notif-v8';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script src="assets/tutorial.js?v=20261017-tour"></script>
 </body>
