@@ -831,21 +831,39 @@ $fotoPerfilDb = !empty($usuarioLogado['foto_perfil']) ? $usuarioLogado['foto_per
         }
 
         .hist-acao-tag.aviso {
-            background: #d6d6d6;
+            background: rgba(245, 158, 11, 0.15);
             color: #b45309;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.4);
         }
 
         .hist-acao-tag.banimento {
-            background: #d6d6d6;
+            background: rgba(220, 38, 38, 0.15);
             color: #b91c1c;
-            border: 1px solid rgba(220, 38, 38, 0.3);
+            border: 1px solid rgba(220, 38, 38, 0.4);
         }
 
         .hist-acao-tag.liberacao {
-            background: #d6d6d6;
+            background: rgba(16, 185, 129, 0.15);
             color: #047857;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        body.acessibilidade-escuro .hist-acao-tag.aviso {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+
+        body.acessibilidade-escuro .hist-acao-tag.banimento {
+            background: rgba(220, 38, 38, 0.2);
+            color: #f87171;
+            border-color: rgba(220, 38, 38, 0.5);
+        }
+
+        body.acessibilidade-escuro .hist-acao-tag.liberacao {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.5);
         }
 
         .hist-corpo {
