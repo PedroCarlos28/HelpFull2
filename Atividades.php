@@ -2570,7 +2570,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
             }
         }
     </script>
-    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
+    <script src="assets/fundo-animado.js?v=20261117-v5"></script>
     <script src="notificacoes.js?v=20261112-notif-v4" onerror="if(!window.togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261112-notif-v4';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script src="assets/tutorial.js?v=20261017-tour"></script>

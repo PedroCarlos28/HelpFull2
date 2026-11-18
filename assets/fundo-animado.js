@@ -524,6 +524,36 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
         },
     };
 
+    function normalizarRgba(cor, defaultAlpha, forceAlpha) {
+        if (!cor) return 'rgba(255, 255, 255, ' + (defaultAlpha !== undefined ? defaultAlpha : 0) + ')';
+        cor = String(cor).trim();
+        if (cor.startsWith('#')) {
+            var hex = cor.slice(1);
+            if (hex.length === 3) hex = hex.split('').map(function (c) { return c + c; }).join('');
+            if (hex.length >= 6) {
+                var r = parseInt(hex.substring(0, 2), 16) || 0;
+                var g = parseInt(hex.substring(2, 4), 16) || 0;
+                var b = parseInt(hex.substring(4, 6), 16) || 0;
+                var a = forceAlpha ? defaultAlpha : (defaultAlpha !== undefined ? defaultAlpha : 1);
+                return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+            }
+        }
+        if (cor.startsWith('rgba')) {
+            if (forceAlpha && defaultAlpha !== undefined) {
+                return cor.replace(/[\d\.]+\)$/, defaultAlpha + ')');
+            }
+            return cor;
+        }
+        if (cor.startsWith('rgb')) {
+            var m = cor.match(/\d+/g);
+            if (m && m.length >= 3) {
+                var a = forceAlpha ? defaultAlpha : (defaultAlpha !== undefined ? defaultAlpha : 1);
+                return 'rgba(' + m[0] + ', ' + m[1] + ', ' + m[2] + ', ' + a + ')';
+            }
+        }
+        return cor;
+    }
+
     function initFundoAnimadoInstancia(canvas) {
         if (!canvas || canvas._fundoAnimadoInit) return;
         canvas._fundoAnimadoInit = true;
@@ -758,11 +788,11 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
 
                 const grad = ctx.createLinearGradient(0, yBase - ribbon.amp, 0, yBase + ribbon.thickness);
                 if (isDark) {
-                    grad.addColorStop(0, rColor1.replace(/[\d\.]+\)$/, '0.35)'));
-                    grad.addColorStop(1, rColor2.replace(/[\d\.]+\)$/, '0.05)'));
+                    grad.addColorStop(0, normalizarRgba(rColor1, 0.22, true));
+                    grad.addColorStop(1, normalizarRgba(rColor2, 0.03, true));
                 } else {
-                    grad.addColorStop(0, rColor1);
-                    grad.addColorStop(1, rColor2);
+                    grad.addColorStop(0, normalizarRgba(rColor1, 0.50));
+                    grad.addColorStop(1, normalizarRgba(rColor2, 0.18));
                 }
 
                 ctx.fillStyle = grad;
@@ -797,12 +827,12 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
                 ctx.restore();
             });
 
-            // 3. Brilho azul do mouse (APENAS se hasMouse = true e NÃO estiver em modo sem animação)
+            // 3. Brilho do mouse suave e difuso (APENAS se hasMouse = true e NÃO estiver em modo sem animação)
             if (hasMouse && !isReduced) {
                 ctx.save();
 
-                const speedBoost = Math.min(mouseSpeed * 0.006, 0.22);
-                const baseRadius = Math.max(width, height) * 0.34;
+                const speedBoost = Math.min(mouseSpeed * 0.005, 0.18);
+                const baseRadius = Math.max(width, height) * 0.30;
                 const glowRadius = baseRadius * (1 + speedBoost);
 
                 const glowGrad = ctx.createRadialGradient(
@@ -814,15 +844,17 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
                 const glowC2 = (paleta && paleta.glow) ? paleta.glow[1] : (isDark ? 'rgba(30, 112, 160, 0.25)' : 'rgba(30, 112, 160, 0.34)');
 
                 if (isDark) {
-                    glowGrad.addColorStop(0, glowC1);
-                    glowGrad.addColorStop(0.3, glowC2);
-                    glowGrad.addColorStop(0.65, glowC2.replace(/[\d\.]+\)$/, '0.10)'));
-                    glowGrad.addColorStop(1, glowC2.replace(/[\d\.]+\)$/, '0)'));
+                    glowGrad.addColorStop(0, normalizarRgba(glowC1, 0.22, true));
+                    glowGrad.addColorStop(0.25, normalizarRgba(glowC1, 0.13, true));
+                    glowGrad.addColorStop(0.50, normalizarRgba(glowC2, 0.06, true));
+                    glowGrad.addColorStop(0.75, normalizarRgba(glowC2, 0.02, true));
+                    glowGrad.addColorStop(1, normalizarRgba(glowC2, 0, true));
                 } else {
-                    glowGrad.addColorStop(0, glowC1);
-                    glowGrad.addColorStop(0.28, glowC2);
-                    glowGrad.addColorStop(0.65, glowC1.replace(/[\d\.]+\)$/, '0.16)'));
-                    glowGrad.addColorStop(1, glowC2.replace(/[\d\.]+\)$/, '0)'));
+                    glowGrad.addColorStop(0, normalizarRgba(glowC1, 0.26, true));
+                    glowGrad.addColorStop(0.25, normalizarRgba(glowC1, 0.15, true));
+                    glowGrad.addColorStop(0.50, normalizarRgba(glowC2, 0.07, true));
+                    glowGrad.addColorStop(0.75, normalizarRgba(glowC2, 0.02, true));
+                    glowGrad.addColorStop(1, normalizarRgba(glowC2, 0, true));
                 }
 
                 ctx.fillStyle = glowGrad;
@@ -830,15 +862,15 @@ window.HelpFullPaletaCores = window.HelpFullPaletaCores || {
                 ctx.arc(currentMouseX, currentMouseY, glowRadius, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Ponto de luz interno concentrado no cursor
-                const coreRadius = 145 * (1 + speedBoost);
+                // Ponto de luz interno suave concentrado no cursor
+                const coreRadius = 110 * (1 + speedBoost);
                 const coreGlow = ctx.createRadialGradient(
                     currentMouseX, currentMouseY, 0,
                     currentMouseX, currentMouseY, coreRadius
                 );
-                coreGlow.addColorStop(0, isDark ? 'rgba(255, 255, 255, 0.50)' : 'rgba(255, 255, 255, 0.60)');
-                coreGlow.addColorStop(0.45, glowC1.replace(/[\d\.]+\)$/, '0.28)'));
-                coreGlow.addColorStop(1, glowC1.replace(/[\d\.]+\)$/, '0)'));
+                coreGlow.addColorStop(0, isDark ? 'rgba(255, 255, 255, 0.18)' : 'rgba(255, 255, 255, 0.28)');
+                coreGlow.addColorStop(0.40, normalizarRgba(glowC1, isDark ? 0.10 : 0.14, true));
+                coreGlow.addColorStop(1, normalizarRgba(glowC1, 0, true));
 
                 ctx.fillStyle = coreGlow;
                 ctx.beginPath();

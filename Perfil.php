@@ -251,6 +251,16 @@ try {
     <title>HelpFull - Meu Perfil</title>
     <link rel="icon" type="image/png" href="assets/logoHelpFull.png">
     <style>
+        :root {
+            --cor-tema-primaria: #2b7a8c;
+            --cor-tema-hover: #236878;
+            --cor-tema-ativa: #1a5360;
+            --cor-tema-clara: #38a3b8;
+            --cor-tema-suave: rgba(43, 122, 140, 0.12);
+            --cor-tema-borda: rgba(43, 122, 140, 0.28);
+            --cor-tema-sombra: rgba(43, 122, 140, 0.35);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -1232,8 +1242,9 @@ try {
         }
 
         .btn-apagar:hover,
-        .btn-editar:hover {
-            opacity: 0.8;
+        .btn-editar:hover,
+        .btn-salvar:hover {
+            opacity: 0.85;
         }
 
         .btn-apagar {
@@ -1241,13 +1252,13 @@ try {
         }
 
         .btn-editar {
-            background: var(--cor-tema-primaria, #bce0e6);
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff;
         }
 
         .btn-salvar {
             display: none;
-            background: var(--cor-tema-primaria, #9bd3ff);
+            background: var(--cor-tema-primaria, #2b7a8c);
             color: #ffffff;
         }
 
@@ -4666,7 +4677,7 @@ try {
             }
         }
     </script>
-    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
+    <script src="assets/fundo-animado.js?v=20261117-v5"></script>
     <script src="notificacoes.js?v=20261112-notif-v4" onerror="if(!window.togglePainelAcessibilidade||window.togglePainelAcessibilidade===togglePainelAcessibilidade){var s=document.createElement('script');s.src='assets/notificacoes.js?v=20261112-notif-v4';document.body.appendChild(s);}"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
     <script src="assets/tutorial.js?v=20261017-tour"></script>

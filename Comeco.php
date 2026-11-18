@@ -2491,7 +2491,7 @@ if (isset($_GET['trocar']) || isset($_GET['logout'])) {
 
         window.mostrarInstrucoesFirebase = mostrarInstrucoesFirebase;
     </script>
-    <script src="assets/fundo-animado.js?v=20260925-v4"></script>
+    <script src="assets/fundo-animado.js?v=20261117-v5"></script>
     <script src="assets/transicao.js?v=20260926-v1"></script>
 </body>
 
